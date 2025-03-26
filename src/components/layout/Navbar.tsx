@@ -32,36 +32,34 @@ const Navbar = () => {
     <header className="border-b border-gray-100">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4 md:gap-8">
-            <Link to="/" className="flex items-center">
-              <img 
-                src="/lovable-uploads/4de8f3ef-2f9c-4028-b855-f7d4a316dabf.png" 
-                alt="Gura" 
-                className="h-12"
+          <Link to="/" className="flex items-center">
+            <img 
+              src="/lovable-uploads/4de8f3ef-2f9c-4028-b855-f7d4a316dabf.png" 
+              alt="Gura" 
+              className="h-12"
+            />
+          </Link>
+          
+          <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center mx-auto max-w-xl w-full px-4">
+            <div className="relative flex items-center w-full">
+              <Input
+                type="text"
+                placeholder="Search products..."
+                className="w-full pr-10 rounded-full border-gray-300 focus:ring-0 focus:border-gray-400 pl-4"
+                value={searchQuery}
+                onChange={handleSearchChange}
               />
-            </Link>
-            
-            <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center">
-              <div className="relative flex items-center">
-                <Input
-                  type="text"
-                  placeholder="Search products..."
-                  className="w-64 pr-10 focus:ring-0 border-gray-200"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
-                <Button 
-                  type="submit" 
-                  variant="ghost" 
-                  size="icon" 
-                  className="absolute right-0"
-                  aria-label="Search"
-                >
-                  <Search className="h-5 w-5 text-gray-500" />
-                </Button>
-              </div>
-            </form>
-          </div>
+              <Button 
+                type="submit" 
+                variant="ghost" 
+                size="icon" 
+                className="absolute right-1"
+                aria-label="Search"
+              >
+                <Search className="h-5 w-5 text-gray-500" />
+              </Button>
+            </div>
+          </form>
           
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" className="md:hidden" aria-label="Search">
