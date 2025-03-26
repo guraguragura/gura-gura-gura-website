@@ -1,5 +1,6 @@
 
 import React from "react";
+import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
@@ -9,12 +10,17 @@ import Footer from "@/components/layout/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <TopInfoBar />
       <Navbar />
-      <Hero />
-      <FeaturedProducts />
-      <Categories />
-      <Newsletter />
+      <div className="flex-grow">
+        <div className="container mx-auto px-4 max-w-7xl bg-white shadow-sm">
+          <Hero />
+          <FeaturedProducts />
+          <Categories />
+          <Newsletter />
+        </div>
+      </div>
       <Footer />
     </div>
   );

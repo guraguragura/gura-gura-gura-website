@@ -10,7 +10,13 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link to="/" className="text-2xl font-bold">GURA</Link>
+            <Link to="/" className="flex items-center">
+              <img 
+                src="/lovable-uploads/4de8f3ef-2f9c-4028-b855-f7d4a316dabf.png" 
+                alt="Gura" 
+                className="h-12"
+              />
+            </Link>
             <nav className="hidden md:flex items-center space-x-6">
               <Link to="/shop" className="text-gray-600 hover:text-black">Shop</Link>
               <Link to="/collections" className="text-gray-600 hover:text-black">Collections</Link>
