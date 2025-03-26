@@ -3,6 +3,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Menu, Search, ShoppingCart, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { Separator } from "@/components/ui/separator";
 
 const Navbar = () => {
   return (
@@ -17,12 +27,6 @@ const Navbar = () => {
                 className="h-12"
               />
             </Link>
-            <nav className="hidden md:flex items-center space-x-6">
-              <Link to="/shop" className="text-gray-600 hover:text-black">Shop</Link>
-              <Link to="/collections" className="text-gray-600 hover:text-black">Collections</Link>
-              <Link to="/about" className="text-gray-600 hover:text-black">About</Link>
-              <Link to="/contact" className="text-gray-600 hover:text-black">Contact</Link>
-            </nav>
           </div>
           
           <div className="flex items-center gap-4">
@@ -39,6 +43,16 @@ const Navbar = () => {
               <Menu className="h-5 w-5" />
             </Button>
           </div>
+        </div>
+        
+        <div className="mt-2">
+          <Separator className="my-2" />
+          <nav className="hidden md:flex items-center justify-center space-x-10 py-2">
+            <Link to="/shop" className="text-gray-600 hover:text-black font-medium">Shop</Link>
+            <Link to="/collections" className="text-gray-600 hover:text-black font-medium">Collections</Link>
+            <Link to="/about" className="text-gray-600 hover:text-black font-medium">About</Link>
+            <Link to="/contact" className="text-gray-600 hover:text-black font-medium">Contact</Link>
+          </nav>
         </div>
       </div>
     </header>
