@@ -36,7 +36,7 @@ const trendingProducts = [
   },
   {
     id: 4,
-    name: "Ultra-Slim Laptop 15" - Silver",
+    name: "Ultra-Slim Laptop 15\" - Silver",
     price: 899.99,
     oldPrice: 1099.99,
     image: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6",
