@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Search, ShoppingCart, User, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,46 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Category {
+  id: string;
+  name: string;
+  handle: string;
+}
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setIsLoading(true);
+      try {
+        // Fetch categories from the product_category table in MedusaJS database via Supabase
+        const { data, error } = await supabase
+          .from('product_category')
+          .select('id, name, handle')
+          .eq('is_active', true)
+          .order('rank', { ascending: true });
+        
+        if (error) {
+          console.error("Error fetching categories:", error);
+          setCategories([]);
+        } else {
+          setCategories(data || []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+        setCategories([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -24,6 +61,15 @@ const Navbar = () => {
     // Handle search submission here
     console.log("Searching for:", searchQuery);
   };
+  
+  // Fallback categories in case the database fetch fails
+  const fallbackCategories = [
+    { id: "women", name: "Women's Collection", handle: "women" },
+    { id: "men", name: "Men's Collection", handle: "men" },
+    { id: "accessories", name: "Accessories", handle: "accessories" }
+  ];
+  
+  const displayCategories = categories.length > 0 ? categories : fallbackCategories;
   
   return (
     <header className="border-b border-gray-100">
@@ -85,15 +131,17 @@ const Navbar = () => {
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-48">
-                  <DropdownMenuItem asChild>
-                    <Link to="/categories/women" className="w-full">Women's Collection</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/categories/men" className="w-full">Men's Collection</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/categories/accessories" className="w-full">Accessories</Link>
-                  </DropdownMenuItem>
+                  {isLoading ? (
+                    <DropdownMenuItem disabled>Loading categories...</DropdownMenuItem>
+                  ) : (
+                    displayCategories.map((category) => (
+                      <DropdownMenuItem key={category.id} asChild>
+                        <Link to={`/categories/${category.handle}`} className="w-full">
+                          {category.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
