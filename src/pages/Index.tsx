@@ -9,6 +9,7 @@ import PromotionalBanners from "@/components/home/PromotionalBanners";
 import RecentlyViewed from "@/components/home/RecentlyViewed";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
 import FeaturedProductsWithPromo from "@/components/home/FeaturedProductsWithPromo";
+import TrendingPurchasesWithPromo from "@/components/home/TrendingPurchasesWithPromo";
 import Newsletter from "@/components/home/Newsletter";
 import Footer from "@/components/layout/Footer";
 
@@ -25,6 +26,7 @@ const Index = () => {
           <PromotionalBanners />
           <FeaturedProducts />
           <FeaturedProductsWithPromo />
+          <TrendingPurchasesWithPromo />
           <RecentlyViewed />
           <Newsletter />
         </div>
