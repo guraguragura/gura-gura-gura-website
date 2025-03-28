@@ -73,7 +73,7 @@ const Navbar = () => {
   
   return (
     <header className="border-b border-gray-100">
-      <div className="container mx-auto px-4 py-4">
+      <div className="mx-auto w-[60%] px-4 py-4"> {/* Updated to 60% width (20% margin on each side) */}
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
             <img 
