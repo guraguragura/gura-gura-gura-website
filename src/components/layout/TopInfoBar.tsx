@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { TruckIcon, PhoneIcon } from "lucide-react";
+import { TruckIcon } from "lucide-react";
 
 const TopInfoBar = () => {
   return (
@@ -10,13 +10,9 @@ const TopInfoBar = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <TruckIcon className="h-4 w-4 mr-2" />
-            <p>Free delivery on orders over ¥30,000</p>
+            <p>Free delivery on orders over RWF 30,000</p>
           </div>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center">
-              <PhoneIcon className="h-4 w-4 mr-2" />
-              <span>Customer Service</span>
-            </div>
+          <div>
             <Link to="/app" className="hover:underline">
               Download the Gura App
             </Link>
