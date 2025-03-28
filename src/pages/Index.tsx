@@ -12,6 +12,7 @@ import FeaturedProductsWithPromo from "@/components/home/FeaturedProductsWithPro
 import TrendingPurchasesWithPromo from "@/components/home/TrendingPurchasesWithPromo";
 import CyberMondayBanner from "@/components/home/CyberMondayBanner";
 import GiftsForEveryone from "@/components/home/GiftsForEveryone";
+import PromotionalBannerCards from "@/components/home/PromotionalBannerCards";
 import Newsletter from "@/components/home/Newsletter";
 import Footer from "@/components/layout/Footer";
 
@@ -31,6 +32,7 @@ const Index = () => {
           <TrendingPurchasesWithPromo />
           <CyberMondayBanner />
           <GiftsForEveryone />
+          <PromotionalBannerCards />
           <RecentlyViewed />
           <Newsletter />
         </div>
