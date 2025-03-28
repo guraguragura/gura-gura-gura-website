@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
@@ -14,8 +14,32 @@ import CyberMondayBanner from "@/components/home/CyberMondayBanner";
 import GiftsForEveryone from "@/components/home/GiftsForEveryone";
 import PromotionalBannerCards from "@/components/home/PromotionalBannerCards";
 import Footer from "@/components/layout/Footer";
+import CategoryCarousel from "@/components/home/CategoryCarousel";
+import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
+  useEffect(() => {
+    // Check categories in the database
+    const checkCategories = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('product_category')
+          .select('*')
+          .eq('is_active', true);
+        
+        if (error) {
+          console.error("Error checking categories:", error);
+        } else {
+          console.log("Available categories:", data);
+        }
+      } catch (error) {
+        console.error("Failed to check categories:", error);
+      }
+    };
+
+    checkCategories();
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <TopInfoBar />
@@ -23,6 +47,7 @@ const Index = () => {
       <div className="flex-grow">
         <div className="mx-auto w-[80%] px-4 max-w-7xl bg-white shadow-sm">
           <Hero />
+          <CategoryCarousel />
           <PopularCategories />
           <TopSellingProducts />
           <PromotionalBanners />

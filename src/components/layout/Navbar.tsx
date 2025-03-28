@@ -47,6 +47,7 @@ const Navbar = () => {
           console.error("Error fetching categories:", error);
           setCategories([]);
         } else {
+          console.log("Categories fetched:", data);
           setCategories(data || []);
         }
       } catch (error) {
