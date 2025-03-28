@@ -1,18 +1,15 @@
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, Search, ShoppingCart, User } from "lucide-react";
+import { Menu, Search, ShoppingCart, User, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 
 const Navbar = () => {
@@ -45,7 +42,7 @@ const Navbar = () => {
               <Input
                 type="text"
                 placeholder="Search products..."
-                className="w-full pr-10 rounded-full border-gray-300 focus:ring-0 focus:border-gray-400 pl-4"
+                className="w-full pr-10 rounded-full border-gray-300 focus:ring-0 focus:border-gray-400 pl-4 h-12 text-base"
                 value={searchQuery}
                 onChange={handleSearchChange}
               />
@@ -80,10 +77,30 @@ const Navbar = () => {
         <div className="mt-2">
           <Separator className="my-2" />
           <nav className="hidden md:flex items-center justify-center space-x-10 py-2">
-            <Link to="/shop" className="text-gray-600 hover:text-black font-medium">Shop</Link>
-            <Link to="/collections" className="text-gray-600 hover:text-black font-medium">Collections</Link>
-            <Link to="/about" className="text-gray-600 hover:text-black font-medium">About</Link>
-            <Link to="/contact" className="text-gray-600 hover:text-black font-medium">Contact</Link>
+            <div className="relative">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="text-gray-600 hover:text-black font-medium flex items-center gap-1">
+                    Categories <ChevronDown className="h-4 w-4" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48">
+                  <DropdownMenuItem asChild>
+                    <Link to="/categories/women" className="w-full">Women's Collection</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/categories/men" className="w-full">Men's Collection</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/categories/accessories" className="w-full">Accessories</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <Link to="/10k-shop" className="text-gray-600 hover:text-black font-medium">10k Shop</Link>
+            <Link to="/electronics" className="text-gray-600 hover:text-black font-medium">Electronics</Link>
+            <Link to="/appliances" className="text-gray-600 hover:text-black font-medium">Appliances</Link>
+            <Link to="/deals" className="text-gray-600 hover:text-black font-medium">Deals</Link>
           </nav>
         </div>
       </div>
