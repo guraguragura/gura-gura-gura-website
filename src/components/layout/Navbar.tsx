@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { SearchIcon, ShoppingCartIcon, UserIcon, HeartIcon, MenuIcon } from "lucide-react";
@@ -9,7 +8,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
@@ -127,7 +125,7 @@ const Navbar = () => {
                   <NavigationMenuTrigger className="text-sm hover:text-blue-600">
                     Categories
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent>
+                  <NavigationMenuContent className="bg-white">
                     <div className="grid grid-cols-2 md:grid-cols-3 p-4 w-[400px] md:w-[600px] gap-3">
                       {displayCategories.map((category) => (
                         <Link 
@@ -174,7 +172,7 @@ const Navbar = () => {
                   Categories
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
+              <DropdownMenuContent align="start" className="w-56 bg-white">
                 {displayCategories.map((category) => (
                   <DropdownMenuItem key={category.id} asChild>
                     <Link 

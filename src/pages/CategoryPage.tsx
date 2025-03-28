@@ -150,20 +150,21 @@ const CategoryPage = () => {
             } else if (productsData) {
               // Transform the data to match the Product interface
               const formattedProducts = productsData.map(product => {
-                // Safely access the metadata object to avoid TypeScript errors
-                const metadata = product.metadata as ProductMetadata || {};
+                // Parse the metadata safely
+                const metadataObj = product.metadata as Record<string, any> || {};
                 
+                // Extract properties with defaults
                 return {
                   id: product.id,
                   title: product.title,
                   description: product.description || "",
                   thumbnail: product.thumbnail || "/placeholder.svg",
-                  price: metadata.price || 0,
-                  discount_price: metadata.discount_price,
-                  rating: metadata.rating || 0,
-                  reviews_count: metadata.reviews_count || 0,
-                  is_sale: metadata.is_sale || false,
-                  is_new: metadata.is_new || false,
+                  price: metadataObj.price || 0,
+                  discount_price: metadataObj.discount_price,
+                  rating: metadataObj.rating || 0,
+                  reviews_count: metadataObj.reviews_count || 0,
+                  is_sale: metadataObj.is_sale || false,
+                  is_new: metadataObj.is_new || false,
                 };
               });
               
@@ -173,7 +174,6 @@ const CategoryPage = () => {
             // No products in this category
             setProducts([]);
           }
-        }
       } catch (error) {
         console.error("Failed to fetch products:", error);
       } finally {
