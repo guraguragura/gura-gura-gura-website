@@ -76,9 +76,13 @@ const Navbar = () => {
       <div className="mx-auto w-[80%] px-4">
         {/* Top navbar with logo and search */}
         <div className="py-3 flex flex-col md:flex-row items-center justify-between gap-4">
-          {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-blue-600">
-            Gura Shop
+          {/* Logo - replacing text with image */}
+          <Link to="/" className="flex items-center">
+            <img 
+              src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
+              alt="Gura Logo" 
+              className="h-10" 
+            />
           </Link>
 
           {/* Search */}
