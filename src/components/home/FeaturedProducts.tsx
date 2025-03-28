@@ -2,6 +2,7 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const featuredProducts = [
   {
@@ -35,6 +36,8 @@ const featuredProducts = [
 ];
 
 const FeaturedProducts = () => {
+  const { formatPrice, isLoading } = useCurrency();
+
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -59,7 +62,11 @@ const FeaturedProducts = () => {
                 <CardContent className="p-4 text-center">
                   <div className="text-sm text-gray-500 mb-1">{product.category}</div>
                   <h3 className="font-medium mb-2">{product.name}</h3>
-                  <div className="font-semibold">${product.price.toFixed(2)}</div>
+                  {isLoading ? (
+                    <div className="animate-pulse h-6 bg-gray-200 rounded w-20 mx-auto"></div>
+                  ) : (
+                    <div className="font-semibold">{formatPrice(product.price)}</div>
+                  )}
                 </CardContent>
               </Card>
             </Link>

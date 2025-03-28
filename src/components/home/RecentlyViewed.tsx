@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const recentProducts = [
   {
@@ -56,6 +57,8 @@ const recentProducts = [
 ];
 
 const RecentlyViewed = () => {
+  const { formatPrice, isLoading } = useCurrency();
+
   return (
     <section className="py-8">
       <div className="container mx-auto px-4">
@@ -83,7 +86,11 @@ const RecentlyViewed = () => {
                     <CardContent className="p-4">
                       <div className="text-xs text-gray-500 mb-1">{product.category}</div>
                       <h3 className="font-medium text-sm line-clamp-2 mb-2">{product.name}</h3>
-                      <div className="font-semibold">${product.price.toFixed(2)}</div>
+                      {isLoading ? (
+                        <div className="animate-pulse h-5 bg-gray-200 rounded w-16"></div>
+                      ) : (
+                        <div className="font-semibold">{formatPrice(product.price)}</div>
+                      )}
                     </CardContent>
                   </Card>
                 </Link>

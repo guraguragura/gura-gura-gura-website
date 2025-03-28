@@ -3,6 +3,16 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Sparkles } from "lucide-react";
+import { useCurrency } from "@/hooks/useCurrency";
+
+interface DealProduct {
+  id: number;
+  name: string;
+  price: number;
+  oldPrice: number;
+  image: string;
+  discountPercentage: number;
+}
 
 const dealProducts = [
   {
@@ -40,6 +50,8 @@ const dealProducts = [
 ];
 
 const DailyDeals = () => {
+  const { formatPrice, isLoading } = useCurrency();
+
   return (
     <section className="py-8 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -71,10 +83,14 @@ const DailyDeals = () => {
                 </div>
                 <CardContent className="p-4">
                   <h3 className="font-medium text-sm line-clamp-2 mb-2">{product.name}</h3>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-lg">${product.price.toFixed(2)}</span>
-                    <span className="text-gray-500 text-sm line-through">${product.oldPrice.toFixed(2)}</span>
-                  </div>
+                  {isLoading ? (
+                    <div className="animate-pulse h-6 bg-gray-200 rounded w-24"></div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-lg">{formatPrice(product.price)}</span>
+                      <span className="text-gray-500 text-sm line-through">{formatPrice(product.oldPrice)}</span>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </Link>
