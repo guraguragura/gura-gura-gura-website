@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ChevronRight, Plus, Minus, ShoppingCart, Heart, Share, Star, Truck, ArrowLeftRight, Package } from "lucide-react";
@@ -33,6 +32,22 @@ interface Product {
   variants?: any[];
 }
 
+interface ProductMetadata {
+  price: number;
+  discount_price?: number;
+  rating: number;
+  reviews_count: number;
+  in_stock: boolean;
+  sku?: string;
+  specifications?: Record<string, any>;
+  features?: string[];
+  is_sale?: boolean;
+  is_new?: boolean;
+  images?: string[];
+  variants?: any[];
+  popularity?: number;
+}
+
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
@@ -56,25 +71,26 @@ const ProductPage = () => {
         if (error) {
           console.error("Error fetching product:", error);
         } else if (data) {
-          // Transform the data to match the Product interface
+          const metadata = data.metadata as ProductMetadata || {};
+          
           const formattedProduct: Product = {
             id: data.id,
             title: data.title,
             description: data.description || "",
             subtitle: data.subtitle || "",
             thumbnail: data.thumbnail || "/placeholder.svg",
-            images: data.metadata?.images || [data.thumbnail || "/placeholder.svg"],
-            price: data.metadata?.price || 19.99,
-            discount_price: data.metadata?.discount_price,
-            rating: data.metadata?.rating || 4.5,
-            reviews_count: data.metadata?.reviews_count || 124,
-            in_stock: data.metadata?.in_stock !== false,
-            sku: data.metadata?.sku || "",
-            specifications: data.metadata?.specifications || {},
-            features: data.metadata?.features || [],
-            is_sale: data.metadata?.is_sale || false,
-            is_new: data.metadata?.is_new || false,
-            variants: data.metadata?.variants || [],
+            images: metadata.images || [data.thumbnail || "/placeholder.svg"],
+            price: metadata.price || 19.99,
+            discount_price: metadata.discount_price,
+            rating: metadata.rating || 4.5,
+            reviews_count: metadata.reviews_count || 124,
+            in_stock: metadata.in_stock !== false,
+            sku: metadata.sku || "",
+            specifications: metadata.specifications || {},
+            features: metadata.features || [],
+            is_sale: metadata.is_sale || false,
+            is_new: metadata.is_new || false,
+            variants: metadata.variants || [],
           };
           
           setProduct(formattedProduct);
@@ -109,7 +125,6 @@ const ProductPage = () => {
     // Implement wishlist functionality here
   };
 
-  // Mock product data if not loaded from database
   const mockProduct: Product = product || {
     id: "1",
     title: "Apple iPhone 14 Pro Max - 256GB - Deep Purple",
@@ -194,7 +209,6 @@ const ProductPage = () => {
       <TopInfoBar />
       <Navbar />
       <div className="container mx-auto py-6 px-4">
-        {/* Breadcrumb */}
         <div className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
           <Link to="/" className="hover:text-blue-500">Home</Link>
           <ChevronRight className="h-4 w-4" />
@@ -203,9 +217,7 @@ const ProductPage = () => {
           <span className="font-semibold text-gray-700">{mockProduct.title}</span>
         </div>
 
-        {/* Product Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {/* Product Images */}
           <div>
             <div className="bg-white p-4 rounded-lg mb-4 flex items-center justify-center h-80">
               <img 
@@ -231,9 +243,7 @@ const ProductPage = () => {
             </div>
           </div>
 
-          {/* Product Info */}
           <div>
-            {/* Title and Badges */}
             <div className="mb-4">
               {mockProduct.is_new && (
                 <span className="inline-block bg-blue-500 text-white text-xs px-2 py-1 rounded mr-2">
@@ -251,7 +261,6 @@ const ProductPage = () => {
               )}
             </div>
 
-            {/* Rating */}
             <div className="flex items-center mb-4">
               <div className="flex mr-2">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -273,7 +282,6 @@ const ProductPage = () => {
               </span>
             </div>
 
-            {/* Price */}
             <div className="mb-6">
               {mockProduct.discount_price ? (
                 <div className="flex items-center">
@@ -291,12 +299,10 @@ const ProductPage = () => {
               )}
             </div>
 
-            {/* Short Description */}
             <p className="text-gray-600 mb-6">
               {mockProduct.description.split('.')[0]}.
             </p>
 
-            {/* Variants */}
             {mockProduct.variants && mockProduct.variants.length > 0 && (
               <div className="mb-6">
                 <h3 className="text-sm font-semibold mb-2">Available Colors:</h3>
@@ -318,7 +324,6 @@ const ProductPage = () => {
               </div>
             )}
 
-            {/* Quantity and Add to Cart */}
             <div className="flex items-start space-x-4 mb-6">
               <div className="flex items-center border rounded-md">
                 <Button 
@@ -364,7 +369,6 @@ const ProductPage = () => {
               </Button>
             </div>
 
-            {/* Shipping Info */}
             <div className="bg-gray-50 p-4 rounded-md space-y-3 mb-6">
               <div className="flex items-center">
                 <Truck className="h-5 w-5 text-blue-500 mr-3" />
@@ -391,7 +395,6 @@ const ProductPage = () => {
           </div>
         </div>
 
-        {/* Product Tabs */}
         <Tabs defaultValue="description" className="mb-12">
           <TabsList className="w-full justify-start border-b rounded-none bg-transparent mb-6">
             <TabsTrigger value="description" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:shadow-none rounded-none">
@@ -484,7 +487,6 @@ const ProductPage = () => {
           </TabsContent>
         </Tabs>
 
-        {/* Related Products */}
         <RelatedProducts productId={mockProduct.id} />
       </div>
       <Footer />

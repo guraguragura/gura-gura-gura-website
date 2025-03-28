@@ -25,6 +25,16 @@ interface Product {
   is_new?: boolean;
 }
 
+interface ProductMetadata {
+  price: number;
+  discount_price?: number;
+  rating: number;
+  reviews_count: number;
+  is_sale?: boolean;
+  is_new?: boolean;
+  popularity?: number;
+}
+
 const sortOptions = [
   { label: "Popularity", value: "popularity" },
   { label: "Price: Low to High", value: "price_asc" },
@@ -139,18 +149,23 @@ const CategoryPage = () => {
               console.error("Error fetching products:", productsError);
             } else if (productsData) {
               // Transform the data to match the Product interface
-              const formattedProducts = productsData.map(product => ({
-                id: product.id,
-                title: product.title,
-                description: product.description || "",
-                thumbnail: product.thumbnail || "/placeholder.svg",
-                price: product.metadata?.price || 0,
-                discount_price: product.metadata?.discount_price,
-                rating: product.metadata?.rating || 0,
-                reviews_count: product.metadata?.reviews_count || 0,
-                is_sale: product.metadata?.is_sale || false,
-                is_new: product.metadata?.is_new || false,
-              }));
+              const formattedProducts = productsData.map(product => {
+                // Safely access the metadata object to avoid TypeScript errors
+                const metadata = product.metadata as ProductMetadata || {};
+                
+                return {
+                  id: product.id,
+                  title: product.title,
+                  description: product.description || "",
+                  thumbnail: product.thumbnail || "/placeholder.svg",
+                  price: metadata.price || 0,
+                  discount_price: metadata.discount_price,
+                  rating: metadata.rating || 0,
+                  reviews_count: metadata.reviews_count || 0,
+                  is_sale: metadata.is_sale || false,
+                  is_new: metadata.is_new || false,
+                };
+              });
               
               setProducts(formattedProducts);
             }
