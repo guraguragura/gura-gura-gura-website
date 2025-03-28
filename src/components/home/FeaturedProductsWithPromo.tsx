@@ -68,10 +68,10 @@ const FeaturedProductsWithPromo = () => {
   const { formatPrice, isLoading } = useCurrency();
 
   return (
-    <section className="py-12 bg-white">
+    <section className="py-8 bg-white">
       <div className="container mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-semibold">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold">
             <span className="font-bold">Featured</span> Products
           </h2>
           <div className="flex items-center gap-4">
@@ -79,7 +79,7 @@ const FeaturedProductsWithPromo = () => {
               View All Products
             </Link>
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" className="rounded-full">
+              <Button variant="outline" size="icon" className="rounded-full w-8 h-8">
                 <span className="sr-only">Previous</span>
                 <svg 
                   width="15" 
@@ -91,7 +91,7 @@ const FeaturedProductsWithPromo = () => {
                   <path d="M8.84182 3.13514C9.04327 3.32401 9.05348 3.64042 8.86462 3.84188L5.43521 7.49991L8.86462 11.1579C9.05348 11.3594 9.04327 11.6758 8.84182 11.8647C8.64036 12.0535 8.32394 12.0433 8.13508 11.8419L4.38508 7.84188C4.20477 7.64955 4.20477 7.35027 4.38508 7.15794L8.13508 3.15794C8.32394 2.95648 8.64036 2.94628 8.84182 3.13514Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path>
                 </svg>
               </Button>
-              <Button variant="outline" size="icon" className="rounded-full">
+              <Button variant="outline" size="icon" className="rounded-full w-8 h-8">
                 <span className="sr-only">Next</span>
                 <svg 
                   width="15" 
@@ -107,9 +107,9 @@ const FeaturedProductsWithPromo = () => {
           </div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {/* Products Section - 3 columns */}
-          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {featuredProducts.map((product) => (
               <Card key={product.id} className="border rounded-lg overflow-hidden flex flex-col">
                 <div className="relative">
@@ -126,29 +126,29 @@ const FeaturedProductsWithPromo = () => {
                       {product.badge}
                     </div>
                   )}
-                  <button className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-100">
-                    <Heart className="h-4 w-4 text-gray-700" />
+                  <button className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-100">
+                    <Heart className="h-3 w-3 text-gray-700" />
                   </button>
                 </div>
                 
-                <div className="p-4 flex flex-col flex-grow">
+                <div className="p-3 flex flex-col flex-grow">
                   <div className="text-xs text-gray-500 mb-1">{product.category}</div>
-                  <h3 className="font-medium text-sm mb-2 line-clamp-2 flex-grow">{product.name}</h3>
+                  <h3 className="font-medium text-xs mb-2 line-clamp-1 flex-grow">{product.name}</h3>
                   
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="flex items-center gap-2 mb-2">
                     {isLoading ? (
-                      <div className="animate-pulse h-5 bg-gray-200 rounded w-16"></div>
+                      <div className="animate-pulse h-4 bg-gray-200 rounded w-12"></div>
                     ) : (
                       <>
-                        <span className="text-lg font-bold">{formatPrice(product.price)}</span>
-                        <span className="text-gray-500 text-sm line-through">{formatPrice(product.oldPrice)}</span>
+                        <span className="text-sm font-bold">{formatPrice(product.price)}</span>
+                        <span className="text-gray-500 text-xs line-through">{formatPrice(product.oldPrice)}</span>
                       </>
                     )}
                   </div>
                   
-                  <Button className="w-full flex items-center justify-center gap-1">
+                  <Button size="sm" className="w-full flex items-center justify-center gap-1 text-xs py-1 h-7">
                     Add To Cart
-                    <ShoppingCart className="h-4 w-4" />
+                    <ShoppingCart className="h-3 w-3" />
                   </Button>
                 </div>
               </Card>
@@ -159,20 +159,20 @@ const FeaturedProductsWithPromo = () => {
           <div className="lg:col-span-1 rounded-lg overflow-hidden relative">
             <div className="bg-indigo-900 h-full w-full rounded-lg overflow-hidden relative">
               <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute w-48 h-48 bg-indigo-600 rounded-full opacity-30 -top-10 -right-10"></div>
-                <div className="absolute w-72 h-72 bg-indigo-600 rounded-full opacity-30 -bottom-20 -left-20"></div>
+                <div className="absolute w-32 h-32 bg-indigo-600 rounded-full opacity-30 -top-10 -right-10"></div>
+                <div className="absolute w-48 h-48 bg-indigo-600 rounded-full opacity-30 -bottom-20 -left-20"></div>
               </div>
               
-              <div className="relative h-full p-6 flex flex-col justify-between">
+              <div className="relative h-full p-4 flex flex-col justify-between">
                 <div>
-                  <div className="bg-amber-400 text-amber-800 text-xs font-bold rounded-full px-3 py-1 inline-block mb-4">20% off</div>
-                  <h3 className="text-white text-xl font-bold mb-2">iPhone Smart Phone - Red</h3>
-                  <div className="text-indigo-200 mb-1">FROM</div>
-                  <div className="text-white text-3xl font-bold mb-4">$890</div>
+                  <div className="bg-amber-400 text-amber-800 text-xs font-bold rounded-full px-2 py-0.5 inline-block mb-2">20% off</div>
+                  <h3 className="text-white text-base font-bold mb-1">iPhone Smart Phone - Red</h3>
+                  <div className="text-indigo-200 text-xs mb-1">FROM</div>
+                  <div className="text-white text-xl font-bold mb-2">$890</div>
                 </div>
                 
-                <div className="mt-2">
-                  <Button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 py-2 flex items-center gap-2 text-sm">
+                <div>
+                  <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-4 py-1 flex items-center gap-1 text-xs h-7">
                     Shop Now
                     <svg 
                       width="15" 
@@ -180,14 +180,14 @@ const FeaturedProductsWithPromo = () => {
                       viewBox="0 0 15 15"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
+                      className="h-3 w-3"
                     >
                       <path d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path>
                     </svg>
                   </Button>
                 </div>
                 
-                <div className="absolute bottom-0 right-0 w-40 h-48">
+                <div className="absolute bottom-0 right-0 w-28 h-32">
                   <img 
                     src="/lovable-uploads/5bc8b271-aa7d-4103-8681-58b3e69bf415.png" 
                     alt="iPhone Smart Phone" 
