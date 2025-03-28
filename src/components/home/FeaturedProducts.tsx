@@ -32,6 +32,20 @@ const featuredProducts = [
     price: 79.99,
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
     category: "Accessories"
+  },
+  {
+    id: 5,
+    name: "Zen Meditation Cushion",
+    price: 59.99,
+    image: "https://images.unsplash.com/photo-1596079890744-c1a0462d0975",
+    category: "Home"
+  },
+  {
+    id: 6,
+    name: "Bamboo Tea Set",
+    price: 119.99,
+    image: "https://images.unsplash.com/photo-1563514227147-6d2320bfbcca",
+    category: "Kitchen"
   }
 ];
 
@@ -48,7 +62,7 @@ const FeaturedProducts = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {featuredProducts.map((product) => (
             <Link to={`/product/${product.id}`} key={product.id}>
               <Card className="h-full transition-all duration-300 hover:shadow-md">
@@ -61,7 +75,7 @@ const FeaturedProducts = () => {
                 </div>
                 <CardContent className="p-4 text-center">
                   <div className="text-sm text-gray-500 mb-1">{product.category}</div>
-                  <h3 className="font-medium mb-2">{product.name}</h3>
+                  <h3 className="font-medium mb-2 text-sm">{product.name}</h3>
                   {isLoading ? (
                     <div className="animate-pulse h-6 bg-gray-200 rounded w-20 mx-auto"></div>
                   ) : (

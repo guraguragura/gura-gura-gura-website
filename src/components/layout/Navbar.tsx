@@ -6,14 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const categories = [
+  "Categories", 
+  "10K Shop", 
   "Electronics", 
-  "Books", 
-  "Home & Kitchen", 
-  "Fashion", 
-  "Sports", 
-  "Toys", 
-  "Health & Beauty", 
-  "Automotive"
+  "Appliances", 
+  "Deals"
 ];
 
 const Navbar = () => {
@@ -62,7 +59,7 @@ const Navbar = () => {
 
         {/* Bottom navbar with categories */}
         <div className="relative">
-          <div className="hidden md:flex items-center space-x-6 py-2 overflow-x-auto">
+          <div className="hidden md:flex items-center justify-start space-x-6 py-2 overflow-x-auto">
             {categories.map((category) => (
               <Link 
                 key={category} 

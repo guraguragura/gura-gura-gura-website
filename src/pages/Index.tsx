@@ -3,7 +3,6 @@ import React from "react";
 import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
-import CategoryCarousel from "@/components/home/CategoryCarousel";
 import PopularCategories from "@/components/home/PopularCategories";
 import DailyDeals from "@/components/home/DailyDeals";
 import RecentlyViewed from "@/components/home/RecentlyViewed";
@@ -20,7 +19,6 @@ const Index = () => {
         <div className="mx-auto w-[80%] px-4 max-w-7xl bg-white shadow-sm">
           <Hero />
           <PopularCategories />
-          <CategoryCarousel />
           <DailyDeals />
           <FeaturedProducts />
           <RecentlyViewed />
