@@ -122,7 +122,7 @@ const Navbar = () => {
         
         <div className="mt-2">
           <Separator className="my-2" />
-          <nav className="hidden md:flex items-center justify-center space-x-10 py-2">
+          <nav className="hidden md:flex items-center justify-start space-x-10 py-2">
             <div className="relative">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
