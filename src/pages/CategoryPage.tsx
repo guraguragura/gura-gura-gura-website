@@ -174,6 +174,7 @@ const CategoryPage = () => {
             // No products in this category
             setProducts([]);
           }
+        }
       } catch (error) {
         console.error("Failed to fetch products:", error);
       } finally {
