@@ -61,6 +61,24 @@ const featuredProducts = [
     image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf",
     badge: null,
     category: "Accessories"
+  },
+  {
+    id: 7,
+    name: "Bluetooth Speaker - Black",
+    price: 34.99,
+    oldPrice: 49.99,
+    image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9",
+    badge: "Hot Deal",
+    category: "Audio"
+  },
+  {
+    id: 8,
+    name: "Ultra HD Monitor - 27\"",
+    price: 299.99,
+    oldPrice: 399.99,
+    image: "https://images.unsplash.com/photo-1551645120-d5ca322d1d04",
+    badge: null,
+    category: "Monitors"
   }
 ];
 
@@ -107,9 +125,9 @@ const FeaturedProductsWithPromo = () => {
           </div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-          {/* Products Section - 3 columns */}
-          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          {/* Products Section - 4 columns */}
+          <div className="lg:col-span-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {featuredProducts.map((product) => (
               <Card key={product.id} className="border rounded-lg overflow-hidden flex flex-col">
                 <div className="relative">
@@ -122,7 +140,8 @@ const FeaturedProductsWithPromo = () => {
                     <div className={`absolute top-2 left-2 rounded-md px-2 py-1 text-xs font-medium text-white
                       ${product.badge === 'Best seller' ? 'bg-black' : 
                         product.badge === 'New' ? 'bg-blue-500' : 
-                        product.badge === 'Sale' ? 'bg-red-500' : 'bg-blue-500'}`}>
+                        product.badge === 'Sale' ? 'bg-red-500' : 
+                        product.badge === 'Hot Deal' ? 'bg-orange-500' : 'bg-blue-500'}`}>
                       {product.badge}
                     </div>
                   )}
