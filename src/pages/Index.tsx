@@ -3,6 +3,7 @@ import React from "react";
 import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
+import CategoryCarousel from "@/components/home/CategoryCarousel";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
 import Categories from "@/components/home/Categories";
 import Newsletter from "@/components/home/Newsletter";
@@ -16,6 +17,7 @@ const Index = () => {
       <div className="flex-grow">
         <div className="mx-auto w-[80%] px-4 max-w-7xl bg-white shadow-sm"> {/* Updated to 80% width */}
           <Hero />
+          <CategoryCarousel />
           <FeaturedProducts />
           <Categories />
           <Newsletter />
