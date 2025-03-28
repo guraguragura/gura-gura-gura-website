@@ -11,6 +11,7 @@ import FeaturedProducts from "@/components/home/FeaturedProducts";
 import FeaturedProductsWithPromo from "@/components/home/FeaturedProductsWithPromo";
 import TrendingPurchasesWithPromo from "@/components/home/TrendingPurchasesWithPromo";
 import CyberMondayBanner from "@/components/home/CyberMondayBanner";
+import GiftsForEveryone from "@/components/home/GiftsForEveryone";
 import Newsletter from "@/components/home/Newsletter";
 import Footer from "@/components/layout/Footer";
 
@@ -29,6 +30,7 @@ const Index = () => {
           <FeaturedProductsWithPromo />
           <TrendingPurchasesWithPromo />
           <CyberMondayBanner />
+          <GiftsForEveryone />
           <RecentlyViewed />
           <Newsletter />
         </div>
