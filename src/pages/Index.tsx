@@ -14,7 +14,7 @@ const Index = () => {
       <TopInfoBar />
       <Navbar />
       <div className="flex-grow">
-        <div className="mx-auto w-[60%] px-4 max-w-7xl bg-white shadow-sm"> {/* Updated to 60% width */}
+        <div className="mx-auto w-[80%] px-4 max-w-7xl bg-white shadow-sm"> {/* Updated to 80% width */}
           <Hero />
           <FeaturedProducts />
           <Categories />
