@@ -4,7 +4,7 @@ import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
 import PopularCategories from "@/components/home/PopularCategories";
-import DailyDeals from "@/components/home/DailyDeals";
+import TopSellingProducts from "@/components/home/TopSellingProducts";
 import RecentlyViewed from "@/components/home/RecentlyViewed";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
 import Newsletter from "@/components/home/Newsletter";
@@ -19,7 +19,7 @@ const Index = () => {
         <div className="mx-auto w-[80%] px-4 max-w-7xl bg-white shadow-sm">
           <Hero />
           <PopularCategories />
-          <DailyDeals />
+          <TopSellingProducts />
           <FeaturedProducts />
           <RecentlyViewed />
           <Newsletter />
