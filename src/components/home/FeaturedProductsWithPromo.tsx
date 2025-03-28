@@ -43,6 +43,24 @@ const featuredProducts = [
     image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
     badge: "Best seller",
     category: "Smartphones"
+  },
+  {
+    id: 5,
+    name: "Wireless Earbuds - White",
+    price: 19.99,
+    oldPrice: 34.99,
+    image: "https://images.unsplash.com/photo-1606741965429-02919c0a010c",
+    badge: "Sale",
+    category: "Audio"
+  },
+  {
+    id: 6,
+    name: "Laptop Stand - Aluminum",
+    price: 24.99,
+    oldPrice: 39.99,
+    image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf",
+    badge: null,
+    category: "Accessories"
   }
 ];
 
@@ -50,7 +68,7 @@ const FeaturedProductsWithPromo = () => {
   const { formatPrice, isLoading } = useCurrency();
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-12 bg-white">
       <div className="container mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-semibold">
@@ -89,9 +107,9 @@ const FeaturedProductsWithPromo = () => {
           </div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-          {/* Products Section - 4 columns */}
-          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Products Section - 3 columns */}
+          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {featuredProducts.map((product) => (
               <Card key={product.id} className="border rounded-lg overflow-hidden flex flex-col">
                 <div className="relative">
@@ -103,7 +121,8 @@ const FeaturedProductsWithPromo = () => {
                   {product.badge && (
                     <div className={`absolute top-2 left-2 rounded-md px-2 py-1 text-xs font-medium text-white
                       ${product.badge === 'Best seller' ? 'bg-black' : 
-                        product.badge === 'New' ? 'bg-blue-500' : 'bg-blue-500'}`}>
+                        product.badge === 'New' ? 'bg-blue-500' : 
+                        product.badge === 'Sale' ? 'bg-red-500' : 'bg-blue-500'}`}>
                       {product.badge}
                     </div>
                   )}
@@ -136,8 +155,8 @@ const FeaturedProductsWithPromo = () => {
             ))}
           </div>
           
-          {/* Promotional Banner - 2 columns */}
-          <div className="lg:col-span-2 rounded-lg overflow-hidden relative">
+          {/* Promotional Banner - 1 column */}
+          <div className="lg:col-span-1 rounded-lg overflow-hidden relative">
             <div className="bg-indigo-900 h-full w-full rounded-lg overflow-hidden relative">
               <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute w-48 h-48 bg-indigo-600 rounded-full opacity-30 -top-10 -right-10"></div>
@@ -147,13 +166,13 @@ const FeaturedProductsWithPromo = () => {
               <div className="relative h-full p-6 flex flex-col justify-between">
                 <div>
                   <div className="bg-amber-400 text-amber-800 text-xs font-bold rounded-full px-3 py-1 inline-block mb-4">20% off</div>
-                  <h3 className="text-white text-2xl font-bold mb-2">iPhone Smart Phone - Red</h3>
+                  <h3 className="text-white text-xl font-bold mb-2">iPhone Smart Phone - Red</h3>
                   <div className="text-indigo-200 mb-1">FROM</div>
-                  <div className="text-white text-4xl font-bold mb-4">$890</div>
+                  <div className="text-white text-3xl font-bold mb-4">$890</div>
                 </div>
                 
-                <div className="mt-6">
-                  <Button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-8 py-3 flex items-center gap-2">
+                <div className="mt-2">
+                  <Button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 py-2 flex items-center gap-2 text-sm">
                     Shop Now
                     <svg 
                       width="15" 
@@ -161,14 +180,14 @@ const FeaturedProductsWithPromo = () => {
                       viewBox="0 0 15 15"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="h-4 w-4"
                     >
                       <path d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path>
                     </svg>
                   </Button>
                 </div>
                 
-                <div className="absolute bottom-0 right-0 w-48 h-64">
+                <div className="absolute bottom-0 right-0 w-40 h-48">
                   <img 
                     src="/lovable-uploads/5bc8b271-aa7d-4103-8681-58b3e69bf415.png" 
                     alt="iPhone Smart Phone" 
