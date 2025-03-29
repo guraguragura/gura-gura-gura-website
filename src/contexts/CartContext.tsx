@@ -3,7 +3,8 @@ import React, { createContext, useContext } from 'react';
 import { useCart } from '@/hooks/useCart';
 
 // Re-export the CartItem type properly with 'export type'
-export type { CartItem } from '@/hooks/useCart';
+import type { CartItem } from '@/hooks/useCart';
+export type { CartItem };
 
 interface CartContextType {
   items: CartItem[];
