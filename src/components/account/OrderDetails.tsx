@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
@@ -32,6 +31,7 @@ import {
 } from '@/components/ui/table';
 import { OrderStatus } from './Orders';
 import { useCurrency } from '@/hooks/useCurrency';
+import { toast } from '@/hooks/use-toast';
 
 interface OrderItem {
   id: string;
@@ -60,7 +60,6 @@ interface OrderDetails {
   };
 }
 
-// Status configuration with icons and colors - same as in Orders.tsx
 const statusConfig: Record<OrderStatus, { icon: React.ReactNode; color: string; label: string }> = {
   pending: { 
     icon: <Clock className="h-5 w-5" />, 
@@ -89,7 +88,6 @@ const statusConfig: Record<OrderStatus, { icon: React.ReactNode; color: string; 
   }
 };
 
-// Track progress of order through steps
 const orderSteps = [
   { status: 'pending', label: 'Order Placed' },
   { status: 'processing', label: 'Processing' },
@@ -97,7 +95,6 @@ const orderSteps = [
   { status: 'delivered', label: 'Delivered' }
 ];
 
-// Mock order data for development
 const mockOrderDetails: Record<string, OrderDetails> = {
   'ord_1234': {
     id: 'ord_1234',
@@ -204,11 +201,24 @@ export const OrderDetails = () => {
   const navigate = useNavigate();
   const { formatPrice, isLoading } = useCurrency();
   
-  // In a real app, we would fetch the order details
   const order = orderId ? mockOrderDetails[orderId] : null;
 
   const goBack = () => {
     navigate('/account/orders');
+  };
+
+  const handleCancelOrder = () => {
+    toast({
+      title: "Order cancellation requested",
+      description: `Cancellation request for order #${order?.display_id} has been submitted.`,
+    });
+  };
+
+  const handleReturnOrder = () => {
+    toast({
+      title: "Return request initiated",
+      description: `Return request for order #${order?.display_id} has been initiated.`,
+    });
   };
 
   if (!order) {
@@ -228,9 +238,9 @@ export const OrderDetails = () => {
     );
   }
 
-  // Determine the current step in the order process
   const currentStepIndex = orderSteps.findIndex(step => step.status === order.status);
   const isOrderCanceled = order.status === 'canceled';
+  const isOrderDelivered = order.status === 'delivered';
 
   return (
     <div className="space-y-6">
@@ -243,7 +253,6 @@ export const OrderDetails = () => {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {/* Order Status Card */}
         <Card>
           <CardHeader>
             <CardTitle>Order Status</CardTitle>
@@ -300,7 +309,6 @@ export const OrderDetails = () => {
           </CardContent>
         </Card>
 
-        {/* Shipping & Payment Info Card */}
         <Card>
           <CardHeader>
             <CardTitle>Order Information</CardTitle>
@@ -335,7 +343,6 @@ export const OrderDetails = () => {
         </Card>
       </div>
 
-      {/* Order Items */}
       <Card>
         <CardHeader>
           <CardTitle>Order Items</CardTitle>
@@ -397,13 +404,27 @@ export const OrderDetails = () => {
         </CardFooter>
       </Card>
 
-      {/* Additional Actions */}
       <div className="flex justify-end">
         <Button variant="outline" className="mr-2">
           Need Help?
         </Button>
-        {(order.status === 'delivered' || order.status === 'out_for_delivery') && (
-          <Button>Track Package</Button>
+        {!isOrderCanceled && (
+          isOrderDelivered ? (
+            <Button 
+              onClick={handleReturnOrder}
+              className="bg-[#F2FCE2] text-green-700 hover:bg-green-100 border border-green-200"
+            >
+              Return Order
+            </Button>
+          ) : (
+            <Button 
+              variant="outline" 
+              onClick={handleCancelOrder}
+              className="text-red-600 border-red-300 hover:bg-red-50"
+            >
+              Cancel Order
+            </Button>
+          )
         )}
       </div>
     </div>
