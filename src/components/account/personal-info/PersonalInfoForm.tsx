@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/form';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface CustomerFormValues {
   first_name: string;
@@ -25,11 +26,11 @@ interface CustomerFormValues {
 interface PersonalInfoFormProps {
   customer: any;
   setCustomer: (customer: any) => void;
-  user: any;
 }
 
-const PersonalInfoForm = ({ customer, setCustomer, user }: PersonalInfoFormProps) => {
+const PersonalInfoForm = ({ customer, setCustomer }: PersonalInfoFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user } = useAuth();
 
   const form = useForm<CustomerFormValues>({
     defaultValues: {
@@ -64,18 +65,17 @@ const PersonalInfoForm = ({ customer, setCustomer, user }: PersonalInfoFormProps
             company_name: values.company_name,
             has_account: true
           })
-          .select('id')
+          .select('*')
           .single();
 
         if (createError) {
           throw createError;
         }
         
-        customerId = newCustomer.id;
         setCustomer(newCustomer);
       } else {
         // Update existing customer
-        const { error: updateError } = await supabase
+        const { data: updatedCustomer, error: updateError } = await supabase
           .from('customer')
           .update({
             first_name: values.first_name,
@@ -85,11 +85,15 @@ const PersonalInfoForm = ({ customer, setCustomer, user }: PersonalInfoFormProps
             company_name: values.company_name,
             updated_at: new Date().toISOString(),
           })
-          .eq('id', customerId);
+          .eq('id', customerId)
+          .select('*')
+          .single();
 
         if (updateError) {
           throw updateError;
         }
+        
+        setCustomer(updatedCustomer);
       }
 
       toast({
