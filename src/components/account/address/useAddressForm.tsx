@@ -73,7 +73,7 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
           } else {
             // If no customer data exists, create a new customer record
             try {
-              // Create a new customer record with empty data
+              // Note: We're not specifying an ID as Supabase will generate a UUID
               const { data: newCustomer, error: createError } = await supabase
                 .from('customer')
                 .insert({
@@ -167,7 +167,6 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
     form,
     isLoading,
     isSubmitting,
-    customerData,
     onSubmit
   };
 };
