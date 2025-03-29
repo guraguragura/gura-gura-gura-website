@@ -5,16 +5,16 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
 interface AddressFormValues {
-  address_name: string;
+  address: string;
   first_name: string;
   last_name: string;
   company: string;
-  address_1: string;
-  address_2: string;
-  city: string;
-  province: string;
+  district: string;
+  sector: string;
+  cell: string;
+  village: string;
   postal_code: string;
-  country_code: string;
+  nearby_landmark: string;
   phone: string;
   is_default_shipping: boolean;
   is_default_billing: boolean;
@@ -27,16 +27,16 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
   
   const form = useForm<AddressFormValues>({
     defaultValues: {
-      address_name: '',
+      address: '',
       first_name: '',
       last_name: '',
       company: '',
-      address_1: '',
-      address_2: '',
-      city: '',
-      province: '',
+      district: '',
+      sector: '',
+      cell: '',
+      village: '',
       postal_code: '',
-      country_code: 'US',
+      nearby_landmark: '',
       phone: '',
       is_default_shipping: false,
       is_default_billing: false
@@ -104,16 +104,16 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
         .insert({
           id: addressId,
           customer_id: customerData.id,
-          address_name: data.address_name,
+          address: data.address,
           first_name: data.first_name,
           last_name: data.last_name,
           company: data.company,
-          address_1: data.address_1,
-          address_2: data.address_2,
-          city: data.city,
-          province: data.province,
+          district: data.district,
+          sector: data.sector,
+          cell: data.cell,
+          village: data.village,
           postal_code: data.postal_code,
-          country_code: data.country_code,
+          nearby_landmark: data.nearby_landmark,
           phone: data.phone,
           is_default_shipping: data.is_default_shipping,
           is_default_billing: data.is_default_billing

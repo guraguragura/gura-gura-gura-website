@@ -49,12 +49,12 @@ const AddressFormFields = ({ form }: AddressFormFieldsProps) => {
 
       <FormField
         control={form.control}
-        name="address_name"
+        name="address"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Address Nickname (e.g. Home, Work)</FormLabel>
+            <FormLabel>Address</FormLabel>
             <FormControl>
-              <Input placeholder="Address nickname" {...field} />
+              <Input placeholder="Address" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -77,12 +77,12 @@ const AddressFormFields = ({ form }: AddressFormFieldsProps) => {
 
       <FormField
         control={form.control}
-        name="address_1"
+        name="district"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Address Line 1</FormLabel>
+            <FormLabel>District</FormLabel>
             <FormControl>
-              <Input placeholder="Street address, P.O. box" {...field} />
+              <Input placeholder="District" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -91,12 +91,12 @@ const AddressFormFields = ({ form }: AddressFormFieldsProps) => {
 
       <FormField
         control={form.control}
-        name="address_2"
+        name="sector"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Address Line 2 (Optional)</FormLabel>
+            <FormLabel>Sector (Optional)</FormLabel>
             <FormControl>
-              <Input placeholder="Apartment, suite, unit, building, floor, etc." {...field} />
+              <Input placeholder="Sector" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -106,12 +106,12 @@ const AddressFormFields = ({ form }: AddressFormFieldsProps) => {
       <div className="grid grid-cols-2 gap-4">
         <FormField
           control={form.control}
-          name="city"
+          name="cell"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>City</FormLabel>
+              <FormLabel>Cell</FormLabel>
               <FormControl>
-                <Input placeholder="City" {...field} />
+                <Input placeholder="Cell" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,12 +120,12 @@ const AddressFormFields = ({ form }: AddressFormFieldsProps) => {
         
         <FormField
           control={form.control}
-          name="province"
+          name="village"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>State/Province</FormLabel>
+              <FormLabel>Village</FormLabel>
               <FormControl>
-                <Input placeholder="State/Province" {...field} />
+                <Input placeholder="Village" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -150,28 +150,13 @@ const AddressFormFields = ({ form }: AddressFormFieldsProps) => {
         
         <FormField
           control={form.control}
-          name="country_code"
+          name="nearby_landmark"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Country</FormLabel>
-              <Select 
-                onValueChange={field.onChange} 
-                defaultValue={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a country" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="US">United States</SelectItem>
-                  <SelectItem value="CA">Canada</SelectItem>
-                  <SelectItem value="GB">United Kingdom</SelectItem>
-                  <SelectItem value="AU">Australia</SelectItem>
-                  <SelectItem value="DE">Germany</SelectItem>
-                  <SelectItem value="FR">France</SelectItem>
-                </SelectContent>
-              </Select>
+              <FormLabel>Nearby Landmark</FormLabel>
+              <FormControl>
+                <Input placeholder="Nearby landmark" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

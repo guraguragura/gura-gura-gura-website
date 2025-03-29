@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, MapPin, Pencil, Trash } from 'lucide-react';
@@ -6,16 +7,16 @@ import AddressForm from './address/AddressForm';
 
 interface Address {
   id: string;
-  address_name: string;
+  address: string;
   first_name: string;
   last_name: string;
   company: string;
-  address_1: string;
-  address_2: string;
-  city: string;
-  province: string;
+  district: string;
+  sector: string;
+  cell: string;
+  village: string;
   postal_code: string;
-  country_code: string;
+  nearby_landmark: string;
   phone: string;
   is_default_shipping: boolean;
   is_default_billing: boolean;
@@ -82,20 +83,20 @@ export const Addresses = () => {
               key={address.id} 
               className="border rounded-lg p-4 hover:border-blue-200 transition-colors"
             >
-              {address.address_name && (
-                <div className="font-medium text-lg mb-1">{address.address_name}</div>
+              {address.address && (
+                <div className="font-medium text-lg mb-1">{address.address}</div>
               )}
               <div className="mb-2">
                 {address.first_name} {address.last_name}
                 {address.company && <div className="text-gray-600">{address.company}</div>}
               </div>
               <div className="text-gray-600 mb-3">
-                <div>{address.address_1}</div>
-                {address.address_2 && <div>{address.address_2}</div>}
+                <div>{address.district}</div>
+                {address.sector && <div>{address.sector}</div>}
                 <div>
-                  {address.city}, {address.province} {address.postal_code}
+                  {address.cell}, {address.village} {address.postal_code}
                 </div>
-                <div>{address.country_code}</div>
+                <div>{address.nearby_landmark}</div>
                 {address.phone && <div className="mt-1">{address.phone}</div>}
               </div>
               <div className="flex flex-wrap gap-2 mb-3">
