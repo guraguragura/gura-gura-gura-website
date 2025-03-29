@@ -3,8 +3,9 @@ import React from "react";
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useCurrency } from "@/hooks/useCurrency";
-import { ShoppingCart, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AddToCartButton from "@/components/product/AddToCartButton";
 
 const trendingProducts = [
   {
@@ -211,10 +212,16 @@ const TrendingPurchasesWithPromo = () => {
                     )}
                   </div>
                   
-                  <Button size="sm" className="w-full flex items-center justify-center gap-1 text-[10px] py-0.5 h-6">
-                    Add To Cart
-                    <ShoppingCart className="h-2.5 w-2.5" />
-                  </Button>
+                  <AddToCartButton 
+                    product={{
+                      id: product.id.toString(),
+                      title: product.name,
+                      price: product.price,
+                      discount_price: product.oldPrice > product.price ? product.price : undefined,
+                      thumbnail: product.image
+                    }}
+                    className="w-full text-[10px] py-0.5 h-6"
+                  />
                 </div>
               </Card>
             ))}

@@ -3,8 +3,9 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useCurrency } from "@/hooks/useCurrency";
-import { Heart, ShoppingCart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AddToCartButton from "@/components/product/AddToCartButton";
 
 interface Product {
   id: number;
@@ -102,7 +103,6 @@ const TopSellingProducts = () => {
                 <h3 className="text-2xl font-bold mb-6">Fresh Vegetables</h3>
                 <Button className="rounded-full flex items-center gap-2 bg-white text-black hover:bg-gray-100">
                   Shop Now
-                  <ShoppingCart className="h-4 w-4" />
                 </Button>
               </div>
               <div className="mt-4 flex justify-center">
@@ -151,10 +151,16 @@ const TopSellingProducts = () => {
                         </div>
                       </Link>
                       <div className="flex items-center justify-between">
-                        <Button variant="secondary" size="sm" className="flex items-center gap-1 px-3 py-1 h-8 w-full mr-2">
-                          <ShoppingCart className="h-4 w-4" />
-                          Add To Cart
-                        </Button>
+                        <AddToCartButton 
+                          product={{
+                            id: product.id.toString(),
+                            title: product.name,
+                            price: product.price,
+                            discount_price: product.oldPrice > product.price ? product.price : undefined,
+                            thumbnail: product.image
+                          }}
+                          className="flex items-center gap-1 px-3 py-1 h-8 w-full mr-2"
+                        />
                         <Button variant="outline" size="icon" className="rounded-full h-8 w-8 flex-shrink-0">
                           <Heart className="h-4 w-4" />
                           <span className="sr-only">Add to wishlist</span>

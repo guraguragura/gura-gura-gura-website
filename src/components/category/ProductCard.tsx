@@ -1,11 +1,12 @@
 
 import React from "react";
-import { Star, ShoppingCart } from "lucide-react";
+import { Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import AddToCartButton from "@/components/product/AddToCartButton";
 import "./ProductCard.css"; // Import custom CSS
 
 interface ProductProps {
@@ -90,12 +91,16 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
               )}
             </div>
             
-            <Button 
-              className="w-full py-2 text-sm flex items-center justify-center bg-gray-500 hover:bg-gray-600"
-              onClick={() => console.log(`Add to cart: ${id}`)}
-            >
-              Add To Cart <ShoppingCart className="ml-2 h-4 w-4" />
-            </Button>
+            <AddToCartButton 
+              product={{
+                id: id,
+                title: title,
+                price: price,
+                discount_price: discount_price,
+                thumbnail: thumbnail
+              }}
+              className="w-full py-2 text-sm flex items-center justify-center"
+            />
           </div>
         </div>
       </Card>
@@ -153,12 +158,16 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
       </CardContent>
       
       <CardFooter className="p-0 mt-auto">
-        <Button 
+        <AddToCartButton 
+          product={{
+            id: id,
+            title: title,
+            price: price,
+            discount_price: discount_price,
+            thumbnail: thumbnail
+          }}
           className="add-to-cart-button"
-          onClick={() => console.log(`Add to cart: ${id}`)}
-        >
-          Add To Cart <ShoppingCart className="cart-icon" />
-        </Button>
+        />
       </CardFooter>
     </Card>
   );

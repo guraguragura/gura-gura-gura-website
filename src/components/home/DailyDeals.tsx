@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 import { useCurrency } from "@/hooks/useCurrency";
+import AddToCartButton from "@/components/product/AddToCartButton";
 
 interface DealProduct {
   id: number;
@@ -67,7 +68,7 @@ const DailyDeals = () => {
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {dealProducts.map((product) => (
-            <Link to={`/product/${product.id}`} key={product.id}>
+            <div key={product.id}>
               <Card className="h-full transition-all duration-300 hover:shadow-md overflow-hidden">
                 <div className="relative">
                   <div className="aspect-square overflow-hidden">
@@ -82,18 +83,30 @@ const DailyDeals = () => {
                   </div>
                 </div>
                 <CardContent className="p-4">
-                  <h3 className="font-medium text-sm line-clamp-2 mb-2">{product.name}</h3>
+                  <Link to={`/product/${product.id}`}>
+                    <h3 className="font-medium text-sm line-clamp-2 mb-2">{product.name}</h3>
+                  </Link>
                   {isLoading ? (
                     <div className="animate-pulse h-6 bg-gray-200 rounded w-24"></div>
                   ) : (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mb-3">
                       <span className="font-bold text-lg">{formatPrice(product.price)}</span>
                       <span className="text-gray-500 text-sm line-through">{formatPrice(product.oldPrice)}</span>
                     </div>
                   )}
+                  <AddToCartButton 
+                    product={{
+                      id: product.id.toString(),
+                      title: product.name,
+                      price: product.price,
+                      discount_price: product.oldPrice > product.price ? product.price : undefined,
+                      thumbnail: product.image
+                    }}
+                    className="w-full mt-2"
+                  />
                 </CardContent>
               </Card>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
