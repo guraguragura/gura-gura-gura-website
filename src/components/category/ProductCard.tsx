@@ -77,13 +77,12 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
         <div className="flex items-baseline gap-2">
           {discount_price ? (
             <>
-              <span className="text-gray-500 line-through text-lg">{formatPrice(price)}</span>
-              <span className="text-2xl font-bold">{formatPrice(discount_price)}</span>
+              <span className="text-gray-500 line-through text-base">{formatPrice(price)}</span>
+              <span className="text-xl font-bold text-blue-600">{formatPrice(discount_price)}</span>
             </>
           ) : (
-            <span className="text-2xl font-bold">{formatPrice(price)}</span>
+            <span className="text-xl font-bold text-blue-600">{formatPrice(price)}</span>
           )}
-          <span className="text-gray-500 text-sm">/Qty</span>
         </div>
       </CardContent>
       
