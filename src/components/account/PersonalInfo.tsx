@@ -145,9 +145,13 @@ export const PersonalInfo = () => {
       
       // If no customer record exists, create one
       if (!customerId) {
+        // Generate a new UUID for the customer if we don't have one
+        const newCustomerId = crypto.randomUUID();
+        
         const { data: newCustomer, error: createError } = await supabase
           .from('customer')
           .insert({
+            id: newCustomerId, // Provide the required id field
             first_name: values.first_name,
             last_name: values.last_name,
             email: values.email,
@@ -214,10 +218,13 @@ export const PersonalInfo = () => {
           throw addressUpdateError;
         }
       } else {
-        // Create new address
+        // Create new address with a new UUID
+        const newAddressId = crypto.randomUUID();
+        
         const { error: createAddressError } = await supabase
           .from('customer_address')
           .insert({
+            id: newAddressId, // Provide the required id field
             customer_id: customerId,
             address: values.address,
             district: values.district,
