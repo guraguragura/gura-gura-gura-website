@@ -14,7 +14,6 @@ interface Order {
   status: OrderStatus;
   date: string;
   total: number;
-  items: number;
   thumbnail?: string; // Optional thumbnail image
 }
 
@@ -55,7 +54,6 @@ const mockOrders: Order[] = [
     status: 'pending',
     date: '2023-11-01',
     total: 124.99,
-    items: 2,
     thumbnail: '/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png'
   },
   {
@@ -64,7 +62,6 @@ const mockOrders: Order[] = [
     status: 'processing',
     date: '2023-10-27',
     total: 79.95,
-    items: 1,
     thumbnail: '/lovable-uploads/189d5b38-0cf3-4a56-9606-2caba74233ca.png'
   },
   {
@@ -73,7 +70,6 @@ const mockOrders: Order[] = [
     status: 'out_for_delivery',
     date: '2023-10-20',
     total: 249.50,
-    items: 3,
     thumbnail: '/lovable-uploads/2b4f1e1c-8388-4e0a-a05c-1efa3ecbb777.png'
   },
   {
@@ -82,7 +78,6 @@ const mockOrders: Order[] = [
     status: 'delivered',
     date: '2023-10-15',
     total: 54.99,
-    items: 1,
     thumbnail: '/lovable-uploads/9f9f6f6c-f423-47c6-8964-326b064c2fd8.png'
   },
   {
@@ -91,7 +86,6 @@ const mockOrders: Order[] = [
     status: 'canceled',
     date: '2023-10-10',
     total: 199.99,
-    items: 2,
     thumbnail: '/lovable-uploads/5bc8b271-aa7d-4103-8681-58b3e69bf415.png'
   }
 ];
@@ -133,7 +127,6 @@ export const Orders = () => {
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
@@ -167,9 +160,6 @@ export const Orders = () => {
                     <div className="text-sm text-gray-900">
                       {isLoading ? '...' : formatPrice(order.total)}
                     </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{order.items}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <Link to={`/account/orders/${order.id}`} className="text-blue-600 hover:text-blue-900">
