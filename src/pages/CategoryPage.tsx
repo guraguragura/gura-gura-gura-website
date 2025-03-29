@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ChevronRight, Grid3X3Icon, ListIcon } from "lucide-react";
@@ -77,7 +76,6 @@ const CategoryPage = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        // Get the category id first
         const { data: categoryData, error: categoryError } = await supabase
           .from('product_category')
           .select('id')
@@ -90,7 +88,6 @@ const CategoryPage = () => {
           return;
         }
 
-        // Get products in this category
         if (categoryData) {
           const { data: productCategoryData, error: productCategoryError } = await supabase
             .from('product_category_product')
@@ -106,7 +103,6 @@ const CategoryPage = () => {
           if (productCategoryData && productCategoryData.length > 0) {
             const productIds = productCategoryData.map(item => item.product_id);
             
-            // Count total products for pagination
             const { count, error: countError } = await supabase
               .from('product')
               .select('id', { count: 'exact' })
@@ -118,14 +114,12 @@ const CategoryPage = () => {
               setTotalProducts(count || 0);
             }
             
-            // Get products with pagination
             let query = supabase
               .from('product')
               .select('id, title, description, thumbnail, metadata')
               .in('id', productIds)
               .range((currentPage - 1) * productsPerPage, currentPage * productsPerPage - 1);
               
-            // Apply sorting
             switch (sortBy) {
               case "price_asc":
                 query = query.order('metadata->price', { ascending: true });
@@ -148,12 +142,9 @@ const CategoryPage = () => {
             if (productsError) {
               console.error("Error fetching products:", productsError);
             } else if (productsData) {
-              // Transform the data to match the Product interface
               const formattedProducts = productsData.map(product => {
-                // Parse the metadata safely
                 const metadataObj = product.metadata as Record<string, any> || {};
                 
-                // Extract properties with defaults
                 return {
                   id: product.id,
                   title: product.title,
@@ -171,7 +162,6 @@ const CategoryPage = () => {
               setProducts(formattedProducts);
             }
           } else {
-            // No products in this category
             setProducts([]);
           }
         }
@@ -190,7 +180,6 @@ const CategoryPage = () => {
 
   const totalPages = Math.ceil(totalProducts / productsPerPage);
 
-  // Mock data for demonstration if no products are available
   const mockProducts: Product[] = loading ? [] : products.length > 0 ? products : Array(8).fill(null).map((_, index) => ({
     id: `mock-${index}`,
     title: "Taylor Forms Broccoli Florets Vegetables",
@@ -215,13 +204,11 @@ const CategoryPage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Left sidebar with filters */}
           <div className="hidden md:block">
             <h2 className="text-xl font-bold mb-6">{categoryName || "Product Category"}</h2>
             <CategoryFilter />
           </div>
 
-          {/* Product grid */}
           <div className="md:col-span-3">
             <div className="flex flex-col space-y-4">
               <div className="flex justify-between items-center bg-white p-4 rounded-md shadow-sm">
@@ -286,7 +273,6 @@ const CategoryPage = () => {
                 </div>
               )}
 
-              {/* Pagination */}
               {totalPages > 1 && (
                 <Pagination className="mt-8">
                   <PaginationContent>
@@ -298,7 +284,6 @@ const CategoryPage = () => {
                     </PaginationItem>
                     
                     {Array.from({ length: Math.min(totalPages, 7) }).map((_, i) => {
-                      // Show first page, last page, current page, and pages around current
                       let pageNumber;
                       if (totalPages <= 7) {
                         pageNumber = i + 1;

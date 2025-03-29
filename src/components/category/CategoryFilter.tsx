@@ -1,27 +1,103 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
+import { supabase } from "@/integrations/supabase/client";
 
 const CategoryFilter = () => {
+  const { handle } = useParams<{ handle: string }>();
   const [priceRange, setPriceRange] = useState([0, 100]);
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [colorFilter, setColorFilter] = useState<string | null>(null);
   const [brandFilter, setBrandFilter] = useState<string | null>(null);
+  const [categories, setCategories] = useState<{name: string, handle: string, count: number}[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const categories = [
-    { name: "Mobile & Accessories", count: 32 },
-    { name: "Laptop", count: 24 },
-    { name: "Electronics", count: 52 },
-    { name: "Smart Watch", count: 32 },
-    { name: "Storage", count: 25 },
-    { name: "Portable Devices", count: 35 },
-    { name: "Action Camera", count: 25 },
-    { name: "Smart Gadget", count: 32 },
-    { name: "Monitor", count: 32 },
-    { name: "Smart TV", count: 12 },
-    { name: "Camera", count: 12 },
+  useEffect(() => {
+    const fetchSubcategories = async () => {
+      setLoading(true);
+      try {
+        // First get the current category ID
+        const { data: currentCategory, error: categoryError } = await supabase
+          .from('product_category')
+          .select('id, name')
+          .eq('handle', handle)
+          .single();
+
+        if (categoryError) {
+          console.error("Error fetching current category:", categoryError);
+          setLoading(false);
+          return;
+        }
+
+        if (currentCategory) {
+          // Fetch subcategories using the mpath pattern matching
+          // Medusa uses mpath to store hierarchical relationship
+          const { data: subcategories, error: subcategoriesError } = await supabase
+            .from('product_category')
+            .select('id, name, handle')
+            .like('mpath', `${currentCategory.id}.%`)
+            .eq('is_active', true)
+            .order('rank', { ascending: true });
+
+          if (subcategoriesError) {
+            console.error("Error fetching subcategories:", subcategoriesError);
+            setLoading(false);
+            return;
+          }
+
+          // For each subcategory, get the count of products
+          const subcategoriesWithCount = await Promise.all(
+            (subcategories || []).map(async (subcat) => {
+              // Get product IDs for this subcategory
+              const { data: productLinks, error: productLinksError } = await supabase
+                .from('product_category_product')
+                .select('product_id')
+                .eq('product_category_id', subcat.id);
+
+              if (productLinksError) {
+                console.error(`Error fetching products for subcategory ${subcat.name}:`, productLinksError);
+                return { ...subcat, count: 0 };
+              }
+
+              return {
+                name: subcat.name,
+                handle: subcat.handle,
+                count: productLinks?.length || 0
+              };
+            })
+          );
+
+          setCategories(subcategoriesWithCount);
+        }
+      } catch (error) {
+        console.error("Failed to fetch subcategories:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (handle) {
+      fetchSubcategories();
+    }
+  }, [handle]);
+
+  // Fallback to mock data if no subcategories are found
+  const mockCategories = [
+    { name: "Mobile & Accessories", handle: "mobile-accessories", count: 32 },
+    { name: "Laptop", handle: "laptop", count: 24 },
+    { name: "Electronics", handle: "electronics", count: 52 },
+    { name: "Smart Watch", handle: "smart-watch", count: 32 },
+    { name: "Storage", handle: "storage", count: 25 },
+    { name: "Portable Devices", handle: "portable-devices", count: 35 },
+    { name: "Action Camera", handle: "action-camera", count: 25 },
+    { name: "Smart Gadget", handle: "smart-gadget", count: 32 },
+    { name: "Monitor", handle: "monitor", count: 32 },
+    { name: "Smart TV", handle: "smart-tv", count: 12 },
+    { name: "Camera", handle: "camera", count: 12 },
   ];
+
+  const displayCategories = categories.length > 0 ? categories : mockCategories;
 
   const colors = [
     { name: "Black", count: 12 },
@@ -56,12 +132,27 @@ const CategoryFilter = () => {
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-3">Product Categories</h3>
         <ul className="space-y-2">
-          {categories.map((category) => (
-            <li key={category.name} className="flex justify-between items-center text-sm">
-              <span className="hover:text-blue-500 cursor-pointer">{category.name}</span>
-              <span className="text-gray-500">({category.count})</span>
-            </li>
-          ))}
+          {loading ? (
+            // Loading state
+            Array(5).fill(null).map((_, index) => (
+              <li key={`loading-${index}`} className="flex justify-between items-center text-sm">
+                <div className="bg-gray-200 h-4 w-28 animate-pulse rounded"></div>
+                <div className="bg-gray-200 h-4 w-8 animate-pulse rounded"></div>
+              </li>
+            ))
+          ) : (
+            displayCategories.map((category) => (
+              <li key={category.name} className="flex justify-between items-center text-sm">
+                <Link 
+                  to={`/categories/${category.handle}`}
+                  className="hover:text-blue-500 cursor-pointer"
+                >
+                  {category.name}
+                </Link>
+                <span className="text-gray-500">({category.count})</span>
+              </li>
+            ))
+          )}
         </ul>
       </div>
 
