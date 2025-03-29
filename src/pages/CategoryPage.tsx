@@ -197,130 +197,134 @@ const CategoryPage = () => {
       <TopInfoBar />
       <Navbar />
       <div className="container mx-auto py-6 px-4">
-        <div className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
-          <Link to="/" className="hover:text-blue-500">Home</Link>
-          <ChevronRight className="h-4 w-4" />
-          <span className="font-semibold text-gray-700">{categoryName || "Product Category"}</span>
-        </div>
+        <div className="mx-auto w-[80%] bg-white shadow-sm">
+          <div className="p-6">
+            <div className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
+              <Link to="/" className="hover:text-blue-500">Home</Link>
+              <ChevronRight className="h-4 w-4" />
+              <span className="font-semibold text-gray-700">{categoryName || "Product Category"}</span>
+            </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="hidden md:block">
-            <h2 className="text-xl font-bold mb-6">{categoryName || "Product Category"}</h2>
-            <CategoryFilter />
-          </div>
-
-          <div className="md:col-span-3">
-            <div className="flex flex-col space-y-4">
-              <div className="flex justify-between items-center bg-white p-4 rounded-md shadow-sm">
-                <div>
-                  <span className="text-sm text-gray-500">Showing 1-{Math.min(mockProducts.length, productsPerPage)} of {totalProducts || mockProducts.length} results</span>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="hidden md:flex space-x-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className={viewMode === "grid" ? "bg-blue-50" : ""}
-                      onClick={() => setViewMode("grid")}
-                    >
-                      <Grid3X3Icon className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className={viewMode === "list" ? "bg-blue-50" : ""}
-                      onClick={() => setViewMode("list")}
-                    >
-                      <ListIcon className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <select
-                    className="border rounded-md px-3 py-1 text-sm"
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                  >
-                    <option value="" disabled>Sort by</option>
-                    {sortOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div className="hidden md:block">
+                <h2 className="text-xl font-bold mb-6">{categoryName || "Product Category"}</h2>
+                <CategoryFilter />
               </div>
 
-              {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {Array(8).fill(null).map((_, index) => (
-                    <div key={index} className="bg-white p-4 rounded-md shadow-sm animate-pulse">
-                      <div className="h-40 w-full bg-gray-200 rounded-md mb-4"></div>
-                      <div className="h-4 w-3/4 bg-gray-200 rounded mb-2"></div>
-                      <div className="h-4 w-1/2 bg-gray-200 rounded mb-4"></div>
-                      <div className="h-6 w-1/3 bg-gray-200 rounded"></div>
+              <div className="md:col-span-3">
+                <div className="flex flex-col space-y-4">
+                  <div className="flex justify-between items-center bg-white p-4 rounded-md shadow-sm border">
+                    <div>
+                      <span className="text-sm text-gray-500">Showing 1-{Math.min(mockProducts.length, productsPerPage)} of {totalProducts || mockProducts.length} results</span>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className={`grid ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" : "grid-cols-1"} gap-4`}>
-                  {mockProducts.map((product) => (
-                    <ProductCard 
-                      key={product.id} 
-                      product={product} 
-                      viewMode={viewMode} 
-                      formatPrice={formatPrice}
-                    />
-                  ))}
-                </div>
-              )}
+                    <div className="flex items-center space-x-4">
+                      <div className="hidden md:flex space-x-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className={viewMode === "grid" ? "bg-blue-50" : ""}
+                          onClick={() => setViewMode("grid")}
+                        >
+                          <Grid3X3Icon className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className={viewMode === "list" ? "bg-blue-50" : ""}
+                          onClick={() => setViewMode("list")}
+                        >
+                          <ListIcon className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <select
+                        className="border rounded-md px-3 py-1 text-sm"
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                      >
+                        <option value="" disabled>Sort by</option>
+                        {sortOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
 
-              {totalPages > 1 && (
-                <Pagination className="mt-8">
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious 
-                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                        className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                      />
-                    </PaginationItem>
-                    
-                    {Array.from({ length: Math.min(totalPages, 7) }).map((_, i) => {
-                      let pageNumber;
-                      if (totalPages <= 7) {
-                        pageNumber = i + 1;
-                      } else if (currentPage <= 3) {
-                        pageNumber = i < 5 ? i + 1 : (i === 5 ? "..." : totalPages);
-                      } else if (currentPage >= totalPages - 2) {
-                        pageNumber = i < 2 ? (i === 0 ? 1 : "...") : totalPages - (6 - i);
-                      } else {
-                        pageNumber = i === 0 ? 1 : i === 1 ? "..." : i === 5 ? "..." : i === 6 ? totalPages : currentPage + (i - 3);
-                      }
+                  {loading ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {Array(8).fill(null).map((_, index) => (
+                        <div key={index} className="bg-white p-4 rounded-md shadow-sm animate-pulse">
+                          <div className="h-40 w-full bg-gray-200 rounded-md mb-4"></div>
+                          <div className="h-4 w-3/4 bg-gray-200 rounded mb-2"></div>
+                          <div className="h-4 w-1/2 bg-gray-200 rounded mb-4"></div>
+                          <div className="h-6 w-1/3 bg-gray-200 rounded"></div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className={`grid ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" : "grid-cols-1"} gap-4`}>
+                      {mockProducts.map((product) => (
+                        <ProductCard 
+                          key={product.id} 
+                          product={product} 
+                          viewMode={viewMode} 
+                          formatPrice={formatPrice}
+                        />
+                      ))}
+                    </div>
+                  )}
 
-                      return (
-                        <PaginationItem key={i}>
-                          {pageNumber === "..." ? (
-                            <span className="py-2 px-4">...</span>
-                          ) : (
-                            <PaginationLink
-                              onClick={() => typeof pageNumber === 'number' && setCurrentPage(pageNumber)}
-                              isActive={currentPage === pageNumber}
-                              className={typeof pageNumber === 'number' ? "cursor-pointer" : ""}
-                            >
-                              {pageNumber}
-                            </PaginationLink>
-                          )}
+                  {totalPages > 1 && (
+                    <Pagination className="mt-8">
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious 
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          />
                         </PaginationItem>
-                      );
-                    })}
-                    
-                    <PaginationItem>
-                      <PaginationNext 
-                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              )}
+                        
+                        {Array.from({ length: Math.min(totalPages, 7) }).map((_, i) => {
+                          let pageNumber;
+                          if (totalPages <= 7) {
+                            pageNumber = i + 1;
+                          } else if (currentPage <= 3) {
+                            pageNumber = i < 5 ? i + 1 : (i === 5 ? "..." : totalPages);
+                          } else if (currentPage >= totalPages - 2) {
+                            pageNumber = i < 2 ? (i === 0 ? 1 : "...") : totalPages - (6 - i);
+                          } else {
+                            pageNumber = i === 0 ? 1 : i === 1 ? "..." : i === 5 ? "..." : i === 6 ? totalPages : currentPage + (i - 3);
+                          }
+
+                          return (
+                            <PaginationItem key={i}>
+                              {pageNumber === "..." ? (
+                                <span className="py-2 px-4">...</span>
+                              ) : (
+                                <PaginationLink
+                                  onClick={() => typeof pageNumber === 'number' && setCurrentPage(pageNumber)}
+                                  isActive={currentPage === pageNumber}
+                                  className={typeof pageNumber === 'number' ? "cursor-pointer" : ""}
+                                >
+                                  {pageNumber}
+                                </PaginationLink>
+                              )}
+                            </PaginationItem>
+                          );
+                        })}
+                        
+                        <PaginationItem>
+                          <PaginationNext 
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
