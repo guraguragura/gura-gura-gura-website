@@ -80,9 +80,6 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
       <div className="flex flex-col min-h-screen bg-gray-50">
         <main className="flex-grow py-8">
           <div className="mx-auto w-[80%] px-4 max-w-7xl">
-            {/* Add the banner component */}
-            <AccountBanner />
-            
             <div className="bg-white shadow-sm">
               <div className="flex flex-col md:flex-row gap-8 py-8">
                 {/* Account Sidebar */}
@@ -103,9 +100,12 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
                   </div>
                 </aside>
                 
-                {/* Content Area */}
+                {/* Content Area with Banner */}
                 <div className="flex-1 min-w-0">
-                  <div className="bg-white border rounded-lg p-6">
+                  {/* Add the banner component directly above the content */}
+                  <AccountBanner />
+                  
+                  <div className="bg-white border rounded-lg p-6 mt-6">
                     {children}
                   </div>
                 </div>
