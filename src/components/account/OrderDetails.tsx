@@ -31,6 +31,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { OrderStatus } from './Orders';
+import { useCurrency } from '@/hooks/useCurrency';
 
 interface OrderItem {
   id: string;
@@ -38,6 +39,7 @@ interface OrderItem {
   quantity: number;
   price: number;
   subtotal: number;
+  thumbnail?: string;
 }
 
 interface OrderDetails {
@@ -104,8 +106,8 @@ const mockOrderDetails: Record<string, OrderDetails> = {
     date: '2023-11-01',
     total: 124.99,
     items: [
-      { id: 'item_1', name: 'Wireless Headphones', quantity: 1, price: 89.99, subtotal: 89.99 },
-      { id: 'item_2', name: 'Phone Case', quantity: 1, price: 24.99, subtotal: 24.99 },
+      { id: 'item_1', name: 'Wireless Headphones', quantity: 1, price: 89.99, subtotal: 89.99, thumbnail: '/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png' },
+      { id: 'item_2', name: 'Phone Case', quantity: 1, price: 24.99, subtotal: 24.99, thumbnail: '/lovable-uploads/61870ac8-67b1-4faf-9fa6-e40f60010b9d.png' },
     ],
     shipping: {
       address: '123 Main St, Anytown, AN 12345',
@@ -124,7 +126,7 @@ const mockOrderDetails: Record<string, OrderDetails> = {
     date: '2023-10-27',
     total: 79.95,
     items: [
-      { id: 'item_3', name: 'Smart Watch', quantity: 1, price: 79.95, subtotal: 79.95 },
+      { id: 'item_3', name: 'Smart Watch', quantity: 1, price: 79.95, subtotal: 79.95, thumbnail: '/lovable-uploads/189d5b38-0cf3-4a56-9606-2caba74233ca.png' },
     ],
     shipping: {
       address: '456 Oak Ave, Somewhere, SW 67890',
@@ -142,9 +144,9 @@ const mockOrderDetails: Record<string, OrderDetails> = {
     date: '2023-10-20',
     total: 249.50,
     items: [
-      { id: 'item_4', name: 'Bluetooth Speaker', quantity: 1, price: 129.99, subtotal: 129.99 },
-      { id: 'item_5', name: 'Wireless Charger', quantity: 2, price: 49.99, subtotal: 99.98 },
-      { id: 'item_6', name: 'USB Cable', quantity: 1, price: 9.99, subtotal: 9.99 },
+      { id: 'item_4', name: 'Bluetooth Speaker', quantity: 1, price: 129.99, subtotal: 129.99, thumbnail: '/lovable-uploads/2b4f1e1c-8388-4e0a-a05c-1efa3ecbb777.png' },
+      { id: 'item_5', name: 'Wireless Charger', quantity: 2, price: 49.99, subtotal: 99.98, thumbnail: '/lovable-uploads/8b872c64-6416-41e9-bcd6-fa615c17062e.png' },
+      { id: 'item_6', name: 'USB Cable', quantity: 1, price: 9.99, subtotal: 9.99, thumbnail: '/lovable-uploads/fee0a176-d29e-4bbd-9e57-4c3c62a0be2b.png' },
     ],
     shipping: {
       address: '789 Pine St, Elsewhere, EL 13579',
@@ -163,8 +165,8 @@ const mockOrderDetails: Record<string, OrderDetails> = {
     date: '2023-10-15',
     total: 54.99,
     items: [
-      { id: 'item_7', name: 'T-Shirt', quantity: 1, price: 29.99, subtotal: 29.99 },
-      { id: 'item_8', name: 'Socks', quantity: 5, price: 4.99, subtotal: 24.95 },
+      { id: 'item_7', name: 'T-Shirt', quantity: 1, price: 29.99, subtotal: 29.99, thumbnail: '/lovable-uploads/9f9f6f6c-f423-47c6-8964-326b064c2fd8.png' },
+      { id: 'item_8', name: 'Socks', quantity: 5, price: 4.99, subtotal: 24.95, thumbnail: '/lovable-uploads/4de8f3ef-2f9c-4028-b855-f7d4a316dabf.png' },
     ],
     shipping: {
       address: '321 Maple Rd, Nowhere, NW 24680',
@@ -183,7 +185,7 @@ const mockOrderDetails: Record<string, OrderDetails> = {
     date: '2023-10-10',
     total: 199.99,
     items: [
-      { id: 'item_9', name: 'Tablet', quantity: 1, price: 199.99, subtotal: 199.99 },
+      { id: 'item_9', name: 'Tablet', quantity: 1, price: 199.99, subtotal: 199.99, thumbnail: '/lovable-uploads/5bc8b271-aa7d-4103-8681-58b3e69bf415.png' },
     ],
     shipping: {
       address: '654 Cedar Ln, Anyplace, AP 97531',
@@ -200,6 +202,7 @@ const mockOrderDetails: Record<string, OrderDetails> = {
 export const OrderDetails = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
+  const { formatPrice, isLoading } = useCurrency();
   
   // In a real app, we would fetch the order details
   const order = orderId ? mockOrderDetails[orderId] : null;
@@ -342,6 +345,7 @@ export const OrderDetails = () => {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-[80px]">Image</TableHead>
                 <TableHead>Product</TableHead>
                 <TableHead className="text-right">Quantity</TableHead>
                 <TableHead className="text-right">Price</TableHead>
@@ -351,10 +355,25 @@ export const OrderDetails = () => {
             <TableBody>
               {order.items.map((item) => (
                 <TableRow key={item.id}>
+                  <TableCell>
+                    {item.thumbnail && (
+                      <div className="h-12 w-12 rounded-md overflow-hidden">
+                        <img
+                          src={item.thumbnail}
+                          alt={item.name}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    )}
+                  </TableCell>
                   <TableCell className="font-medium">{item.name}</TableCell>
                   <TableCell className="text-right">{item.quantity}</TableCell>
-                  <TableCell className="text-right">${item.price.toFixed(2)}</TableCell>
-                  <TableCell className="text-right">${item.subtotal.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">
+                    {isLoading ? '...' : formatPrice(item.price)}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {isLoading ? '...' : formatPrice(item.subtotal)}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -364,15 +383,15 @@ export const OrderDetails = () => {
           <div className="space-y-1 text-sm w-1/3">
             <div className="flex justify-between">
               <span>Subtotal:</span>
-              <span>${(order.total - order.shipping.cost).toFixed(2)}</span>
+              <span>{isLoading ? '...' : formatPrice(order.total - order.shipping.cost)}</span>
             </div>
             <div className="flex justify-between">
               <span>Shipping:</span>
-              <span>${order.shipping.cost.toFixed(2)}</span>
+              <span>{isLoading ? '...' : formatPrice(order.shipping.cost)}</span>
             </div>
             <div className="flex justify-between font-bold pt-2 border-t">
               <span>Total:</span>
-              <span>${order.total.toFixed(2)}</span>
+              <span>{isLoading ? '...' : formatPrice(order.total)}</span>
             </div>
           </div>
         </CardFooter>

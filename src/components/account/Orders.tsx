@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Clock, Package, CheckCircle, Truck, XCircle } from 'lucide-react';
+import { useCurrency } from '@/hooks/useCurrency';
 
 // Define the possible order statuses
 export type OrderStatus = 'pending' | 'processing' | 'out_for_delivery' | 'delivered' | 'canceled';
@@ -14,6 +15,7 @@ interface Order {
   date: string;
   total: number;
   items: number;
+  thumbnail?: string; // Optional thumbnail image
 }
 
 // Status configuration with icons and colors
@@ -53,7 +55,8 @@ const mockOrders: Order[] = [
     status: 'pending',
     date: '2023-11-01',
     total: 124.99,
-    items: 2
+    items: 2,
+    thumbnail: '/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png'
   },
   {
     id: 'ord_2345',
@@ -61,7 +64,8 @@ const mockOrders: Order[] = [
     status: 'processing',
     date: '2023-10-27',
     total: 79.95,
-    items: 1
+    items: 1,
+    thumbnail: '/lovable-uploads/189d5b38-0cf3-4a56-9606-2caba74233ca.png'
   },
   {
     id: 'ord_3456',
@@ -69,7 +73,8 @@ const mockOrders: Order[] = [
     status: 'out_for_delivery',
     date: '2023-10-20',
     total: 249.50,
-    items: 3
+    items: 3,
+    thumbnail: '/lovable-uploads/2b4f1e1c-8388-4e0a-a05c-1efa3ecbb777.png'
   },
   {
     id: 'ord_4567',
@@ -77,7 +82,8 @@ const mockOrders: Order[] = [
     status: 'delivered',
     date: '2023-10-15',
     total: 54.99,
-    items: 1
+    items: 1,
+    thumbnail: '/lovable-uploads/9f9f6f6c-f423-47c6-8964-326b064c2fd8.png'
   },
   {
     id: 'ord_5678',
@@ -85,12 +91,14 @@ const mockOrders: Order[] = [
     status: 'canceled',
     date: '2023-10-10',
     total: 199.99,
-    items: 2
+    items: 2,
+    thumbnail: '/lovable-uploads/5bc8b271-aa7d-4103-8681-58b3e69bf415.png'
   }
 ];
 
 export const Orders = () => {
   const [orders] = useState<Order[]>(mockOrders);
+  const { formatPrice, isLoading } = useCurrency();
 
   // If you have no orders
   if (orders.length === 0) {
@@ -121,6 +129,7 @@ export const Orders = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
@@ -135,6 +144,17 @@ export const Orders = () => {
                     <div className="text-sm font-medium text-gray-900">#{order.display_id}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
+                    {order.thumbnail && (
+                      <div className="flex-shrink-0 h-10 w-10">
+                        <img 
+                          className="h-10 w-10 rounded-md object-cover" 
+                          src={order.thumbnail} 
+                          alt={`Order #${order.display_id} thumbnail`} 
+                        />
+                      </div>
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-500">{order.date}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -144,7 +164,9 @@ export const Orders = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">${order.total.toFixed(2)}</div>
+                    <div className="text-sm text-gray-900">
+                      {isLoading ? '...' : formatPrice(order.total)}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-500">{order.items}</div>
