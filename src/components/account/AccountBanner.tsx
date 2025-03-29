@@ -1,6 +1,7 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 
 interface BannerContent {
   title: string;
@@ -9,6 +10,35 @@ interface BannerContent {
 
 const AccountBanner = () => {
   const location = useLocation();
+  const [firstName, setFirstName] = useState('Customer');
+  
+  // Fetch customer data to get the first name
+  useEffect(() => {
+    const fetchCustomerData = async () => {
+      try {
+        // Get first customer record as placeholder
+        // In a real application, you would fetch the specific customer based on authentication
+        const { data, error } = await supabase
+          .from('customer')
+          .select('first_name')
+          .limit(1)
+          .single();
+
+        if (error) {
+          console.error('Error fetching customer data:', error);
+          return;
+        }
+
+        if (data && data.first_name) {
+          setFirstName(data.first_name);
+        }
+      } catch (error) {
+        console.error('Error in fetchCustomerData:', error);
+      }
+    };
+
+    fetchCustomerData();
+  }, []);
   
   // Define content based on current path
   const getBannerContent = (): BannerContent => {
@@ -59,7 +89,7 @@ const AccountBanner = () => {
         
         {/* Content */}
         <div className="pt-16 pb-4">
-          <h1 className="text-blue-900 text-4xl font-bold mb-2">Hello Customer</h1>
+          <h1 className="text-blue-900 text-4xl font-bold mb-2">Hello {firstName}</h1>
           <p className="text-blue-900 text-xl">
             {content.description}
           </p>
