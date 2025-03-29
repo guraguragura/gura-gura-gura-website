@@ -10,6 +10,7 @@ import ProductPage from "./pages/ProductPage";
 import NotFound from "./pages/NotFound";
 import AccountPage from "./pages/AccountPage";
 import AuthPage from "./pages/AuthPage";
+import FaqPage from "./pages/FaqPage";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,8 @@ const App = () => (
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/account/*" element={<AccountPage />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/help" element={<FaqPage />} />
+          <Route path="/faq" element={<FaqPage />} />
           <Route path="/about" element={<Index />} /> {/* To be implemented */}
           <Route path="/contact" element={<Index />} /> {/* To be implemented */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
