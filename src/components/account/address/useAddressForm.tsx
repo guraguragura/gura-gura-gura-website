@@ -73,10 +73,13 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
           } else {
             // If no customer data exists, create a new customer record
             try {
-              // Note: We're not specifying an ID as Supabase will generate a UUID
+              // Generate a UUID for the new customer
+              const newCustomerId = crypto.randomUUID();
+              
               const { data: newCustomer, error: createError } = await supabase
                 .from('customer')
                 .insert({
+                  id: newCustomerId, // Add the id field here to fix the error
                   first_name: '',
                   last_name: '',
                   email: '',
