@@ -76,35 +76,39 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
   return (
     <>
       <Navbar />
-      <main className="container mx-auto py-8 px-4 md:px-6">
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Account Sidebar */}
-          <aside className="md:w-64 flex-shrink-0">
-            <div className="sticky top-8 border rounded-lg overflow-hidden">
-              {/* Main Navigation */}
-              <div className="flex flex-col py-3 space-y-1">
-                {renderNavItems(navItems)}
-              </div>
+      <div className="flex flex-col min-h-screen bg-gray-50">
+        <main className="flex-grow py-8">
+          <div className="mx-auto w-[80%] px-4 max-w-7xl bg-white shadow-sm">
+            <div className="flex flex-col md:flex-row gap-8 py-8">
+              {/* Account Sidebar */}
+              <aside className="md:w-64 flex-shrink-0">
+                <div className="sticky top-8 border rounded-lg overflow-hidden">
+                  {/* Main Navigation */}
+                  <div className="flex flex-col py-3 space-y-1">
+                    {renderNavItems(navItems)}
+                  </div>
+                  
+                  {/* Divider */}
+                  <div className="border-t my-2"></div>
+                  
+                  {/* Secondary Navigation */}
+                  <div className="flex flex-col py-3 space-y-1">
+                    {renderNavItems(secondaryNavItems)}
+                  </div>
+                </div>
+              </aside>
               
-              {/* Divider */}
-              <div className="border-t my-2"></div>
-              
-              {/* Secondary Navigation */}
-              <div className="flex flex-col py-3 space-y-1">
-                {renderNavItems(secondaryNavItems)}
+              {/* Content Area */}
+              <div className="flex-1 min-w-0">
+                <div className="bg-white border rounded-lg p-6">
+                  {children}
+                </div>
               </div>
-            </div>
-          </aside>
-          
-          {/* Content Area */}
-          <div className="flex-1 min-w-0">
-            <div className="bg-white border rounded-lg p-6">
-              {children}
             </div>
           </div>
-        </div>
-      </main>
-      <Footer />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 };
