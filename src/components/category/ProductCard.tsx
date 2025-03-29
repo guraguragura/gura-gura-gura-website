@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import "./ProductCard.css"; // Import custom CSS
 
 interface ProductProps {
   product: {
@@ -101,17 +102,17 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
     );
   }
 
-  // Grid view (exactly matching reference image)
+  // Grid view with hybrid approach
   return (
-    <Card className="overflow-hidden flex flex-col h-full transition-all duration-200 hover:shadow-md border border-gray-200 rounded-xl">
-      <div className="relative bg-gray-100 p-4">
+    <Card className="product-card-grid overflow-hidden flex flex-col h-full transition-all duration-200 hover:shadow-md">
+      <div className="product-image-container relative">
         {is_sale && discountPercentage > 0 && (
-          <Badge className="absolute top-3 left-3 bg-blue-500 hover:bg-blue-500 text-white px-4 py-1.5 font-medium rounded-full text-xs">
+          <Badge className="sale-badge">
             Sale {discountPercentage}%
           </Badge>
         )}
         <Link to={`/product/${id}`}>
-          <div className="flex justify-center items-center h-48">
+          <div className="product-image-wrapper">
             <img 
               src={thumbnail} 
               alt={title}
@@ -121,42 +122,42 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
         </Link>
       </div>
       
-      <CardContent className="flex-grow p-5">
+      <CardContent className="product-content">
         <Link to={`/product/${id}`}>
-          <h3 className="text-lg font-bold text-gray-900 mb-2 hover:text-gray-700 transition-colors line-clamp-2">
+          <h3 className="product-title">
             {title}
           </h3>
         </Link>
         
-        <div className="flex items-center gap-1 mb-3">
-          <span className="text-sm font-semibold text-gray-800">{rating.toFixed(1)}</span>
-          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-          <span className="text-xs text-gray-500">({reviews_count > 1000 ? `${(reviews_count/1000).toFixed(1)}k` : reviews_count} reviews)</span>
+        <div className="rating-container">
+          <span className="rating-value">{rating.toFixed(1)}</span>
+          <Star className="rating-star" />
+          <span className="reviews-count">({reviews_count > 1000 ? `${(reviews_count/1000).toFixed(1)}k` : reviews_count} reviews)</span>
         </div>
         
-        <Progress value={inventoryPercentage} className="h-1.5 mb-1 bg-gray-200 rounded-full overflow-hidden" />
-        <div className="text-xs text-gray-500 mb-4">
+        <Progress value={inventoryPercentage} className="inventory-progress" />
+        <div className="inventory-text">
           {soldItems} items sold
         </div>
         
-        <div className="flex items-baseline gap-2 mb-3">
+        <div className="price-container">
           {discount_price ? (
             <>
-              <span className="text-gray-400 line-through text-sm">{formatPrice(price)}</span>
-              <span className="text-xl font-bold text-black">{formatPrice(discount_price)}</span>
+              <span className="original-price">{formatPrice(price)}</span>
+              <span className="discount-price">{formatPrice(discount_price)}</span>
             </>
           ) : (
-            <span className="text-xl font-bold text-black">{formatPrice(price)}</span>
+            <span className="discount-price">{formatPrice(price)}</span>
           )}
         </div>
       </CardContent>
       
       <CardFooter className="p-0 mt-auto">
         <Button 
-          className="w-full rounded-none py-3 text-sm flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-black font-medium border-t border-gray-200"
+          className="add-to-cart-button"
           onClick={() => console.log(`Add to cart: ${id}`)}
         >
-          Add To Cart <ShoppingCart className="ml-2 h-4 w-4" />
+          Add To Cart <ShoppingCart className="cart-icon" />
         </Button>
       </CardFooter>
     </Card>
