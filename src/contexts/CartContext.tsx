@@ -1,6 +1,9 @@
 
 import React, { createContext, useContext } from 'react';
-import { useCart, CartItem } from '@/hooks/useCart';
+import { useCart } from '@/hooks/useCart';
+
+// Re-export the CartItem type properly with 'export type'
+export type { CartItem } from '@/hooks/useCart';
 
 interface CartContextType {
   items: CartItem[];
@@ -34,5 +37,5 @@ export const useCartContext = () => {
   return context;
 };
 
-// Re-export the useCart hook and CartItem type for direct usage
-export { useCart, CartItem };
+// Re-export the useCart hook for direct usage
+export { useCart };

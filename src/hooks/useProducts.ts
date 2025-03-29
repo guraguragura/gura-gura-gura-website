@@ -67,18 +67,22 @@ export function useProducts(options: {
           // Transform data to match our Product interface
           const formattedProducts: Product[] = data.map(product => {
             const metadata = product.metadata || {};
+            
+            // Safely access metadata properties with type checking
+            const metadataObj = typeof metadata === 'object' && metadata !== null ? metadata : {};
+            
             return {
               id: product.id,
               title: product.title,
               description: product.description || "",
-              price: typeof metadata === 'object' && metadata !== null ? (metadata.price || 19.99) : 19.99,
-              discount_price: typeof metadata === 'object' && metadata !== null ? metadata.discount_price : undefined,
+              price: typeof metadataObj.price === 'number' ? metadataObj.price : 19.99,
+              discount_price: typeof metadataObj.discount_price === 'number' ? metadataObj.discount_price : undefined,
               thumbnail: product.thumbnail || "/placeholder.svg",
-              images: typeof metadata === 'object' && metadata !== null ? (metadata.images || [product.thumbnail || "/placeholder.svg"]) : [product.thumbnail || "/placeholder.svg"],
-              rating: typeof metadata === 'object' && metadata !== null ? (metadata.rating || 4.5) : 4.5,
-              reviews_count: typeof metadata === 'object' && metadata !== null ? (metadata.reviews_count || 124) : 124,
-              is_sale: typeof metadata === 'object' && metadata !== null ? (metadata.is_sale || false) : false,
-              is_new: typeof metadata === 'object' && metadata !== null ? (metadata.is_new || false) : false,
+              images: Array.isArray(metadataObj.images) ? metadataObj.images : [product.thumbnail || "/placeholder.svg"],
+              rating: typeof metadataObj.rating === 'number' ? metadataObj.rating : 4.5,
+              reviews_count: typeof metadataObj.reviews_count === 'number' ? metadataObj.reviews_count : 124,
+              is_sale: Boolean(metadataObj.is_sale),
+              is_new: Boolean(metadataObj.is_new),
               metadata
             };
           });
