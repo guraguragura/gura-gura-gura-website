@@ -17,7 +17,7 @@ interface ReturnRequest {
   order_item_id: string;
   reason: string;
   description: string | null;
-  status: 'pending' | 'approved' | 'rejected' | 'completed';
+  status: string; // Changed from strict union type to string to match database
   quantity: number;
   created_at: string;
 }
@@ -167,9 +167,9 @@ export const Returns = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className={`flex items-center text-sm ${statusConfig[returnRequest.status].color}`}>
-                      {statusConfig[returnRequest.status].icon}
-                      <span className="ml-1.5">{statusConfig[returnRequest.status].label}</span>
+                    <div className={`flex items-center text-sm ${statusConfig[returnRequest.status]?.color || 'text-gray-500'}`}>
+                      {statusConfig[returnRequest.status]?.icon || <Clock className="h-5 w-5" />}
+                      <span className="ml-1.5">{statusConfig[returnRequest.status]?.label || returnRequest.status}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
