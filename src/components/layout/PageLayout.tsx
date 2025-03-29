@@ -8,19 +8,21 @@ interface PageLayoutProps {
   children: ReactNode;
   fullWidth?: boolean;
   className?: string;
+  noPadding?: boolean;
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({ 
   children, 
   fullWidth = false,
-  className = ""
+  className = "",
+  noPadding = false
 }) => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <TopInfoBar />
       <Navbar />
       <div className="flex-grow">
-        <div className={`mx-auto ${fullWidth ? 'w-full' : 'w-[90%]'} px-4 max-w-7xl py-8 bg-white shadow-sm ${className}`}>
+        <div className={`mx-auto ${fullWidth ? 'w-full' : 'w-[90%]'} px-4 max-w-7xl py-8 bg-white shadow-sm ${noPadding ? 'p-0' : ''} ${className}`}>
           {children}
         </div>
       </div>

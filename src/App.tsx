@@ -16,6 +16,8 @@ import AdvantagesPage from "./pages/AdvantagesPage";
 import GuraAppPage from "./pages/GuraAppPage";
 import PressPage from "./pages/PressPage";
 import CareersPage from "./pages/CareersPage";
+import GuraBusinessPage from "./pages/GuraBusinessPage";
+import PartnerWithGuraPage from "./pages/PartnerWithGuraPage";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +42,8 @@ const App = () => (
           <Route path="/app" element={<GuraAppPage />} />
           <Route path="/press" element={<PressPage />} />
           <Route path="/careers" element={<CareersPage />} />
+          <Route path="/business" element={<GuraBusinessPage />} />
+          <Route path="/partner" element={<PartnerWithGuraPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
