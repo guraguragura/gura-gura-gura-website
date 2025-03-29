@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Star, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -27,12 +26,10 @@ interface ProductProps {
 const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice }) => {
   const { id, title, price, thumbnail, rating, reviews_count, discount_price, is_sale } = product;
   
-  // Mock inventory data - in a real app, this would come from the backend
   const totalInventory = 35;
   const soldItems = 18;
   const inventoryPercentage = (soldItems / totalInventory) * 100;
   
-  // Discount percentage calculation
   const discountPercentage = discount_price && price 
     ? Math.round(((price - discount_price) / price) * 100) 
     : 0;
@@ -88,7 +85,7 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
       
       <CardFooter className="p-0">
         <Button 
-          className="w-full rounded-none py-4 text-lg flex items-center justify-center"
+          className="w-full rounded-none py-4 text-lg flex items-center justify-center bg-gray-500 hover:bg-gray-600"
           onClick={() => console.log(`Add to cart: ${id}`)}
         >
           Add To Cart <ShoppingCart className="ml-2" />
