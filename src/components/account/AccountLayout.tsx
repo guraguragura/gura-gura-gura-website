@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import AccountBanner from './AccountBanner';
 
 interface NavItem {
   path: string;
@@ -78,30 +79,35 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
       <Navbar />
       <div className="flex flex-col min-h-screen bg-gray-50">
         <main className="flex-grow py-8">
-          <div className="mx-auto w-[80%] px-4 max-w-7xl bg-white shadow-sm">
-            <div className="flex flex-col md:flex-row gap-8 py-8">
-              {/* Account Sidebar */}
-              <aside className="md:w-64 flex-shrink-0">
-                <div className="sticky top-8 border rounded-lg overflow-hidden">
-                  {/* Main Navigation */}
-                  <div className="flex flex-col py-3 space-y-1">
-                    {renderNavItems(navItems)}
+          <div className="mx-auto w-[80%] px-4 max-w-7xl">
+            {/* Add the banner component */}
+            <AccountBanner />
+            
+            <div className="bg-white shadow-sm">
+              <div className="flex flex-col md:flex-row gap-8 py-8">
+                {/* Account Sidebar */}
+                <aside className="md:w-64 flex-shrink-0">
+                  <div className="sticky top-8 border rounded-lg overflow-hidden">
+                    {/* Main Navigation */}
+                    <div className="flex flex-col py-3 space-y-1">
+                      {renderNavItems(navItems)}
+                    </div>
+                    
+                    {/* Divider */}
+                    <div className="border-t my-2"></div>
+                    
+                    {/* Secondary Navigation */}
+                    <div className="flex flex-col py-3 space-y-1">
+                      {renderNavItems(secondaryNavItems)}
+                    </div>
                   </div>
-                  
-                  {/* Divider */}
-                  <div className="border-t my-2"></div>
-                  
-                  {/* Secondary Navigation */}
-                  <div className="flex flex-col py-3 space-y-1">
-                    {renderNavItems(secondaryNavItems)}
+                </aside>
+                
+                {/* Content Area */}
+                <div className="flex-1 min-w-0">
+                  <div className="bg-white border rounded-lg p-6">
+                    {children}
                   </div>
-                </div>
-              </aside>
-              
-              {/* Content Area */}
-              <div className="flex-1 min-w-0">
-                <div className="bg-white border rounded-lg p-6">
-                  {children}
                 </div>
               </div>
             </div>
