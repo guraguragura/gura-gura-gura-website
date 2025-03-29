@@ -1,10 +1,9 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopInfoBar from '@/components/layout/TopInfoBar';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { useCart } from '@/contexts/CartContext';
+import { useCartContext } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
@@ -17,7 +16,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useCurrency } from '@/hooks/useCurrency';
 import { CreditCard, CalendarRange, Lock, ShieldCheck } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
+import { useCheckout } from '@/hooks/useCheckout';
 
 const checkoutSchema = z.object({
   firstName: z.string().min(2, { message: 'First name must be at least 2 characters' }),
@@ -40,10 +40,10 @@ const checkoutSchema = z.object({
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
 const CheckoutPage = () => {
-  const { items, subtotal, total, clearCart } = useCart();
+  const { items, subtotal, total } = useCartContext();
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
-  const [isProcessing, setIsProcessing] = useState(false);
+  const { processCheckout, isProcessing } = useCheckout();
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
@@ -65,22 +65,7 @@ const CheckoutPage = () => {
   const paymentMethod = form.watch('paymentMethod');
 
   const onSubmit = (data: CheckoutFormValues) => {
-    setIsProcessing(true);
-    
-    // Simulate payment processing
-    setTimeout(() => {
-      console.log('Order data:', data);
-      console.log('Cart items:', items);
-      
-      toast({
-        title: "Order Placed Successfully!",
-        description: "Thank you for your purchase.",
-      });
-      
-      clearCart();
-      setIsProcessing(false);
-      navigate('/payment-success');
-    }, 2000);
+    processCheckout(data);
   };
 
   if (items.length === 0) {

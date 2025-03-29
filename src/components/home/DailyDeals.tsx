@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 import { useCurrency } from "@/hooks/useCurrency";
 import AddToCartButton from "@/components/product/AddToCartButton";
+import { useCartContext } from "@/contexts/CartContext";
 
 interface DealProduct {
   id: number;
@@ -52,6 +53,18 @@ const dealProducts = [
 
 const DailyDeals = () => {
   const { formatPrice, isLoading } = useCurrency();
+  const { addItem } = useCartContext();
+
+  const handleAddToCart = (product: DealProduct) => {
+    addItem({
+      id: product.id.toString(),
+      title: product.name,
+      price: product.price,
+      discount_price: product.oldPrice > product.price ? product.price : undefined,
+      thumbnail: product.image,
+      quantity: 1
+    });
+  };
 
   return (
     <section className="py-8 bg-gray-50">

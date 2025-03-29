@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { ShoppingCart, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/contexts/CartContext';
+import { useCartContext } from '@/contexts/CartContext';
 
 interface AddToCartButtonProps {
   product: {
@@ -21,7 +21,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   quantity = 1,
   className,
 }) => {
-  const { addItem } = useCart();
+  const { addItem } = useCartContext();
   const [isAdding, setIsAdding] = useState(false);
 
   const handleAddToCart = () => {
