@@ -215,10 +215,9 @@ export const OrderDetails = () => {
   };
 
   const handleReturnOrder = () => {
-    toast({
-      title: "Return request initiated",
-      description: `Return request for order #${order?.display_id} has been initiated.`,
-    });
+    if (order && order.items.length > 0) {
+      navigate(`/account/returns/new/${order.id}/${order.items[0].id}`);
+    }
   };
 
   if (!order) {

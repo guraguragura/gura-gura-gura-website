@@ -1077,6 +1077,45 @@ export type Database = {
           },
         ]
       }
+      customer_return_requests: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          order_id: string
+          order_item_id: string
+          quantity: number
+          reason: string
+          status: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          order_id: string
+          order_item_id: string
+          quantity?: number
+          reason: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          order_id?: string
+          order_item_id?: string
+          quantity?: number
+          reason?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       fulfillment: {
         Row: {
           canceled_at: string | null
