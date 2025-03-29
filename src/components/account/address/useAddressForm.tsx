@@ -71,8 +71,34 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
             form.setValue('last_name', data.last_name || '');
             form.setValue('phone', data.phone || '');
           } else {
-            // If no customer data exists, we'll continue without pre-filling
-            console.log('No customer data found, continuing with empty form');
+            // If no customer data exists, create a new customer record
+            try {
+              // Create a new customer record with empty data
+              const { data: newCustomer, error: createError } = await supabase
+                .from('customer')
+                .insert({
+                  first_name: '',
+                  last_name: '',
+                  email: '',
+                  phone: '',
+                  has_account: true
+                })
+                .select()
+                .single();
+                
+              if (createError) {
+                console.error('Error creating customer profile:', createError);
+                toast.error('Could not create customer profile');
+                return;
+              }
+              
+              if (newCustomer) {
+                setCustomerData(newCustomer);
+                console.log('Created new customer profile:', newCustomer);
+              }
+            } catch (createErr) {
+              console.error('Error in customer creation:', createErr);
+            }
           }
         } catch (error) {
           console.error('Error in fetchCustomerData:', error);
@@ -91,7 +117,7 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
       
       if (!customerData) {
         console.error('No customer data available');
-        toast.error('Customer profile not found. Please create a profile first.');
+        toast.error('Customer profile not found. Please try again.');
         return;
       }
 

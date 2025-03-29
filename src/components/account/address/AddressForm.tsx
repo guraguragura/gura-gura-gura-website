@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useAddressForm } from './useAddressForm';
 import AddressFormFields from './AddressFormFields';
-import NoCustomerProfile from './NoCustomerProfile';
 
 interface AddressFormProps {
   isOpen: boolean;
@@ -20,7 +19,7 @@ interface AddressFormProps {
 }
 
 const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
-  const { form, isLoading, isSubmitting, customerData, onSubmit } = useAddressForm(isOpen, onClose, onAddressAdded);
+  const { form, isLoading, isSubmitting, onSubmit } = useAddressForm(isOpen, onClose, onAddressAdded);
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -36,8 +35,6 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
           <div className="py-6 flex justify-center">
             <p className="text-gray-500">Loading your information...</p>
           </div>
-        ) : !customerData ? (
-          <NoCustomerProfile onClose={onClose} />
         ) : (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
