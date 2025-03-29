@@ -102,10 +102,12 @@ const Navbar = () => {
 
           {/* Icons */}
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" className="flex flex-col items-center p-1">
-              <UserIcon className="h-5 w-5" />
-              <span className="text-xs mt-1">Account</span>
-            </Button>
+            <Link to="/account">
+              <Button variant="ghost" size="sm" className="flex flex-col items-center p-1">
+                <UserIcon className="h-5 w-5" />
+                <span className="text-xs mt-1">Account</span>
+              </Button>
+            </Link>
             <Button variant="ghost" size="sm" className="flex flex-col items-center p-1">
               <HeartIcon className="h-5 w-5" />
               <span className="text-xs mt-1">Wishlist</span>
