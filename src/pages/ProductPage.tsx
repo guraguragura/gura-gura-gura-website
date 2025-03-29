@@ -33,6 +33,21 @@ interface Product {
   variants?: any[];
 }
 
+interface ProductMetadata {
+  images?: string[];
+  price?: number;
+  discount_price?: number;
+  rating?: number;
+  reviews_count?: number;
+  in_stock?: boolean;
+  sku?: string;
+  specifications?: Record<string, any>;
+  features?: string[];
+  is_sale?: boolean;
+  is_new?: boolean;
+  variants?: any[];
+}
+
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
@@ -56,6 +71,9 @@ const ProductPage = () => {
         if (error) {
           console.error("Error fetching product:", error);
         } else if (data) {
+          // Cast metadata to the correct type
+          const metadata = data.metadata as ProductMetadata || {};
+          
           // Transform the data to match the Product interface
           const formattedProduct: Product = {
             id: data.id,
@@ -63,18 +81,18 @@ const ProductPage = () => {
             description: data.description || "",
             subtitle: data.subtitle || "",
             thumbnail: data.thumbnail || "/placeholder.svg",
-            images: data.metadata?.images || [data.thumbnail || "/placeholder.svg"],
-            price: data.metadata?.price || 19.99,
-            discount_price: data.metadata?.discount_price,
-            rating: data.metadata?.rating || 4.5,
-            reviews_count: data.metadata?.reviews_count || 124,
-            in_stock: data.metadata?.in_stock !== false,
-            sku: data.metadata?.sku || "",
-            specifications: data.metadata?.specifications || {},
-            features: data.metadata?.features || [],
-            is_sale: data.metadata?.is_sale || false,
-            is_new: data.metadata?.is_new || false,
-            variants: data.metadata?.variants || [],
+            images: metadata.images || [data.thumbnail || "/placeholder.svg"],
+            price: metadata.price || 19.99,
+            discount_price: metadata.discount_price,
+            rating: metadata.rating || 4.5,
+            reviews_count: metadata.reviews_count || 124,
+            in_stock: metadata.in_stock !== false,
+            sku: metadata.sku || "",
+            specifications: metadata.specifications || {},
+            features: metadata.features || [],
+            is_sale: metadata.is_sale || false,
+            is_new: metadata.is_new || false,
+            variants: metadata.variants || [],
           };
           
           setProduct(formattedProduct);
