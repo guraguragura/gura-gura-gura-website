@@ -17,12 +17,15 @@ interface Product {
   metadata?: Record<string, any>;
 }
 
-export function useProducts(options: {
+// Define specific options type to avoid deep nesting issues
+interface ProductOptions {
   category?: string;
   limit?: number;
   featured?: boolean;
   onSale?: boolean;
-} = {}) {
+}
+
+export function useProducts(options: ProductOptions = {}) {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -70,7 +73,7 @@ export function useProducts(options: {
             const metadata = product.metadata && typeof product.metadata === 'object' ? product.metadata : {};
             
             // Helper function to safely get metadata values with type checking
-            const getMetadataValue = <T>(key: string, defaultValue: T): T => {
+            const getMetadataValue = <T,>(key: string, defaultValue: T): T => {
               if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) {
                 return defaultValue;
               }
@@ -79,14 +82,14 @@ export function useProducts(options: {
               
               // Type-specific checks
               if (key === 'price' || key === 'discount_price' || key === 'rating' || key === 'reviews_count') {
-                return (typeof value === 'number') ? value as unknown as T : defaultValue;
+                return (typeof value === 'number') ? value as T : defaultValue;
               } else if (key === 'images') {
-                return (Array.isArray(value)) ? value as unknown as T : [product.thumbnail || "/placeholder.svg"] as unknown as T;
+                return (Array.isArray(value)) ? value as T : [product.thumbnail || "/placeholder.svg"] as unknown as T;
               } else if (key === 'is_sale' || key === 'is_new') {
-                return (typeof value === 'boolean') ? value as unknown as T : defaultValue;
+                return (typeof value === 'boolean') ? value as T : defaultValue;
               }
               
-              return (value !== undefined && value !== null) ? value as unknown as T : defaultValue;
+              return (value !== undefined && value !== null) ? value as T : defaultValue;
             };
             
             return {
