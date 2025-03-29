@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,7 +19,6 @@ const AuthPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  // Form fields
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
@@ -28,7 +26,6 @@ const AuthPage = () => {
   const [lastName, setLastName] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
 
-  // Redirect to account page if user is already logged in
   useEffect(() => {
     if (user) {
       navigate('/account');
@@ -76,7 +73,6 @@ const AuthPage = () => {
         setError(result.error.message || 'Failed to create account. Please try again.');
       } else {
         setError(null);
-        // Note: In a real app, you might want to handle email confirmation here
       }
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred');
@@ -106,6 +102,14 @@ const AuthPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
+        <div className="flex justify-center mb-8">
+          <img 
+            src="/lovable-uploads/fee0a176-d29e-4bbd-9e57-4c3c62a0be2b.png" 
+            alt="Gura Logo" 
+            className="h-20 w-auto"
+          />
+        </div>
+        
         <Card className="w-full">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center">
