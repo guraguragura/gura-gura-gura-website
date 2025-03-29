@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -30,6 +31,14 @@ const AuthPage = () => {
     if (user) {
       navigate('/account');
     }
+    
+    // Prevent scrolling on this page
+    document.body.style.overflow = 'hidden';
+    
+    // Cleanup function to restore scrolling when component unmounts
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
   }, [user, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -100,7 +109,7 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="h-screen overflow-hidden bg-gray-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
         <div className="flex justify-center mb-8">
           <img 
