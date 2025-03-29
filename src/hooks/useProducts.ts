@@ -69,42 +69,24 @@ export function useProducts(options: ProductOptions = {}) {
         } else {
           // Transform data to match our Product interface
           const formattedProducts: Product[] = data.map(product => {
-            // Ensure metadata is treated as a valid object or empty object if null/undefined
-            const metadata = product.metadata && typeof product.metadata === 'object' ? product.metadata : {};
+            const metadata = product.metadata || {};
             
-            // Helper function to safely get metadata values
-            function getMetadataValue(key: string, defaultValue: any): any {
-              if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) {
-                return defaultValue;
-              }
-              
-              const value = metadata[key];
-              
-              // Type-specific checks
-              if (key === 'price' || key === 'discount_price' || key === 'rating' || key === 'reviews_count') {
-                return typeof value === 'number' ? value : defaultValue;
-              } else if (key === 'images') {
-                return Array.isArray(value) ? value : [product.thumbnail || "/placeholder.svg"];
-              } else if (key === 'is_sale' || key === 'is_new') {
-                return typeof value === 'boolean' ? value : defaultValue;
-              }
-              
-              return value !== undefined && value !== null ? value : defaultValue;
-            }
+            // Extract values directly without using complex type inference
+            const productThumbnail = product.thumbnail || "/placeholder.svg";
             
             return {
               id: product.id,
               title: product.title,
               description: product.description || "",
-              price: getMetadataValue('price', 19.99),
-              discount_price: getMetadataValue('discount_price', undefined),
-              thumbnail: product.thumbnail || "/placeholder.svg",
-              images: getMetadataValue('images', [product.thumbnail || "/placeholder.svg"]),
-              rating: getMetadataValue('rating', 4.5),
-              reviews_count: getMetadataValue('reviews_count', 124),
-              is_sale: getMetadataValue('is_sale', false),
-              is_new: getMetadataValue('is_new', false),
-              metadata
+              price: typeof metadata.price === 'number' ? metadata.price : 19.99,
+              discount_price: typeof metadata.discount_price === 'number' ? metadata.discount_price : undefined,
+              thumbnail: productThumbnail,
+              images: Array.isArray(metadata.images) ? metadata.images : [productThumbnail],
+              rating: typeof metadata.rating === 'number' ? metadata.rating : 4.5,
+              reviews_count: typeof metadata.reviews_count === 'number' ? metadata.reviews_count : 124,
+              is_sale: typeof metadata.is_sale === 'boolean' ? metadata.is_sale : false,
+              is_new: typeof metadata.is_new === 'boolean' ? metadata.is_new : false,
+              metadata: typeof metadata === 'object' && !Array.isArray(metadata) ? metadata : {}
             };
           });
           
