@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AccountLayout } from '@/components/account/AccountLayout';
 import { PersonalInfo } from '@/components/account/PersonalInfo';
 import { Addresses } from '@/components/account/Addresses';
@@ -9,18 +9,12 @@ import { Orders } from '@/components/account/Orders';
 import { OrderDetails } from '@/components/account/OrderDetails';
 import { Returns } from '@/components/account/Returns';
 import ReturnRequestForm from '@/components/account/ReturnRequestForm';
-// We're temporarily removing the useAuth import for development
-// import { useAuth } from '@/contexts/AuthContext'; 
+import { useAuth } from '@/contexts/AuthContext';
 
 const AccountPage = () => {
-  // Temporarily bypass authentication checks for development
-  // const { user, loading } = useAuth();
-  // This is a temporary mock user to bypass authentication during development
-  const mockUser = { id: 'dev-user-id', email: 'dev@example.com' };
-  const loading = false;
+  const navigate = useNavigate();
+  const { user, loading } = useAuth();
   
-  // Commented out the authentication redirect logic for now
-  /*
   useEffect(() => {
     // Wait until loading is done before redirecting
     if (!loading && !user) {
@@ -28,7 +22,7 @@ const AccountPage = () => {
     }
   }, [user, loading, navigate]);
 
-  // Show nothing while checking authentication
+  // Show loading spinner while checking authentication
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -41,7 +35,6 @@ const AccountPage = () => {
   if (!user && !loading) {
     return <Navigate to="/auth" replace />;
   }
-  */
   
   return (
     <AccountLayout>
