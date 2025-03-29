@@ -82,10 +82,14 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
         return;
       }
 
-      // Insert new address - let Supabase generate the UUID
+      // Generate a UUID for the address
+      const addressId = crypto.randomUUID();
+
+      // Insert new address with the generated UUID
       const { error } = await supabase
         .from('customer_address')
-        .insert([{
+        .insert({
+          id: addressId, // Include the ID field explicitly
           customer_id: customerData.id,
           address_name: data.address_name,
           first_name: data.first_name,
@@ -100,7 +104,7 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
           phone: data.phone,
           is_default_shipping: data.is_default_shipping,
           is_default_billing: data.is_default_billing
-        }]);
+        });
 
       if (error) {
         console.error('Error adding address:', error);
