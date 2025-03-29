@@ -1,16 +1,37 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
 
 export function useCustomerProfile() {
   const [isLoading, setIsLoading] = useState(false);
-  const [customer, setCustomer] = useState<any>(null);
-  const [address, setAddress] = useState<any>(null);
-  const { user } = useAuth();
+  const [customer, setCustomer] = useState<any>({
+    // Mock customer data for development
+    id: 'dev-customer-id',
+    email: 'dev@example.com',
+    first_name: 'Development',
+    last_name: 'User',
+    phone: '+1234567890'
+  });
+  const [address, setAddress] = useState<any>({
+    // Mock address data for development
+    id: 'dev-address-id',
+    customer_id: 'dev-customer-id',
+    address: '123 Development St',
+    district: 'Dev District',
+    sector: 'Dev Sector',
+    cell: 'Dev Cell',
+    village: 'Dev Village',
+    postal_code: '12345',
+    nearby_landmark: 'Near Dev Park'
+  });
+  
+  // Mock user data for development
+  const user = { id: 'dev-user-id', email: 'dev@example.com' };
 
-  // Fetch customer data
+  // Fetch customer data - commented out for now
   useEffect(() => {
+    // This functionality is temporarily disabled for development
+    /*
     const fetchCustomer = async () => {
       if (!user) return;
       
@@ -54,21 +75,20 @@ export function useCustomerProfile() {
     };
 
     fetchCustomer();
-  }, [user]);
+    */
+    
+    // Simulate loading for development
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    
+  }, []);
 
   const refreshAddress = async () => {
-    if (customer) {
-      // Refresh address data after update
-      const { data: addressData } = await supabase
-        .from('customer_address')
-        .select('*')
-        .eq('customer_id', customer.id)
-        .maybeSingle();
-        
-      if (addressData) {
-        setAddress(addressData);
-      }
-    }
+    // Temporarily mocked for development
+    console.log('Address refreshed (mock)');
+    toast.success('Address updated');
   };
 
   return { isLoading, customer, setCustomer, address, setAddress, refreshAddress };

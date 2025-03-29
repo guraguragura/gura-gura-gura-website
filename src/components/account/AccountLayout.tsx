@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   User, 
   MapPin, 
@@ -13,6 +13,7 @@ import {
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import AccountBanner from './AccountBanner';
+import { toast } from 'sonner';
 
 interface NavItem {
   path: string;
@@ -27,6 +28,13 @@ interface AccountLayoutProps {
 
 export const AccountLayout = ({ children }: AccountLayoutProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // This is a temporary mock logout function for development
+    toast.success('You have been signed out');
+    navigate('/');
+  };
 
   const navItems: NavItem[] = [
     { path: '/account/personal-info', label: 'Personal info', icon: <User className="h-5 w-5" /> },
@@ -39,7 +47,8 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
   const secondaryNavItems: NavItem[] = [
     { section: 'OTHER', path: '', label: '', icon: null },
     { path: '/help', label: 'FAQ', icon: <HelpCircle className="h-5 w-5" /> },
-    { path: '/logout', label: 'Sign Out', icon: <LogOut className="h-5 w-5 text-red-500" /> },
+    { path: '#', label: 'Sign Out', icon: <LogOut className="h-5 w-5 text-red-500" />, 
+      onClick: handleLogout }, // Add onClick handler for the logout button
   ];
 
   const isActive = (path: string) => {
@@ -53,6 +62,19 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
           <div key={`section-${index}`} className="px-3 py-2 text-xs font-semibold text-gray-500">
             {item.section}
           </div>
+        );
+      }
+      
+      if (item.path === '#' && item.onClick) {
+        return (
+          <button
+            key={`button-${index}`}
+            onClick={item.onClick}
+            className="flex items-center gap-3 px-3 py-2 rounded-md transition-colors text-gray-700 hover:bg-gray-50 w-full text-left"
+          >
+            {item.icon}
+            <span>{item.label}</span>
+          </button>
         );
       }
       
