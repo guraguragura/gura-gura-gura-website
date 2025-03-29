@@ -38,7 +38,9 @@ const AddressFields: React.FC<AddressFieldsProps> = ({
   setLandmark,
 }) => {
   return (
-    <>
+    <div className="space-y-4">
+      <h3 className="text-base font-medium border-b pb-2">Address Information</h3>
+      
       <div className="space-y-2">
         <Label htmlFor="address">Address</Label>
         <div className="relative">
@@ -118,7 +120,7 @@ const AddressFields: React.FC<AddressFieldsProps> = ({
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

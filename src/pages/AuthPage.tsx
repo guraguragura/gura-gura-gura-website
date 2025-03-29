@@ -70,7 +70,7 @@ const AuthPage = () => {
             {isLogin ? (
               authContent
             ) : (
-              <ScrollArea className="max-h-[60vh]">
+              <ScrollArea className="max-h-[70vh]">
                 {authContent}
               </ScrollArea>
             )}
