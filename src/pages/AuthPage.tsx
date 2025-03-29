@@ -46,7 +46,7 @@ const AuthPage = () => {
 
   return (
     <div className={`min-h-screen bg-gray-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 ${!isLogin ? 'py-8' : ''}`}>
-      <div className="max-w-md w-full">
+      <div className={`w-full ${isLogin ? 'max-w-md' : 'max-w-2xl'}`}>
         <div className="flex justify-center mb-8">
           <img 
             src="/lovable-uploads/fee0a176-d29e-4bbd-9e57-4c3c62a0be2b.png" 

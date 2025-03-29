@@ -55,7 +55,7 @@ const AddressFields: React.FC<AddressFieldsProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="district">District</Label>
           <Input 
@@ -75,9 +75,7 @@ const AddressFields: React.FC<AddressFieldsProps> = ({
             onChange={(e) => setSector(e.target.value)}
           />
         </div>
-      </div>
 
-      <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="cell">Cell</Label>
           <Input 
@@ -87,7 +85,9 @@ const AddressFields: React.FC<AddressFieldsProps> = ({
             onChange={(e) => setCell(e.target.value)}
           />
         </div>
-        
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="village">Village</Label>
           <Input 
@@ -97,9 +97,7 @@ const AddressFields: React.FC<AddressFieldsProps> = ({
             onChange={(e) => setVillage(e.target.value)}
           />
         </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
+        
         <div className="space-y-2">
           <Label htmlFor="postalCode">Postal/ZIP Code</Label>
           <Input 
