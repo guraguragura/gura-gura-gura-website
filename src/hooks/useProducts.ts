@@ -2,6 +2,18 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
+// Define a more explicit type for metadata to avoid deep type recursion
+type SafeMetadata = {
+  price?: number;
+  discount_price?: number;
+  images?: string[];
+  rating?: number;
+  reviews_count?: number;
+  is_sale?: boolean;
+  is_new?: boolean;
+  [key: string]: unknown;
+};
+
 interface Product {
   id: string;
   title: string;
@@ -14,7 +26,7 @@ interface Product {
   reviews_count?: number;
   is_sale?: boolean;
   is_new?: boolean;
-  metadata?: Record<string, unknown>;
+  metadata?: SafeMetadata;
 }
 
 // Define specific options type to avoid deep nesting issues
@@ -70,8 +82,12 @@ export function useProducts(options: ProductOptions = {}) {
         } else if (data) {
           // Transform data to match our Product interface
           const formattedProducts: Product[] = data.map(product => {
-            // Use type assertion for metadata with proper checks
-            const metadata = product.metadata as Record<string, unknown> || {};
+            // Extract metadata safely
+            const rawMetadata = product.metadata || {};
+            
+            // Ensure metadata is an object, not an array or primitive
+            const metadata: SafeMetadata = typeof rawMetadata === 'object' && 
+              !Array.isArray(rawMetadata) ? rawMetadata as SafeMetadata : {};
             
             return {
               id: product.id,
@@ -85,9 +101,7 @@ export function useProducts(options: ProductOptions = {}) {
               reviews_count: typeof metadata.reviews_count === 'number' ? metadata.reviews_count : 124,
               is_sale: typeof metadata.is_sale === 'boolean' ? metadata.is_sale : false,
               is_new: typeof metadata.is_new === 'boolean' ? metadata.is_new : false,
-              metadata: product.metadata && typeof product.metadata === 'object' && !Array.isArray(product.metadata) 
-                ? product.metadata as Record<string, unknown>
-                : {}
+              metadata: metadata
             };
           });
           
