@@ -48,14 +48,14 @@ export function useProducts(options: ProductOptions = {}) {
       setError(null);
       
       try {
-        // Build query
+        // First, let's prepare a base query
         let query = supabase
           .from('product')
           .select('*, product_category_product(product_category_id, product_category:product_category(name, handle))')
           .eq('deleted_at', null)
           .order('created_at', { ascending: false });
           
-        // Apply filters
+        // Apply filters one by one
         if (options.category) {
           query = query.eq('product_category_product.product_category.handle', options.category);
         }
@@ -72,13 +72,14 @@ export function useProducts(options: ProductOptions = {}) {
           query = query.limit(options.limit);
         }
         
-        const { data, error } = await query;
+        // Execute the query
+        const { data, error: queryError } = await query;
         
-        if (error) {
-          console.error("Error fetching products:", error);
+        if (queryError) {
+          console.error("Error fetching products:", queryError);
           setError("Failed to load products");
           setProducts([]);
-        } else {
+        } else if (data) {
           // Transform data to match our Product interface
           const formattedProducts: Product[] = data.map(product => {
             // Cast metadata to our specific type or default to empty object
