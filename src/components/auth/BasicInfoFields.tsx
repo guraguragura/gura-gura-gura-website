@@ -2,7 +2,7 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, Eye, EyeOff, Phone } from 'lucide-react';
 
 type BasicInfoFieldsProps = {
   firstName: string;
@@ -11,6 +11,8 @@ type BasicInfoFieldsProps = {
   setLastName: (value: string) => void;
   email: string;
   setEmail: (value: string) => void;
+  phoneNumber: string;
+  setPhoneNumber: (value: string) => void;
   password: string;
   setPassword: (value: string) => void;
   showPassword: boolean;
@@ -24,6 +26,8 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
   setLastName,
   email,
   setEmail,
+  phoneNumber,
+  setPhoneNumber,
   password,
   setPassword,
   showPassword,
@@ -81,6 +85,23 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
             onChange={(e) => setEmail(e.target.value)}
             className="pl-10"
             required
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="phoneNumber">Phone Number</Label>
+        <div className="relative">
+          <span className="absolute left-3 top-3 text-gray-400">
+            <Phone className="h-4 w-4" />
+          </span>
+          <Input 
+            id="phoneNumber" 
+            type="tel" 
+            placeholder="+1234567890" 
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            className="pl-10"
           />
         </div>
       </div>

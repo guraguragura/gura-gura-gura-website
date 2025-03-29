@@ -21,6 +21,7 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
 
   // Address fields
@@ -56,7 +57,8 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
           cell,
           village,
           postal_code: postalCode,
-          nearby_landmark: landmark
+          nearby_landmark: landmark,
+          phone_number: phoneNumber
         }
       );
       
@@ -88,6 +90,8 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
           setLastName={setLastName}
           email={email}
           setEmail={setEmail}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
           password={password}
           setPassword={setPassword}
           showPassword={showPassword}
