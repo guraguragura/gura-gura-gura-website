@@ -91,7 +91,7 @@ const AuthPage = () => {
         
         {/* Right side - Image Background */}
         <div className="hidden md:flex md:w-1/2 bg-[#F8C4B4] relative overflow-hidden">
-          <div className="absolute inset-0 flex flex-col justify-center items-center p-8 z-10">
+          <div className="absolute top-16 left-10 z-10 text-left">
             <h2 className="text-4xl font-bold text-white mb-4">Shop smart, shop fast,</h2>
             <h2 className="text-4xl font-bold text-white">shop Gura.</h2>
           </div>
