@@ -34,5 +34,5 @@ export const useCartContext = () => {
   return context;
 };
 
-// Re-export the useCart hook's types for convenience
-export type { CartItem };
+// Re-export the useCart hook and CartItem type for direct usage
+export { useCart, CartItem };

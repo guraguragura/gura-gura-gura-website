@@ -71,14 +71,14 @@ export function useProducts(options: {
               id: product.id,
               title: product.title,
               description: product.description || "",
-              price: metadata.price || 19.99,
-              discount_price: metadata.discount_price,
+              price: typeof metadata === 'object' && metadata !== null ? (metadata.price || 19.99) : 19.99,
+              discount_price: typeof metadata === 'object' && metadata !== null ? metadata.discount_price : undefined,
               thumbnail: product.thumbnail || "/placeholder.svg",
-              images: metadata.images || [product.thumbnail || "/placeholder.svg"],
-              rating: metadata.rating || 4.5,
-              reviews_count: metadata.reviews_count || 124,
-              is_sale: metadata.is_sale || false,
-              is_new: metadata.is_new || false,
+              images: typeof metadata === 'object' && metadata !== null ? (metadata.images || [product.thumbnail || "/placeholder.svg"]) : [product.thumbnail || "/placeholder.svg"],
+              rating: typeof metadata === 'object' && metadata !== null ? (metadata.rating || 4.5) : 4.5,
+              reviews_count: typeof metadata === 'object' && metadata !== null ? (metadata.reviews_count || 124) : 124,
+              is_sale: typeof metadata === 'object' && metadata !== null ? (metadata.is_sale || false) : false,
+              is_new: typeof metadata === 'object' && metadata !== null ? (metadata.is_new || false) : false,
               metadata
             };
           });

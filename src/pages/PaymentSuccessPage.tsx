@@ -6,10 +6,10 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, ArrowRight } from 'lucide-react';
-import { useCart } from '@/contexts/CartContext';
+import { useCartContext } from '@/contexts/CartContext';
 
 const PaymentSuccessPage = () => {
-  const { items } = useCart();
+  const { items } = useCartContext();
   const navigate = useNavigate();
   
   // If the user navigates directly to this page without making a purchase, redirect to home

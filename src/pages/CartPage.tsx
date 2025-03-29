@@ -3,7 +3,7 @@ import React from 'react';
 import TopInfoBar from '@/components/layout/TopInfoBar';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { useCart } from '@/contexts/CartContext';
+import { useCartContext } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
@@ -14,7 +14,7 @@ import CartEmpty from '@/components/cart/CartEmpty';
 import CartSummary from '@/components/cart/CartSummary';
 
 const CartPage = () => {
-  const { items, removeItem, updateItemQuantity, totalItems, subtotal, total } = useCart();
+  const { items, removeItem, updateItemQuantity, itemCount, subtotal, total } = useCartContext();
   const { formatPrice } = useCurrency();
 
   if (items.length === 0) {
@@ -36,7 +36,7 @@ const CartPage = () => {
       <Navbar />
       <div className="container mx-auto py-12 px-4 flex-grow">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8">Shopping Cart ({totalItems} items)</h1>
+          <h1 className="text-3xl font-bold mb-8">Shopping Cart ({itemCount} items)</h1>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="md:col-span-2">

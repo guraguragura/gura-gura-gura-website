@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useCart } from '@/contexts/CartContext';
+import { useCartContext } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
@@ -8,7 +8,7 @@ import { useCurrency } from '@/hooks/useCurrency';
 import { Card } from '@/components/ui/card';
 
 const CartSummary = () => {
-  const { subtotal, total } = useCart();
+  const { subtotal, total } = useCartContext();
   const { formatPrice } = useCurrency();
 
   return (

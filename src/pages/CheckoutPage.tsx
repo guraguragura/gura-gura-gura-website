@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopInfoBar from '@/components/layout/TopInfoBar';
@@ -65,7 +66,17 @@ const CheckoutPage = () => {
   const paymentMethod = form.watch('paymentMethod');
 
   const onSubmit = (data: CheckoutFormValues) => {
-    processCheckout(data);
+    processCheckout({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phone: data.phone,
+      address: data.address,
+      city: data.city,
+      state: data.state,
+      zipCode: data.zipCode,
+      paymentMethod: data.paymentMethod
+    });
   };
 
   if (items.length === 0) {
