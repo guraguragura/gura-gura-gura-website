@@ -29,7 +29,6 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
   const location = useLocation();
 
   const navItems: NavItem[] = [
-    { section: 'MAIN', path: '', label: '', icon: null },
     { path: '/account/personal-info', label: 'Personal info', icon: <User className="h-5 w-5" /> },
     { path: '/account/addresses', label: 'Addresses', icon: <MapPin className="h-5 w-5" /> },
     { path: '/account/wishlist', label: 'Wishlists', icon: <Heart className="h-5 w-5" /> },
