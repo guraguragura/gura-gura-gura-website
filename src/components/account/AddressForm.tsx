@@ -78,20 +78,26 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
             .from('customer')
             .select('*')
             .limit(1)
-            .single();
+            .maybeSingle(); // Using maybeSingle instead of single to handle no results
 
-          if (error) {
+          if (error && error.code !== 'PGRST116') {
+            // Only show error if it's not the "no rows returned" error
             console.error('Error fetching customer data:', error);
             toast.error('Error fetching customer data');
             return;
           }
 
-          setCustomerData(data);
-          
-          // Pre-fill the first name and last name fields from the customer data
-          form.setValue('first_name', data.first_name || '');
-          form.setValue('last_name', data.last_name || '');
-          form.setValue('phone', data.phone || '');
+          if (data) {
+            setCustomerData(data);
+            
+            // Pre-fill the first name and last name fields from the customer data
+            form.setValue('first_name', data.first_name || '');
+            form.setValue('last_name', data.last_name || '');
+            form.setValue('phone', data.phone || '');
+          } else {
+            // If no customer data exists, we'll continue without pre-filling
+            console.log('No customer data found, continuing with empty form');
+          }
         } catch (error) {
           console.error('Error in fetchCustomerData:', error);
         } finally {
@@ -109,7 +115,7 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
       
       if (!customerData) {
         console.error('No customer data available');
-        toast.error('Customer data not available');
+        toast.error('Customer profile not found. Please create a profile first.');
         return;
       }
 
@@ -120,7 +126,7 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
       const { error } = await supabase
         .from('customer_address')
         .insert({
-          id: addressId, // Include the ID field explicitly
+          id: addressId,
           customer_id: customerData.id,
           address_name: data.address_name,
           first_name: data.first_name,
@@ -168,6 +174,21 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
         {isLoading ? (
           <div className="py-6 flex justify-center">
             <p className="text-gray-500">Loading your information...</p>
+          </div>
+        ) : !customerData ? (
+          <div className="py-6">
+            <p className="text-amber-600 mb-3">No customer profile found.</p>
+            <p className="text-gray-600">Please create your personal profile in the Personal Information section before adding addresses.</p>
+            <Button 
+              className="mt-4" 
+              variant="outline" 
+              onClick={() => {
+                onClose();
+                window.location.href = '/account/personal-info';
+              }}
+            >
+              Go to Personal Information
+            </Button>
           </div>
         ) : (
           <Form {...form}>
