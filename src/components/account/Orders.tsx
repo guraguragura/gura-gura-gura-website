@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Clock, Package, CheckCircle, Truck, XCircle } from 'lucide-react';
 
 // Define the possible order statuses
-export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'canceled';
+export type OrderStatus = 'pending' | 'processing' | 'out_for_delivery' | 'delivered' | 'canceled';
 
 // Define the order interface
 interface Order {
@@ -27,10 +27,10 @@ const statusConfig: Record<OrderStatus, { icon: React.ReactNode; color: string; 
     color: 'text-blue-500', 
     label: 'Processing' 
   },
-  shipped: { 
+  out_for_delivery: { 
     icon: <Truck className="h-5 w-5" />, 
     color: 'text-indigo-500', 
-    label: 'Shipped' 
+    label: 'Out for Delivery' 
   },
   delivered: { 
     icon: <CheckCircle className="h-5 w-5" />, 
@@ -65,7 +65,7 @@ const mockOrders: Order[] = [
   {
     id: 'ord_3456',
     display_id: 3456,
-    status: 'shipped',
+    status: 'out_for_delivery',
     date: '2023-10-20',
     total: 249.50,
     items: 3
