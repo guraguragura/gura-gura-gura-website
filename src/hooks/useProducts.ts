@@ -17,17 +17,6 @@ interface Product {
   metadata?: Record<string, unknown>;
 }
 
-// Define a more specific type for product metadata without index signature
-interface ProductMetadata {
-  price?: number;
-  discount_price?: number;
-  images?: string[];
-  rating?: number;
-  reviews_count?: number;
-  is_sale?: boolean;
-  is_new?: boolean;
-}
-
 // Define specific options type to avoid deep nesting issues
 interface ProductOptions {
   category?: string;
@@ -81,8 +70,8 @@ export function useProducts(options: ProductOptions = {}) {
         } else if (data) {
           // Transform data to match our Product interface
           const formattedProducts: Product[] = data.map(product => {
-            // Safely extract metadata or default to empty object
-            const metadata = product.metadata || {};
+            // Use type assertion for metadata with proper checks
+            const metadata = product.metadata as Record<string, unknown> || {};
             
             return {
               id: product.id,
@@ -96,7 +85,9 @@ export function useProducts(options: ProductOptions = {}) {
               reviews_count: typeof metadata.reviews_count === 'number' ? metadata.reviews_count : 124,
               is_sale: typeof metadata.is_sale === 'boolean' ? metadata.is_sale : false,
               is_new: typeof metadata.is_new === 'boolean' ? metadata.is_new : false,
-              metadata: typeof product.metadata === 'object' && product.metadata !== null ? product.metadata : {}
+              metadata: product.metadata && typeof product.metadata === 'object' && !Array.isArray(product.metadata) 
+                ? product.metadata as Record<string, unknown>
+                : {}
             };
           });
           
