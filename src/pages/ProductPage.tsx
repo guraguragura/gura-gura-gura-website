@@ -53,8 +53,10 @@ const ProductPage = () => {
           console.error("Error fetching product:", error);
           setProduct(null);
         } else if (data) {
+          // Parse the metadata as a Record<string, any>
           const metadataObj = data.metadata as Record<string, any> || {};
           
+          // Transform the product data with safe property access
           const formattedProduct = {
             id: data.id,
             title: data.title,
@@ -130,6 +132,7 @@ const ProductPage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Product Image Gallery */}
           <div>
             <img src={mainImage} alt={product.title} className="w-full h-96 object-contain rounded-md shadow-md" />
             <div className="mt-4 grid grid-cols-4 gap-2">
@@ -145,6 +148,7 @@ const ProductPage = () => {
             </div>
           </div>
 
+          {/* Product Details */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900 mb-4">{product.title}</h1>
             <div className="flex items-center mb-4">
@@ -155,6 +159,7 @@ const ProductPage = () => {
             </div>
             <p className="text-gray-700 mb-6">{product.description}</p>
 
+            {/* Quantity selector */}
             <div className="flex items-center space-x-4 mb-6">
               <div className="font-medium">Quantity:</div>
               <div className="flex items-center border rounded-md">
@@ -164,6 +169,7 @@ const ProductPage = () => {
               </div>
             </div>
 
+            {/* Add to cart button */}
             <div className="flex items-center space-x-4 mb-6">
               <Button className="bg-blue-600 text-white rounded-md px-6 py-3 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                 <ShoppingCart className="h-5 w-5 mr-2" />
@@ -178,11 +184,13 @@ const ProductPage = () => {
               </Button>
             </div>
 
+            {/* Product SKU and Availability */}
             <div className="mb-6">
               <div className="text-sm text-gray-500">SKU: {product.sku}</div>
               <div className="text-sm text-gray-500">Availability: {product.in_stock ? "In Stock" : "Out of Stock"}</div>
             </div>
 
+            {/* Product Tabs */}
             <Tabs defaultValue="description" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="description">Description</TabsTrigger>
@@ -216,6 +224,7 @@ const ProductPage = () => {
           </div>
         </div>
 
+        {/* Product Accordion */}
         <Accordion type="single" collapsible className="w-full mt-8">
           <AccordionItem value="details">
             <AccordionTrigger>Product Details</AccordionTrigger>
@@ -237,16 +246,13 @@ const ProductPage = () => {
           <AccordionItem value="reviews">
             <AccordionTrigger>Reviews</AccordionTrigger>
             <AccordionContent>
-              <ProductReviews 
-                productId={product.id} 
-                averageRating={product.rating} 
-                totalReviews={product.reviews_count} 
-              />
+              <ProductReviews productId={product.id} />
             </AccordionContent>
           </AccordionItem>
         </Accordion>
 
-        <RelatedProducts productId={product.id} />
+        {/* Related Products */}
+        <RelatedProducts categoryId="some_category_id" />
       </div>
       <Footer />
     </div>
