@@ -48,14 +48,14 @@ export function useProducts(options: ProductOptions = {}) {
       setError(null);
       
       try {
-        // First, let's prepare a base query
+        // Build our base query
         let query = supabase
           .from('product')
           .select('*, product_category_product(product_category_id, product_category:product_category(name, handle))')
           .eq('deleted_at', null)
           .order('created_at', { ascending: false });
-          
-        // Apply filters one by one
+        
+        // Apply individual filters
         if (options.category) {
           query = query.eq('product_category_product.product_category.handle', options.category);
         }
