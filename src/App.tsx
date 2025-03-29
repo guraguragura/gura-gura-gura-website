@@ -11,6 +11,11 @@ import NotFound from "./pages/NotFound";
 import AccountPage from "./pages/AccountPage";
 import AuthPage from "./pages/AuthPage";
 import FaqPage from "./pages/FaqPage";
+import AboutUsPage from "./pages/AboutUsPage";
+import AdvantagesPage from "./pages/AdvantagesPage";
+import GuraAppPage from "./pages/GuraAppPage";
+import PressPage from "./pages/PressPage";
+import CareersPage from "./pages/CareersPage";
 
 const queryClient = new QueryClient();
 
@@ -22,16 +27,19 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/shop" element={<Index />} /> {/* To be implemented */}
-          <Route path="/collections" element={<Index />} /> {/* To be implemented */}
+          <Route path="/shop" element={<Index />} />
+          <Route path="/collections" element={<Index />} />
           <Route path="/categories/:handle" element={<CategoryPage />} />
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/account/*" element={<AccountPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/help" element={<FaqPage />} />
           <Route path="/faq" element={<FaqPage />} />
-          <Route path="/about" element={<Index />} /> {/* To be implemented */}
-          <Route path="/contact" element={<Index />} /> {/* To be implemented */}
+          <Route path="/about" element={<AboutUsPage />} />
+          <Route path="/advantages" element={<AdvantagesPage />} />
+          <Route path="/app" element={<GuraAppPage />} />
+          <Route path="/press" element={<PressPage />} />
+          <Route path="/careers" element={<CareersPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
