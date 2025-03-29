@@ -40,7 +40,7 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
     return (
       <Card className="overflow-hidden mb-4 transition-all duration-200 hover:shadow-md">
         <div className="flex flex-col md:flex-row">
-          <div className="relative bg-gray-100 p-4 md:w-48 flex-shrink-0">
+          <div className="relative bg-white p-4 md:w-48 flex-shrink-0">
             {is_sale && discountPercentage > 0 && (
               <Badge className="absolute top-3 left-3 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 font-medium rounded-full">
                 Sale {discountPercentage}%
