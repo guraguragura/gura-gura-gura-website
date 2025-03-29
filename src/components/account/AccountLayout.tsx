@@ -20,6 +20,7 @@ interface NavItem {
   label: string;
   icon: React.ReactNode;
   section?: string;
+  onClick?: () => void; // Added onClick as an optional property
 }
 
 interface AccountLayoutProps {
@@ -48,7 +49,7 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
     { section: 'OTHER', path: '', label: '', icon: null },
     { path: '/help', label: 'FAQ', icon: <HelpCircle className="h-5 w-5" /> },
     { path: '#', label: 'Sign Out', icon: <LogOut className="h-5 w-5 text-red-500" />, 
-      onClick: handleLogout }, // Add onClick handler for the logout button
+      onClick: handleLogout }, // Added onClick handler for the logout button
   ];
 
   const isActive = (path: string) => {
