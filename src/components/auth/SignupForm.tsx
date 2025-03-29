@@ -1,13 +1,11 @@
 
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Mail, User, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import AddressFields from './AddressFields';
+import BasicInfoFields from './BasicInfoFields';
+import TermsCheckbox from './TermsCheckbox';
+import SubmitButton from './SubmitButton';
 
 type SignupFormProps = {
   error: string | null;
@@ -83,84 +81,18 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
       )}
       
       <form onSubmit={handleSignUp} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="firstName">First Name</Label>
-            <div className="relative">
-              <span className="absolute left-3 top-3 text-gray-400">
-                <User className="h-4 w-4" />
-              </span>
-              <Input 
-                id="firstName" 
-                placeholder="John" 
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                className="pl-10"
-                required
-              />
-            </div>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="lastName">Last Name</Label>
-            <div className="relative">
-              <span className="absolute left-3 top-3 text-gray-400">
-                <User className="h-4 w-4" />
-              </span>
-              <Input 
-                id="lastName" 
-                placeholder="Doe" 
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                className="pl-10"
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="signupEmail">Email</Label>
-          <div className="relative">
-            <span className="absolute left-3 top-3 text-gray-400">
-              <Mail className="h-4 w-4" />
-            </span>
-            <Input 
-              id="signupEmail" 
-              type="email" 
-              placeholder="name@example.com" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="pl-10"
-              required
-            />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="signupPassword">Password</Label>
-          <div className="relative">
-            <span className="absolute left-3 top-3 text-gray-400">
-              <Lock className="h-4 w-4" />
-            </span>
-            <Input 
-              id="signupPassword" 
-              type={showPassword ? "text" : "password"} 
-              placeholder="••••••••" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="pl-10 pr-10"
-              required
-            />
-            <button 
-              type="button"
-              className="absolute right-3 top-3 text-gray-400"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </button>
-          </div>
-        </div>
+        <BasicInfoFields 
+          firstName={firstName}
+          setFirstName={setFirstName}
+          lastName={lastName}
+          setLastName={setLastName}
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          showPassword={showPassword}
+          setShowPassword={setShowPassword}
+        />
 
         <AddressFields 
           address={address}
@@ -179,32 +111,16 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
           setLandmark={setLandmark}
         />
 
-        <div className="flex items-center space-x-2">
-          <Checkbox 
-            id="terms" 
-            checked={agreeTerms}
-            onCheckedChange={(checked) => setAgreeTerms(checked as boolean)}
-          />
-          <label
-            htmlFor="terms"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            I agree to the terms and conditions
-          </label>
-        </div>
+        <TermsCheckbox 
+          agreeTerms={agreeTerms}
+          setAgreeTerms={setAgreeTerms}
+        />
 
-        <Button 
-          type="submit" 
-          className="w-full" 
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Creating Account...
-            </>
-          ) : 'Create Account'}
-        </Button>
+        <SubmitButton 
+          isLoading={isLoading}
+          label="Create Account"
+          loadingLabel="Creating Account..."
+        />
       </form>
     </>
   );
