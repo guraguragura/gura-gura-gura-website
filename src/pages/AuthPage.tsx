@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -89,13 +90,13 @@ const AuthPage = () => {
         </div>
         
         {/* Right side - Image Background */}
-        <div className="hidden md:flex md:w-1/2 bg-cyan-100 relative overflow-hidden">
+        <div className="hidden md:flex md:w-1/2 bg-[#F8C4B4] relative overflow-hidden">
           <div className="absolute inset-0 flex flex-col justify-center items-center p-8 z-10">
             <h2 className="text-4xl font-bold text-white mb-4">Shop smart, shop fast,</h2>
             <h2 className="text-4xl font-bold text-white">shop Gura.</h2>
           </div>
           <img 
-            src="/lovable-uploads/2b4f1e1c-8388-4e0a-a05c-1efa3ecbb777.png" 
+            src="/lovable-uploads/61870ac8-67b1-4faf-9fa6-e40f60010b9d.png" 
             alt="Gura Shopping" 
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
