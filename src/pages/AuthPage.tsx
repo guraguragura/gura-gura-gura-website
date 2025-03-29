@@ -10,8 +10,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/contexts/AuthContext';
 import { Facebook, Mail, Phone, Eye, EyeOff, User, Lock, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -106,9 +104,8 @@ const AuthPage = () => {
   };
 
   return (
-    <>
-      <Navbar />
-      <div className="container mx-auto my-12 px-4 max-w-md">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full">
         <Card className="w-full">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center">
@@ -423,8 +420,7 @@ const AuthPage = () => {
           </CardFooter>
         </Card>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 };
 
