@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Clock, Package, CheckCircle, Truck, XCircle } from 'lucide-react';
 
 // Define the possible order statuses
@@ -149,7 +150,9 @@ export const Orders = () => {
                     <div className="text-sm text-gray-500">{order.items}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900">View</button>
+                    <Link to={`/account/orders/${order.id}`} className="text-blue-600 hover:text-blue-900">
+                      View
+                    </Link>
                   </td>
                 </tr>
               ))}
