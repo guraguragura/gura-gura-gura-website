@@ -10,7 +10,13 @@ type AuthContextType = {
   loading: boolean;
   signInWithEmail: (email: string, password: string) => Promise<{error: any | null}>;
   signInWithPhone: (phone: string, password: string) => Promise<{error: any | null}>;
-  signUpWithEmail: (email: string, password: string, firstName: string, lastName: string) => Promise<{error: any | null}>;
+  signUpWithEmail: (
+    email: string, 
+    password: string, 
+    firstName: string, 
+    lastName: string, 
+    addressData?: Record<string, string>
+  ) => Promise<{error: any | null}>;
   signInWithGoogle: () => Promise<void>;
   signInWithFacebook: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -64,15 +70,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { error };
   };
 
-  const signUpWithEmail = async (email: string, password: string, firstName: string, lastName: string) => {
+  const signUpWithEmail = async (
+    email: string, 
+    password: string, 
+    firstName: string, 
+    lastName: string,
+    addressData?: Record<string, string>
+  ) => {
+    // Combine basic user data with address data if provided
+    const userData = {
+      first_name: firstName,
+      last_name: lastName,
+      ...(addressData || {})
+    };
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: {
-          first_name: firstName,
-          last_name: lastName,
-        },
+        data: userData,
       },
     });
     return { error };

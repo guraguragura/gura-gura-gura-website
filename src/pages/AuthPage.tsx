@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/contexts/AuthContext';
-import { Facebook, Mail, Phone, Eye, EyeOff, User, Lock, Loader2 } from 'lucide-react';
+import { Facebook, Mail, Phone, Eye, EyeOff, User, Lock, Loader2, MapPin } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const AuthPage = () => {
@@ -26,16 +25,22 @@ const AuthPage = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
+  
+  const [address, setAddress] = useState('');
+  const [district, setDistrict] = useState('');
+  const [sector, setSector] = useState('');
+  const [cell, setCell] = useState('');
+  const [village, setVillage] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [landmark, setLandmark] = useState('');
 
   useEffect(() => {
     if (user) {
       navigate('/account');
     }
     
-    // Prevent scrolling on this page
     document.body.style.overflow = 'hidden';
     
-    // Cleanup function to restore scrolling when component unmounts
     return () => {
       document.body.style.overflow = 'auto';
     };
@@ -76,7 +81,21 @@ const AuthPage = () => {
     setIsLoading(true);
 
     try {
-      const result = await signUpWithEmail(email, password, firstName, lastName);
+      const result = await signUpWithEmail(
+        email, 
+        password, 
+        firstName, 
+        lastName, 
+        {
+          address,
+          district,
+          sector,
+          cell,
+          village,
+          postal_code: postalCode,
+          nearby_landmark: landmark
+        }
+      );
       
       if (result.error) {
         setError(result.error.message || 'Failed to create account. Please try again.');
@@ -346,6 +365,88 @@ const AuthPage = () => {
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="address">Address</Label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-3 text-gray-400">
+                      <MapPin className="h-4 w-4" />
+                    </span>
+                    <Input 
+                      id="address" 
+                      placeholder="Your address" 
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="district">District</Label>
+                    <Input 
+                      id="district" 
+                      placeholder="District" 
+                      value={district}
+                      onChange={(e) => setDistrict(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="sector">Sector</Label>
+                    <Input 
+                      id="sector" 
+                      placeholder="Sector" 
+                      value={sector}
+                      onChange={(e) => setSector(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="cell">Cell</Label>
+                    <Input 
+                      id="cell" 
+                      placeholder="Cell" 
+                      value={cell}
+                      onChange={(e) => setCell(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="village">Village</Label>
+                    <Input 
+                      id="village" 
+                      placeholder="Village" 
+                      value={village}
+                      onChange={(e) => setVillage(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="postalCode">Postal/ZIP Code</Label>
+                    <Input 
+                      id="postalCode" 
+                      placeholder="Postal code" 
+                      value={postalCode}
+                      onChange={(e) => setPostalCode(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="landmark">Nearby Landmark</Label>
+                    <Input 
+                      id="landmark" 
+                      placeholder="Nearby landmark" 
+                      value={landmark}
+                      onChange={(e) => setLandmark(e.target.value)}
+                    />
                   </div>
                 </div>
 
