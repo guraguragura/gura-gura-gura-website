@@ -182,12 +182,13 @@ const CategoryPage = () => {
 
   const mockProducts: Product[] = loading ? [] : products.length > 0 ? products : Array(8).fill(null).map((_, index) => ({
     id: `mock-${index}`,
-    title: "Taylor Forms Broccoli Florets Vegetables",
+    title: "Taylor Farms Broccoli Florets Vegetables",
     description: "High-quality product with great features",
-    price: 14.99,
+    price: 28.99,
     thumbnail: "/placeholder.svg",
-    rating: 4.5,
-    reviews_count: 124,
+    rating: 4.8,
+    reviews_count: 17000,
+    discount_price: 14.99,
     is_sale: index % 3 === 0,
     is_new: index % 5 === 0
   }));
@@ -197,7 +198,7 @@ const CategoryPage = () => {
       <TopInfoBar />
       <Navbar />
       <div className="container mx-auto py-6 px-4">
-        <div className="mx-auto w-[80%] bg-white shadow-sm">
+        <div className="mx-auto w-[80%] bg-white shadow-sm rounded-lg">
           <div className="p-6">
             <div className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
               <Link to="/" className="hover:text-blue-500">Home</Link>
@@ -252,18 +253,23 @@ const CategoryPage = () => {
                   </div>
 
                   {loading ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                      {Array(8).fill(null).map((_, index) => (
-                        <div key={index} className="bg-white p-4 rounded-md shadow-sm animate-pulse">
-                          <div className="h-40 w-full bg-gray-200 rounded-md mb-4"></div>
-                          <div className="h-4 w-3/4 bg-gray-200 rounded mb-2"></div>
-                          <div className="h-4 w-1/2 bg-gray-200 rounded mb-4"></div>
-                          <div className="h-6 w-1/3 bg-gray-200 rounded"></div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {Array(6).fill(null).map((_, index) => (
+                        <div key={index} className="bg-white rounded-lg shadow-sm animate-pulse">
+                          <div className="h-48 w-full bg-gray-200 rounded-t-lg"></div>
+                          <div className="p-4">
+                            <div className="h-6 w-3/4 bg-gray-200 rounded mb-2"></div>
+                            <div className="h-4 w-1/4 bg-gray-200 rounded mb-4"></div>
+                            <div className="h-2 w-full bg-gray-200 rounded mb-2"></div>
+                            <div className="h-4 w-1/3 bg-gray-200 rounded mb-4"></div>
+                            <div className="h-6 w-1/2 bg-gray-200 rounded"></div>
+                          </div>
+                          <div className="h-12 bg-gray-200 rounded-b-lg"></div>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className={`grid ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" : "grid-cols-1"} gap-4`}>
+                    <div className={`grid ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"} gap-6`}>
                       {mockProducts.map((product) => (
                         <ProductCard 
                           key={product.id} 
