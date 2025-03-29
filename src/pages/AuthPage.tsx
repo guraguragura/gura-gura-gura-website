@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import LoginForm from '@/components/auth/LoginForm';
 import SignupForm from '@/components/auth/SignupForm';
 import SocialLogin from '@/components/auth/SocialLogin';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -19,15 +20,32 @@ const AuthPage = () => {
       navigate('/account');
     }
     
-    document.body.style.overflow = 'hidden';
+    // Only prevent scrolling on login page, not signup page
+    if (isLogin) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
     
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [user, navigate]);
+  }, [user, navigate, isLogin]);
+
+  const authContent = (
+    <>
+      {isLogin ? (
+        <LoginForm error={error} setError={setError} />
+      ) : (
+        <SignupForm error={error} setError={setError} />
+      )}
+
+      <SocialLogin isLoading={isLoading} />
+    </>
+  );
 
   return (
-    <div className="h-screen overflow-hidden bg-gray-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div className={`min-h-screen bg-gray-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 ${!isLogin ? 'py-8' : ''}`}>
       <div className="max-w-md w-full">
         <div className="flex justify-center mb-8">
           <img 
@@ -50,12 +68,12 @@ const AuthPage = () => {
           </CardHeader>
           <CardContent>
             {isLogin ? (
-              <LoginForm error={error} setError={setError} />
+              authContent
             ) : (
-              <SignupForm error={error} setError={setError} />
+              <ScrollArea className="max-h-[60vh]">
+                {authContent}
+              </ScrollArea>
             )}
-
-            <SocialLogin isLoading={isLoading} />
           </CardContent>
           <CardFooter>
             <p className="text-center w-full">
