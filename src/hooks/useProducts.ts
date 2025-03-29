@@ -72,8 +72,8 @@ export function useProducts(options: ProductOptions = {}) {
             // Ensure metadata is treated as a valid object or empty object if null/undefined
             const metadata = product.metadata && typeof product.metadata === 'object' ? product.metadata : {};
             
-            // Helper function to safely get metadata values with type checking
-            const getMetadataValue = <T,>(key: string, defaultValue: T): T => {
+            // Helper function to safely get metadata values
+            function getMetadataValue(key: string, defaultValue: any): any {
               if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) {
                 return defaultValue;
               }
@@ -82,28 +82,28 @@ export function useProducts(options: ProductOptions = {}) {
               
               // Type-specific checks
               if (key === 'price' || key === 'discount_price' || key === 'rating' || key === 'reviews_count') {
-                return (typeof value === 'number') ? value as T : defaultValue;
+                return typeof value === 'number' ? value : defaultValue;
               } else if (key === 'images') {
-                return (Array.isArray(value)) ? value as T : [product.thumbnail || "/placeholder.svg"] as unknown as T;
+                return Array.isArray(value) ? value : [product.thumbnail || "/placeholder.svg"];
               } else if (key === 'is_sale' || key === 'is_new') {
-                return (typeof value === 'boolean') ? value as T : defaultValue;
+                return typeof value === 'boolean' ? value : defaultValue;
               }
               
-              return (value !== undefined && value !== null) ? value as T : defaultValue;
-            };
+              return value !== undefined && value !== null ? value : defaultValue;
+            }
             
             return {
               id: product.id,
               title: product.title,
               description: product.description || "",
-              price: getMetadataValue<number>('price', 19.99),
-              discount_price: getMetadataValue<number | undefined>('discount_price', undefined),
+              price: getMetadataValue('price', 19.99),
+              discount_price: getMetadataValue('discount_price', undefined),
               thumbnail: product.thumbnail || "/placeholder.svg",
-              images: getMetadataValue<string[]>('images', [product.thumbnail || "/placeholder.svg"]),
-              rating: getMetadataValue<number>('rating', 4.5),
-              reviews_count: getMetadataValue<number>('reviews_count', 124),
-              is_sale: getMetadataValue<boolean>('is_sale', false),
-              is_new: getMetadataValue<boolean>('is_new', false),
+              images: getMetadataValue('images', [product.thumbnail || "/placeholder.svg"]),
+              rating: getMetadataValue('rating', 4.5),
+              reviews_count: getMetadataValue('reviews_count', 124),
+              is_sale: getMetadataValue('is_sale', false),
+              is_new: getMetadataValue('is_new', false),
               metadata
             };
           });
