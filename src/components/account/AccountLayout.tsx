@@ -10,8 +10,8 @@ import {
   LogOut, 
   HelpCircle
 } from 'lucide-react';
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 
 interface NavItem {
   path: string;
