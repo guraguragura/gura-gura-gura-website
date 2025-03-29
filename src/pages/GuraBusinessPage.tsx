@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Building, 
   Briefcase, 
-  HandShake, 
+  Handshake, 
   Users, 
   Truck, 
   DollarSign, 
