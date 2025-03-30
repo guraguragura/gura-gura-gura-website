@@ -25,7 +25,7 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm border-b">
-      <div className="mx-auto w-[80%] px-4">
+      <div className="mx-auto w-[80%] px-4 max-w-7xl">
         {/* Top navbar with logo and search */}
         <div className="py-3 flex flex-col md:flex-row items-center justify-between gap-4">
           <Logo />

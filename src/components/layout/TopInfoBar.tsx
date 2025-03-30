@@ -6,7 +6,7 @@ import { TruckIcon } from "lucide-react";
 const TopInfoBar = () => {
   return (
     <div className="bg-brand-teal text-white py-2 text-sm">
-      <div className="mx-auto w-[80%] px-4">
+      <div className="mx-auto w-[80%] px-4 max-w-7xl">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <TruckIcon className="h-4 w-4 mr-2" />
