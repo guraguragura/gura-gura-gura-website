@@ -23,6 +23,12 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import ContactPage from "./pages/ContactPage";
+import TermsPage from "./pages/TermsPage";
+import ShippingPage from "./pages/ShippingPage";
+import ReturnsPage from "./pages/ReturnsPage";
+import PaymentPage from "./pages/PaymentPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import CookiesPage from "./pages/CookiesPage";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +60,15 @@ const App = () => (
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/payment-success" element={<PaymentSuccessPage />} />
+            
+            {/* New pages */}
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/shipping" element={<ShippingPage />} />
+            <Route path="/returns" element={<ReturnsPage />} />
+            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/cookies" element={<CookiesPage />} />
+            
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

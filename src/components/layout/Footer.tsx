@@ -92,7 +92,6 @@ const Footer = () => {
               <li><Link to="/shipping" className="hover:text-brand-teal">Shipping and delivery</Link></li>
               <li><Link to="/returns" className="hover:text-brand-teal">Returns and refunds</Link></li>
               <li><Link to="/payment" className="hover:text-brand-teal">Payment methods</Link></li>
-              <li><Link to="/terms" className="hover:text-brand-teal">Terms and conditions</Link></li>
               <li><Link to="/privacy" className="hover:text-brand-teal">Privacy Policy</Link></li>
               <li><Link to="/cookies" className="hover:text-brand-teal">Cookie Policy</Link></li>
               <li><Link to="/faq" className="hover:text-brand-teal">FAQ</Link></li>
@@ -105,8 +104,8 @@ const Footer = () => {
             <h4 className="font-semibold mb-4">For business</h4>
             <ul className="space-y-2 text-sm">
               <li><Link to="/partner" className="hover:text-brand-teal">Partner with Gura</Link></li>
-              <li><Link to="/wholesale" className="hover:text-brand-teal">Wholesale purchases</Link></li>
-              <li><Link to="/affiliate" className="hover:text-brand-teal">Affiliate program</Link></li>
+              <li><Link to="/business" className="hover:text-brand-teal">Wholesale purchases</Link></li>
+              <li><Link to="/business" className="hover:text-brand-teal">Affiliate program</Link></li>
             </ul>
           </div>
           
