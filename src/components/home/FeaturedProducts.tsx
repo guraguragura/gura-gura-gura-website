@@ -72,8 +72,8 @@ const FeaturedProducts = () => {
     <section className="py-16 bg-white">
       <div className="container mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold">
-            <span className="font-bold">New</span> <span className="font-normal">Arrivals</span>
+          <h2 className="text-3xl font-semibold">
+            <span className="font-bold">New</span> Arrivals
           </h2>
           <div className="flex items-center gap-4">
             <Link to="/shop" className="text-gray-600 hover:text-gray-900">

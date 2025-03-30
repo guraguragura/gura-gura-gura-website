@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -86,12 +87,8 @@ const FeaturedProductsWithPromo = () => {
   const { formatPrice, isLoading } = useCurrency();
 
   return (
-    <section className="py-8 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold mb-6">
-          Featured <span className="font-normal">Products</span>
-        </h2>
-        
+    <section className="py-4 bg-white">
+      <div className="container mx-auto">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-xl font-semibold">
             <span className="font-bold">Featured</span> Products
@@ -132,6 +129,7 @@ const FeaturedProductsWithPromo = () => {
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-2">
+          {/* Products Section - 4 columns */}
           <div className="lg:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-2">
             {featuredProducts.map((product) => (
               <Card key={product.id} className="border rounded-lg overflow-hidden flex flex-col h-52">
@@ -185,6 +183,7 @@ const FeaturedProductsWithPromo = () => {
             ))}
           </div>
           
+          {/* Promotional Banner - 1 column */}
           <div className="lg:col-span-1 rounded-lg overflow-hidden relative">
             <div className="bg-indigo-900 h-full w-full rounded-lg overflow-hidden relative">
               <div className="absolute inset-0 overflow-hidden">
