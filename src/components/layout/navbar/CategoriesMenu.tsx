@@ -28,7 +28,7 @@ const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuP
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-sm hover:text-blue-600">
+            <NavigationMenuTrigger className="text-sm hover:text-brand-teal">
               Categories
             </NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -44,7 +44,7 @@ const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuP
                 ))}
                 <Link 
                   to="/collections"
-                  className="col-span-2 md:col-span-3 p-2 mt-3 text-blue-600 font-medium text-sm hover:underline"
+                  className="col-span-2 md:col-span-3 p-2 mt-3 text-brand-teal font-medium text-sm hover:underline"
                 >
                   View All Categories →
                 </Link>
@@ -59,7 +59,7 @@ const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuP
         <Link 
           key={category} 
           to={`/categories/${category.toLowerCase().replace(/\s+/g, '-')}`}
-          className="text-sm whitespace-nowrap hover:text-blue-600"
+          className="text-sm whitespace-nowrap hover:text-brand-teal"
         >
           {category}
         </Link>

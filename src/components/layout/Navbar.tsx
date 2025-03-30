@@ -45,13 +45,13 @@ const Navbar = () => {
             <NavigationMenu className="hidden md:flex">
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <Link to="/business" className="inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+                  <Link to="/business" className="inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
                     <User className="mr-2 h-4 w-4" />
                     For Business
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link to="/faq" className="inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+                  <Link to="/faq" className="inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
                     <Headphones className="mr-2 h-4 w-4" />
                     Customer Services
                   </Link>
@@ -66,7 +66,7 @@ const Navbar = () => {
                       <li className="row-span-3">
                         <NavigationMenuLink asChild>
                           <Link
-                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-blue-500 to-blue-700 p-6 no-underline outline-none focus:shadow-md"
+                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-brand-teal to-brand-teal/80 p-6 no-underline outline-none focus:shadow-md"
                             to="/business"
                           >
                             <div className="mt-4 mb-2 text-lg font-medium text-white">
@@ -79,7 +79,7 @@ const Navbar = () => {
                         </NavigationMenuLink>
                       </li>
                       <li>
-                        <Link to="/contact" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <Link to="/contact" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal">
                           <div className="text-sm font-medium leading-none">Email Support</div>
                           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                             support@gura.rw
@@ -87,7 +87,7 @@ const Navbar = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/contact" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <Link to="/contact" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal">
                           <div className="text-sm font-medium leading-none">Phone Support</div>
                           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                             +250 788 123 456
@@ -95,7 +95,7 @@ const Navbar = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/contact" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <Link to="/contact" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal">
                           <div className="text-sm font-medium leading-none">Visit Us</div>
                           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                             123 Business Avenue, Kigali, Rwanda

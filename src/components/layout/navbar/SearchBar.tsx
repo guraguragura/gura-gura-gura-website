@@ -83,14 +83,14 @@ const SearchBar = () => {
           <Input 
             type="search" 
             placeholder="Search for products, brands, etc." 
-            className="pl-4 pr-10 py-2 border-2 border-blue-500 rounded-md focus:ring-blue-500"
+            className="pl-4 pr-10 py-2 border-2 border-brand-teal rounded-md focus:ring-brand-teal"
             value={query}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={() => query.length >= 2 && setIsOpen(true)}
           />
           <button type="submit" className="absolute inset-y-0 right-0 flex items-center pr-3">
-            <SearchIcon className="h-5 w-5 text-blue-500" />
+            <SearchIcon className="h-5 w-5 text-brand-teal" />
           </button>
         </div>
       </form>
@@ -115,7 +115,7 @@ const SearchBar = () => {
               {suggestions.map((product, index) => (
                 <li 
                   key={product.id}
-                  className={`p-2 flex items-center gap-2 cursor-pointer hover:bg-gray-100 ${index === selectedIndex ? 'bg-blue-50' : ''}`}
+                  className={`p-2 flex items-center gap-2 cursor-pointer hover:bg-gray-100 ${index === selectedIndex ? 'bg-brand-teal/10' : ''}`}
                   onClick={() => handleProductSelect(product)}
                   onMouseEnter={() => setSelectedIndex(index)}
                 >
