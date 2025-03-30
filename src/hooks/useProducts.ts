@@ -83,34 +83,33 @@ export function useProducts(options: ProductOptions = {}) {
         } else if (data) {
           // Transform data to match our Product interface
           const formattedProducts: Product[] = data.map(product => {
-            // Extract metadata safely
-            const metadata = product.metadata || {};
-            
-            // Create a new metadata object with only the fields we need
-            const safeMetadata: SafeMetadata = {
-              price: typeof metadata.price === 'number' ? metadata.price : undefined,
-              discount_price: typeof metadata.discount_price === 'number' ? metadata.discount_price : undefined,
-              images: Array.isArray(metadata.images) ? metadata.images : undefined,
-              rating: typeof metadata.rating === 'number' ? metadata.rating : undefined,
-              reviews_count: typeof metadata.reviews_count === 'number' ? metadata.reviews_count : undefined,
-              is_sale: typeof metadata.is_sale === 'boolean' ? metadata.is_sale : undefined,
-              is_new: typeof metadata.is_new === 'boolean' ? metadata.is_new : undefined,
-              is_featured: typeof metadata.is_featured === 'boolean' ? metadata.is_featured : undefined,
-            };
+            // Safely extract metadata as a plain object
+            const metadataObj = typeof product.metadata === 'object' && product.metadata !== null 
+              ? product.metadata 
+              : {};
             
             return {
               id: product.id,
               title: product.title,
               description: product.description || "",
-              price: typeof safeMetadata.price === 'number' ? safeMetadata.price : 19.99,
-              discount_price: typeof safeMetadata.discount_price === 'number' ? safeMetadata.discount_price : undefined,
+              price: typeof metadataObj.price === 'number' ? metadataObj.price : 19.99,
+              discount_price: typeof metadataObj.discount_price === 'number' ? metadataObj.discount_price : undefined,
               thumbnail: product.thumbnail || "/placeholder.svg",
-              images: Array.isArray(safeMetadata.images) ? safeMetadata.images : [product.thumbnail || "/placeholder.svg"],
-              rating: typeof safeMetadata.rating === 'number' ? safeMetadata.rating : 4.5,
-              reviews_count: typeof safeMetadata.reviews_count === 'number' ? safeMetadata.reviews_count : 124,
-              is_sale: typeof safeMetadata.is_sale === 'boolean' ? safeMetadata.is_sale : false,
-              is_new: typeof safeMetadata.is_new === 'boolean' ? safeMetadata.is_new : false,
-              metadata: safeMetadata
+              images: Array.isArray(metadataObj.images) ? metadataObj.images : [product.thumbnail || "/placeholder.svg"],
+              rating: typeof metadataObj.rating === 'number' ? metadataObj.rating : 4.5,
+              reviews_count: typeof metadataObj.reviews_count === 'number' ? metadataObj.reviews_count : 124,
+              is_sale: typeof metadataObj.is_sale === 'boolean' ? metadataObj.is_sale : false,
+              is_new: typeof metadataObj.is_new === 'boolean' ? metadataObj.is_new : false,
+              metadata: {
+                price: typeof metadataObj.price === 'number' ? metadataObj.price : undefined,
+                discount_price: typeof metadataObj.discount_price === 'number' ? metadataObj.discount_price : undefined,
+                images: Array.isArray(metadataObj.images) ? metadataObj.images : undefined,
+                rating: typeof metadataObj.rating === 'number' ? metadataObj.rating : undefined,
+                reviews_count: typeof metadataObj.reviews_count === 'number' ? metadataObj.reviews_count : undefined,
+                is_sale: typeof metadataObj.is_sale === 'boolean' ? metadataObj.is_sale : undefined,
+                is_new: typeof metadataObj.is_new === 'boolean' ? metadataObj.is_new : undefined,
+                is_featured: typeof metadataObj.is_featured === 'boolean' ? metadataObj.is_featured : undefined
+              }
             };
           });
           
