@@ -2,12 +2,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ChevronRight } from "lucide-react";
 
 interface Category {
   id: string;
@@ -21,37 +23,41 @@ interface CategoriesMenuProps {
 }
 
 const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuProps) => {
+  const handleCategorySelect = (value: string) => {
+    // Navigate to the selected category
+    if (value === "view-all") {
+      window.location.href = "/collections";
+    } else {
+      window.location.href = `/categories/${value}`;
+    }
+  };
+
   return (
     <div className="hidden md:flex items-center justify-start space-x-6 py-2 overflow-x-auto">
-      {/* Categories dropdown */}
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-sm hover:text-brand-teal">
-              Categories
-            </NavigationMenuTrigger>
-            <NavigationMenuContent className="bg-white">
-              <div className="grid grid-cols-2 md:grid-cols-3 p-4 w-[400px] md:w-[600px] gap-3 bg-white">
-                {displayCategories.map((category) => (
-                  <Link 
-                    key={category.id}
-                    to={`/categories/${category.handle}`}
-                    className="block p-2 hover:bg-gray-50 rounded"
-                  >
-                    {category.name}
-                  </Link>
-                ))}
-                <Link 
-                  to="/collections"
-                  className="col-span-2 md:col-span-3 p-2 mt-3 text-brand-teal font-medium text-sm hover:underline"
+      {/* Categories dropdown using Select */}
+      <div className="relative z-40">
+        <Select onValueChange={handleCategorySelect}>
+          <SelectTrigger className="w-[180px] bg-white text-sm hover:text-brand-teal border-none shadow-none focus:ring-0">
+            <SelectValue placeholder="Categories" />
+          </SelectTrigger>
+          <SelectContent className="bg-white z-50">
+            <SelectGroup>
+              {displayCategories.map((category) => (
+                <SelectItem 
+                  key={category.id} 
+                  value={category.handle}
+                  className="cursor-pointer"
                 >
-                  View All Categories →
-                </Link>
-              </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+                  {category.name}
+                </SelectItem>
+              ))}
+              <SelectItem value="view-all" className="text-brand-teal font-medium">
+                View All Categories →
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
 
       {/* Static menu items */}
       {staticCategories.map((category) => (
