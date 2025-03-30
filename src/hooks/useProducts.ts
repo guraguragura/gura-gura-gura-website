@@ -2,8 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-// Define a more explicit type for metadata to avoid deep type recursion
-// Remove index signature to prevent excessive type recursion
+// Define a more explicit type for metadata without index signature to avoid deep type recursion
 type SafeMetadata = {
   price?: number;
   discount_price?: number;
@@ -12,7 +11,8 @@ type SafeMetadata = {
   reviews_count?: number;
   is_sale?: boolean;
   is_new?: boolean;
-  // No more index signature here to avoid the TS2589 error
+  is_featured?: boolean;
+  // No index signature to prevent excessive type recursion
 };
 
 interface Product {
@@ -84,26 +84,33 @@ export function useProducts(options: ProductOptions = {}) {
           // Transform data to match our Product interface
           const formattedProducts: Product[] = data.map(product => {
             // Extract metadata safely
-            const rawMetadata = product.metadata || {};
+            const metadata = product.metadata || {};
             
-            // Ensure metadata is an object, not an array or primitive
-            // Use type assertion but with runtime check first
-            const isValidMetadata = typeof rawMetadata === 'object' && !Array.isArray(rawMetadata);
-            const metadata = isValidMetadata ? rawMetadata as SafeMetadata : {} as SafeMetadata;
+            // Create a new metadata object with only the fields we need
+            const safeMetadata: SafeMetadata = {
+              price: typeof metadata.price === 'number' ? metadata.price : undefined,
+              discount_price: typeof metadata.discount_price === 'number' ? metadata.discount_price : undefined,
+              images: Array.isArray(metadata.images) ? metadata.images : undefined,
+              rating: typeof metadata.rating === 'number' ? metadata.rating : undefined,
+              reviews_count: typeof metadata.reviews_count === 'number' ? metadata.reviews_count : undefined,
+              is_sale: typeof metadata.is_sale === 'boolean' ? metadata.is_sale : undefined,
+              is_new: typeof metadata.is_new === 'boolean' ? metadata.is_new : undefined,
+              is_featured: typeof metadata.is_featured === 'boolean' ? metadata.is_featured : undefined,
+            };
             
             return {
               id: product.id,
               title: product.title,
               description: product.description || "",
-              price: typeof metadata.price === 'number' ? metadata.price : 19.99,
-              discount_price: typeof metadata.discount_price === 'number' ? metadata.discount_price : undefined,
+              price: typeof safeMetadata.price === 'number' ? safeMetadata.price : 19.99,
+              discount_price: typeof safeMetadata.discount_price === 'number' ? safeMetadata.discount_price : undefined,
               thumbnail: product.thumbnail || "/placeholder.svg",
-              images: Array.isArray(metadata.images) ? metadata.images : [product.thumbnail || "/placeholder.svg"],
-              rating: typeof metadata.rating === 'number' ? metadata.rating : 4.5,
-              reviews_count: typeof metadata.reviews_count === 'number' ? metadata.reviews_count : 124,
-              is_sale: typeof metadata.is_sale === 'boolean' ? metadata.is_sale : false,
-              is_new: typeof metadata.is_new === 'boolean' ? metadata.is_new : false,
-              metadata: isValidMetadata ? metadata : undefined
+              images: Array.isArray(safeMetadata.images) ? safeMetadata.images : [product.thumbnail || "/placeholder.svg"],
+              rating: typeof safeMetadata.rating === 'number' ? safeMetadata.rating : 4.5,
+              reviews_count: typeof safeMetadata.reviews_count === 'number' ? safeMetadata.reviews_count : 124,
+              is_sale: typeof safeMetadata.is_sale === 'boolean' ? safeMetadata.is_sale : false,
+              is_new: typeof safeMetadata.is_new === 'boolean' ? safeMetadata.is_new : false,
+              metadata: safeMetadata
             };
           });
           
