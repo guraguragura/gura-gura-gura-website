@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-// Define strict interfaces without index signatures or recursive types
+// Define simple non-recursive interfaces
 interface ProductMetadata {
   price?: number;
   discount_price?: number;
@@ -36,34 +36,26 @@ interface ProductOptions {
   onSale?: boolean;
 }
 
-// Generic type-safe extraction utility
-function safeExtract<T>(obj: unknown, key: string, defaultValue: T): T {
-  if (!obj || typeof obj !== 'object' || obj === null) {
+// Simplified extraction utilities using type assertion
+function extractNumber(data: any, key: string, defaultValue: number): number {
+  if (!data || typeof data !== 'object' || typeof data[key] !== 'number') {
     return defaultValue;
   }
-  
-  const value = (obj as Record<string, unknown>)[key];
-  if (value === undefined || value === null) {
+  return data[key];
+}
+
+function extractBoolean(data: any, key: string, defaultValue: boolean): boolean {
+  if (!data || typeof data !== 'object' || typeof data[key] !== 'boolean') {
     return defaultValue;
   }
-  
-  return value as T;
+  return data[key];
 }
 
-// Type-specific extraction utilities
-function safeExtractNumber(obj: unknown, key: string, defaultValue: number): number {
-  const value = safeExtract<unknown>(obj, key, null);
-  return typeof value === 'number' ? value : defaultValue;
-}
-
-function safeExtractArray<T>(obj: unknown, key: string, defaultValue: T[]): T[] {
-  const value = safeExtract<unknown>(obj, key, null);
-  return Array.isArray(value) ? value : defaultValue;
-}
-
-function safeExtractBoolean(obj: unknown, key: string, defaultValue: boolean): boolean {
-  const value = safeExtract<unknown>(obj, key, null);
-  return typeof value === 'boolean' ? value : defaultValue;
+function extractArray<T>(data: any, key: string, defaultValue: T[]): T[] {
+  if (!data || typeof data !== 'object' || !Array.isArray(data[key])) {
+    return defaultValue;
+  }
+  return data[key];
 }
 
 export function useProducts(options: ProductOptions = {}) {
@@ -111,35 +103,23 @@ export function useProducts(options: ProductOptions = {}) {
         } else if (data) {
           // Transform data to match our Product interface
           const formattedProducts: Product[] = data.map(item => {
-            // Ensure metadata is an object
+            // Handle metadata safely
             const metadata = typeof item.metadata === 'object' && item.metadata !== null 
-              ? item.metadata as Record<string, unknown>
+              ? item.metadata 
               : {};
             
             // Extract values safely
-            const price = safeExtractNumber(metadata, 'price', 19.99);
-            const discountPrice = safeExtractNumber(metadata, 'discount_price', 0);
-            const images = safeExtractArray<string>(metadata, 'images', [item.thumbnail || "/placeholder.svg"]);
-            const rating = safeExtractNumber(metadata, 'rating', 4.5);
-            const reviewsCount = safeExtractNumber(metadata, 'reviews_count', 124);
-            const isSale = safeExtractBoolean(metadata, 'is_sale', false);
-            const isNew = safeExtractBoolean(metadata, 'is_new', false);
-            const isFeatured = safeExtractBoolean(metadata, 'is_featured', false);
+            const price = extractNumber(metadata, 'price', 19.99);
+            const discountPrice = extractNumber(metadata, 'discount_price', 0);
+            const images = extractArray<string>(metadata, 'images', [item.thumbnail || "/placeholder.svg"]);
+            const rating = extractNumber(metadata, 'rating', 4.5);
+            const reviewsCount = extractNumber(metadata, 'reviews_count', 124);
+            const isSale = extractBoolean(metadata, 'is_sale', false);
+            const isNew = extractBoolean(metadata, 'is_new', false);
+            const isFeatured = extractBoolean(metadata, 'is_featured', false);
             
-            // Create a safe ProductMetadata object
-            const productMetadata: ProductMetadata = {
-              price,
-              discount_price: discountPrice || undefined,
-              images,
-              rating,
-              reviews_count: reviewsCount,
-              is_sale: isSale,
-              is_new: isNew,
-              is_featured: isFeatured
-            };
-            
-            // Build product with directly assigned properties
-            const product: Product = {
+            // Build the product object directly
+            return {
               id: item.id,
               title: item.title,
               description: item.description || "",
@@ -151,10 +131,17 @@ export function useProducts(options: ProductOptions = {}) {
               reviews_count: reviewsCount,
               is_sale: isSale,
               is_new: isNew,
-              metadata: productMetadata
+              metadata: {
+                price,
+                discount_price: discountPrice || undefined,
+                images,
+                rating,
+                reviews_count: reviewsCount,
+                is_sale: isSale,
+                is_new: isNew,
+                is_featured: isFeatured
+              }
             };
-            
-            return product;
           });
           
           setProducts(formattedProducts);
