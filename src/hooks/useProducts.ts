@@ -38,15 +38,10 @@ interface ProductOptions {
 
 /**
  * Safely extracts a value from a JSON object with type checking
- * @param obj The object to extract from
- * @param key The key to extract
- * @param type The expected type
- * @param defaultValue Default value if key doesn't exist or type doesn't match
  */
 function safeExtract<T>(
   obj: Record<string, unknown> | null | undefined, 
   key: string, 
-  type: string, 
   defaultValue: T
 ): T {
   if (!obj || typeof obj !== 'object' || obj === null) {
@@ -54,7 +49,7 @@ function safeExtract<T>(
   }
   
   const value = obj[key];
-  if (value === undefined || value === null || typeof value !== type) {
+  if (value === undefined || value === null) {
     return defaultValue;
   }
   
@@ -62,49 +57,39 @@ function safeExtract<T>(
 }
 
 /**
+ * Safely extracts a number from a JSON object
+ */
+function safeExtractNumber(
+  obj: Record<string, unknown> | null | undefined, 
+  key: string, 
+  defaultValue: number
+): number {
+  const value = safeExtract(obj, key, null);
+  return typeof value === 'number' ? value : defaultValue;
+}
+
+/**
  * Safely extracts an array from a JSON object
- * @param obj The object to extract from
- * @param key The key to extract
- * @param defaultValue Default value if key doesn't exist or is not an array
  */
 function safeExtractArray<T>(
   obj: Record<string, unknown> | null | undefined, 
   key: string, 
   defaultValue: T[]
 ): T[] {
-  if (!obj || typeof obj !== 'object' || obj === null) {
-    return defaultValue;
-  }
-  
-  const value = obj[key];
-  if (!Array.isArray(value)) {
-    return defaultValue;
-  }
-  
-  return value as T[];
+  const value = safeExtract(obj, key, null);
+  return Array.isArray(value) ? value : defaultValue;
 }
 
 /**
  * Safely extracts a boolean from a JSON object
- * @param obj The object to extract from
- * @param key The key to extract
- * @param defaultValue Default value if key doesn't exist or is not a boolean
  */
 function safeExtractBoolean(
   obj: Record<string, unknown> | null | undefined, 
   key: string, 
   defaultValue: boolean
 ): boolean {
-  if (!obj || typeof obj !== 'object' || obj === null) {
-    return defaultValue;
-  }
-  
-  const value = obj[key];
-  if (typeof value !== 'boolean') {
-    return defaultValue;
-  }
-  
-  return value;
+  const value = safeExtract(obj, key, null);
+  return typeof value === 'boolean' ? value : defaultValue;
 }
 
 export function useProducts(options: ProductOptions = {}) {
@@ -153,24 +138,24 @@ export function useProducts(options: ProductOptions = {}) {
           // Transform data to match our Product interface
           const formattedProducts: Product[] = data.map(item => {
             // First, ensure metadata is an object
-            const rawMetadata = (typeof item.metadata === 'object' && item.metadata !== null) 
+            const metadata = typeof item.metadata === 'object' && item.metadata !== null 
               ? item.metadata as Record<string, unknown>
               : {};
             
-            // Extract values safely with type checking
-            const price = safeExtract(rawMetadata, 'price', 'number', 19.99);
-            const discountPrice = safeExtract(rawMetadata, 'discount_price', 'number', undefined);
-            const images = safeExtractArray(rawMetadata, 'images', [item.thumbnail || "/placeholder.svg"]);
-            const rating = safeExtract(rawMetadata, 'rating', 'number', 4.5);
-            const reviewsCount = safeExtract(rawMetadata, 'reviews_count', 'number', 124);
-            const isSale = safeExtractBoolean(rawMetadata, 'is_sale', false);
-            const isNew = safeExtractBoolean(rawMetadata, 'is_new', false);
-            const isFeatured = safeExtractBoolean(rawMetadata, 'is_featured', false);
+            // Extract values safely with improved type checking
+            const price = safeExtractNumber(metadata, 'price', 19.99);
+            const discountPrice = safeExtractNumber(metadata, 'discount_price', 0);
+            const images = safeExtractArray<string>(metadata, 'images', [item.thumbnail || "/placeholder.svg"]);
+            const rating = safeExtractNumber(metadata, 'rating', 4.5);
+            const reviewsCount = safeExtractNumber(metadata, 'reviews_count', 124);
+            const isSale = safeExtractBoolean(metadata, 'is_sale', false);
+            const isNew = safeExtractBoolean(metadata, 'is_new', false);
+            const isFeatured = safeExtractBoolean(metadata, 'is_featured', false);
             
             // Create a safe ProductMetadata object
             const productMetadata: ProductMetadata = {
               price,
-              discount_price: discountPrice,
+              discount_price: discountPrice || undefined,
               images,
               rating,
               reviews_count: reviewsCount,
@@ -185,7 +170,7 @@ export function useProducts(options: ProductOptions = {}) {
               title: item.title,
               description: item.description || "",
               price,
-              discount_price: discountPrice,
+              discount_price: discountPrice || undefined,
               thumbnail: item.thumbnail || "/placeholder.svg",
               images,
               rating,

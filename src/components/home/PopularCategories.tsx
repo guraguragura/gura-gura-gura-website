@@ -7,48 +7,56 @@ const staticCategories = [
   {
     id: "electronics",
     name: "Electronics",
+    handle: "electronics", // Added handle property
     image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03",
     color: "bg-blue-100"
   },
   {
     id: "books",
     name: "Books & Media",
+    handle: "books", // Added handle property
     image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d",
     color: "bg-green-100"
   },
   {
     id: "home",
     name: "Home & Kitchen",
+    handle: "home-kitchen", // Added handle property
     image: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6",
     color: "bg-yellow-100"
   },
   {
     id: "fashion",
     name: "Fashion",
+    handle: "fashion", // Added handle property
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
     color: "bg-purple-100"
   },
   {
     id: "sports",
     name: "Sports & Outdoors",
+    handle: "sports-outdoors", // Added handle property
     image: "https://images.unsplash.com/photo-1517649763962-0c623066013b",
     color: "bg-red-100"
   },
   {
     id: "beauty",
     name: "Health & Beauty",
+    handle: "health-beauty", // Added handle property
     image: "https://images.unsplash.com/photo-1607006677169-a62beb975922",
     color: "bg-indigo-100"
   },
   {
     id: "kids",
     name: "Kids & Toys",
+    handle: "kids-toys", // Added handle property
     image: "https://images.unsplash.com/photo-1522771930-78848d9293e8",
     color: "bg-pink-100"
   },
   {
     id: "automotive",
     name: "Automotive",
+    handle: "automotive", // Added handle property
     image: "https://images.unsplash.com/photo-1542362567-b07e54358753",
     color: "bg-gray-100"
   }
@@ -161,7 +169,7 @@ const PopularCategories: React.FC<PopularCategoriesProps> = ({
             {displayCategories.map((category) => (
               <Link 
                 key={category.id} 
-                to={`/categories/${category.handle || category.id}`}
+                to={`/categories/${category.handle}`}
                 className="group block"
               >
                 <div className={`rounded-lg p-4 ${category.color || getRandomColor()} transition-all duration-300 group-hover:shadow-md flex flex-col items-center text-center`}>
