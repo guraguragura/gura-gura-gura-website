@@ -13,6 +13,7 @@ import TrendingPurchasesWithPromo from "@/components/home/TrendingPurchasesWithP
 import CyberMondayBanner from "@/components/home/CyberMondayBanner";
 import GiftsForEveryone from "@/components/home/GiftsForEveryone";
 import PromotionalBannerCards from "@/components/home/PromotionalBannerCards";
+import DailyDeals from "@/components/home/DailyDeals";
 import Footer from "@/components/layout/Footer";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -70,6 +71,7 @@ const Index = () => {
           <Hero />
           <PopularCategories dbCategories={categories} isLoading={isLoading} />
           <TopSellingProducts />
+          <DailyDeals />
           <PromotionalBanners />
           <FeaturedProducts />
           <FeaturedProductsWithPromo />

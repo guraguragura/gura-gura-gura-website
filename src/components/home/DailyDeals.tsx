@@ -72,7 +72,9 @@ const DailyDeals = () => {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Sparkles className="text-yellow-500 mr-2 h-6 w-6" />
-            <h2 className="text-2xl font-bold">Daily Deals</h2>
+            <h2 className="text-2xl font-bold">
+              Daily <span className="font-normal">Deals</span>
+            </h2>
           </div>
           <Link to="/deals" className="text-blue-600 hover:underline font-medium">
             View All Deals

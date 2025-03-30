@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { 
@@ -23,7 +22,6 @@ const CategoryCarousel = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Fetch categories from MedusaJS via Supabase
   useEffect(() => {
     const fetchCategories = async () => {
       setIsLoading(true);
@@ -51,20 +49,16 @@ const CategoryCarousel = () => {
     fetchCategories();
   }, []);
   
-  // Set up auto-scrolling to the right
   useEffect(() => {
     if (!api) return;
     
-    // Scroll to the next slide every 3 seconds
     const interval = setInterval(() => {
       api.scrollNext();
     }, 3000);
     
-    // Clean up interval on component unmount
     return () => clearInterval(interval);
   }, [api]);
 
-  // Fallback categories in case the data fetch fails
   const fallbackCategories = [
     {
       id: "pcat_01",
@@ -95,7 +89,6 @@ const CategoryCarousel = () => {
 
   const displayCategories = categories.length > 0 ? categories : fallbackCategories;
   
-  // Function to get image URL based on category handle
   const getCategoryImage = (handle: string) => {
     const imageMap: Record<string, string> = {
       "women": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
@@ -118,7 +111,9 @@ const CategoryCarousel = () => {
     <section className="py-8 bg-gray-50">
       <div className="container mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Trending Categories</h2>
+          <h2 className="text-2xl font-bold">
+            Trending <span className="font-normal">Categories</span>
+          </h2>
           <Link to="/collections" className="text-primary flex items-center gap-1 hover:underline">
             View All <ChevronRight className="h-4 w-4" />
           </Link>

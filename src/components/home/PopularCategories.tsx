@@ -1,6 +1,13 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem, 
+  CarouselNext, 
+  CarouselPrevious 
+} from "@/components/ui/carousel";
 
 // Fallback static categories to use when no DB categories are available
 const staticCategories = [
@@ -151,7 +158,9 @@ const PopularCategories: React.FC<PopularCategoriesProps> = ({
   return (
     <section className="py-10">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold mb-6">Our Categories</h2>
+        <h2 className="text-2xl font-bold mb-6">
+          Our <span className="font-normal">Categories</span>
+        </h2>
         
         {isLoading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -165,30 +174,40 @@ const PopularCategories: React.FC<PopularCategoriesProps> = ({
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {displayCategories.map((category) => (
-              <Link 
-                key={category.id} 
-                to={`/categories/${category.handle}`}
-                className="group block"
-              >
-                <div className={`rounded-lg p-4 ${category.color || getRandomColor()} transition-all duration-300 group-hover:shadow-md flex flex-col items-center text-center`}>
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden mb-3">
-                    <img 
-                      src={category.image} 
-                      alt={category.name} 
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = "/placeholder.svg";
-                      }}
-                    />
-                  </div>
-                  <h3 className="text-sm font-medium">{category.name}</h3>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+          >
+            <CarouselContent>
+              {displayCategories.map((category) => (
+                <CarouselItem key={category.id} className="md:basis-1/4 lg:basis-1/6">
+                  <Link 
+                    to={`/categories/${category.handle}`}
+                    className="group block"
+                  >
+                    <div className={`rounded-lg p-4 ${category.color || getRandomColor()} transition-all duration-300 group-hover:shadow-md flex flex-col items-center text-center`}>
+                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden mb-3">
+                        <img 
+                          src={category.image} 
+                          alt={category.name} 
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = "/placeholder.svg";
+                          }}
+                        />
+                      </div>
+                      <h3 className="text-sm font-medium">{category.name}</h3>
+                    </div>
+                  </Link>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-0 bg-white/80 hover:bg-white" />
+            <CarouselNext className="right-0 bg-white/80 hover:bg-white" />
+          </Carousel>
         )}
       </div>
     </section>
