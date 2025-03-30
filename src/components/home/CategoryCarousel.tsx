@@ -118,7 +118,7 @@ const CategoryCarousel = () => {
     <section className="py-8 bg-gray-50">
       <div className="container mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Trending Categories</h2>
+          <h2 className="text-2xl font-bold">Trending <span className="font-normal">Categories</span></h2>
           <Link to="/collections" className="text-primary flex items-center gap-1 hover:underline">
             View All <ChevronRight className="h-4 w-4" />
           </Link>

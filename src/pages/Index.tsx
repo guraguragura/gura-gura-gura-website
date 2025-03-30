@@ -15,6 +15,8 @@ import GiftsForEveryone from "@/components/home/GiftsForEveryone";
 import PromotionalBannerCards from "@/components/home/PromotionalBannerCards";
 import Footer from "@/components/layout/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import DailyDeals from "@/components/home/DailyDeals";
+import CategoryCarousel from "@/components/home/CategoryCarousel";
 
 interface Category {
   id: string;
@@ -69,6 +71,8 @@ const Index = () => {
         <div className="mx-auto w-[80%] px-4 max-w-7xl bg-white shadow-sm">
           <Hero />
           <PopularCategories dbCategories={categories} isLoading={isLoading} />
+          <DailyDeals />
+          <CategoryCarousel />
           <TopSellingProducts />
           <PromotionalBanners />
           <FeaturedProducts />
