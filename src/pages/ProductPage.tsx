@@ -1,106 +1,19 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { supabase } from "@/integrations/supabase/client";
 import RelatedProducts from "@/components/product/RelatedProducts";
 import ProductBreadcrumb from "@/components/product/ProductBreadcrumb";
 import ProductImageGallery from "@/components/product/ProductImageGallery";
 import ProductInfo from "@/components/product/ProductInfo";
 import ProductTabs from "@/components/product/ProductTabs";
-
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  subtitle?: string;
-  price: number;
-  discount_price?: number;
-  thumbnail: string;
-  images?: string[];
-  rating: number;
-  reviews_count: number;
-  in_stock: boolean;
-  sku?: string;
-  specifications?: Record<string, any>;
-  features?: string[];
-  is_sale?: boolean;
-  is_new?: boolean;
-  variants?: any[];
-}
-
-interface ProductMetadata {
-  images?: string[];
-  price?: number;
-  discount_price?: number;
-  rating?: number;
-  reviews_count?: number;
-  in_stock?: boolean;
-  sku?: string;
-  specifications?: Record<string, any>;
-  features?: string[];
-  is_sale?: boolean;
-  is_new?: boolean;
-  variants?: any[];
-}
+import { useProductDetails } from "@/hooks/useProductDetails";
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      setLoading(true);
-      try {
-        if (!id) return;
-
-        const { data, error } = await supabase
-          .from('product')
-          .select('*, product_category_product(product_category_id, product_category:product_category(name, handle))')
-          .eq('id', id)
-          .single();
-
-        if (error) {
-          console.error("Error fetching product:", error);
-        } else if (data) {
-          // Cast metadata to the correct type
-          const metadata = data.metadata as ProductMetadata || {};
-          
-          // Transform the data to match the Product interface
-          const formattedProduct: Product = {
-            id: data.id,
-            title: data.title,
-            description: data.description || "",
-            subtitle: data.subtitle || "",
-            thumbnail: data.thumbnail || "/placeholder.svg",
-            images: metadata.images || [data.thumbnail || "/placeholder.svg"],
-            price: metadata.price || 19.99,
-            discount_price: metadata.discount_price,
-            rating: metadata.rating || 4.5,
-            reviews_count: metadata.reviews_count || 124,
-            in_stock: metadata.in_stock !== false,
-            sku: metadata.sku || "",
-            specifications: metadata.specifications || {},
-            features: metadata.features || [],
-            is_sale: metadata.is_sale || false,
-            is_new: metadata.is_new || false,
-            variants: metadata.variants || [],
-          };
-          
-          setProduct(formattedProduct);
-        }
-      } catch (error) {
-        console.error("Failed to fetch product:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProduct();
-  }, [id]);
+  const { product, loading, error } = useProductDetails(id);
 
   const addToCart = (quantity: number) => {
     console.log(`Added ${quantity} of ${product?.title} to cart`);
@@ -112,8 +25,8 @@ const ProductPage = () => {
     // Implement wishlist functionality here
   };
 
-  // Mock product data if not loaded from database
-  const mockProduct: Product = product || {
+  // Fallback to mock data if there's an error or no product found
+  const mockProduct = {
     id: "1",
     title: "Apple iPhone 14 Pro Max - 256GB - Deep Purple",
     description: "The iPhone 14 Pro Max features a stunning 6.7-inch Super Retina XDR display with ProMotion technology, an advanced camera system for incredible photos and videos, and the A16 Bionic chip, the fastest chip ever in a smartphone. Plus, it has all-day battery life and industry-leading durability features.",
@@ -156,7 +69,8 @@ const ProductPage = () => {
       { color: "Gold", price: 1299, thumbnail: "/placeholder.svg" },
       { color: "Silver", price: 1299, thumbnail: "/placeholder.svg" },
       { color: "Space Black", price: 1299, thumbnail: "/placeholder.svg" }
-    ]
+    ],
+    metadata: {}
   };
 
   if (loading) {
@@ -192,35 +106,38 @@ const ProductPage = () => {
     );
   }
 
+  // Use product data or fallback to mock data if there's an error
+  const displayProduct = product || mockProduct;
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <TopInfoBar />
       <Navbar />
       <div className="container mx-auto py-6 px-4">
         {/* Breadcrumb */}
-        <ProductBreadcrumb title={mockProduct.title} />
+        <ProductBreadcrumb title={displayProduct.title} />
 
         {/* Product Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {/* Product Images */}
           <ProductImageGallery 
-            images={mockProduct.images || [mockProduct.thumbnail]} 
-            title={mockProduct.title} 
+            images={displayProduct.images || [displayProduct.thumbnail]} 
+            title={displayProduct.title} 
           />
 
           {/* Product Info */}
           <ProductInfo 
-            product={mockProduct} 
+            product={displayProduct} 
             onAddToCart={addToCart} 
             onAddToWishlist={addToWishlist} 
           />
         </div>
 
         {/* Product Tabs */}
-        <ProductTabs product={mockProduct} />
+        <ProductTabs product={displayProduct} />
 
         {/* Related Products */}
-        <RelatedProducts productId={mockProduct.id} />
+        <RelatedProducts productId={displayProduct.id} />
       </div>
       <Footer />
     </div>

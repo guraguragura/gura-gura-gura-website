@@ -1,5 +1,5 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
@@ -16,27 +16,49 @@ import PromotionalBannerCards from "@/components/home/PromotionalBannerCards";
 import Footer from "@/components/layout/Footer";
 import { supabase } from "@/integrations/supabase/client";
 
+interface Category {
+  id: string;
+  name: string;
+  handle: string;
+  is_active: boolean;
+}
+
 const Index = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    // Check categories in the database
-    const checkCategories = async () => {
+    // Fetch categories from the database
+    const fetchCategories = async () => {
       try {
+        setIsLoading(true);
         const { data, error } = await supabase
           .from('product_category')
-          .select('*')
+          .select('id, name, handle, is_active')
           .eq('is_active', true);
         
         if (error) {
-          console.error("Error checking categories:", error);
-        } else {
-          console.log("Available categories:", data);
+          console.error("Error fetching categories:", error);
+        } else if (data) {
+          // Safely process the data
+          const fetchedCategories: Category[] = data.map(item => ({
+            id: item.id || '',
+            name: item.name || '',
+            handle: item.handle || '',
+            is_active: !!item.is_active
+          }));
+          
+          setCategories(fetchedCategories);
+          console.log("Available categories:", fetchedCategories);
         }
       } catch (error) {
-        console.error("Failed to check categories:", error);
+        console.error("Failed to fetch categories:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    checkCategories();
+    fetchCategories();
   }, []);
 
   return (
@@ -46,7 +68,7 @@ const Index = () => {
       <div className="flex-grow">
         <div className="mx-auto w-[80%] px-4 max-w-7xl bg-white shadow-sm">
           <Hero />
-          <PopularCategories />
+          <PopularCategories dbCategories={categories} isLoading={isLoading} />
           <TopSellingProducts />
           <PromotionalBanners />
           <FeaturedProducts />

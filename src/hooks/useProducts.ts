@@ -36,9 +36,75 @@ interface ProductOptions {
   onSale?: boolean;
 }
 
-// Type guard to check if a value is a plain object
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+/**
+ * Safely extracts a value from a JSON object with type checking
+ * @param obj The object to extract from
+ * @param key The key to extract
+ * @param type The expected type
+ * @param defaultValue Default value if key doesn't exist or type doesn't match
+ */
+function safeExtract<T>(
+  obj: Record<string, unknown> | null | undefined, 
+  key: string, 
+  type: string, 
+  defaultValue: T
+): T {
+  if (!obj || typeof obj !== 'object' || obj === null) {
+    return defaultValue;
+  }
+  
+  const value = obj[key];
+  if (value === undefined || value === null || typeof value !== type) {
+    return defaultValue;
+  }
+  
+  return value as T;
+}
+
+/**
+ * Safely extracts an array from a JSON object
+ * @param obj The object to extract from
+ * @param key The key to extract
+ * @param defaultValue Default value if key doesn't exist or is not an array
+ */
+function safeExtractArray<T>(
+  obj: Record<string, unknown> | null | undefined, 
+  key: string, 
+  defaultValue: T[]
+): T[] {
+  if (!obj || typeof obj !== 'object' || obj === null) {
+    return defaultValue;
+  }
+  
+  const value = obj[key];
+  if (!Array.isArray(value)) {
+    return defaultValue;
+  }
+  
+  return value as T[];
+}
+
+/**
+ * Safely extracts a boolean from a JSON object
+ * @param obj The object to extract from
+ * @param key The key to extract
+ * @param defaultValue Default value if key doesn't exist or is not a boolean
+ */
+function safeExtractBoolean(
+  obj: Record<string, unknown> | null | undefined, 
+  key: string, 
+  defaultValue: boolean
+): boolean {
+  if (!obj || typeof obj !== 'object' || obj === null) {
+    return defaultValue;
+  }
+  
+  const value = obj[key];
+  if (typeof value !== 'boolean') {
+    return defaultValue;
+  }
+  
+  return value;
 }
 
 export function useProducts(options: ProductOptions = {}) {
@@ -86,36 +152,46 @@ export function useProducts(options: ProductOptions = {}) {
         } else if (data) {
           // Transform data to match our Product interface
           const formattedProducts: Product[] = data.map(item => {
-            // Extract metadata safely using explicit property checks
-            const rawMetadata = item.metadata || {};
+            // First, ensure metadata is an object
+            const rawMetadata = (typeof item.metadata === 'object' && item.metadata !== null) 
+              ? item.metadata as Record<string, unknown>
+              : {};
             
-            // Create a fresh metadata object with strict typing
-            const productMetadata: ProductMetadata = {};
+            // Extract values safely with type checking
+            const price = safeExtract(rawMetadata, 'price', 'number', 19.99);
+            const discountPrice = safeExtract(rawMetadata, 'discount_price', 'number', undefined);
+            const images = safeExtractArray(rawMetadata, 'images', [item.thumbnail || "/placeholder.svg"]);
+            const rating = safeExtract(rawMetadata, 'rating', 'number', 4.5);
+            const reviewsCount = safeExtract(rawMetadata, 'reviews_count', 'number', 124);
+            const isSale = safeExtractBoolean(rawMetadata, 'is_sale', false);
+            const isNew = safeExtractBoolean(rawMetadata, 'is_new', false);
+            const isFeatured = safeExtractBoolean(rawMetadata, 'is_featured', false);
             
-            // Only add properties that exist and have correct types
-            if (typeof rawMetadata.price === 'number') productMetadata.price = rawMetadata.price;
-            if (typeof rawMetadata.discount_price === 'number') productMetadata.discount_price = rawMetadata.discount_price;
-            if (Array.isArray(rawMetadata.images)) productMetadata.images = rawMetadata.images;
-            if (typeof rawMetadata.rating === 'number') productMetadata.rating = rawMetadata.rating;
-            if (typeof rawMetadata.reviews_count === 'number') productMetadata.reviews_count = rawMetadata.reviews_count;
-            if (typeof rawMetadata.is_sale === 'boolean') productMetadata.is_sale = rawMetadata.is_sale;
-            if (typeof rawMetadata.is_new === 'boolean') productMetadata.is_new = rawMetadata.is_new;
-            if (typeof rawMetadata.is_featured === 'boolean') productMetadata.is_featured = rawMetadata.is_featured;
+            // Create a safe ProductMetadata object
+            const productMetadata: ProductMetadata = {
+              price,
+              discount_price: discountPrice,
+              images,
+              rating,
+              reviews_count: reviewsCount,
+              is_sale: isSale,
+              is_new: isNew,
+              is_featured: isFeatured
+            };
             
-            // Build product with directly assigned properties, not referencing original metadata
+            // Build product with directly assigned properties
             const product: Product = {
               id: item.id,
               title: item.title,
               description: item.description || "",
-              price: typeof rawMetadata.price === 'number' ? rawMetadata.price : 19.99,
-              discount_price: typeof rawMetadata.discount_price === 'number' ? rawMetadata.discount_price : undefined,
+              price,
+              discount_price: discountPrice,
               thumbnail: item.thumbnail || "/placeholder.svg",
-              images: Array.isArray(rawMetadata.images) ? rawMetadata.images : [item.thumbnail || "/placeholder.svg"],
-              rating: typeof rawMetadata.rating === 'number' ? rawMetadata.rating : 4.5,
-              reviews_count: typeof rawMetadata.reviews_count === 'number' ? rawMetadata.reviews_count : 124,
-              is_sale: typeof rawMetadata.is_sale === 'boolean' ? rawMetadata.is_sale : false,
-              is_new: typeof rawMetadata.is_new === 'boolean' ? rawMetadata.is_new : false,
-              // Use our carefully constructed metadata object
+              images,
+              rating,
+              reviews_count: reviewsCount,
+              is_sale: isSale,
+              is_new: isNew,
               metadata: productMetadata
             };
             
