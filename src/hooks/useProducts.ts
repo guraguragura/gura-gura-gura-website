@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-// Define a more explicit type for metadata without index signature to avoid deep type recursion
-type SafeMetadata = {
+// Define strict interfaces without index signatures
+interface ProductMetadata {
   price?: number;
   discount_price?: number;
   images?: string[];
@@ -12,8 +12,7 @@ type SafeMetadata = {
   is_sale?: boolean;
   is_new?: boolean;
   is_featured?: boolean;
-  // No index signature to prevent excessive type recursion
-};
+}
 
 interface Product {
   id: string;
@@ -22,20 +21,24 @@ interface Product {
   price: number;
   discount_price?: number;
   thumbnail: string;
-  images?: string[];
-  rating?: number;
-  reviews_count?: number;
-  is_sale?: boolean;
-  is_new?: boolean;
-  metadata?: SafeMetadata;
+  images: string[];
+  rating: number;
+  reviews_count: number;
+  is_sale: boolean;
+  is_new: boolean;
+  metadata: ProductMetadata;
 }
 
-// Define specific options type to avoid deep nesting issues
 interface ProductOptions {
   category?: string;
   limit?: number;
   featured?: boolean;
   onSale?: boolean;
+}
+
+// Type guard to check if a value is a plain object
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 export function useProducts(options: ProductOptions = {}) {
@@ -82,45 +85,41 @@ export function useProducts(options: ProductOptions = {}) {
           setProducts([]);
         } else if (data) {
           // Transform data to match our Product interface
-          const formattedProducts: Product[] = data.map(product => {
-            // Ensure metadata is a valid object before extracting properties
-            const rawMetadata = product.metadata;
-            const metadataObj = typeof rawMetadata === 'object' && rawMetadata !== null ? rawMetadata : {};
+          const formattedProducts: Product[] = data.map(item => {
+            // Extract metadata safely using explicit property checks
+            const rawMetadata = item.metadata || {};
             
-            // Extract metadata properties with proper type checking
-            const price = typeof metadataObj.price === 'number' ? metadataObj.price : 19.99;
-            const discount_price = typeof metadataObj.discount_price === 'number' ? metadataObj.discount_price : undefined;
-            const images = Array.isArray(metadataObj.images) ? metadataObj.images : [product.thumbnail || "/placeholder.svg"];
-            const rating = typeof metadataObj.rating === 'number' ? metadataObj.rating : 4.5;
-            const reviews_count = typeof metadataObj.reviews_count === 'number' ? metadataObj.reviews_count : 124;
-            const is_sale = typeof metadataObj.is_sale === 'boolean' ? metadataObj.is_sale : false;
-            const is_new = typeof metadataObj.is_new === 'boolean' ? metadataObj.is_new : false;
-            const is_featured = typeof metadataObj.is_featured === 'boolean' ? metadataObj.is_featured : undefined;
+            // Create a fresh metadata object with strict typing
+            const productMetadata: ProductMetadata = {};
             
-            // Assemble the Product object with proper typing
-            return {
-              id: product.id,
-              title: product.title,
-              description: product.description || "",
-              price,
-              discount_price,
-              thumbnail: product.thumbnail || "/placeholder.svg",
-              images,
-              rating,
-              reviews_count,
-              is_sale,
-              is_new,
-              metadata: {
-                price: typeof metadataObj.price === 'number' ? metadataObj.price : undefined,
-                discount_price,
-                images: Array.isArray(metadataObj.images) ? metadataObj.images : undefined,
-                rating,
-                reviews_count,
-                is_sale,
-                is_new,
-                is_featured
-              }
+            // Only add properties that exist and have correct types
+            if (typeof rawMetadata.price === 'number') productMetadata.price = rawMetadata.price;
+            if (typeof rawMetadata.discount_price === 'number') productMetadata.discount_price = rawMetadata.discount_price;
+            if (Array.isArray(rawMetadata.images)) productMetadata.images = rawMetadata.images;
+            if (typeof rawMetadata.rating === 'number') productMetadata.rating = rawMetadata.rating;
+            if (typeof rawMetadata.reviews_count === 'number') productMetadata.reviews_count = rawMetadata.reviews_count;
+            if (typeof rawMetadata.is_sale === 'boolean') productMetadata.is_sale = rawMetadata.is_sale;
+            if (typeof rawMetadata.is_new === 'boolean') productMetadata.is_new = rawMetadata.is_new;
+            if (typeof rawMetadata.is_featured === 'boolean') productMetadata.is_featured = rawMetadata.is_featured;
+            
+            // Build product with directly assigned properties, not referencing original metadata
+            const product: Product = {
+              id: item.id,
+              title: item.title,
+              description: item.description || "",
+              price: typeof rawMetadata.price === 'number' ? rawMetadata.price : 19.99,
+              discount_price: typeof rawMetadata.discount_price === 'number' ? rawMetadata.discount_price : undefined,
+              thumbnail: item.thumbnail || "/placeholder.svg",
+              images: Array.isArray(rawMetadata.images) ? rawMetadata.images : [item.thumbnail || "/placeholder.svg"],
+              rating: typeof rawMetadata.rating === 'number' ? rawMetadata.rating : 4.5,
+              reviews_count: typeof rawMetadata.reviews_count === 'number' ? rawMetadata.reviews_count : 124,
+              is_sale: typeof rawMetadata.is_sale === 'boolean' ? rawMetadata.is_sale : false,
+              is_new: typeof rawMetadata.is_new === 'boolean' ? rawMetadata.is_new : false,
+              // Use our carefully constructed metadata object
+              metadata: productMetadata
             };
+            
+            return product;
           });
           
           setProducts(formattedProducts);
