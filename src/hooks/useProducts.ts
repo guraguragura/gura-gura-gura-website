@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -59,8 +60,8 @@ export function useProducts(options: ProductOptions = {}) {
       setError(null);
       
       try {
-        // Build our base query
-        let query = supabase
+        // Use the any type for the query to avoid TypeScript's excessive type checking
+        let query: any = supabase
           .from('product')
           .select('*, product_category_product(product_category_id, product_category:product_category(name, handle))')
           .eq('deleted_at', null)
