@@ -22,6 +22,7 @@ import PartnerWithGuraPage from "./pages/PartnerWithGuraPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import ContactPage from "./pages/ContactPage";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/careers" element={<CareersPage />} />
             <Route path="/business" element={<GuraBusinessPage />} />
             <Route path="/partner" element={<PartnerWithGuraPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/payment-success" element={<PaymentSuccessPage />} />

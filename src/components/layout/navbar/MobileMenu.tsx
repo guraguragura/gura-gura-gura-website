@@ -1,13 +1,14 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, User, Headphones, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
 interface Category {
@@ -31,10 +32,14 @@ const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) =>
             className="flex items-center"
           >
             <MenuIcon className="h-5 w-5 mr-2" />
-            Categories
+            Menu
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-56">
+          {/* Categories */}
+          <DropdownMenuItem>
+            <span className="font-semibold">Categories</span>
+          </DropdownMenuItem>
           {displayCategories.map((category) => (
             <DropdownMenuItem key={category.id} asChild>
               <Link 
@@ -45,11 +50,6 @@ const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) =>
               </Link>
             </DropdownMenuItem>
           ))}
-          <DropdownMenuItem asChild>
-            <Link to="/collections" className="w-full text-blue-600">
-              View All Categories
-            </Link>
-          </DropdownMenuItem>
           {staticCategories.map((category) => (
             <DropdownMenuItem key={category} asChild>
               <Link 
@@ -60,6 +60,33 @@ const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) =>
               </Link>
             </DropdownMenuItem>
           ))}
+          <DropdownMenuItem asChild>
+            <Link to="/collections" className="w-full text-blue-600">
+              View All Categories
+            </Link>
+          </DropdownMenuItem>
+          
+          <DropdownMenuSeparator />
+          
+          {/* Navigation Links */}
+          <DropdownMenuItem asChild>
+            <Link to="/business" className="w-full flex items-center">
+              <User className="mr-2 h-4 w-4" />
+              For Business
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/faq" className="w-full flex items-center">
+              <Headphones className="mr-2 h-4 w-4" />
+              Customer Services
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link to="/contact" className="w-full flex items-center">
+              <Phone className="mr-2 h-4 w-4" />
+              Contact Us
+            </Link>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
