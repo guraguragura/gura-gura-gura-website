@@ -83,32 +83,42 @@ export function useProducts(options: ProductOptions = {}) {
         } else if (data) {
           // Transform data to match our Product interface
           const formattedProducts: Product[] = data.map(product => {
-            // Safely extract metadata as a plain object
-            const metadataObj = typeof product.metadata === 'object' && product.metadata !== null 
-              ? product.metadata 
-              : {};
+            // Ensure metadata is a valid object before extracting properties
+            const rawMetadata = product.metadata;
+            const metadataObj = typeof rawMetadata === 'object' && rawMetadata !== null ? rawMetadata : {};
             
+            // Extract metadata properties with proper type checking
+            const price = typeof metadataObj.price === 'number' ? metadataObj.price : 19.99;
+            const discount_price = typeof metadataObj.discount_price === 'number' ? metadataObj.discount_price : undefined;
+            const images = Array.isArray(metadataObj.images) ? metadataObj.images : [product.thumbnail || "/placeholder.svg"];
+            const rating = typeof metadataObj.rating === 'number' ? metadataObj.rating : 4.5;
+            const reviews_count = typeof metadataObj.reviews_count === 'number' ? metadataObj.reviews_count : 124;
+            const is_sale = typeof metadataObj.is_sale === 'boolean' ? metadataObj.is_sale : false;
+            const is_new = typeof metadataObj.is_new === 'boolean' ? metadataObj.is_new : false;
+            const is_featured = typeof metadataObj.is_featured === 'boolean' ? metadataObj.is_featured : undefined;
+            
+            // Assemble the Product object with proper typing
             return {
               id: product.id,
               title: product.title,
               description: product.description || "",
-              price: typeof metadataObj.price === 'number' ? metadataObj.price : 19.99,
-              discount_price: typeof metadataObj.discount_price === 'number' ? metadataObj.discount_price : undefined,
+              price,
+              discount_price,
               thumbnail: product.thumbnail || "/placeholder.svg",
-              images: Array.isArray(metadataObj.images) ? metadataObj.images : [product.thumbnail || "/placeholder.svg"],
-              rating: typeof metadataObj.rating === 'number' ? metadataObj.rating : 4.5,
-              reviews_count: typeof metadataObj.reviews_count === 'number' ? metadataObj.reviews_count : 124,
-              is_sale: typeof metadataObj.is_sale === 'boolean' ? metadataObj.is_sale : false,
-              is_new: typeof metadataObj.is_new === 'boolean' ? metadataObj.is_new : false,
+              images,
+              rating,
+              reviews_count,
+              is_sale,
+              is_new,
               metadata: {
                 price: typeof metadataObj.price === 'number' ? metadataObj.price : undefined,
-                discount_price: typeof metadataObj.discount_price === 'number' ? metadataObj.discount_price : undefined,
+                discount_price,
                 images: Array.isArray(metadataObj.images) ? metadataObj.images : undefined,
-                rating: typeof metadataObj.rating === 'number' ? metadataObj.rating : undefined,
-                reviews_count: typeof metadataObj.reviews_count === 'number' ? metadataObj.reviews_count : undefined,
-                is_sale: typeof metadataObj.is_sale === 'boolean' ? metadataObj.is_sale : undefined,
-                is_new: typeof metadataObj.is_new === 'boolean' ? metadataObj.is_new : undefined,
-                is_featured: typeof metadataObj.is_featured === 'boolean' ? metadataObj.is_featured : undefined
+                rating,
+                reviews_count,
+                is_sale,
+                is_new,
+                is_featured
               }
             };
           });
