@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 // Define a more explicit type for metadata to avoid deep type recursion
+// Remove index signature to prevent excessive type recursion
 type SafeMetadata = {
   price?: number;
   discount_price?: number;
@@ -11,7 +12,7 @@ type SafeMetadata = {
   reviews_count?: number;
   is_sale?: boolean;
   is_new?: boolean;
-  [key: string]: unknown;
+  // No more index signature here to avoid the TS2589 error
 };
 
 interface Product {
@@ -86,8 +87,9 @@ export function useProducts(options: ProductOptions = {}) {
             const rawMetadata = product.metadata || {};
             
             // Ensure metadata is an object, not an array or primitive
-            const metadata: SafeMetadata = typeof rawMetadata === 'object' && 
-              !Array.isArray(rawMetadata) ? rawMetadata as SafeMetadata : {};
+            // Use type assertion but with runtime check first
+            const isValidMetadata = typeof rawMetadata === 'object' && !Array.isArray(rawMetadata);
+            const metadata = isValidMetadata ? rawMetadata as SafeMetadata : {} as SafeMetadata;
             
             return {
               id: product.id,
@@ -101,7 +103,7 @@ export function useProducts(options: ProductOptions = {}) {
               reviews_count: typeof metadata.reviews_count === 'number' ? metadata.reviews_count : 124,
               is_sale: typeof metadata.is_sale === 'boolean' ? metadata.is_sale : false,
               is_new: typeof metadata.is_new === 'boolean' ? metadata.is_new : false,
-              metadata: metadata
+              metadata: isValidMetadata ? metadata : undefined
             };
           });
           
