@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-// Simplified non-recursive interfaces
+// Flatten the interfaces to avoid circular references
 interface ProductMetadata {
   price?: number;
   discount_price?: number;
@@ -36,7 +36,7 @@ interface ProductOptions {
   onSale?: boolean;
 }
 
-// Simplified extraction utilities
+// Simple extraction utilities with explicit return types
 function extractNumber(data: any, key: string, defaultValue: number): number {
   if (!data || typeof data !== 'object' || typeof data[key] !== 'number') {
     return defaultValue;
@@ -102,23 +102,23 @@ export function useProducts(options: ProductOptions = {}) {
           setProducts([]);
         } else if (data) {
           // Transform data to match our Product interface
-          const formattedProducts: Product[] = data.map(item => {
-            // Handle metadata safely
-            const metadata = typeof item.metadata === 'object' && item.metadata !== null 
+          const formattedProducts = data.map(item => {
+            // Handle metadata safely (use a simple object, not the type)
+            const rawMetadata = typeof item.metadata === 'object' && item.metadata !== null 
               ? item.metadata 
               : {};
             
-            // Extract values safely
-            const price = extractNumber(metadata, 'price', 19.99);
-            const discountPrice = extractNumber(metadata, 'discount_price', 0);
-            const images = extractArray<string>(metadata, 'images', [item.thumbnail || "/placeholder.svg"]);
-            const rating = extractNumber(metadata, 'rating', 4.5);
-            const reviewsCount = extractNumber(metadata, 'reviews_count', 124);
-            const isSale = extractBoolean(metadata, 'is_sale', false);
-            const isNew = extractBoolean(metadata, 'is_new', false);
-            const isFeatured = extractBoolean(metadata, 'is_featured', false);
+            // Extract individual values safely
+            const price = extractNumber(rawMetadata, 'price', 19.99);
+            const discountPrice = extractNumber(rawMetadata, 'discount_price', 0);
+            const images = extractArray<string>(rawMetadata, 'images', [item.thumbnail || "/placeholder.svg"]);
+            const rating = extractNumber(rawMetadata, 'rating', 4.5);
+            const reviewsCount = extractNumber(rawMetadata, 'reviews_count', 124);
+            const isSale = extractBoolean(rawMetadata, 'is_sale', false);
+            const isNew = extractBoolean(rawMetadata, 'is_new', false);
+            const isFeatured = extractBoolean(rawMetadata, 'is_featured', false);
             
-            // Build the product object directly
+            // Build the product object with explicit type casting to avoid circular references
             return {
               id: item.id,
               title: item.title,
@@ -131,6 +131,7 @@ export function useProducts(options: ProductOptions = {}) {
               reviews_count: reviewsCount,
               is_sale: isSale,
               is_new: isNew,
+              // Use an explicit separate metadata object to avoid circular references
               metadata: {
                 price,
                 discount_price: discountPrice || undefined,
@@ -141,7 +142,7 @@ export function useProducts(options: ProductOptions = {}) {
                 is_new: isNew,
                 is_featured: isFeatured
               }
-            };
+            } as Product; // Explicitly cast to Product to help TypeScript
           });
           
           setProducts(formattedProducts);
