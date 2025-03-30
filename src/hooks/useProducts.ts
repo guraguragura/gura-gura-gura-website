@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-// Define strict interfaces without index signatures
+// Define strict interfaces without index signatures or recursive types
 interface ProductMetadata {
   price?: number;
   discount_price?: number;
@@ -36,19 +36,13 @@ interface ProductOptions {
   onSale?: boolean;
 }
 
-/**
- * Safely extracts a value from a JSON object with type checking
- */
-function safeExtract<T>(
-  obj: Record<string, unknown> | null | undefined, 
-  key: string, 
-  defaultValue: T
-): T {
+// Generic type-safe extraction utility
+function safeExtract<T>(obj: unknown, key: string, defaultValue: T): T {
   if (!obj || typeof obj !== 'object' || obj === null) {
     return defaultValue;
   }
   
-  const value = obj[key];
+  const value = (obj as Record<string, unknown>)[key];
   if (value === undefined || value === null) {
     return defaultValue;
   }
@@ -56,39 +50,19 @@ function safeExtract<T>(
   return value as T;
 }
 
-/**
- * Safely extracts a number from a JSON object
- */
-function safeExtractNumber(
-  obj: Record<string, unknown> | null | undefined, 
-  key: string, 
-  defaultValue: number
-): number {
-  const value = safeExtract(obj, key, null);
+// Type-specific extraction utilities
+function safeExtractNumber(obj: unknown, key: string, defaultValue: number): number {
+  const value = safeExtract<unknown>(obj, key, null);
   return typeof value === 'number' ? value : defaultValue;
 }
 
-/**
- * Safely extracts an array from a JSON object
- */
-function safeExtractArray<T>(
-  obj: Record<string, unknown> | null | undefined, 
-  key: string, 
-  defaultValue: T[]
-): T[] {
-  const value = safeExtract(obj, key, null);
+function safeExtractArray<T>(obj: unknown, key: string, defaultValue: T[]): T[] {
+  const value = safeExtract<unknown>(obj, key, null);
   return Array.isArray(value) ? value : defaultValue;
 }
 
-/**
- * Safely extracts a boolean from a JSON object
- */
-function safeExtractBoolean(
-  obj: Record<string, unknown> | null | undefined, 
-  key: string, 
-  defaultValue: boolean
-): boolean {
-  const value = safeExtract(obj, key, null);
+function safeExtractBoolean(obj: unknown, key: string, defaultValue: boolean): boolean {
+  const value = safeExtract<unknown>(obj, key, null);
   return typeof value === 'boolean' ? value : defaultValue;
 }
 
@@ -137,12 +111,12 @@ export function useProducts(options: ProductOptions = {}) {
         } else if (data) {
           // Transform data to match our Product interface
           const formattedProducts: Product[] = data.map(item => {
-            // First, ensure metadata is an object
+            // Ensure metadata is an object
             const metadata = typeof item.metadata === 'object' && item.metadata !== null 
               ? item.metadata as Record<string, unknown>
               : {};
             
-            // Extract values safely with improved type checking
+            // Extract values safely
             const price = safeExtractNumber(metadata, 'price', 19.99);
             const discountPrice = safeExtractNumber(metadata, 'discount_price', 0);
             const images = safeExtractArray<string>(metadata, 'images', [item.thumbnail || "/placeholder.svg"]);
