@@ -14,7 +14,6 @@ import CyberMondayBanner from "@/components/home/CyberMondayBanner";
 import GiftsForEveryone from "@/components/home/GiftsForEveryone";
 import PromotionalBannerCards from "@/components/home/PromotionalBannerCards";
 import Footer from "@/components/layout/Footer";
-import CategoryCarousel from "@/components/home/CategoryCarousel";
 import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
@@ -47,7 +46,6 @@ const Index = () => {
       <div className="flex-grow">
         <div className="mx-auto w-[80%] px-4 max-w-7xl bg-white shadow-sm">
           <Hero />
-          <CategoryCarousel />
           <PopularCategories />
           <TopSellingProducts />
           <PromotionalBanners />

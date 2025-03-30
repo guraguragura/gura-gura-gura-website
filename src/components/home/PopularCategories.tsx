@@ -57,7 +57,7 @@ const PopularCategories = () => {
   return (
     <section className="py-10">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold mb-6">Popular Categories</h2>
+        <h2 className="text-2xl font-bold mb-6">Our Categories</h2>
         
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {categories.map((category) => (
