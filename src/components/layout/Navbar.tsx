@@ -11,7 +11,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
@@ -61,22 +60,20 @@ const Navbar = () => {
                     <Phone className="mr-2 h-4 w-4" />
                     Contact Us
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
+                  <NavigationMenuContent className="bg-white">
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 bg-white">
                       <li className="row-span-3">
-                        <NavigationMenuLink asChild>
-                          <Link
-                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-brand-teal to-brand-teal/80 p-6 no-underline outline-none focus:shadow-md"
-                            to="/business"
-                          >
-                            <div className="mt-4 mb-2 text-lg font-medium text-white">
-                              Gura Support
-                            </div>
-                            <p className="text-sm leading-tight text-white/90">
-                              We're here to help with any questions or concerns.
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
+                        <Link
+                          className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-brand-teal to-brand-teal/80 p-6 no-underline outline-none focus:shadow-md"
+                          to="/business"
+                        >
+                          <div className="mt-4 mb-2 text-lg font-medium text-white">
+                            Gura Support
+                          </div>
+                          <p className="text-sm leading-tight text-white/90">
+                            We're here to help with any questions or concerns.
+                          </p>
+                        </Link>
                       </li>
                       <li>
                         <Link to="/contact" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal">

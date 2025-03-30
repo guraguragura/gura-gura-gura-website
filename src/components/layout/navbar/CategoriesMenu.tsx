@@ -5,7 +5,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
@@ -31,8 +30,8 @@ const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuP
             <NavigationMenuTrigger className="text-sm hover:text-brand-teal">
               Categories
             </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className="grid grid-cols-2 md:grid-cols-3 p-4 w-[400px] md:w-[600px] gap-3">
+            <NavigationMenuContent className="bg-white">
+              <div className="grid grid-cols-2 md:grid-cols-3 p-4 w-[400px] md:w-[600px] gap-3 bg-white">
                 {displayCategories.map((category) => (
                   <Link 
                     key={category.id}
