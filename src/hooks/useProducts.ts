@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-// Define simple non-recursive interfaces
+// Simplified non-recursive interfaces
 interface ProductMetadata {
   price?: number;
   discount_price?: number;
@@ -36,7 +36,7 @@ interface ProductOptions {
   onSale?: boolean;
 }
 
-// Simplified extraction utilities using type assertion
+// Simplified extraction utilities
 function extractNumber(data: any, key: string, defaultValue: number): number {
   if (!data || typeof data !== 'object' || typeof data[key] !== 'number') {
     return defaultValue;
