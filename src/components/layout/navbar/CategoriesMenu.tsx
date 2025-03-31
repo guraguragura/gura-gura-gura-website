@@ -36,8 +36,8 @@ const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuP
       {/* Categories dropdown using Select */}
       <div className="relative z-40">
         <Select onValueChange={handleCategorySelect}>
-          <SelectTrigger className="w-[150px] bg-white text-sm hover:text-brand-teal border-none shadow-none focus:ring-0 px-3 pr-0">
-            <SelectValue placeholder="Categories" className="pr-0 mr-0" />
+          <SelectTrigger className="w-[130px] bg-white text-sm hover:text-brand-teal border-none shadow-none focus:ring-0 px-2 py-2">
+            <span className="mr-0 pr-0">Categories</span>
           </SelectTrigger>
           <SelectContent className="bg-white z-50">
             <SelectGroup>
