@@ -26,7 +26,7 @@ const categoryImages: Record<string, string> = {
   "health-beauty": "https://images.unsplash.com/photo-1607006677169-a62beb975922",
   "kids-toys": "https://images.unsplash.com/photo-1522771930-78848d9293e8",
   "automotive": "https://images.unsplash.com/photo-1542362567-b07e54358753",
-  "10k-shop": "https://images.unsplash.com/photo-1607082349566-187342175e2f",
+  "10k-shop": "/lovable-uploads/140ba952-70e0-44c3-91c3-6464a0ba3e8b.png",
   "home-art": "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6",
   "accessories": "https://images.unsplash.com/photo-1721322800607-8c38375eef04"
 };

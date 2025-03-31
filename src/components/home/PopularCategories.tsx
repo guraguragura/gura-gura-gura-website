@@ -103,6 +103,10 @@ const categoryImageMap: Record<string, {image: string, color: string}> = {
     image: "https://images.unsplash.com/photo-1542362567-b07e54358753", 
     color: "bg-gray-100" 
   },
+  "10k-shop": { 
+    image: "/lovable-uploads/140ba952-70e0-44c3-91c3-6464a0ba3e8b.png", 
+    color: "bg-red-100" 
+  },
   // Default for any category not in the mapping
   "default": { 
     image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc", 
@@ -167,7 +171,7 @@ const PopularCategories: React.FC<PopularCategoriesProps> = ({
             {[1, 2, 3, 4].map((_, index) => (
               <div key={index} className="flex-none w-1/4">
                 <div className="bg-gray-200 rounded-lg p-4 flex flex-col items-center">
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gray-300 mb-3"></div>
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-md bg-gray-300 mb-3"></div>
                   <div className="h-4 w-20 bg-gray-300 rounded"></div>
                 </div>
               </div>
@@ -190,7 +194,7 @@ const PopularCategories: React.FC<PopularCategoriesProps> = ({
                     className="group block"
                   >
                     <div className={`rounded-lg p-4 ${category.color || getRandomColor()} transition-all duration-300 group-hover:shadow-md flex flex-col items-center text-center`}>
-                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden mb-3">
+                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-md overflow-hidden mb-3">
                         <img 
                           src={category.image} 
                           alt={category.name} 
