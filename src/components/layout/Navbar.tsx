@@ -1,4 +1,3 @@
-
 import React from "react";
 import Logo from "./navbar/Logo";
 import SearchBar from "./navbar/SearchBar";
@@ -44,19 +43,19 @@ const Navbar = () => {
             <NavigationMenu className="hidden md:flex">
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <Link to="/business" className="inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 font-medium transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+                  <Link to="/business" className="inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
                     <User className="mr-2 h-4 w-4" />
-                    For Business
+                    <span>For Business</span>
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link to="/faq" className="inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 font-medium transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+                  <Link to="/faq" className="inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
                     <Headphones className="mr-2 h-4 w-4" />
-                    Customer Services
+                    <span>Customer Services</span>
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="font-medium">
+                  <NavigationMenuTrigger className="text-sm">
                     <Phone className="mr-2 h-4 w-4" />
                     Contact Us
                   </NavigationMenuTrigger>
@@ -117,4 +116,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
