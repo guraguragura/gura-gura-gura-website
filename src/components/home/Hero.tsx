@@ -3,9 +3,7 @@ import React from "react";
 import { 
   Carousel, 
   CarouselContent, 
-  CarouselItem, 
-  CarouselNext, 
-  CarouselPrevious 
+  CarouselItem 
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 
@@ -85,8 +83,6 @@ const Hero = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="left-2 bg-white/80 hover:bg-white" />
-          <CarouselNext className="right-2 bg-white/80 hover:bg-white" />
         </Carousel>
       </div>
     </section>
