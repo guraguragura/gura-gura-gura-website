@@ -44,19 +44,19 @@ const Navbar = () => {
             <NavigationMenu className="hidden md:flex">
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <Link to="/business" className="inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+                  <Link to="/business" className="inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 font-medium transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
                     <User className="mr-2 h-4 w-4" />
                     For Business
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link to="/faq" className="inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+                  <Link to="/faq" className="inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 font-medium transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
                     <Headphones className="mr-2 h-4 w-4" />
                     Customer Services
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-sm">
+                  <NavigationMenuTrigger className="font-medium">
                     <Phone className="mr-2 h-4 w-4" />
                     Contact Us
                   </NavigationMenuTrigger>
@@ -95,7 +95,7 @@ const Navbar = () => {
                         <Link to="/contact" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-brand-teal focus:bg-accent focus:text-brand-teal">
                           <div className="text-sm font-medium leading-none">Visit Us</div>
                           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            123 Business Avenue, Kigali, Rwanda
+                            +250 788 123 456
                           </p>
                         </Link>
                       </li>
@@ -117,3 +117,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
