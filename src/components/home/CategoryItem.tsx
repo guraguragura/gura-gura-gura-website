@@ -16,8 +16,8 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ id, name, handle, image, co
       to={`/categories/${handle}`}
       className="group block text-center"
     >
-      <div className={`rounded-lg p-4 ${color} transition-all duration-300 group-hover:shadow-md flex items-center justify-center`}>
-        <div className="w-16 h-16 md:w-20 md:h-20 rounded-md overflow-hidden">
+      <div className={`rounded-lg p-4 ${color} transition-all duration-300 group-hover:shadow-md aspect-square flex items-center justify-center`}>
+        <div className="w-full h-full rounded-md overflow-hidden">
           <img 
             src={image} 
             alt={name} 
