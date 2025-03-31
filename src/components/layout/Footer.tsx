@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, MessageSquare } from "lucide-react";
@@ -105,7 +104,6 @@ const Footer = () => {
             <ul className="space-y-2 text-sm">
               <li><Link to="/partner" className="hover:text-brand-teal">Partner with Gura</Link></li>
               <li><Link to="/business" className="hover:text-brand-teal">Wholesale purchases</Link></li>
-              <li><Link to="/business" className="hover:text-brand-teal">Affiliate program</Link></li>
             </ul>
           </div>
           
