@@ -33,7 +33,7 @@ const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuP
   };
 
   return (
-    <div className="hidden md:flex items-center justify-start space-x-6 py-2 overflow-x-auto">
+    <div className="hidden md:flex items-center justify-start pl-0 space-x-4 py-2 overflow-x-auto">
       {/* Categories dropdown using Select */}
       <div className="relative z-40">
         <Select onValueChange={handleCategorySelect}>
