@@ -32,12 +32,12 @@ const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuP
   };
 
   return (
-    <div className="hidden md:flex items-center justify-start pl-0 space-x-4 py-2 overflow-x-auto">
+    <div className="hidden md:flex items-center justify-start pl-0 space-x-6 py-2 overflow-x-auto">
       {/* Categories dropdown using Select */}
       <div className="relative z-40">
         <Select onValueChange={handleCategorySelect}>
-          <SelectTrigger className="w-[180px] bg-white text-sm hover:text-brand-teal border-none shadow-none focus:ring-0 px-3 pr-0">
-            <SelectValue placeholder="Categories" />
+          <SelectTrigger className="w-[150px] bg-white text-sm hover:text-brand-teal border-none shadow-none focus:ring-0 px-3 pr-0">
+            <SelectValue placeholder="Categories" className="pr-0 mr-0" />
           </SelectTrigger>
           <SelectContent className="bg-white z-50">
             <SelectGroup>
@@ -63,7 +63,7 @@ const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuP
         <Link 
           key={category} 
           to={`/categories/${category.toLowerCase().replace(/\s+/g, '-')}`}
-          className="text-sm whitespace-nowrap hover:text-brand-teal"
+          className="text-sm whitespace-nowrap hover:text-brand-teal px-1"
         >
           {category}
         </Link>
