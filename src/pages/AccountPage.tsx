@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AccountLayout } from '@/components/account/AccountLayout';
@@ -15,14 +14,15 @@ const AccountPage = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   
-  useEffect(() => {
-    // Wait until loading is done before redirecting
-    if (!loading && !user) {
-      navigate('/auth');
-    }
-  }, [user, loading, navigate]);
+  // TEMPORARY: Disabling authentication redirect
+  // useEffect(() => {
+  //   // Wait until loading is done before redirecting
+  //   if (!loading && !user) {
+  //     navigate('/auth');
+  //   }
+  // }, [user, loading, navigate]);
 
-  // Show loading spinner while checking authentication
+  // Show loading spinner while checking authentication (keeping this for UX)
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -31,10 +31,10 @@ const AccountPage = () => {
     );
   }
 
-  // If not authenticated and not loading, redirect to auth page
-  if (!user && !loading) {
-    return <Navigate to="/auth" replace />;
-  }
+  // TEMPORARY: Removed this check to allow access without authentication
+  // if (!user && !loading) {
+  //   return <Navigate to="/auth" replace />;
+  // }
   
   return (
     <AccountLayout>
