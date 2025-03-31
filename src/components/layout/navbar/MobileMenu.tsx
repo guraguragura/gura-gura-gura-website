@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { MenuIcon, User, Headphones, Phone } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -70,20 +70,17 @@ const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) =>
           
           {/* Navigation Links */}
           <DropdownMenuItem asChild>
-            <Link to="/business" className="w-full flex items-center">
-              <User className="mr-2 h-4 w-4" />
+            <Link to="/business" className="w-full">
               For Business
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/faq" className="w-full flex items-center">
-              <Headphones className="mr-2 h-4 w-4" />
+            <Link to="/faq" className="w-full">
               Customer Services
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/contact" className="w-full flex items-center">
-              <Phone className="mr-2 h-4 w-4" />
+            <Link to="/contact" className="w-full">
               Contact Us
             </Link>
           </DropdownMenuItem>
