@@ -1,9 +1,8 @@
-
 import React from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Star, Coffee, Heart, Users, Zap, Globe, ArrowRight } from 'lucide-react';
+import { Coffee, Star, Heart, Globe, Users, Zap, ArrowRight } from 'lucide-react';
 
 const CareersPage = () => {
   const benefits = [
@@ -39,45 +38,6 @@ const CareersPage = () => {
     }
   ];
 
-  const openPositions = [
-    {
-      title: "Senior Software Engineer",
-      department: "Engineering",
-      location: "Kigali, Rwanda",
-      type: "Full-time"
-    },
-    {
-      title: "UX/UI Designer",
-      department: "Product",
-      location: "Kigali, Rwanda",
-      type: "Full-time"
-    },
-    {
-      title: "Marketing Manager",
-      department: "Marketing",
-      location: "Kigali, Rwanda",
-      type: "Full-time"
-    },
-    {
-      title: "Customer Support Specialist",
-      department: "Operations",
-      location: "Remote, Rwanda",
-      type: "Full-time"
-    },
-    {
-      title: "Data Analyst",
-      department: "Business Intelligence",
-      location: "Kigali, Rwanda",
-      type: "Full-time"
-    },
-    {
-      title: "Logistics Coordinator",
-      department: "Operations",
-      location: "Kigali, Rwanda",
-      type: "Full-time"
-    }
-  ];
-
   return (
     <PageLayout>
       <div className="space-y-12">
@@ -100,10 +60,6 @@ const CareersPage = () => {
               <p className="text-gray-700 mb-6">
                 Our team members enjoy a dynamic work environment where ideas are valued, growth is encouraged, and achievements are celebrated. We believe in empowering our employees to take ownership of their work and make meaningful contributions.
               </p>
-              <Button className="flex items-center gap-2">
-                View Open Positions
-                <ArrowRight className="h-4 w-4" />
-              </Button>
             </div>
             <div className="rounded-lg overflow-hidden h-80 bg-gray-200 flex items-center justify-center">
               <div className="text-gray-500 text-center">Team Photo</div>
@@ -124,29 +80,6 @@ const CareersPage = () => {
                   </div>
                   <h3 className="text-xl font-bold mb-2">{benefit.title}</h3>
                   <p className="text-gray-600">{benefit.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* Open Positions */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold mb-6 flex items-center">
-            <Briefcase className="mr-2 h-8 w-8 text-blue-500" />
-            Open Positions
-          </h2>
-          <div className="space-y-4">
-            {openPositions.map((position, index) => (
-              <Card key={index} className="hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between">
-                    <div>
-                      <h3 className="text-xl font-bold mb-2">{position.title}</h3>
-                      <div className="text-gray-600 mb-2">{position.department} • {position.location} • {position.type}</div>
-                    </div>
-                    <Button className="mt-4 md:mt-0">View Position</Button>
-                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -233,7 +166,7 @@ const CareersPage = () => {
               }
             ].map((step, index) => (
               <div key={index} className="flex gap-4">
-                <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center shrink-0">
+                <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center shrink-0 mt-0.5">
                   {step.step}
                 </div>
                 <div>
@@ -253,10 +186,7 @@ const CareersPage = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button className="bg-blue-600 hover:bg-blue-700">
-              View Open Positions
-            </Button>
-            <Button variant="outline" className="border-blue-600 text-blue-600">
-              Send Speculative Application
+              Send Application
             </Button>
           </div>
         </section>
