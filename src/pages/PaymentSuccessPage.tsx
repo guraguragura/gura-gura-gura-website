@@ -7,17 +7,16 @@ import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, ArrowRight } from 'lucide-react';
 import { useCartContext } from '@/contexts/CartContext';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const PaymentSuccessPage = () => {
-  const { items } = useCartContext();
+  const { items, clearCart } = useCartContext();
   const navigate = useNavigate();
   
-  // If the user navigates directly to this page without making a purchase, redirect to home
+  // Clear cart on successful payment
   useEffect(() => {
-    if (items.length > 0) {
-      navigate('/');
-    }
-  }, [items, navigate]);
+    clearCart();
+  }, [clearCart]);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -34,6 +33,12 @@ const PaymentSuccessPage = () => {
           <p className="text-lg text-gray-600 mb-8">
             Thank you for your purchase. Your order has been received and is being processed.
           </p>
+          
+          <Alert className="bg-green-50 border-green-200 mb-6">
+            <AlertDescription className="text-green-800">
+              This is a placeholder for payment success. Integration with a real payment processor will be added later.
+            </AlertDescription>
+          </Alert>
           
           <p className="text-gray-600 mb-2">
             Order confirmation has been sent to your email address.

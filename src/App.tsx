@@ -22,6 +22,7 @@ import PartnerWithGuraPage from "./pages/PartnerWithGuraPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import PaymentErrorPage from "./pages/PaymentErrorPage";
 import ContactPage from "./pages/ContactPage";
 import TermsPage from "./pages/TermsPage";
 import ShippingPage from "./pages/ShippingPage";
@@ -70,6 +71,7 @@ const App = () => (
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/payment-success" element={<PaymentSuccessPage />} />
+            <Route path="/payment-error" element={<PaymentErrorPage />} />
             
             {/* New pages */}
             <Route path="/terms" element={<TermsPage />} />

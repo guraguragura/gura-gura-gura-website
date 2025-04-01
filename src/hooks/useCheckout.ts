@@ -63,15 +63,21 @@ export function useCheckout() {
 
       console.log("Processing order with data:", orderData);
 
-      // Here we would actually connect to Medusa backend
-      // This is a placeholder for the actual API call
+      // PLACEHOLDER: For now, we'll simulate payment processing
+      // with an 80% success rate for testing both scenarios
+      const simulatePaymentSuccess = Math.random() < 0.8;
       
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1500));
       
+      if (!simulatePaymentSuccess) {
+        // Simulate payment failure for testing
+        console.log("Simulated payment failure");
+        throw new Error("Payment processing failed. Please try again.");
+      }
+      
       // Store order in Supabase for guest checkout or if needed
       if (!isAuthenticated) {
-        // First check if we need to create the guest_orders table
         // Instead of trying to store in a non-existent table, let's use customer_return_requests
         // for now as a temporary storage (this is just a placeholder until we properly set up the backend)
         const { error } = await supabase
@@ -101,6 +107,7 @@ export function useCheckout() {
     } catch (error) {
       console.error("Checkout error:", error);
       toast.error("There was a problem processing your order. Please try again.");
+      navigate('/payment-error');
     } finally {
       setIsProcessing(false);
     }
