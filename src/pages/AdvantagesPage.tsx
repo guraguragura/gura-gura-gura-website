@@ -3,7 +3,6 @@ import React from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import HeroSection from '@/components/advantages/HeroSection';
 import ServicesOverview from '@/components/advantages/ServicesOverview';
-import ServiceTabs from '@/components/advantages/ServiceTabs';
 import AdvantagesGrid from '@/components/advantages/AdvantagesGrid';
 import Testimonials from '@/components/advantages/Testimonials';
 import InfoSections from '@/components/advantages/InfoSections';
@@ -18,9 +17,6 @@ const AdvantagesPage = () => {
 
         {/* Key Services Overview */}
         <ServicesOverview />
-
-        {/* Tabs for Different Services */}
-        <ServiceTabs />
 
         {/* Advantages Grid */}
         <AdvantagesGrid />
