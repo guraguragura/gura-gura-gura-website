@@ -61,6 +61,48 @@ const PressPage = () => {
           </p>
         </div>
 
+        {/* Press Releases */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-6 flex items-center">
+            <FileText className="mr-2 h-6 w-6 text-blue-500" />
+            Press Releases
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {pressReleases.map((release, index) => (
+              <Card key={index} className="h-full">
+                <CardContent className="p-6 flex flex-col h-full">
+                  <div className="text-sm text-gray-500 mb-1">{release.date}</div>
+                  <h3 className="text-xl font-bold mb-2">{release.title}</h3>
+                  <p className="text-gray-700 mb-4 flex-grow">{release.excerpt}</p>
+                  <a href="#" className="text-blue-600 hover:underline font-medium">Read full press release</a>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <div className="mt-6 text-center">
+            <Button variant="outline" className="mt-4">View All Press Releases</Button>
+          </div>
+        </section>
+
+        {/* Media Coverage */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-6 flex items-center">
+            <Globe className="mr-2 h-6 w-6 text-blue-500" />
+            Media Coverage
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {mediaFeatures.map((feature, index) => (
+              <Card key={index} className="h-full">
+                <CardContent className="p-6 flex flex-col h-full">
+                  <div className="text-sm text-gray-500 mb-1">{feature.publication} | {feature.date}</div>
+                  <h3 className="text-lg font-bold mb-4 flex-grow">{feature.title}</h3>
+                  <a href={feature.link} className="text-blue-600 hover:underline font-medium">Read article</a>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
         {/* Press Contact Section */}
         <section className="mb-16">
           <Card>
@@ -91,136 +133,6 @@ const PressPage = () => {
               </div>
             </CardContent>
           </Card>
-        </section>
-
-        {/* Press Releases */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold mb-6 flex items-center">
-            <FileText className="mr-2 h-6 w-6 text-blue-500" />
-            Press Releases
-          </h2>
-          <div className="space-y-6">
-            {pressReleases.map((release, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="text-sm text-gray-500 mb-1">{release.date}</div>
-                  <h3 className="text-xl font-bold mb-2">{release.title}</h3>
-                  <p className="text-gray-700 mb-4">{release.excerpt}</p>
-                  <a href="#" className="text-blue-600 hover:underline font-medium">Read full press release</a>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <div className="mt-6 text-center">
-            <Button variant="outline" className="mt-4">View All Press Releases</Button>
-          </div>
-        </section>
-
-        {/* Media Coverage */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold mb-6 flex items-center">
-            <Globe className="mr-2 h-6 w-6 text-blue-500" />
-            Media Coverage
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {mediaFeatures.map((feature, index) => (
-              <Card key={index} className="h-full">
-                <CardContent className="p-6 flex flex-col h-full">
-                  <div className="text-sm text-gray-500 mb-1">{feature.publication} | {feature.date}</div>
-                  <h3 className="text-lg font-bold mb-4 flex-grow">{feature.title}</h3>
-                  <a href={feature.link} className="text-blue-600 hover:underline font-medium">Read article</a>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* Brand Assets */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold mb-6 flex items-center">
-            <Camera className="mr-2 h-6 w-6 text-blue-500" />
-            Brand Assets
-          </h2>
-          <p className="text-gray-700 mb-6">
-            Download official Gura logos, product images, and brand guidelines for media use. All assets are available in high resolution formats.
-          </p>
-          <div className="grid md:grid-cols-3 gap-6">
-            <Card>
-              <CardContent className="p-6">
-                <div className="h-40 bg-gray-200 flex items-center justify-center mb-4 rounded">
-                  <div className="text-gray-500">Logo Pack</div>
-                  {/* Replace with actual image: <img src="/press/logos-preview.jpg" alt="Gura Logos" className="w-full h-full object-cover rounded" /> */}
-                </div>
-                <h3 className="text-lg font-bold mb-2">Logo Pack</h3>
-                <p className="text-gray-600 text-sm mb-4">Includes PNG, SVG, and EPS formats in color and monochrome versions.</p>
-                <Button variant="outline" size="sm" className="w-full">
-                  <Download className="h-4 w-4 mr-2" />
-                  Download Logos
-                </Button>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6">
-                <div className="h-40 bg-gray-200 flex items-center justify-center mb-4 rounded">
-                  <div className="text-gray-500">Product Images</div>
-                  {/* Replace with actual image: <img src="/press/product-images-preview.jpg" alt="Product Images" className="w-full h-full object-cover rounded" /> */}
-                </div>
-                <h3 className="text-lg font-bold mb-2">Product Images</h3>
-                <p className="text-gray-600 text-sm mb-4">High-resolution images of Gura's mobile app and website interfaces.</p>
-                <Button variant="outline" size="sm" className="w-full">
-                  <Download className="h-4 w-4 mr-2" />
-                  Download Images
-                </Button>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6">
-                <div className="h-40 bg-gray-200 flex items-center justify-center mb-4 rounded">
-                  <div className="text-gray-500">Brand Guidelines</div>
-                  {/* Replace with actual image: <img src="/press/brand-guidelines-preview.jpg" alt="Brand Guidelines" className="w-full h-full object-cover rounded" /> */}
-                </div>
-                <h3 className="text-lg font-bold mb-2">Brand Guidelines</h3>
-                <p className="text-gray-600 text-sm mb-4">Comprehensive guide to Gura's visual identity, including color palette and typography.</p>
-                <Button variant="outline" size="sm" className="w-full">
-                  <Download className="h-4 w-4 mr-2" />
-                  Download Guidelines
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
-        {/* Events */}
-        <section>
-          <h2 className="text-3xl font-bold mb-6 flex items-center">
-            <Users className="mr-2 h-6 w-6 text-blue-500" />
-            Upcoming Events
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              {
-                date: "June 15-16, 2023",
-                title: "Rwanda Tech Summit",
-                location: "Kigali Convention Center",
-                description: "Gura's CEO will be delivering a keynote on 'The Future of E-commerce in Africa'."
-              },
-              {
-                date: "July 22, 2023",
-                title: "Gura Seller Conference",
-                location: "Marriott Hotel, Kigali",
-                description: "Annual conference for Gura sellers featuring workshops and networking opportunities."
-              }
-            ].map((event, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="text-sm text-gray-500 mb-1">{event.date}</div>
-                  <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                  <div className="text-gray-700 mb-3">Location: {event.location}</div>
-                  <p className="text-gray-600">{event.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
         </section>
       </div>
     </PageLayout>
