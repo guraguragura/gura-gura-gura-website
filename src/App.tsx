@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "./contexts/CartContext";
 import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
@@ -45,7 +45,17 @@ const App = () => (
             <Route path="/collections" element={<Index />} />
             <Route path="/categories/:handle" element={<CategoryPage />} />
             <Route path="/product/:id" element={<ProductPage />} />
+            
+            {/* Account routes - all nested under /account */}
             <Route path="/account/*" element={<AccountPage />} />
+
+            {/* Add redirection for common paths users might try directly */}
+            <Route path="/personal-info" element={<Navigate to="/account/personal-info" replace />} />
+            <Route path="/addresses" element={<Navigate to="/account/addresses" replace />} />
+            <Route path="/wishlist" element={<Navigate to="/account/wishlist" replace />} />
+            <Route path="/orders" element={<Navigate to="/account/orders" replace />} />
+            <Route path="/returns" element={<Navigate to="/account/returns" replace />} />
+            
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/help" element={<FaqPage />} />
             <Route path="/faq" element={<FaqPage />} />
