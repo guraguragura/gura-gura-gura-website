@@ -29,6 +29,7 @@ import ReturnsPage from "./pages/ReturnsPage";
 import PaymentPage from "./pages/PaymentPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import CookiesPage from "./pages/CookiesPage";
+import AddressesPage from "./pages/AddressesPage";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const App = () => (
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/payment-success" element={<PaymentSuccessPage />} />
+            <Route path="/addresses" element={<AddressesPage />} />
             
             {/* New pages */}
             <Route path="/terms" element={<TermsPage />} />
