@@ -54,7 +54,7 @@ const Navbar = () => {
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="text-sm pr-0">
-                    <span className="pr-0 mr-0">Contact Us</span>
+                    <span className="pr-0 mr-0 text-sm">Contact Us</span>
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className="bg-white">
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 bg-white">
