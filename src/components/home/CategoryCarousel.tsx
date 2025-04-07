@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { 
@@ -85,6 +86,16 @@ const CategoryCarousel = () => {
       id: "pcat_05",
       name: "Home & Art",
       handle: "home-art"
+    },
+    {
+      id: "pcat_06",
+      name: "Phones & Accessories",
+      handle: "phones-accessories"
+    },
+    {
+      id: "pcat_07",
+      name: "Sports & Outdoors",
+      handle: "sports-outdoors"
     }
   ];
 
@@ -131,6 +142,11 @@ const CategoryCarousel = () => {
                         src={getCategoryImage(category.handle)}
                         alt={category.name}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "https://images.unsplash.com/photo-1472851294608-062f824d29cc"; // Fallback image
+                          console.error(`Failed to load image for ${category.name}:`, category.handle);
+                        }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
                         <h3 className="text-white text-lg font-medium">{category.name}</h3>

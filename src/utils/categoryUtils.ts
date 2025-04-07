@@ -17,7 +17,7 @@ export const categoryImageMap: Record<string, {image: string, color: string}> = 
     color: "bg-purple-100" 
   },
   "sports-outdoors": { 
-    image: "https://images.unsplash.com/photo-1517649763962-0c623066013b", 
+    image: "/lovable-uploads/9d63294e-b5da-482e-bab3-e585c3da4015.png", 
     color: "bg-red-100" 
   },
   "health-beauty": { 
@@ -53,7 +53,7 @@ export const categoryImageMap: Record<string, {image: string, color: string}> = 
     color: "bg-yellow-100" 
   },
   "phones-accessories": { 
-    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9", 
+    image: "/lovable-uploads/9cb8ab96-34b6-412d-8a93-69dd5dacf8c5.png", 
     color: "bg-gray-100" 
   },
   "default": { 
