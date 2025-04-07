@@ -7,6 +7,8 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import AddToCartButton from "@/components/product/AddToCartButton";
+import { Heart } from "lucide-react";
+import { useWishlist } from "@/contexts/WishlistContext";
 import "./ProductCard.css"; // Import custom CSS
 
 interface ProductProps {
@@ -28,6 +30,26 @@ interface ProductProps {
 
 const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice }) => {
   const { id, title, price, thumbnail, rating, reviews_count, discount_price, is_sale, description } = product;
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  
+  const inWishlist = isInWishlist(id);
+  
+  const toggleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (inWishlist) {
+      removeFromWishlist(id);
+    } else {
+      addToWishlist({
+        id,
+        title,
+        price,
+        discount_price,
+        thumbnail
+      });
+    }
+  };
   
   const totalInventory = 35;
   const soldItems = 18;
@@ -56,6 +78,12 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
                 />
               </div>
             </Link>
+            <button 
+              onClick={toggleWishlist}
+              className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-gray-50 transition-colors"
+            >
+              <Heart className={`h-4 w-4 ${inWishlist ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
+            </button>
           </div>
           
           <div className="flex-grow p-4">
@@ -125,6 +153,12 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
             />
           </div>
         </Link>
+        <button 
+          onClick={toggleWishlist}
+          className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-gray-50 transition-colors"
+        >
+          <Heart className={`h-4 w-4 ${inWishlist ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
+        </button>
       </div>
       
       <CardContent className="product-content">

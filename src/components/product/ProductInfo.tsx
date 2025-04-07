@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCurrency } from "@/hooks/useCurrency";
 import AddToCartButton from "./AddToCartButton";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 interface ProductInfoProps {
   product: {
@@ -30,10 +31,27 @@ interface ProductInfoProps {
 
 const ProductInfo: React.FC<ProductInfoProps> = ({
   product,
-  onAddToWishlist,
+  onAddToCart,
 }) => {
   const [quantity, setQuantity] = useState(1);
   const { formatPrice } = useCurrency();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  
+  const inWishlist = isInWishlist(product.id);
+
+  const toggleWishlist = () => {
+    if (inWishlist) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        discount_price: product.discount_price,
+        thumbnail: product.thumbnail
+      });
+    }
+  };
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
@@ -185,10 +203,13 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         <Button
           variant="outline"
           size="icon"
-          onClick={onAddToWishlist}
-          className="h-10 w-10"
+          onClick={toggleWishlist}
+          className={`h-10 w-10 ${inWishlist ? 'bg-red-50 border-red-200' : ''}`}
         >
-          <Heart size={20} />
+          <Heart 
+            size={20} 
+            className={inWishlist ? "fill-red-500 text-red-500" : ""} 
+          />
         </Button>
       </div>
       

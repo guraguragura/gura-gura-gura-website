@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Heart } from "lucide-react";
 import { useCurrency } from "@/hooks/useCurrency";
 import AddToCartButton from "@/components/product/AddToCartButton";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 interface FeaturedProductCardProps {
   product: {
@@ -19,6 +20,25 @@ interface FeaturedProductCardProps {
 
 const FeaturedProductCard = ({ product }: FeaturedProductCardProps) => {
   const { formatPrice, isLoading } = useCurrency();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  
+  const productId = product.id.toString();
+  const inWishlist = isInWishlist(productId);
+  
+  const toggleWishlist = () => {
+    if (inWishlist) {
+      removeFromWishlist(productId);
+    } else {
+      addToWishlist({
+        id: productId,
+        title: product.name,
+        price: product.price,
+        discount_price: product.oldPrice > product.price ? product.price : undefined,
+        thumbnail: product.image,
+        category: product.category
+      });
+    }
+  };
 
   return (
     <Card className="border rounded-lg overflow-hidden flex flex-col h-52">
@@ -37,8 +57,11 @@ const FeaturedProductCard = ({ product }: FeaturedProductCardProps) => {
             {product.badge}
           </div>
         )}
-        <button className="absolute top-1 right-1 w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-100">
-          <Heart className="h-2.5 w-2.5 text-gray-700" />
+        <button 
+          onClick={toggleWishlist}
+          className="absolute top-1 right-1 w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-100"
+        >
+          <Heart className={`h-2.5 w-2.5 ${inWishlist ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
         </button>
       </div>
       
