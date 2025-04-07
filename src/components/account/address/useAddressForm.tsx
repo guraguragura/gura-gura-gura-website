@@ -6,9 +6,6 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface AddressFormValues {
   address: string;
-  first_name: string;
-  last_name: string;
-  company: string;
   district: string;
   sector: string;
   cell: string;
@@ -28,9 +25,6 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
   const form = useForm<AddressFormValues>({
     defaultValues: {
       address: '',
-      first_name: '',
-      last_name: '',
-      company: '',
       district: '',
       sector: '',
       cell: '',
@@ -66,10 +60,10 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
           if (data) {
             setCustomerData(data);
             
-            // Pre-fill the first name and last name fields from the customer data
-            form.setValue('first_name', data.first_name || '');
-            form.setValue('last_name', data.last_name || '');
-            form.setValue('phone', data.phone || '');
+            // Pre-fill the phone number field from the customer data if available
+            if (data.phone) {
+              form.setValue('phone', data.phone);
+            }
           } else {
             // If no customer data exists, create a new customer record
             try {
@@ -79,7 +73,7 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
               const { data: newCustomer, error: createError } = await supabase
                 .from('customer')
                 .insert({
-                  id: newCustomerId, // Add the id field here to fix the error
+                  id: newCustomerId, 
                   first_name: '',
                   last_name: '',
                   email: '',
@@ -134,9 +128,9 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
           id: addressId,
           customer_id: customerData.id,
           address: data.address,
-          first_name: data.first_name,
-          last_name: data.last_name,
-          company: data.company,
+          first_name: customerData.first_name || '',
+          last_name: customerData.last_name || '',
+          company: customerData.company_name || '',
           district: data.district,
           sector: data.sector,
           cell: data.cell,
@@ -170,6 +164,7 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
     form,
     isLoading,
     isSubmitting,
-    onSubmit
+    onSubmit,
+    customerData
   };
 };

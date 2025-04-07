@@ -13,9 +13,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 interface AddressFormValues {
   address: string;
-  first_name: string;
-  last_name: string;
-  company: string;
   district: string;
   sector: string;
   cell: string;
@@ -34,36 +31,6 @@ interface AddressFormFieldsProps {
 const AddressFormFields = ({ form }: AddressFormFieldsProps) => {
   return (
     <>
-      <div className="grid grid-cols-2 gap-4">
-        <FormField
-          control={form.control}
-          name="first_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>First Name</FormLabel>
-              <FormControl>
-                <Input placeholder="First name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        <FormField
-          control={form.control}
-          name="last_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Last Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Last name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-
       <FormField
         control={form.control}
         name="address"
@@ -72,20 +39,6 @@ const AddressFormFields = ({ form }: AddressFormFieldsProps) => {
             <FormLabel>Address Name</FormLabel>
             <FormControl>
               <Input placeholder="e.g., Home, Work, etc." {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="company"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Company (Optional)</FormLabel>
-            <FormControl>
-              <Input placeholder="Company name" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
