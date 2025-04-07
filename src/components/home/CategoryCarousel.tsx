@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { 
@@ -23,7 +22,6 @@ const CategoryCarousel = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Fetch categories from MedusaJS via Supabase
   useEffect(() => {
     const fetchCategories = async () => {
       setIsLoading(true);
@@ -51,20 +49,16 @@ const CategoryCarousel = () => {
     fetchCategories();
   }, []);
   
-  // Set up auto-scrolling to the right
   useEffect(() => {
     if (!api) return;
     
-    // Scroll to the next slide every 3 seconds
     const interval = setInterval(() => {
       api.scrollNext();
     }, 3000);
     
-    // Clean up interval on component unmount
     return () => clearInterval(interval);
   }, [api]);
 
-  // Fallback categories in case the data fetch fails
   const fallbackCategories = [
     {
       id: "pcat_01",
@@ -95,7 +89,6 @@ const CategoryCarousel = () => {
 
   const displayCategories = categories.length > 0 ? categories : fallbackCategories;
   
-  // Function to get image URL based on category handle
   const getCategoryImage = (handle: string) => {
     const imageMap: Record<string, string> = {
       "women": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
@@ -107,8 +100,8 @@ const CategoryCarousel = () => {
       "phones-accessories": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9",
       "sports-outdoors": "https://images.unsplash.com/photo-1517649763962-0c623066013b",
       "health-beauty": "https://images.unsplash.com/photo-1607006677169-a62beb975922",
-      "kids": "https://images.unsplash.com/photo-1522771930-78848d9293e8",
-      "car-accessories": "https://images.unsplash.com/photo-1542362567-b07e54358753"
+      "kids": "/lovable-uploads/ee7d75cc-e5d9-43fb-9381-a969386ddab7.png",
+      "car-accessories": "/lovable-uploads/ea338bf4-ab81-449c-b252-6f5c79c8bfad.png"
     };
     
     return imageMap[handle] || "https://images.unsplash.com/photo-1607082349566-187342175e2f";

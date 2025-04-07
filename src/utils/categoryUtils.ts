@@ -26,12 +26,12 @@ export const categoryImageMap: Record<string, {image: string, color: string}> = 
     color: "bg-indigo-100" 
   },
   "kids-toys": { 
-    image: "https://images.unsplash.com/photo-1522771930-78848d9293e8", 
+    image: "/lovable-uploads/ee7d75cc-e5d9-43fb-9381-a969386ddab7.png", 
     color: "bg-pink-100" 
   },
   "automotive": { 
-    image: "https://images.unsplash.com/photo-1542362567-b07e54358753", 
-    color: "bg-gray-100" 
+    image: "/lovable-uploads/ea338bf4-ab81-449c-b252-6f5c79c8bfad.png", 
+    color: "bg-yellow-200" 
   },
   "10k-shop": { 
     image: "/lovable-uploads/140ba952-70e0-44c3-91c3-6464a0ba3e8b.png", 
@@ -96,15 +96,15 @@ export const staticCategories = [
     id: "kids",
     name: "Kids & Toys",
     handle: "kids-toys",
-    image: "https://images.unsplash.com/photo-1522771930-78848d9293e8",
+    image: "/lovable-uploads/ee7d75cc-e5d9-43fb-9381-a969386ddab7.png",
     color: "bg-pink-100"
   },
   {
     id: "automotive",
     name: "Automotive",
     handle: "automotive",
-    image: "https://images.unsplash.com/photo-1542362567-b07e54358753",
-    color: "bg-gray-100"
+    image: "/lovable-uploads/ea338bf4-ab81-449c-b252-6f5c79c8bfad.png",
+    color: "bg-yellow-200"
   },
   {
     id: "home-art",
