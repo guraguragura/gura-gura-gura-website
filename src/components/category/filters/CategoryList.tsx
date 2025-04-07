@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -22,14 +21,14 @@ const categoryImages: Record<string, string> = {
   "books": "https://images.unsplash.com/photo-1495446815901-a7297e633e8d",
   "home-kitchen": "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6",
   "fashion": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
-  "sports-outdoors": "https://images.unsplash.com/photo-1517649763962-0c623066013b",
+  "sports-outdoors": "/lovable-uploads/9d63294e-b5da-482e-bab3-e585c3da4015.png",
   "health-beauty": "/lovable-uploads/7d883551-ca4e-4d2d-891b-a0f8a17496f7.png",
   "kids-toys": "/lovable-uploads/ee7d75cc-e5d9-43fb-9381-a969386ddab7.png",
   "automotive": "/lovable-uploads/ea338bf4-ab81-449c-b252-6f5c79c8bfad.png",
   "10k-shop": "/lovable-uploads/140ba952-70e0-44c3-91c3-6464a0ba3e8b.png",
   "home-art": "/lovable-uploads/155f1dc2-a1c1-4394-b43c-8513d52e943c.png",
   "appliances-kitchen": "/lovable-uploads/92f98a77-737e-4626-8174-6622fef36bb0.png",
-  "accessories": "https://images.unsplash.com/photo-1721322800607-8c38375eef04"
+  "phones-accessories": "/lovable-uploads/9cb8ab96-34b6-412d-8a93-69dd5dacf8c5.png"
 };
 
 // Helper function to get image for a category

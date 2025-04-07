@@ -1,4 +1,3 @@
-
 // Mapping of category handles to image URLs and colors
 export const categoryImageMap: Record<string, {image: string, color: string}> = {
   "electronics": { 
@@ -97,7 +96,7 @@ export const staticCategories = [
     id: "sports",
     name: "Sports & Outdoors",
     handle: "sports-outdoors",
-    image: "https://images.unsplash.com/photo-1517649763962-0c623066013b",
+    image: "/lovable-uploads/9d63294e-b5da-482e-bab3-e585c3da4015.png",
     color: "bg-red-100"
   },
   {
@@ -127,6 +126,13 @@ export const staticCategories = [
     handle: "home-art",
     image: "/lovable-uploads/155f1dc2-a1c1-4394-b43c-8513d52e943c.png",
     color: "bg-blue-100"
+  },
+  {
+    id: "phones",
+    name: "Phones & Accessories",
+    handle: "phones-accessories",
+    image: "/lovable-uploads/9cb8ab96-34b6-412d-8a93-69dd5dacf8c5.png",
+    color: "bg-gray-100"
   }
 ];
 
