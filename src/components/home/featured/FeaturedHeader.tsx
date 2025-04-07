@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 const FeaturedHeader = () => {
   return (
-    <div className="flex items-center justify-between mb-3">
+    <div className="flex items-center justify-between mb-6">
       <h2 className="text-2xl">
         <span className="font-bold">Featured</span> <span className="font-light">Products</span>
       </h2>

@@ -39,7 +39,7 @@ const giftsCategories = [
 
 const GiftsForEveryone = () => {
   return (
-    <section className="py-10 bg-white">
+    <section className="py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl">

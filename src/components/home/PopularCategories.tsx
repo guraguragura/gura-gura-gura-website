@@ -44,7 +44,7 @@ const PopularCategories: React.FC<PopularCategoriesProps> = ({
     : staticCategories;
 
   return (
-    <section className="py-10">
+    <section className="py-12">
       <div className="container mx-auto px-4">
         <h2 className="text-2xl mb-6">
           <span className="font-bold">Our</span> <span className="font-light">Categories</span>

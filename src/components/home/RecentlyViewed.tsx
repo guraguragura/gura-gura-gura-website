@@ -69,9 +69,9 @@ const RecentlyViewed = () => {
   const { formatPrice, isLoading } = useCurrency();
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-12 bg-white">
       <div className="container mx-auto">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl">
             <span className="font-bold">Recently</span> <span className="font-light">Viewed</span>
           </h2>
