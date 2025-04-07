@@ -1,3 +1,4 @@
+
 // Mapping of category handles to image URLs and colors
 export const categoryImageMap: Record<string, {image: string, color: string}> = {
   "electronics": { 
@@ -21,7 +22,7 @@ export const categoryImageMap: Record<string, {image: string, color: string}> = 
     color: "bg-red-100" 
   },
   "health-beauty": { 
-    image: "https://images.unsplash.com/photo-1607006677169-a62beb975922", 
+    image: "/lovable-uploads/7d883551-ca4e-4d2d-891b-a0f8a17496f7.png", 
     color: "bg-indigo-100" 
   },
   "kids": { 
@@ -49,7 +50,7 @@ export const categoryImageMap: Record<string, {image: string, color: string}> = 
     color: "bg-blue-200" 
   },
   "appliances-kitchen": { 
-    image: "https://images.unsplash.com/photo-1574269906882-7b08f4f6c37c", 
+    image: "/lovable-uploads/92f98a77-737e-4626-8174-6622fef36bb0.png", 
     color: "bg-yellow-100" 
   },
   "phones-accessories": { 

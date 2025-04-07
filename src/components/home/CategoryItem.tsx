@@ -11,6 +11,9 @@ interface CategoryItemProps {
 }
 
 const CategoryItem: React.FC<CategoryItemProps> = ({ id, name, handle, image, color }) => {
+  // Debug image URL
+  console.log(`CategoryItem for ${name}:`, { handle, image });
+  
   return (
     <Link to={`/categories/${handle}`} className="block group">
       <div className={`rounded-lg p-2 ${color} hover:shadow-md transition-all duration-200`}>
