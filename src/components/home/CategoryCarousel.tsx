@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { getCategoryStyle } from "@/utils/categoryUtils";
 
 interface Category {
   id: string;
@@ -90,21 +91,8 @@ const CategoryCarousel = () => {
   const displayCategories = categories.length > 0 ? categories : fallbackCategories;
   
   const getCategoryImage = (handle: string) => {
-    const imageMap: Record<string, string> = {
-      "women": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
-      "men": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
-      "electronics": "https://images.unsplash.com/photo-1550009158-9ebf69173e03",
-      "10k-shop": "https://images.unsplash.com/photo-1607082349566-187342175e2f",
-      "home-art": "/lovable-uploads/155f1dc2-a1c1-4394-b43c-8513d52e943c.png",
-      "appliances-kitchen": "https://images.unsplash.com/photo-1574269906882-7b08f4f6c37c",
-      "phones-accessories": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9",
-      "sports-outdoors": "https://images.unsplash.com/photo-1517649763962-0c623066013b",
-      "health-beauty": "https://images.unsplash.com/photo-1607006677169-a62beb975922",
-      "kids": "/lovable-uploads/ee7d75cc-e5d9-43fb-9381-a969386ddab7.png",
-      "car-accessories": "/lovable-uploads/ea338bf4-ab81-449c-b252-6f5c79c8bfad.png"
-    };
-    
-    return imageMap[handle] || "https://images.unsplash.com/photo-1607082349566-187342175e2f";
+    const categoryStyle = getCategoryStyle(handle);
+    return categoryStyle.image;
   };
 
   return (
