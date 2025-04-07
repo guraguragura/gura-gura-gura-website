@@ -6,6 +6,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AddToCartButton from "@/components/product/AddToCartButton";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 interface Product {
   id: number;
@@ -53,6 +54,25 @@ const products: Product[] = [
 
 const TopSellingProducts = () => {
   const { formatPrice, isLoading } = useCurrency();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  
+  const handleWishlistToggle = (product: Product, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const productId = product.id.toString();
+    if (isInWishlist(productId)) {
+      removeFromWishlist(productId);
+    } else {
+      addToWishlist({
+        id: productId,
+        title: product.name,
+        price: product.price,
+        discount_price: product.oldPrice > product.price ? product.price : undefined,
+        thumbnail: product.image
+      });
+    }
+  };
 
   return (
     <section className="py-12 bg-white">
@@ -161,8 +181,15 @@ const TopSellingProducts = () => {
                           }}
                           className="flex items-center gap-1 px-3 py-1 h-8 w-full mr-2"
                         />
-                        <Button variant="outline" size="icon" className="rounded-full h-8 w-8 flex-shrink-0">
-                          <Heart className="h-4 w-4" />
+                        <Button 
+                          variant="outline" 
+                          size="icon" 
+                          className="rounded-full h-8 w-8 flex-shrink-0"
+                          onClick={(e) => handleWishlistToggle(product, e)}
+                        >
+                          <Heart 
+                            className={`h-4 w-4 ${isInWishlist(product.id.toString()) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} 
+                          />
                           <span className="sr-only">Add to wishlist</span>
                         </Button>
                       </div>
