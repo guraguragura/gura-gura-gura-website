@@ -29,7 +29,18 @@ const PopularCategories: React.FC<PopularCategoriesProps> = ({
 }) => {
   const [api, setApi] = React.useState<any>(null);
   
-  // Use DB categories if available, otherwise use static ones
+  React.useEffect(() => {
+    if (!api) return;
+    
+    // Auto-scroll the carousel every 5 seconds
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, [api]);
+  
+  // Process categories and ensure they have the correct images
   const displayCategories = dbCategories.length > 0 
     ? dbCategories.map(cat => {
         const style = getCategoryStyle(cat.handle);
@@ -42,6 +53,13 @@ const PopularCategories: React.FC<PopularCategoriesProps> = ({
         };
       })
     : staticCategories;
+
+  // Debug output to verify images
+  console.log("Popular Categories:", displayCategories.map(c => ({
+    name: c.name,
+    handle: c.handle,
+    image: c.image
+  })));
 
   return (
     <section className="py-12">

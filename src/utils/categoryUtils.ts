@@ -1,4 +1,3 @@
-
 // Mapping of category handles to image URLs and colors
 export const categoryImageMap: Record<string, {image: string, color: string}> = {
   "electronics": { 
@@ -25,11 +24,11 @@ export const categoryImageMap: Record<string, {image: string, color: string}> = 
     image: "https://images.unsplash.com/photo-1607006677169-a62beb975922", 
     color: "bg-indigo-100" 
   },
-  "kids-toys": { 
+  "kids": { 
     image: "/lovable-uploads/ee7d75cc-e5d9-43fb-9381-a969386ddab7.png", 
     color: "bg-pink-100" 
   },
-  "automotive": { 
+  "car-accessories": { 
     image: "/lovable-uploads/ea338bf4-ab81-449c-b252-6f5c79c8bfad.png", 
     color: "bg-yellow-200" 
   },
@@ -41,7 +40,22 @@ export const categoryImageMap: Record<string, {image: string, color: string}> = 
     image: "/lovable-uploads/155f1dc2-a1c1-4394-b43c-8513d52e943c.png", 
     color: "bg-blue-100" 
   },
-  // Default for any category not in the mapping
+  "women": { 
+    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7", 
+    color: "bg-pink-100" 
+  },
+  "men": { 
+    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b", 
+    color: "bg-blue-200" 
+  },
+  "appliances-kitchen": { 
+    image: "https://images.unsplash.com/photo-1574269906882-7b08f4f6c37c", 
+    color: "bg-yellow-100" 
+  },
+  "phones-accessories": { 
+    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9", 
+    color: "bg-gray-100" 
+  },
   "default": { 
     image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc", 
     color: "bg-gray-100" 
@@ -117,8 +131,23 @@ export const staticCategories = [
 
 // Get category image and color
 export const getCategoryStyle = (handle: string) => {
-  const category = categoryImageMap[handle] || categoryImageMap.default;
-  return category;
+  // First try direct match
+  if (categoryImageMap[handle]) {
+    return categoryImageMap[handle];
+  }
+  
+  // Try to match with hyphenated variations
+  // This helps with handles like "car-accessories" matching "car_accessories" etc.
+  const normalizedHandle = handle.replace(/[-_]/g, '').toLowerCase();
+  for (const [key, value] of Object.entries(categoryImageMap)) {
+    const normalizedKey = key.replace(/[-_]/g, '').toLowerCase();
+    if (normalizedHandle === normalizedKey) {
+      return value;
+    }
+  }
+  
+  // Return default if no match
+  return categoryImageMap.default;
 };
 
 // Generate random category color if none is specified
