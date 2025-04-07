@@ -32,42 +32,39 @@ import PaymentErrorPage from "@/pages/PaymentErrorPage";
 import AuthPage from "@/pages/AuthPage";
 
 import { CartProvider } from "@/contexts/CartContext";
-import { WishlistProvider } from "@/contexts/WishlistContext";
 
 function App() {
   return (
     <CartProvider>
-      <WishlistProvider>
-        <Routes>
-          <Route path="/" element={<IndexPage />} />
-          <Route path="/product/:id" element={<ProductPage />} />
-          <Route path="/category/:id" element={<CategoryPage />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/about" element={<AboutUsPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-          <Route path="/returns" element={<ReturnsPage />} />
-          <Route path="/shipping" element={<ShippingPage />} />
-          <Route path="/cookies" element={<CookiesPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/faq" element={<FaqPage />} />
-          <Route path="/advantages" element={<AdvantagesPage />} />
-          <Route path="/business" element={<GuraBusinessPage />} />
-          <Route path="/partner" element={<PartnerWithGuraPage />} />
-          <Route path="/app" element={<GuraAppPage />} />
-          <Route path="/careers" element={<CareersPage />} />
-          <Route path="/press" element={<PressPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/account/*" element={<AccountPage />} />
-          <Route path="/account/addresses" element={<AddressesPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/payment" element={<PaymentPage />} />
-          <Route path="/payment/success" element={<PaymentSuccessPage />} />
-          <Route path="/payment/error" element={<PaymentErrorPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Toaster />
-      </WishlistProvider>
+      <Routes>
+        <Route path="/" element={<IndexPage />} />
+        <Route path="/product/:id" element={<ProductPage />} />
+        <Route path="/category/:id" element={<CategoryPage />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/about" element={<AboutUsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/returns" element={<ReturnsPage />} />
+        <Route path="/shipping" element={<ShippingPage />} />
+        <Route path="/cookies" element={<CookiesPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/faq" element={<FaqPage />} />
+        <Route path="/advantages" element={<AdvantagesPage />} />
+        <Route path="/business" element={<GuraBusinessPage />} />
+        <Route path="/partner" element={<PartnerWithGuraPage />} />
+        <Route path="/app" element={<GuraAppPage />} />
+        <Route path="/careers" element={<CareersPage />} />
+        <Route path="/press" element={<PressPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/account/*" element={<AccountPage />} />
+        <Route path="/account/addresses" element={<AddressesPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/payment/success" element={<PaymentSuccessPage />} />
+        <Route path="/payment/error" element={<PaymentErrorPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <Toaster />
     </CartProvider>
   );
 }

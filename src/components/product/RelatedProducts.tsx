@@ -1,9 +1,11 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Star } from 'lucide-react';
+import { Star, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCurrency } from '@/hooks/useCurrency';
+import { useWishlist } from '@/contexts/WishlistContext';
+import AddToCartButton from './AddToCartButton';
 
 interface Product {
   id: string;
@@ -23,6 +25,7 @@ interface RelatedProductsProps {
 
 const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
   const { formatPrice } = useCurrency();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   
   // Mock related products
   const mockProducts: Product[] = Array(4).fill(null).map((_, idx) => ({
@@ -49,6 +52,23 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
         ))}
       </div>
     );
+  };
+  
+  const handleWishlistToggle = (product: Product, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        discount_price: product.discount_price,
+        thumbnail: product.thumbnail
+      });
+    }
   };
 
   return (
@@ -77,6 +97,15 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
                   SALE
                 </div>
               )}
+              
+              <button 
+                onClick={(e) => handleWishlistToggle(product, e)}
+                className="absolute top-2 right-2 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+              >
+                <Heart 
+                  className={`h-4 w-4 ${isInWishlist(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} 
+                />
+              </button>
             </div>
             
             <div className="flex items-center mb-1">
@@ -103,12 +132,16 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
               </div>
             </div>
 
-            <Button 
+            <AddToCartButton 
+              product={{
+                id: product.id,
+                title: product.title,
+                price: product.price,
+                discount_price: product.discount_price,
+                thumbnail: product.thumbnail
+              }}
               className="w-full mt-3"
-              onClick={() => console.log(`Add to cart: ${product.id}`)}
-            >
-              Add To Cart
-            </Button>
+            />
           </div>
         ))}
       </div>

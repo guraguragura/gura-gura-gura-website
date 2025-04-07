@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AddToCartButton from "@/components/product/AddToCartButton";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 const recentProducts = [
   {
@@ -67,6 +68,27 @@ const recentProducts = [
 
 const RecentlyViewed = () => {
   const { formatPrice, isLoading } = useCurrency();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  
+  const handleWishlistToggle = (product: any, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const productId = product.id.toString();
+    
+    if (isInWishlist(productId)) {
+      removeFromWishlist(productId);
+    } else {
+      addToWishlist({
+        id: productId,
+        title: product.name,
+        price: product.price,
+        discount_price: product.oldPrice > product.price ? product.price : undefined,
+        thumbnail: product.image,
+        category: product.category
+      });
+    }
+  };
 
   return (
     <section className="py-12 bg-white">
@@ -122,8 +144,11 @@ const RecentlyViewed = () => {
                     {product.badge}
                   </div>
                 )}
-                <button className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-100">
-                  <Heart className="h-4 w-4 text-gray-700" />
+                <button 
+                  onClick={(e) => handleWishlistToggle(product, e)}
+                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-100"
+                >
+                  <Heart className={`h-4 w-4 ${isInWishlist(product.id.toString()) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
                 </button>
               </div>
               

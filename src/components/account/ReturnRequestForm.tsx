@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast";
 
 interface OrderItem {
   id: string;
@@ -68,14 +69,14 @@ const ReturnRequestForm = () => {
         title: "Error",
         description: "Please provide a reason for the return.",
         variant: "destructive",
-      })
+      });
       return;
     }
 
     toast({
       title: "Success",
       description: "Return request submitted successfully!",
-    })
+    });
   };
 
   if (loading) {

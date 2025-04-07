@@ -2,10 +2,11 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Heart } from "lucide-react";
 import { useCurrency } from "@/hooks/useCurrency";
 import AddToCartButton from "@/components/product/AddToCartButton";
 import { useCartContext } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 interface DealProduct {
   id: number;
@@ -54,6 +55,7 @@ const dealProducts = [
 const DailyDeals = () => {
   const { formatPrice, isLoading } = useCurrency();
   const { addItem } = useCartContext();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   const handleAddToCart = (product: DealProduct) => {
     addItem({
@@ -64,6 +66,25 @@ const DailyDeals = () => {
       thumbnail: product.image,
       quantity: 1
     });
+  };
+  
+  const handleWishlistToggle = (product: DealProduct, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const productId = product.id.toString();
+    
+    if (isInWishlist(productId)) {
+      removeFromWishlist(productId);
+    } else {
+      addToWishlist({
+        id: productId,
+        title: product.name,
+        price: product.price,
+        discount_price: product.oldPrice > product.price ? product.price : undefined,
+        thumbnail: product.image
+      });
+    }
   };
 
   return (
@@ -94,6 +115,12 @@ const DailyDeals = () => {
                   <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
                     -{product.discountPercentage}%
                   </div>
+                  <button 
+                    onClick={(e) => handleWishlistToggle(product, e)}
+                    className="absolute top-2 right-2 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                  >
+                    <Heart className={`h-4 w-4 ${isInWishlist(product.id.toString()) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
+                  </button>
                 </div>
                 <CardContent className="p-4">
                   <Link to={`/product/${product.id}`}>
