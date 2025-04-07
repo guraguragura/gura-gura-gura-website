@@ -42,7 +42,9 @@ const GiftsForEveryone = () => {
     <section className="py-10 bg-white">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Gifts for <span className="font-normal">Everyone</span></h2>
+          <h2 className="text-2xl">
+            <span className="font-bold">Gifts for</span> <span className="font-light">Everyone</span>
+          </h2>
           <Link to="/gifts" className="flex items-center text-blue-600 hover:underline">
             View All Gifts <ChevronRight className="w-4 h-4 ml-1" />
           </Link>

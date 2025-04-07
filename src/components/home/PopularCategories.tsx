@@ -46,7 +46,9 @@ const PopularCategories: React.FC<PopularCategoriesProps> = ({
   return (
     <section className="py-10">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold mb-6">Our <span className="font-normal">Categories</span></h2>
+        <h2 className="text-2xl mb-6">
+          <span className="font-bold">Our</span> <span className="font-light">Categories</span>
+        </h2>
         
         {isLoading ? (
           <PopularCategoriesSkeleton />

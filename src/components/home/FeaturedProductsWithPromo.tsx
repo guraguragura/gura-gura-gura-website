@@ -90,8 +90,8 @@ const FeaturedProductsWithPromo = () => {
     <section className="py-4 bg-white">
       <div className="container mx-auto">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-semibold">
-            <span className="font-bold">Featured</span> Products
+          <h2 className="text-2xl">
+            <span className="font-bold">Featured</span> <span className="font-light">Products</span>
           </h2>
           <div className="flex items-center gap-2">
             <Link to="/shop" className="text-gray-600 hover:text-gray-900 text-sm">

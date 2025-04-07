@@ -58,8 +58,8 @@ const TopSellingProducts = () => {
     <section className="py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">
-            Top Selling <span className="font-normal">Products</span>
+          <h2 className="text-2xl">
+            <span className="font-bold">Top Selling</span> <span className="font-light">Products</span>
           </h2>
           <div className="flex items-center gap-4">
             <Link to="/shop" className="text-gray-600 hover:text-gray-900">

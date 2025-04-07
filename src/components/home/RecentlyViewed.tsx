@@ -72,8 +72,8 @@ const RecentlyViewed = () => {
     <section className="py-16 bg-white">
       <div className="container mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-semibold">
-            <span className="font-bold">Recently</span> Viewed
+          <h2 className="text-2xl">
+            <span className="font-bold">Recently</span> <span className="font-light">Viewed</span>
           </h2>
           <div className="flex items-center gap-4">
             <Link to="/history" className="text-gray-600 hover:text-gray-900">
