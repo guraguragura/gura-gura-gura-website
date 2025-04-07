@@ -1,7 +1,8 @@
+
 // Mapping of category handles to image URLs and colors
 export const categoryImageMap: Record<string, {image: string, color: string}> = {
   "electronics": { 
-    image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03", 
+    image: "/lovable-uploads/29835d73-aaa6-4a78-902d-7c9805dd79e1.png", 
     color: "bg-blue-100" 
   },
   "books": { 
