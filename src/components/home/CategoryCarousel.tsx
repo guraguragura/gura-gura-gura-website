@@ -135,10 +135,10 @@ const CategoryCarousel = () => {
           >
             <CarouselContent>
               {displayCategories.map((category) => (
-                <CarouselItem key={category.id} className="md:basis-1/3 lg:basis-1/4">
+                <CarouselItem key={category.id} className="md:basis-1/3 lg:basis-1/4 pt-1 pb-8">
                   <Link to={`/categories/${category.handle}`} className="block group">
-                    <div className="flex flex-col items-center">
-                      <div className="relative h-64 w-full overflow-hidden rounded-lg">
+                    <div className="flex flex-col h-full">
+                      <div className="h-64 w-full overflow-hidden rounded-lg mb-3">
                         <img
                           src={getCategoryImage(category.handle)}
                           alt={category.name}
@@ -150,7 +150,7 @@ const CategoryCarousel = () => {
                           }}
                         />
                       </div>
-                      <h3 className="mt-3 text-center text-lg font-medium">{category.name}</h3>
+                      <h3 className="text-center text-lg font-medium">{category.name}</h3>
                     </div>
                   </Link>
                 </CarouselItem>
