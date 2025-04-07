@@ -102,7 +102,7 @@ const CategoryCarousel = () => {
       "men": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
       "electronics": "https://images.unsplash.com/photo-1550009158-9ebf69173e03",
       "10k-shop": "https://images.unsplash.com/photo-1607082349566-187342175e2f",
-      "home-art": "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6",
+      "home-art": "/lovable-uploads/155f1dc2-a1c1-4394-b43c-8513d52e943c.png",
       "appliances-kitchen": "https://images.unsplash.com/photo-1574269906882-7b08f4f6c37c",
       "phones-accessories": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9",
       "sports-outdoors": "https://images.unsplash.com/photo-1517649763962-0c623066013b",

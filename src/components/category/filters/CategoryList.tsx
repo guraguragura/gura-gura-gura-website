@@ -27,7 +27,7 @@ const categoryImages: Record<string, string> = {
   "kids-toys": "https://images.unsplash.com/photo-1522771930-78848d9293e8",
   "automotive": "https://images.unsplash.com/photo-1542362567-b07e54358753",
   "10k-shop": "/lovable-uploads/140ba952-70e0-44c3-91c3-6464a0ba3e8b.png",
-  "home-art": "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6",
+  "home-art": "/lovable-uploads/155f1dc2-a1c1-4394-b43c-8513d52e943c.png",
   "accessories": "https://images.unsplash.com/photo-1721322800607-8c38375eef04"
 };
 

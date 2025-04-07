@@ -37,6 +37,10 @@ export const categoryImageMap: Record<string, {image: string, color: string}> = 
     image: "/lovable-uploads/140ba952-70e0-44c3-91c3-6464a0ba3e8b.png", 
     color: "bg-red-100" 
   },
+  "home-art": { 
+    image: "/lovable-uploads/155f1dc2-a1c1-4394-b43c-8513d52e943c.png", 
+    color: "bg-blue-100" 
+  },
   // Default for any category not in the mapping
   "default": { 
     image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc", 
@@ -101,6 +105,13 @@ export const staticCategories = [
     handle: "automotive",
     image: "https://images.unsplash.com/photo-1542362567-b07e54358753",
     color: "bg-gray-100"
+  },
+  {
+    id: "home-art",
+    name: "Home & Art",
+    handle: "home-art",
+    image: "/lovable-uploads/155f1dc2-a1c1-4394-b43c-8513d52e943c.png",
+    color: "bg-blue-100"
   }
 ];
 
