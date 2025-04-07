@@ -13,18 +13,6 @@ export function useCustomerProfile() {
     last_name: 'User',
     phone: '+1234567890'
   });
-  const [address, setAddress] = useState<any>({
-    // Mock address data for development
-    id: 'dev-address-id',
-    customer_id: 'dev-customer-id',
-    address: '123 Development St',
-    district: 'Dev District',
-    sector: 'Dev Sector',
-    cell: 'Dev Cell',
-    village: 'Dev Village',
-    postal_code: '12345',
-    nearby_landmark: 'Near Dev Park'
-  });
   
   // Mock user data for development
   const user = { id: 'dev-user-id', email: 'dev@example.com' };
@@ -52,21 +40,6 @@ export function useCustomerProfile() {
 
         if (customerData) {
           setCustomer(customerData);
-          
-          // Now fetch address information for this customer
-          const { data: addressData, error: addressError } = await supabase
-            .from('customer_address')
-            .select('*')
-            .eq('customer_id', customerData.id)
-            .maybeSingle();
-            
-          if (addressError && addressError.code !== 'PGRST116') {
-            console.error('Error fetching address data:', addressError);
-          }
-          
-          if (addressData) {
-            setAddress(addressData);
-          }
         }
       } catch (error) {
         console.error('Error in fetchCustomer:', error);
@@ -86,11 +59,5 @@ export function useCustomerProfile() {
     
   }, []);
 
-  const refreshAddress = async () => {
-    // Temporarily mocked for development
-    console.log('Address refreshed (mock)');
-    toast.success('Address updated');
-  };
-
-  return { isLoading, customer, setCustomer, address, setAddress, refreshAddress };
+  return { isLoading, customer, setCustomer };
 }

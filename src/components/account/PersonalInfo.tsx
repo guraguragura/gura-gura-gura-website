@@ -2,10 +2,10 @@
 import React from 'react';
 import { useCustomerProfile } from '@/hooks/useCustomerProfile';
 import PersonalInfoForm from './personal-info/PersonalInfoForm';
-import AddressInfoForm from './personal-info/AddressInfoForm';
+import PasswordChangeForm from './personal-info/PasswordChangeForm';
 
 export const PersonalInfo = () => {
-  const { isLoading, customer, setCustomer, address, refreshAddress } = useCustomerProfile();
+  const { isLoading, customer, setCustomer } = useCustomerProfile();
 
   return (
     <div className="space-y-8">
@@ -25,11 +25,7 @@ export const PersonalInfo = () => {
             setCustomer={setCustomer} 
           />
           
-          <AddressInfoForm 
-            customer={customer} 
-            address={address} 
-            onAddressUpdated={refreshAddress} 
-          />
+          <PasswordChangeForm />
         </>
       )}
     </div>
