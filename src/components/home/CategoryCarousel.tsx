@@ -137,20 +137,20 @@ const CategoryCarousel = () => {
               {displayCategories.map((category) => (
                 <CarouselItem key={category.id} className="md:basis-1/3 lg:basis-1/4">
                   <Link to={`/categories/${category.handle}`} className="block group">
-                    <div className="relative h-64 overflow-hidden rounded-lg">
-                      <img
-                        src={getCategoryImage(category.handle)}
-                        alt={category.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "https://images.unsplash.com/photo-1472851294608-062f824d29cc"; // Fallback image
-                          console.error(`Failed to load image for ${category.name}:`, category.handle);
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                        <h3 className="text-white text-lg font-medium">{category.name}</h3>
+                    <div className="flex flex-col items-center">
+                      <div className="relative h-64 w-full overflow-hidden rounded-lg">
+                        <img
+                          src={getCategoryImage(category.handle)}
+                          alt={category.name}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = "https://images.unsplash.com/photo-1472851294608-062f824d29cc"; // Fallback image
+                            console.error(`Failed to load image for ${category.name}:`, category.handle);
+                          }}
+                        />
                       </div>
+                      <h3 className="mt-3 text-center text-lg font-medium">{category.name}</h3>
                     </div>
                   </Link>
                 </CarouselItem>
