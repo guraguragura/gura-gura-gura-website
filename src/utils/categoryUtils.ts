@@ -42,11 +42,11 @@ export const categoryImageMap: Record<string, {image: string, color: string}> = 
     color: "bg-blue-100" 
   },
   "women": { 
-    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7", 
+    image: "/lovable-uploads/95be1088-bdc1-4e5f-adf3-f3d8274a774b.png", 
     color: "bg-pink-100" 
   },
   "men": { 
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b", 
+    image: "/lovable-uploads/3444a916-c7fa-441c-8ac5-46fff6a723b0.png", 
     color: "bg-blue-200" 
   },
   "appliances-kitchen": { 
@@ -104,7 +104,7 @@ export const staticCategories = [
     id: "beauty",
     name: "Health & Beauty",
     handle: "health-beauty",
-    image: "https://images.unsplash.com/photo-1607006677169-a62beb975922",
+    image: "/lovable-uploads/7d883551-ca4e-4d2d-891b-a0f8a17496f7.png",
     color: "bg-indigo-100"
   },
   {

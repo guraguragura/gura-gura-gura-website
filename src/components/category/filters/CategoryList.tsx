@@ -16,8 +16,8 @@ interface CategoryListProps {
 
 // Mapping of category handles to image URLs
 const categoryImages: Record<string, string> = {
-  "women": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
-  "men": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+  "women": "/lovable-uploads/95be1088-bdc1-4e5f-adf3-f3d8274a774b.png",
+  "men": "/lovable-uploads/3444a916-c7fa-441c-8ac5-46fff6a723b0.png",
   "electronics": "https://images.unsplash.com/photo-1550009158-9ebf69173e03",
   "books": "https://images.unsplash.com/photo-1495446815901-a7297e633e8d",
   "home-kitchen": "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6",
