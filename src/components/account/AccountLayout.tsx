@@ -52,7 +52,7 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
 
   const secondaryNavItems: NavItem[] = [
     { section: 'OTHER', path: '', label: '', icon: null },
-    { path: '/help', label: 'FAQ', icon: <HelpCircle className="h-5 w-5" /> },
+    { path: '/faq', label: 'FAQ', icon: <HelpCircle className="h-5 w-5" /> }, // Updated to use /faq
     { path: '#', label: 'Sign Out', icon: <LogOut className="h-5 w-5 text-red-500" />, 
       onClick: handleLogout },
   ];
