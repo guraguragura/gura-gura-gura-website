@@ -40,6 +40,7 @@ function App() {
         <Route path="/" element={<IndexPage />} />
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/category/:id" element={<CategoryPage />} />
+        <Route path="/categories/:handle" element={<CategoryPage />} /> {/* Add this new route to support both formats */}
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/about" element={<AboutUsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />

@@ -7,7 +7,12 @@ import CategoryContent from "./CategoryContent";
 import useCategoryData from "./useCategoryData";
 
 const CategoryPage = () => {
-  const { handle } = useParams<{ handle: string }>();
+  // Use destructuring to get both potential parameter names
+  const { handle, id } = useParams<{ handle?: string; id?: string }>();
+  
+  // Use whichever parameter is available (handle from /categories/:handle or id from /category/:id)
+  const categoryHandle = handle || id;
+  
   const { formatPrice } = useCurrency();
   const { 
     products, 
@@ -23,7 +28,7 @@ const CategoryPage = () => {
     totalPages,
     productsPerPage,
     sortOptions
-  } = useCategoryData(handle);
+  } = useCategoryData(categoryHandle);
 
   const displayedProducts = loading ? [] : products;
 
