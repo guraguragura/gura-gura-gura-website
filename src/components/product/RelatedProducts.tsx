@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useCurrency } from '@/hooks/useCurrency';
 import { useWishlist } from '@/contexts/WishlistContext';
 import AddToCartButton from './AddToCartButton';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Product {
   id: string;
@@ -26,6 +27,7 @@ interface RelatedProductsProps {
 const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
   const { formatPrice } = useCurrency();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const isMobile = useIsMobile();
   
   // Mock related products
   const mockProducts: Product[] = Array(4).fill(null).map((_, idx) => ({
@@ -46,7 +48,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
         {[1, 2, 3, 4, 5].map(star => (
           <Star
             key={star}
-            size={14}
+            size={isMobile ? 12 : 14}
             className={star <= rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}
           />
         ))}
@@ -72,62 +74,62 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
   };
 
   return (
-    <div className="mb-12">
-      <h2 className="text-2xl font-bold mb-6">Related Products</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="mb-8 sm:mb-12">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Related Products</h2>
+      <div className="grid grid-cols-2 gap-3 sm:gap-6">
         {mockProducts.map(product => (
-          <div key={product.id} className="bg-white p-4 rounded-md shadow-sm hover:shadow-md transition-shadow">
-            <div className="relative mb-4">
+          <div key={product.id} className="bg-white p-3 sm:p-4 rounded-md shadow-sm hover:shadow-md transition-shadow">
+            <div className="relative mb-2 sm:mb-4">
               <Link to={`/product/${product.id}`}>
                 <img 
                   src={product.thumbnail} 
                   alt={product.title} 
-                  className="w-full h-40 object-contain"
+                  className="w-full h-28 sm:h-40 object-contain"
                 />
               </Link>
               
               {product.is_new && (
-                <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                <div className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-blue-500 text-white text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
                   NEW
                 </div>
               )}
               
               {product.is_sale && (
-                <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                <div className="absolute top-1 left-1 sm:top-2 sm:left-2 bg-red-500 text-white text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded">
                   SALE
                 </div>
               )}
               
               <button 
                 onClick={(e) => handleWishlistToggle(product, e)}
-                className="absolute top-2 right-2 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                className="absolute top-1 right-1 sm:top-2 sm:right-2 w-6 h-6 sm:w-8 sm:h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
               >
                 <Heart 
-                  className={`h-4 w-4 ${isInWishlist(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} 
+                  className={`h-3 w-3 sm:h-4 sm:w-4 ${isInWishlist(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} 
                 />
               </button>
             </div>
             
             <div className="flex items-center mb-1">
               {renderStars(product.rating)}
-              <span className="text-xs text-gray-500 ml-1">({product.reviews_count})</span>
+              <span className="text-[10px] sm:text-xs text-gray-500 ml-1">({product.reviews_count})</span>
             </div>
             
             <Link to={`/product/${product.id}`}>
-              <h3 className="font-medium text-sm mb-2 hover:text-blue-500 transition-colors line-clamp-2">
+              <h3 className="font-medium text-xs sm:text-sm mb-1 sm:mb-2 hover:text-blue-500 transition-colors line-clamp-2">
                 {product.title}
               </h3>
             </Link>
             
-            <div className="flex justify-between items-center mt-2">
+            <div className="flex justify-between items-center mt-1 sm:mt-2">
               <div>
                 {product.discount_price ? (
                   <div className="flex items-center">
-                    <span className="text-lg font-bold text-red-500">{formatPrice(product.discount_price)}</span>
-                    <span className="text-sm text-gray-500 line-through ml-2">{formatPrice(product.price)}</span>
+                    <span className="text-sm sm:text-lg font-bold text-red-500">{formatPrice(product.discount_price)}</span>
+                    <span className="text-[10px] sm:text-sm text-gray-500 line-through ml-1 sm:ml-2">{formatPrice(product.price)}</span>
                   </div>
                 ) : (
-                  <span className="text-lg font-bold text-gray-900">{formatPrice(product.price)}</span>
+                  <span className="text-sm sm:text-lg font-bold text-gray-900">{formatPrice(product.price)}</span>
                 )}
               </div>
             </div>
@@ -140,7 +142,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
                 discount_price: product.discount_price,
                 thumbnail: product.thumbnail
               }}
-              className="w-full mt-3"
+              className="w-full mt-2 sm:mt-3 text-xs sm:text-sm py-1 sm:py-2"
             />
           </div>
         ))}
