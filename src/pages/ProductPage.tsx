@@ -136,8 +136,10 @@ const ProductPage = () => {
         {/* Product Tabs */}
         <ProductTabs product={displayProduct} />
 
-        {/* Related Products */}
-        <RelatedProducts productId={displayProduct.id} />
+        {/* Related Products - Now with improved responsive layout */}
+        <div className="max-w-[1200px] mx-auto">
+          <RelatedProducts productId={displayProduct.id} />
+        </div>
       </div>
       <Footer />
     </div>

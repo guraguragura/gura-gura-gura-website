@@ -29,7 +29,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const isMobile = useIsMobile();
   
-  // Mock related products
+  // Mock related products - generating 4 for display
   const mockProducts: Product[] = Array(4).fill(null).map((_, idx) => ({
     id: `related-${idx}`,
     title: "Similar Product " + (idx + 1),
@@ -76,7 +76,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
   return (
     <div className="mb-8 sm:mb-12">
       <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Related Products</h2>
-      <div className="grid grid-cols-2 gap-3 sm:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
         {mockProducts.map(product => (
           <div key={product.id} className="bg-white p-3 sm:p-4 rounded-md shadow-sm hover:shadow-md transition-shadow">
             <div className="relative mb-2 sm:mb-4">
