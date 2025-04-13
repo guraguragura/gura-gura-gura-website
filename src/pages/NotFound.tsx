@@ -29,7 +29,7 @@ const NotFound = () => {
               Return to Home
             </Link>
             <div className="pt-2">
-              <Link to="/help" className="text-blue-500 hover:text-blue-700 underline">
+              <Link to="/faq" className="text-blue-500 hover:text-blue-700 underline">
                 Need help? Contact support
               </Link>
             </div>
