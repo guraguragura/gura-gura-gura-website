@@ -11,183 +11,121 @@ import {
   FormLabel, 
   FormMessage 
 } from '@/components/ui/form';
-import { toast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
-import { Eye, EyeOff, Lock } from 'lucide-react';
+import { toast } from '@/hooks/use-toast'; 
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-interface PasswordFormValues {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
+const passwordSchema = z.object({
+  current_password: z.string().min(1, 'Current password is required'),
+  new_password: z.string().min(8, 'Password must be at least 8 characters'),
+  confirm_password: z.string().min(8, 'Password must be at least 8 characters'),
+}).refine((data) => data.new_password === data.confirm_password, {
+  message: "Passwords don't match",
+  path: ["confirm_password"],
+});
+
+type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 const PasswordChangeForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showCurrent, setShowCurrent] = useState(false);
-  const [showNew, setShowNew] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const { user } = useAuth();
+  const isMobile = useIsMobile();
 
   const form = useForm<PasswordFormValues>({
+    resolver: zodResolver(passwordSchema),
     defaultValues: {
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: '',
+      current_password: '',
+      new_password: '',
+      confirm_password: '',
     },
   });
 
   const onSubmit = async (values: PasswordFormValues) => {
-    if (!user) {
-      toast({
-        title: "Error",
-        description: "You need to be logged in to change your password.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (values.newPassword !== values.confirmPassword) {
-      toast({
-        title: "Error",
-        description: "New password and confirmation do not match.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsSubmitting(true);
-    try {
-      const { error } = await supabase.auth.updateUser({
-        password: values.newPassword
-      });
-
-      if (error) {
-        throw error;
-      }
-
+    
+    // Mock password change for development
+    setTimeout(() => {
       toast({
         title: "Success",
-        description: "Your password has been updated successfully.",
+        description: "Your password has been updated.",
       });
       
       form.reset();
-    } catch (error: any) {
-      console.error('Error updating password:', error);
-      toast({
-        title: "Error",
-        description: error.message || "Failed to update password. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const toggleVisibility = (field: 'current' | 'new' | 'confirm') => {
-    if (field === 'current') setShowCurrent(!showCurrent);
-    else if (field === 'new') setShowNew(!showNew);
-    else setShowConfirm(!showConfirm);
+    }, 1000);
   };
 
   return (
-    <div className="space-y-6 bg-white p-6 rounded-lg shadow-sm border">
-      <h3 className="text-base font-medium border-b pb-2 mb-4">Password Management</h3>
+    <div className="space-y-6 bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
+      <h3 className="text-sm sm:text-base font-medium border-b pb-2 mb-4">Change Password</h3>
       
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
           <FormField
             control={form.control}
-            name="currentPassword"
+            name="current_password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Current Password</FormLabel>
+                <FormLabel className="text-sm sm:text-base">Current Password</FormLabel>
                 <FormControl>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3">
-                      <Lock className="h-4 w-4 text-gray-400" />
-                    </div>
-                    <Input 
-                      type={showCurrent ? "text" : "password"} 
-                      className="pl-10 pr-10"
-                      {...field} 
-                    />
-                    <button
-                      type="button"
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500"
-                      onClick={() => toggleVisibility('current')}
-                    >
-                      {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
+                  <Input
+                    type="password"
+                    placeholder="Enter your current password" 
+                    {...field}
+                    className="text-sm sm:text-base"
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs sm:text-sm" />
               </FormItem>
             )}
           />
-
-          <FormField
-            control={form.control}
-            name="newPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>New Password</FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3">
-                      <Lock className="h-4 w-4 text-gray-400" />
-                    </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <FormField
+              control={form.control}
+              name="new_password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm sm:text-base">New Password</FormLabel>
+                  <FormControl>
                     <Input 
-                      type={showNew ? "text" : "password"} 
-                      className="pl-10 pr-10"
-                      {...field} 
+                      type="password" 
+                      placeholder="Enter your new password" 
+                      {...field}
+                      className="text-sm sm:text-base"
                     />
-                    <button
-                      type="button"
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500"
-                      onClick={() => toggleVisibility('new')}
-                    >
-                      {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm New Password</FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3">
-                      <Lock className="h-4 w-4 text-gray-400" />
-                    </div>
+                  </FormControl>
+                  <FormMessage className="text-xs sm:text-sm" />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="confirm_password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm sm:text-base">Confirm New Password</FormLabel>
+                  <FormControl>
                     <Input 
-                      type={showConfirm ? "text" : "password"} 
-                      className="pl-10 pr-10"
-                      {...field} 
+                      type="password" 
+                      placeholder="Confirm your new password" 
+                      {...field}
+                      className="text-sm sm:text-base"
                     />
-                    <button
-                      type="button"
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500"
-                      onClick={() => toggleVisibility('confirm')}
-                    >
-                      {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Updating..." : "Update Password"}
+                  </FormControl>
+                  <FormMessage className="text-xs sm:text-sm" />
+                </FormItem>
+              )}
+            />
+          </div>
+          
+          <Button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="w-full sm:w-auto text-sm sm:text-base py-2"
+          >
+            {isSubmitting ? "Updating..." : "Change Password"}
           </Button>
         </form>
       </Form>

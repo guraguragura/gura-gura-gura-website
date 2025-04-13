@@ -8,12 +8,16 @@ import {
   ShoppingBag, 
   RefreshCw, 
   LogOut, 
-  HelpCircle
+  HelpCircle,
+  Menu
 } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import AccountBanner from './AccountBanner';
 import { toast } from 'sonner';
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from '@/components/ui/button';
 
 interface NavItem {
   path: string;
@@ -30,6 +34,7 @@ interface AccountLayoutProps {
 export const AccountLayout = ({ children }: AccountLayoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const handleLogout = () => {
     // This is a temporary mock logout function for development
@@ -96,38 +101,64 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
     });
   };
 
+  // Mobile sidebar menu
+  const renderMobileSidebar = () => {
+    return (
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline" size="sm" className="flex items-center gap-2 mb-4">
+            <Menu className="h-4 w-4" />
+            <span>Account Menu</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-[85vw] sm:w-[385px] pt-12">
+          <div className="flex flex-col py-3 space-y-1">
+            {renderNavItems(navItems)}
+            <div className="border-t my-2"></div>
+            {renderNavItems(secondaryNavItems)}
+          </div>
+        </SheetContent>
+      </Sheet>
+    );
+  };
+
   return (
     <>
       <Navbar />
       <div className="flex flex-col min-h-screen bg-gray-50">
-        <main className="flex-grow py-8">
-          <div className="mx-auto w-[80%] px-4 max-w-7xl">
+        <main className="flex-grow py-4 sm:py-8">
+          <div className="mx-auto w-full px-4 sm:w-[90%] md:w-[85%] lg:w-[80%] max-w-7xl">
             <div className="bg-white shadow-sm">
-              <div className="flex flex-col md:flex-row gap-8 py-8">
-                {/* Account Sidebar */}
-                <aside className="md:w-64 flex-shrink-0">
-                  <div className="sticky top-8 border rounded-lg overflow-hidden">
-                    {/* Main Navigation */}
-                    <div className="flex flex-col py-3 space-y-1">
-                      {renderNavItems(navItems)}
+              <div className="flex flex-col md:flex-row gap-4 sm:gap-8 py-4 sm:py-8">
+                {/* Account Sidebar - Hidden on mobile */}
+                {!isMobile && (
+                  <aside className="md:w-64 flex-shrink-0">
+                    <div className="sticky top-8 border rounded-lg overflow-hidden">
+                      {/* Main Navigation */}
+                      <div className="flex flex-col py-3 space-y-1">
+                        {renderNavItems(navItems)}
+                      </div>
+                      
+                      {/* Divider */}
+                      <div className="border-t my-2"></div>
+                      
+                      {/* Secondary Navigation */}
+                      <div className="flex flex-col py-3 space-y-1">
+                        {renderNavItems(secondaryNavItems)}
+                      </div>
                     </div>
-                    
-                    {/* Divider */}
-                    <div className="border-t my-2"></div>
-                    
-                    {/* Secondary Navigation */}
-                    <div className="flex flex-col py-3 space-y-1">
-                      {renderNavItems(secondaryNavItems)}
-                    </div>
-                  </div>
-                </aside>
+                  </aside>
+                )}
                 
                 {/* Content Area with Banner */}
                 <div className="flex-1 min-w-0">
+                  {/* Mobile menu button - Only visible on mobile */}
+                  {isMobile && renderMobileSidebar()}
+                  
                   {/* Add the banner component directly above the content */}
                   <AccountBanner />
                   
-                  <div className="bg-white border rounded-lg p-6 mt-6">
+                  <div className="bg-white border rounded-lg p-4 sm:p-6 mt-4 sm:mt-6">
                     {children}
                   </div>
                 </div>

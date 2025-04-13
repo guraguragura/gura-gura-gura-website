@@ -14,6 +14,7 @@ import {
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface CustomerFormValues {
   first_name: string;
@@ -31,6 +32,7 @@ interface PersonalInfoFormProps {
 const PersonalInfoForm = ({ customer, setCustomer }: PersonalInfoFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useAuth();
+  const isMobile = useIsMobile();
 
   const form = useForm<CustomerFormValues>({
     defaultValues: {
@@ -113,22 +115,22 @@ const PersonalInfoForm = ({ customer, setCustomer }: PersonalInfoFormProps) => {
   };
 
   return (
-    <div className="space-y-6 bg-white p-6 rounded-lg shadow-sm border">
-      <h3 className="text-base font-medium border-b pb-2 mb-4">Basic Information</h3>
+    <div className="space-y-6 bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
+      <h3 className="text-sm sm:text-base font-medium border-b pb-2 mb-4">Basic Information</h3>
       
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <FormField
               control={form.control}
               name="first_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First Name</FormLabel>
+                  <FormLabel className="text-sm sm:text-base">First Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="John" {...field} />
+                    <Input placeholder="John" {...field} className="text-sm sm:text-base" />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs sm:text-sm" />
                 </FormItem>
               )}
             />
@@ -138,27 +140,32 @@ const PersonalInfoForm = ({ customer, setCustomer }: PersonalInfoFormProps) => {
               name="last_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Last Name</FormLabel>
+                  <FormLabel className="text-sm sm:text-base">Last Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Doe" {...field} />
+                    <Input placeholder="Doe" {...field} className="text-sm sm:text-base" />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs sm:text-sm" />
                 </FormItem>
               )}
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="text-sm sm:text-base">Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="john.doe@example.com" {...field} />
+                    <Input 
+                      type="email" 
+                      placeholder="john.doe@example.com" 
+                      {...field} 
+                      className="text-sm sm:text-base"
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs sm:text-sm" />
                 </FormItem>
               )}
             />
@@ -168,11 +175,16 @@ const PersonalInfoForm = ({ customer, setCustomer }: PersonalInfoFormProps) => {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone</FormLabel>
+                  <FormLabel className="text-sm sm:text-base">Phone</FormLabel>
                   <FormControl>
-                    <Input type="tel" placeholder="+1 (555) 000-0000" {...field} />
+                    <Input 
+                      type="tel" 
+                      placeholder="+1 (555) 000-0000" 
+                      {...field} 
+                      className="text-sm sm:text-base"
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs sm:text-sm" />
                 </FormItem>
               )}
             />
@@ -183,16 +195,24 @@ const PersonalInfoForm = ({ customer, setCustomer }: PersonalInfoFormProps) => {
             name="company_name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company (Optional)</FormLabel>
+                <FormLabel className="text-sm sm:text-base">Company (Optional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="Acme Inc." {...field} />
+                  <Input 
+                    placeholder="Acme Inc." 
+                    {...field} 
+                    className="text-sm sm:text-base"
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs sm:text-sm" />
               </FormItem>
             )}
           />
 
-          <Button type="submit" disabled={isSubmitting}>
+          <Button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="w-full sm:w-auto text-sm sm:text-base py-2"
+          >
             {isSubmitting ? "Saving..." : "Save Personal Information"}
           </Button>
         </form>
