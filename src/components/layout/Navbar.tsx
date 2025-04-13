@@ -77,7 +77,7 @@ const Navbar = () => {
                       <li className="row-span-3">
                         <Link
                           className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-brand-teal to-brand-teal/80 p-4 sm:p-6 no-underline outline-none focus:shadow-md"
-                          to="/business"
+                          to="/contact"
                         >
                           <div className="mt-4 mb-2 text-base sm:text-lg font-medium text-white">
                             Gura Support
