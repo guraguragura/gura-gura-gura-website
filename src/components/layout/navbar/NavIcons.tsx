@@ -1,17 +1,18 @@
 
 import React from 'react';
-import { User, Heart, Settings } from 'lucide-react';
+import { User, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { CartButton } from '@/components/cart/CartButton';
 import { useWishlist } from '@/contexts/WishlistContext';
-import { Badge } from '@/components/ui/badge';
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const NavIcons = () => {
   const { wishlist } = useWishlist();
+  const isMobile = useIsMobile();
   
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-1 sm:space-x-2">
       <CartButton />
       <div className="relative">
         <Button variant="ghost" size="icon" asChild>

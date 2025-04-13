@@ -1,10 +1,11 @@
 
-import React from "react";
+import React, { useState } from "react";
 import Logo from "./navbar/Logo";
 import SearchBar from "./navbar/SearchBar";
 import NavIcons from "./navbar/NavIcons";
 import CategoriesMenu from "./navbar/CategoriesMenu";
 import MobileMenu from "./navbar/MobileMenu";
+import MobileHeader from "./navbar/MobileHeader";
 import { useCategoriesData } from "./navbar/useCategoriesData";
 import { Link } from "react-router-dom";
 import { 
@@ -14,13 +15,28 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Static categories that don't need to be fetched
 const staticCategories = ["10K Shop", "Electronics", "Appliances", "Deals"];
 
 const Navbar = () => {
   const { displayCategories } = useCategoriesData();
+  const isMobile = useIsMobile();
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
+
+  if (isMobile) {
+    return (
+      <header className="sticky top-0 z-50 bg-white shadow-sm border-b">
+        <MobileHeader 
+          displayCategories={displayCategories} 
+          staticCategories={staticCategories} 
+          showSearch={showMobileSearch}
+          setShowSearch={setShowMobileSearch}
+        />
+      </header>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm border-b">

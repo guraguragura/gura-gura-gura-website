@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { getCategoryStyle } from "@/utils/categoryUtils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CategoryItemProps {
   name: string;
@@ -16,6 +17,8 @@ interface CategoryListProps {
 }
 
 const CategoryList = ({ categories, loading }: CategoryListProps) => {
+  const isMobile = useIsMobile();
+  
   if (loading) {
     return (
       <>
@@ -35,8 +38,8 @@ const CategoryList = ({ categories, loading }: CategoryListProps) => {
   return (
     <>
       {categories.map((category) => (
-        <li key={category.name} className="flex items-center mb-2 sm:mb-3 hover:bg-gray-50 rounded p-1">
-          <div className="h-7 sm:h-8 w-7 sm:w-8 rounded-full overflow-hidden mr-2 sm:mr-3 bg-gray-100">
+        <li key={category.name} className={`flex items-center mb-2 sm:mb-3 hover:bg-gray-50 rounded p-1 ${isMobile ? 'text-xs' : ''}`}>
+          <div className={`${isMobile ? 'h-6 w-6' : 'h-7 sm:h-8 w-7 sm:w-8'} rounded-full overflow-hidden mr-2 sm:mr-3 bg-gray-100`}>
             <img 
               src={getCategoryStyle(category.handle).image} 
               alt={category.name}
