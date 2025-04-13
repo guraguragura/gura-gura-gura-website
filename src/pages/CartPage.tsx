@@ -22,7 +22,7 @@ const CartPage = () => {
       <div className="flex flex-col min-h-screen bg-gray-50">
         <TopInfoBar />
         <Navbar />
-        <div className="container mx-auto py-12 px-4 flex-grow">
+        <div className="container mx-auto py-8 px-4 flex-grow">
           <CartEmpty />
         </div>
         <Footer />
@@ -34,16 +34,16 @@ const CartPage = () => {
     <div className="flex flex-col min-h-screen bg-gray-50">
       <TopInfoBar />
       <Navbar />
-      <div className="container mx-auto py-12 px-4 flex-grow">
+      <div className="container mx-auto py-6 sm:py-12 px-4 flex-grow">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8">Shopping Cart ({itemCount} items)</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-8">Shopping Cart ({itemCount} items)</h1>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="md:col-span-2">
-              <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
                 {items.map((item) => (
-                  <div key={item.id} className="flex items-start gap-4 py-6 border-b last:border-b-0">
-                    <div className="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-md overflow-hidden">
+                  <div key={item.id} className="flex flex-col sm:flex-row items-start gap-4 py-6 border-b last:border-b-0">
+                    <div className="flex-shrink-0 w-24 h-24 bg-gray-100 rounded-md overflow-hidden mx-auto sm:mx-0">
                       <img 
                         src={item.thumbnail || "/placeholder.svg"} 
                         alt={item.title} 
@@ -51,7 +51,7 @@ const CartPage = () => {
                       />
                     </div>
                     
-                    <div className="flex-grow">
+                    <div className="flex-grow w-full sm:w-auto">
                       <Link to={`/product/${item.id}`} className="text-lg font-medium hover:text-blue-600 transition-colors">
                         {item.title}
                       </Link>
@@ -71,7 +71,7 @@ const CartPage = () => {
                         )}
                       </div>
                       
-                      <div className="mt-4 flex items-center">
+                      <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
                         <div className="flex items-center border rounded-md overflow-hidden">
                           <Button 
                             type="button" 
@@ -106,26 +106,35 @@ const CartPage = () => {
                           type="button" 
                           variant="ghost" 
                           size="sm" 
-                          className="ml-4 text-red-500 hover:text-red-700 hover:bg-red-50"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
                           onClick={() => removeItem(item.id)}
                         >
                           <Trash2 className="h-4 w-4 mr-1" />
                           Remove
                         </Button>
+                      
+                        <div className="text-right flex-shrink-0 ml-auto sm:ml-0 w-full sm:w-auto mt-2 sm:mt-0">
+                          <span className="font-semibold">
+                            {formatPrice((item.discount_price || item.price) * item.quantity)}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    
-                    <div className="text-right flex-shrink-0">
-                      <span className="font-semibold">
-                        {formatPrice((item.discount_price || item.price) * item.quantity)}
-                      </span>
                     </div>
                   </div>
                 ))}
               </div>
+              
+              {/* Mobile-only button to continue shopping */}
+              <div className="mt-4 block lg:hidden">
+                <Button variant="outline" className="w-full" size="lg" asChild>
+                  <Link to="/">
+                    Continue Shopping
+                  </Link>
+                </Button>
+              </div>
             </div>
             
-            <div className="md:col-span-1">
+            <div className="lg:col-span-1 mt-4 lg:mt-0">
               <CartSummary />
             </div>
           </div>
