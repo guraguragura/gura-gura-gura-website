@@ -15,6 +15,7 @@ import GiftsForEveryone from "@/components/home/GiftsForEveryone";
 import PromotionalBannerCards from "@/components/home/PromotionalBannerCards";
 import Footer from "@/components/layout/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Category {
   id: string;
@@ -26,6 +27,7 @@ interface Category {
 const Index = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     // Fetch categories from the database
@@ -66,7 +68,7 @@ const Index = () => {
       <TopInfoBar />
       <Navbar />
       <div className="flex-grow">
-        <div className="mx-auto w-[80%] px-4 max-w-7xl bg-white shadow-sm">
+        <div className={`mx-auto ${isMobile ? 'w-[94%]' : 'w-[80%]'} px-0 sm:px-4 max-w-7xl bg-white shadow-sm`}>
           <Hero />
           <PopularCategories dbCategories={categories} isLoading={isLoading} />
           <TopSellingProducts />

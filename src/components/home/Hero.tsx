@@ -46,8 +46,8 @@ const Hero = () => {
   }, [api]);
 
   return (
-    <section className="py-4">
-      <div className="container mx-auto">
+    <section className="py-1 md:py-4">
+      <div className="w-full px-2 md:px-4 mx-auto">
         <Carousel
           setApi={setApi}
           className="w-full"
@@ -59,7 +59,7 @@ const Hero = () => {
           <CarouselContent>
             {heroSlides.map((slide) => (
               <CarouselItem key={slide.id}>
-                <div className="relative h-[300px] md:h-[400px] lg:h-[450px] w-full rounded-lg overflow-hidden">
+                <div className="relative h-[250px] sm:h-[300px] md:h-[400px] lg:h-[450px] w-full rounded-lg overflow-hidden">
                   <img 
                     src={slide.image} 
                     alt={slide.title} 
@@ -70,12 +70,12 @@ const Hero = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
                   
                   {/* Content positioned over the banner */}
-                  <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-16">
+                  <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-16">
                     <div className="max-w-md">
-                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white mb-2">
+                      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white mb-2">
                         {slide.title}
                       </h1>
-                      <p className="text-xl text-white/90 mb-6">{slide.subtitle}</p>
+                      <p className="text-lg md:text-xl text-white/90 mb-4 md:mb-6">{slide.subtitle}</p>
                       <Button size="lg">{slide.buttonText}</Button>
                     </div>
                   </div>
