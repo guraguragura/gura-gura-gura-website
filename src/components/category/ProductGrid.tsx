@@ -25,7 +25,7 @@ interface ProductGridProps {
 const ProductGrid = ({ products, viewMode, loading, formatPrice }: ProductGridProps) => {
   if (loading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {Array(6).fill(null).map((_, index) => (
           <div key={index} className="bg-white rounded-lg shadow-sm animate-pulse">
             <div className="h-48 w-full bg-gray-200 rounded-t-lg"></div>
@@ -44,7 +44,7 @@ const ProductGrid = ({ products, viewMode, loading, formatPrice }: ProductGridPr
   }
 
   return (
-    <div className={`grid ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"} gap-6`}>
+    <div className={`grid ${viewMode === "grid" ? "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"} gap-4 sm:gap-6`}>
       {products.map((product) => (
         <ProductCard 
           key={product.id} 

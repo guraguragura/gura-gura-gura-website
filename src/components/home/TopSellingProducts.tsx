@@ -136,7 +136,7 @@ const TopSellingProducts = () => {
           </div>
           
           {/* Product Cards */}
-          <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="lg:col-span-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
             {products.map((product) => (
               <div key={product.id} className="flex flex-col h-full">
                 <Card className="flex-1 border relative overflow-hidden">

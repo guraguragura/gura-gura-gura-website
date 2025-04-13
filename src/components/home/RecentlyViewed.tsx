@@ -130,7 +130,7 @@ const RecentlyViewed = () => {
           </div>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {recentProducts.map((product) => (
             <div key={product.id} className="border rounded-lg overflow-hidden">
               <div className="relative">

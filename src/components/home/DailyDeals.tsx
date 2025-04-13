@@ -100,7 +100,7 @@ const DailyDeals = () => {
           </Link>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {dealProducts.map((product) => (
             <div key={product.id}>
               <Card className="h-full transition-all duration-300 hover:shadow-md overflow-hidden">
