@@ -1,6 +1,7 @@
 
 import React from "react";
 import ProductViewToggle from "./ProductViewToggle";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ProductListHeaderProps {
   totalProducts: number;
@@ -21,22 +22,24 @@ const ProductListHeader = ({
   viewMode,
   setViewMode,
 }: ProductListHeaderProps) => {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="flex justify-between items-center bg-white p-4 rounded-md shadow-sm border">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-3 sm:p-4 rounded-md shadow-sm border gap-2 sm:gap-0">
       <div>
-        <span className="text-sm text-gray-500">
+        <span className="text-xs sm:text-sm text-gray-500">
           Showing 1-{currentProducts} of {totalProducts} results
         </span>
       </div>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-2 sm:space-x-4 w-full sm:w-auto">
         <ProductViewToggle viewMode={viewMode} setViewMode={setViewMode} />
         <select
-          className="border rounded-md px-3 py-1 text-sm"
+          className="border rounded-md px-2 py-1 text-xs sm:text-sm w-full sm:w-auto"
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
         >
           <option value="" disabled>
-            Sort by
+            {isMobile ? "Sort" : "Sort by"}
           </option>
           {sortOptions.map((option) => (
             <option key={option.value} value={option.value}>

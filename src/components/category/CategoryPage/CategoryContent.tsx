@@ -6,6 +6,10 @@ import CategoryFilter from "@/components/category/CategoryFilter";
 import ProductListHeader from "@/components/category/ProductListHeader";
 import ProductGrid from "@/components/category/ProductGrid";
 import CategoryPagination from "@/components/category/CategoryPagination";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Filter } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Product {
   id: string;
@@ -53,11 +57,35 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
   productsPerPage,
   sortOptions
 }) => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="p-6">
+    <div className="p-2 sm:p-6">
       <CategoryBreadcrumb categoryName={categoryName} />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8">
+        {/* Mobile filter drawer */}
+        {isMobile && (
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button 
+                variant="outline" 
+                className="w-full mb-4 flex items-center justify-center gap-2"
+              >
+                <Filter className="h-4 w-4" />
+                Filters
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[85%] sm:w-[350px] overflow-y-auto">
+              <div className="py-4">
+                <CategoryHeader name={categoryName} />
+                <CategoryFilter />
+              </div>
+            </SheetContent>
+          </Sheet>
+        )}
+        
+        {/* Desktop sidebar filter */}
         <div className="hidden md:block">
           <CategoryHeader name={categoryName} />
           <CategoryFilter />

@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Grid3X3Icon, ListIcon } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ProductViewToggleProps {
   viewMode: "grid" | "list";
@@ -9,6 +10,12 @@ interface ProductViewToggleProps {
 }
 
 const ProductViewToggle = ({ viewMode, setViewMode }: ProductViewToggleProps) => {
+  const isMobile = useIsMobile();
+  
+  if (isMobile) {
+    return null;
+  }
+  
   return (
     <div className="hidden md:flex space-x-2">
       <Button

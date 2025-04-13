@@ -1,6 +1,7 @@
 
 import React from "react";
 import ProductCard from "./ProductCard";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Product {
   id: string;
@@ -23,9 +24,11 @@ interface ProductGridProps {
 }
 
 const ProductGrid = ({ products, viewMode, loading, formatPrice }: ProductGridProps) => {
+  const isMobile = useIsMobile();
+  
   if (loading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {Array(6).fill(null).map((_, index) => (
           <div key={index} className="bg-white rounded-lg shadow-sm animate-pulse">
             <div className="h-48 w-full bg-gray-200 rounded-t-lg"></div>
@@ -44,7 +47,11 @@ const ProductGrid = ({ products, viewMode, loading, formatPrice }: ProductGridPr
   }
 
   return (
-    <div className={`grid ${viewMode === "grid" ? "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"} gap-4 sm:gap-6`}>
+    <div className={`grid ${viewMode === "grid" 
+      ? isMobile 
+        ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" 
+        : "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3" 
+      : "grid-cols-1"} gap-4`}>
       {products.map((product) => (
         <ProductCard 
           key={product.id} 
