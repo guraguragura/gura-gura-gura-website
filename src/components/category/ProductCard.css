@@ -1,8 +1,7 @@
-
 /* Product Card Grid Styles */
 .product-card-grid {
   width: 100%;
-  max-width: 257px;
+  max-width: 100%;
   margin: 0 auto;
   border: 1px solid #E6E6E6;
   border-radius: 16px;
@@ -161,17 +160,27 @@
   }
   
   .product-image-wrapper {
-    height: 180px;
+    height: 140px;
   }
   
   .product-title {
-    font-size: 16px;
-    line-height: 20px;
-    min-height: 40px;
+    font-size: 14px;
+    line-height: 18px;
+    min-height: 36px;
+    margin-bottom: 8px;
+  }
+  
+  .rating-container {
+    margin-bottom: 8px;
   }
   
   .price-container {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .product-content {
+    padding: 12px;
   }
   
   .original-price,
@@ -180,8 +189,12 @@
     line-height: 20px;
   }
   
+  .inventory-text {
+    margin-bottom: 8px;
+  }
+  
   .add-to-cart-button {
     font-size: 14px;
-    padding: 12px 0 10px;
+    padding: 10px 0 8px;
   }
 }
