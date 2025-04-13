@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React from "react";
 import { Menu, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Logo from "./Logo";
@@ -12,14 +11,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-interface Category {
-  id: string;
-  name: string;
-  handle: string;
-}
-
 interface MobileHeaderProps {
-  displayCategories: Category[];
+  displayCategories: { id: string; name: string; handle: string }[];
   staticCategories: string[];
   showSearch: boolean;
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,9 +31,7 @@ const MobileHeader = ({
   
   return (
     <div className="mx-auto w-full">
-      {/* Main mobile header */}
       <div className="flex items-center justify-between px-4 py-2">
-        {/* Left: Menu button */}
         <div>
           <Sheet>
             <SheetTrigger asChild>
@@ -88,12 +79,10 @@ const MobileHeader = ({
           </Sheet>
         </div>
         
-        {/* Center: Logo */}
         <div className="flex-1 flex justify-center">
           <Logo />
         </div>
         
-        {/* Right: Icons */}
         <div className="flex items-center space-x-1">
           <Button 
             variant="ghost" 
@@ -110,12 +99,10 @@ const MobileHeader = ({
         </div>
       </div>
       
-      {/* Search bar that appears when search icon is clicked */}
       {showSearch && (
         <div className="border-t px-4 py-2 bg-white">
           <SearchBar />
           
-          {/* Categories */}
           <div className="mt-2 overflow-x-auto">
             <div className="flex space-x-2 pb-2">
               <Link 
