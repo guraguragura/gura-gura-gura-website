@@ -107,21 +107,21 @@ const CategoryCarousel = () => {
   };
 
   return (
-    <section className="py-8 bg-gray-50">
-      <div className="container mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Trending <span className="font-normal">Categories</span></h2>
-          <Link to="/collections" className="text-primary flex items-center gap-1 hover:underline">
-            View All <ChevronRight className="h-4 w-4" />
+    <section className="py-4 sm:py-8 bg-gray-50">
+      <div className="container mx-auto px-3 sm:px-4">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold">Trending <span className="font-normal">Categories</span></h2>
+          <Link to="/collections" className="text-primary flex items-center gap-1 hover:underline text-sm sm:text-base">
+            View All <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
           </Link>
         </div>
         
         {isLoading ? (
-          <div className="flex justify-center py-12">
-            <div className="animate-pulse flex space-x-4">
-              <div className="h-32 w-32 bg-slate-200 rounded"></div>
-              <div className="h-32 w-32 bg-slate-200 rounded"></div>
-              <div className="h-32 w-32 bg-slate-200 rounded"></div>
+          <div className="flex justify-center py-8 sm:py-12">
+            <div className="animate-pulse flex space-x-2 sm:space-x-4">
+              <div className="h-24 w-24 sm:h-32 sm:w-32 bg-slate-200 rounded"></div>
+              <div className="h-24 w-24 sm:h-32 sm:w-32 bg-slate-200 rounded"></div>
+              <div className="h-24 w-24 sm:h-32 sm:w-32 bg-slate-200 rounded"></div>
             </div>
           </div>
         ) : (
@@ -135,10 +135,10 @@ const CategoryCarousel = () => {
           >
             <CarouselContent>
               {displayCategories.map((category) => (
-                <CarouselItem key={category.id} className="md:basis-1/3 lg:basis-1/4 pt-1 pb-8">
+                <CarouselItem key={category.id} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 pt-1 pb-6 sm:pb-8">
                   <Link to={`/categories/${category.handle}`} className="block group">
                     <div className="flex flex-col h-full">
-                      <div className="h-64 w-full overflow-hidden rounded-lg mb-3">
+                      <div className="h-36 sm:h-48 md:h-56 lg:h-64 w-full overflow-hidden rounded-lg mb-2 sm:mb-3">
                         <img
                           src={getCategoryImage(category.handle)}
                           alt={category.name}
@@ -150,14 +150,14 @@ const CategoryCarousel = () => {
                           }}
                         />
                       </div>
-                      <h3 className="text-center text-lg font-medium">{category.name}</h3>
+                      <h3 className="text-center text-sm sm:text-base md:text-lg font-medium">{category.name}</h3>
                     </div>
                   </Link>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="left-2 bg-white/80 hover:bg-white" />
-            <CarouselNext className="right-2 bg-white/80 hover:bg-white" />
+            <CarouselPrevious className="left-2 bg-white/80 hover:bg-white hidden sm:flex h-8 w-8 sm:h-10 sm:w-10" />
+            <CarouselNext className="right-2 bg-white/80 hover:bg-white hidden sm:flex h-8 w-8 sm:h-10 sm:w-10" />
           </Carousel>
         )}
       </div>

@@ -22,7 +22,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       <TopInfoBar />
       <Navbar />
       <div className="flex-grow">
-        <div className={`mx-auto ${fullWidth ? 'w-full' : 'w-[80%]'} max-w-7xl px-4 py-8 bg-white shadow-sm ${noPadding ? 'p-0' : ''} ${className}`}>
+        <div className={`mx-auto ${fullWidth ? 'w-full' : 'w-full md:w-[95%] lg:w-[90%] xl:w-[80%]'} max-w-7xl px-2 sm:px-4 py-4 sm:py-8 bg-white shadow-sm ${noPadding ? 'p-0' : ''} ${className}`}>
           {children}
         </div>
       </div>
