@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const TopSellingProducts = () => {
   const { formatPrice, isLoading: currencyLoading } = useCurrency();
   const { products, isLoading: productsLoading } = useProducts({ 
-    limit: 4,  // Fetch only 4 products
+    limit: 4,
     // You can add more filters here like featured: true
   });
   
@@ -47,7 +47,7 @@ const TopSellingProducts = () => {
                 <ProductCard 
                   key={product.id}
                   product={{
-                    id: product.id,
+                    id: parseInt(product.id),
                     name: product.title,
                     price: product.price,
                     oldPrice: product.discount_price ? product.price : product.price * 1.2, // Fallback for display

@@ -12,7 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const FeaturedProducts = () => {
   const { formatPrice, isLoading: currencyLoading } = useCurrency();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  const { products, isLoading: productsLoading } = useProducts({ 
+  const { products, isLoading: productsLoading, error } = useProducts({ 
     limit: 6,
     featured: true // Get featured products
   });
@@ -91,6 +91,10 @@ const FeaturedProducts = () => {
                 </div>
               </div>
             ))
+          ) : error ? (
+            <div className="col-span-full p-8 text-center text-gray-500">
+              <p>Failed to load products. {error}</p>
+            </div>
           ) : products.length > 0 ? (
             products.map((product) => (
               <div key={product.id} className="border rounded-lg overflow-hidden">
@@ -154,7 +158,7 @@ const FeaturedProducts = () => {
             ))
           ) : (
             <div className="col-span-full flex items-center justify-center text-gray-500 py-12">
-              No new arrivals found
+              <p>No new arrivals found. Add products and mark them as featured in your admin dashboard.</p>
             </div>
           )}
         </div>

@@ -39,7 +39,7 @@ const FeaturedProductsGrid = () => {
           key={product.id} 
           product={{
             id: parseInt(product.id),
-            title: product.title,
+            name: product.title,
             price: product.price,
             oldPrice: product.discount_price ? product.price : product.price * 1.2,
             salePrice: product.discount_price,
@@ -49,8 +49,8 @@ const FeaturedProductsGrid = () => {
               product.is_sale ? 'sale' : null
             ].filter(Boolean) as string[],
             rating: product.rating || 4.5,
-            name: product.title,
-            category: product.raw_metadata?.product_type || "Product"
+            category: product.raw_metadata?.product_type || "Product",
+            badge: product.is_sale ? 'Sale' : product.is_new ? 'New' : null
           }}
         />
       ))}

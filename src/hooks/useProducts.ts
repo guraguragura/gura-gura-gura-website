@@ -67,17 +67,21 @@ export function useProducts(options: ProductOptions = {}) {
           .eq('deleted_at', null)
           .order('created_at', { ascending: false });
         
+        console.log("Fetching products with options:", options);
+        
         // Apply individual filters
         if (options.category) {
           query = query.eq('product_category_product.product_category.handle', options.category);
         }
         
         if (options.featured) {
+          console.log("Filtering for featured products");
           query = query.eq('metadata->is_featured', true);
         }
         
         if (options.onSale) {
-          query = query.not('metadata->discount_price', 'is', null);
+          console.log("Filtering for on sale products");
+          query = query.eq('metadata->is_sale', true);
         }
         
         if (options.limit) {
@@ -92,12 +96,16 @@ export function useProducts(options: ProductOptions = {}) {
           setError("Failed to load products");
           setProducts([]);
         } else if (data) {
+          console.log("Raw product data:", data);
+          
           // Transform data to match our Product interface without circular references
           const formattedProducts = data.map(item => {
             // Get the raw metadata object safely
             const rawMetadata = typeof item.metadata === 'object' && item.metadata !== null 
               ? item.metadata 
               : {};
+            
+            console.log("Product metadata for", item.title, ":", rawMetadata);
             
             // Extract all values we need
             const price = extractNumber(rawMetadata, 'price', 19.99);
@@ -128,6 +136,13 @@ export function useProducts(options: ProductOptions = {}) {
             };
             
             return product;
+          });
+          
+          console.log("Formatted products count:", formattedProducts.length);
+          console.log("Products with specific flags:", {
+            featured: formattedProducts.filter(p => p.is_featured).length,
+            new: formattedProducts.filter(p => p.is_new).length,
+            onSale: formattedProducts.filter(p => p.is_sale).length
           });
           
           setProducts(formattedProducts);
