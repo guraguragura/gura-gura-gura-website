@@ -5802,6 +5802,20 @@ export type Database = {
           category_id: string
         }[]
       }
+      get_related_products: {
+        Args: { current_product_id: string }
+        Returns: {
+          id: string
+          title: string
+          thumbnail: string
+          price: number
+          discount_price: number
+          rating: number
+          reviews_count: number
+          is_sale: boolean
+          is_new: boolean
+        }[]
+      }
     }
     Enums: {
       claim_reason_enum:

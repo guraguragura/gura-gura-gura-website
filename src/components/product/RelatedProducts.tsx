@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Heart } from 'lucide-react';
@@ -7,18 +6,7 @@ import { useCurrency } from '@/hooks/useCurrency';
 import { useWishlist } from '@/contexts/WishlistContext';
 import AddToCartButton from './AddToCartButton';
 import { useIsMobile } from '@/hooks/use-mobile';
-
-interface Product {
-  id: string;
-  title: string;
-  thumbnail: string;
-  price: number;
-  discount_price?: number;
-  rating: number;
-  reviews_count: number;
-  is_sale?: boolean;
-  is_new?: boolean;
-}
+import { useRelatedProducts } from '@/hooks/useRelatedProducts';
 
 interface RelatedProductsProps {
   productId: string;
@@ -28,19 +16,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
   const { formatPrice } = useCurrency();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const isMobile = useIsMobile();
-  
-  // Mock related products - generating 4 for display
-  const mockProducts: Product[] = Array(4).fill(null).map((_, idx) => ({
-    id: `related-${idx}`,
-    title: "Similar Product " + (idx + 1),
-    thumbnail: "/placeholder.svg",
-    price: 14.99 + idx * 5,
-    discount_price: idx % 2 === 0 ? 12.99 + idx * 4 : undefined,
-    rating: 4 + (idx % 2) * 0.5,
-    reviews_count: 50 + idx * 20,
-    is_sale: idx % 2 === 0,
-    is_new: idx % 3 === 0
-  }));
+  const { products, loading, error } = useRelatedProducts(productId);
 
   const renderStars = (rating: number) => {
     return (
@@ -56,7 +32,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
     );
   };
   
-  const handleWishlistToggle = (product: Product, e: React.MouseEvent) => {
+  const handleWishlistToggle = (product: any, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
@@ -73,16 +49,41 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ productId }) => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="mb-8 sm:mb-12">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Related Products</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-white p-3 sm:p-4 rounded-md shadow-sm animate-pulse">
+              <div className="bg-gray-200 h-28 sm:h-40 rounded mb-2 sm:mb-4"/>
+              <div className="bg-gray-200 h-4 rounded mb-2"/>
+              <div className="bg-gray-200 h-4 w-1/2 rounded"/>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return null;
+  }
+
+  if (products.length === 0) {
+    return null;
+  }
+
   return (
     <div className="mb-8 sm:mb-12">
       <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Related Products</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
-        {mockProducts.map(product => (
+        {products.map(product => (
           <div key={product.id} className="bg-white p-3 sm:p-4 rounded-md shadow-sm hover:shadow-md transition-shadow">
             <div className="relative mb-2 sm:mb-4">
               <Link to={`/product/${product.id}`}>
                 <img 
-                  src={product.thumbnail} 
+                  src={product.thumbnail || "/placeholder.svg"} 
                   alt={product.title} 
                   className="w-full h-28 sm:h-40 object-contain"
                 />
