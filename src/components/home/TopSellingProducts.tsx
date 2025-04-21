@@ -11,7 +11,7 @@ const TopSellingProducts = () => {
   const { formatPrice, isLoading: currencyLoading } = useCurrency();
   const { products, isLoading: productsLoading } = useProducts({ 
     limit: 4,
-    // You can add more filters here like featured: true
+    onSale: true // Get products on sale
   });
   
   const isLoading = currencyLoading || productsLoading;
@@ -50,7 +50,7 @@ const TopSellingProducts = () => {
                     id: parseInt(product.id),
                     name: product.title,
                     price: product.price,
-                    oldPrice: product.discount_price ? product.price : product.price * 1.2, // Fallback for display
+                    oldPrice: product.discount_price ? product.price : product.price * 1.2,
                     image: product.thumbnail || "/placeholder.svg",
                     badge: product.is_new ? 'New' : product.is_sale ? 'Sale' : null,
                     rating: product.rating || 4.5,

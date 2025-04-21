@@ -25,6 +25,7 @@ interface ProductOptions {
   limit?: number;
   featured?: boolean;
   onSale?: boolean;
+  new?: boolean;
 }
 
 // Utility functions for safely extracting values
@@ -36,10 +37,17 @@ function extractNumber(data: any, key: string, defaultValue: number): number {
 }
 
 function extractBoolean(data: any, key: string, defaultValue: boolean): boolean {
-  if (!data || typeof data !== 'object' || typeof data[key] !== 'boolean') {
+  if (!data || typeof data !== 'object') {
     return defaultValue;
   }
-  return data[key];
+  // Handle both direct boolean values and string representations
+  if (typeof data[key] === 'boolean') {
+    return data[key];
+  }
+  if (typeof data[key] === 'string') {
+    return data[key].toLowerCase() === 'true';
+  }
+  return defaultValue;
 }
 
 function extractArray<T>(data: any, key: string, defaultValue: T[]): T[] {
@@ -84,6 +92,11 @@ export function useProducts(options: ProductOptions = {}) {
           query = query.eq('metadata->is_sale', true);
         }
         
+        if (options.new) {
+          console.log("Filtering for new products");
+          query = query.eq('metadata->is_new', true);
+        }
+        
         if (options.limit) {
           query = query.limit(options.limit);
         }
@@ -113,9 +126,18 @@ export function useProducts(options: ProductOptions = {}) {
             const images = extractArray<string>(rawMetadata, 'images', [item.thumbnail || "/placeholder.svg"]);
             const rating = extractNumber(rawMetadata, 'rating', 4.5);
             const reviewsCount = extractNumber(rawMetadata, 'reviews_count', 124);
+            
+            // Check for boolean values in different formats
             const isSale = extractBoolean(rawMetadata, 'is_sale', false);
             const isNew = extractBoolean(rawMetadata, 'is_new', false);
             const isFeatured = extractBoolean(rawMetadata, 'is_featured', false);
+            
+            console.log(`Product ${item.title} flags:`, { 
+              isFeatured, isNew, isSale,
+              metadata_featured: rawMetadata.is_featured,
+              metadata_new: rawMetadata.is_new,
+              metadata_sale: rawMetadata.is_sale
+            });
             
             // Build a completely flat product object
             const product: Product = {
@@ -157,7 +179,7 @@ export function useProducts(options: ProductOptions = {}) {
     };
 
     fetchProducts();
-  }, [options.category, options.limit, options.featured, options.onSale]);
+  }, [options.category, options.limit, options.featured, options.onSale, options.new]);
 
   return { products, isLoading, error };
 }

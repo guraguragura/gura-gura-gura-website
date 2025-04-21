@@ -42,7 +42,6 @@ const FeaturedProductsGrid = () => {
             name: product.title,
             price: product.price,
             oldPrice: product.discount_price ? product.price : product.price * 1.2,
-            salePrice: product.discount_price,
             image: product.thumbnail || "/placeholder.svg",
             badges: [
               product.is_new ? 'new' : null,

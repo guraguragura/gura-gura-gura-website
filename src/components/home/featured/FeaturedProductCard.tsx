@@ -12,9 +12,12 @@ interface FeaturedProductCardProps {
     name: string;
     price: number;
     oldPrice: number;
+    salePrice?: number;
     image: string;
     badge: string | null;
     category: string;
+    badges?: string[];
+    rating?: number;
   }
 }
 
