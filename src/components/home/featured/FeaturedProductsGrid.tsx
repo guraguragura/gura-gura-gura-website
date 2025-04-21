@@ -10,6 +10,8 @@ const FeaturedProductsGrid = () => {
     featured: true
   });
 
+  console.log("FeaturedProductsGrid - featured products:", products);
+
   if (isLoading) {
     return (
       <div className="lg:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-2">
