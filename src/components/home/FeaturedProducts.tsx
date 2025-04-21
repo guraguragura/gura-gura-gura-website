@@ -1,74 +1,24 @@
 
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { Heart } from "lucide-react";
 import { useCurrency } from "@/hooks/useCurrency";
 import { Badge } from "@/components/ui/badge";
-import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AddToCartButton from "@/components/product/AddToCartButton";
 import { useWishlist } from "@/contexts/WishlistContext";
-
-const newArrivals = [
-  {
-    id: 1,
-    name: "iPhone 14 Pro - Blue & Pink",
-    price: 14.99,
-    oldPrice: 28.99,
-    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
-    badge: "New",
-    category: "Smartphones"
-  },
-  {
-    id: 2,
-    name: "Galaxy Watch 5 - Black",
-    price: 14.99,
-    oldPrice: 28.99,
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
-    badge: "25%OFF",
-    category: "Watches" 
-  },
-  {
-    id: 3,
-    name: "iPhone 14 Pro - Graphite",
-    price: 14.99,
-    oldPrice: 28.99,
-    image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04",
-    badge: "25%OFF",
-    category: "Smartphones"
-  },
-  {
-    id: 4,
-    name: "AirPods Pro - Lavender",
-    price: 14.99,
-    oldPrice: 28.99,
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
-    badge: "25%OFF",
-    category: "Audio"
-  },
-  {
-    id: 5,
-    name: "Xiaomi 13 Pro - Black",
-    price: 14.99,
-    oldPrice: 28.99,
-    image: "https://images.unsplash.com/photo-1596079890744-c1a0462d0975", 
-    badge: "Best Seller",
-    category: "Smartphones"
-  },
-  {
-    id: 6,
-    name: "Samsung Galaxy S23 - Black",
-    price: 14.99,
-    oldPrice: 28.99,
-    image: "https://images.unsplash.com/photo-1563514227147-6d2320bfbcca",
-    badge: "New",
-    category: "Smartphones"
-  }
-];
+import { useProducts } from "@/hooks/useProducts";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const FeaturedProducts = () => {
-  const { formatPrice, isLoading } = useCurrency();
+  const { formatPrice, isLoading: currencyLoading } = useCurrency();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { products, isLoading: productsLoading } = useProducts({ 
+    limit: 6,
+    featured: true // Get featured products
+  });
+  
+  const isLoading = currencyLoading || productsLoading;
 
   const handleWishlistToggle = (product: any, e: React.MouseEvent) => {
     e.preventDefault();
@@ -80,10 +30,10 @@ const FeaturedProducts = () => {
     } else {
       addToWishlist({
         id: productId,
-        title: product.name,
+        title: product.name || product.title,
         price: product.price,
-        discount_price: product.oldPrice ? product.price : undefined,
-        thumbnail: product.image
+        discount_price: product.discount_price,
+        thumbnail: product.image || product.thumbnail
       });
     }
   };
@@ -129,60 +79,85 @@ const FeaturedProducts = () => {
         </div>
         
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {newArrivals.map((product) => (
-            <div key={product.id} className="border rounded-lg overflow-hidden">
-              <div className="relative">
-                <img 
-                  src={product.image} 
-                  alt={product.name}
-                  className="w-full aspect-square object-cover" 
-                />
-                {product.badge && (
-                  <div className={`absolute top-2 left-2 rounded-md px-2 py-1 text-xs font-medium text-white
-                    ${product.badge.includes('OFF') ? 'bg-red-500' : 
-                      product.badge === 'New' ? 'bg-blue-500' : 
-                      product.badge === 'Best Seller' ? 'bg-black' : 'bg-blue-500'}`}>
-                    {product.badge}
-                  </div>
-                )}
-                <button 
-                  onClick={(e) => handleWishlistToggle(product, e)}
-                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-100"
-                >
-                  <Heart 
-                    className={`h-4 w-4 ${isInWishlist(product.id.toString()) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} 
-                  />
-                </button>
+          {isLoading ? (
+            // Loading skeleton
+            Array(6).fill(0).map((_, index) => (
+              <div key={`loading-${index}`} className="border rounded-lg overflow-hidden">
+                <Skeleton className="w-full aspect-square" />
+                <div className="p-3">
+                  <Skeleton className="w-16 h-3 mb-1" />
+                  <Skeleton className="w-full h-4 mb-2" />
+                  <Skeleton className="w-20 h-4 mb-3" />
+                  <Skeleton className="w-full h-8" />
+                </div>
               </div>
-              
-              <div className="p-3">
-                <div className="text-xs text-gray-500 mb-1">{product.category}</div>
-                <h3 className="font-medium text-sm mb-2 line-clamp-1">{product.name}</h3>
-                
-                <div className="flex items-center gap-2 mb-3">
-                  {isLoading ? (
-                    <div className="animate-pulse h-5 bg-gray-200 rounded w-16"></div>
-                  ) : (
-                    <>
-                      <span className="font-bold">{formatPrice(product.price)}</span>
-                      <span className="text-gray-500 text-sm line-through">{formatPrice(product.oldPrice)}</span>
-                    </>
+            ))
+          ) : products.length > 0 ? (
+            products.map((product) => (
+              <div key={product.id} className="border rounded-lg overflow-hidden">
+                <div className="relative">
+                  <img 
+                    src={product.thumbnail || "/placeholder.svg"} 
+                    alt={product.title}
+                    className="w-full aspect-square object-cover" 
+                  />
+                  {product.is_new && (
+                    <div className="absolute top-2 left-2 rounded-md px-2 py-1 text-xs font-medium text-white bg-blue-500">
+                      New
+                    </div>
                   )}
+                  {product.is_sale && (
+                    <div className="absolute top-2 left-2 rounded-md px-2 py-1 text-xs font-medium text-white bg-red-500">
+                      Sale
+                    </div>
+                  )}
+                  <button 
+                    onClick={(e) => handleWishlistToggle(product, e)}
+                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-100"
+                  >
+                    <Heart 
+                      className={`h-4 w-4 ${isInWishlist(product.id.toString()) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} 
+                    />
+                  </button>
                 </div>
                 
-                <AddToCartButton 
-                  product={{
-                    id: product.id.toString(),
-                    title: product.name,
-                    price: product.price,
-                    discount_price: product.oldPrice ? product.price : undefined,
-                    thumbnail: product.image
-                  }}
-                  className="w-full flex items-center justify-center gap-2 size-sm"
-                />
+                <div className="p-3">
+                  <div className="text-xs text-gray-500 mb-1">
+                    {product.product_type || "Product"}
+                  </div>
+                  <h3 className="font-medium text-sm mb-2 line-clamp-1">{product.title}</h3>
+                  
+                  <div className="flex items-center gap-2 mb-3">
+                    {currencyLoading ? (
+                      <div className="animate-pulse h-5 bg-gray-200 rounded w-16"></div>
+                    ) : (
+                      <>
+                        <span className="font-bold">{formatPrice(product.discount_price || product.price)}</span>
+                        {product.discount_price && (
+                          <span className="text-gray-500 text-sm line-through">{formatPrice(product.price)}</span>
+                        )}
+                      </>
+                    )}
+                  </div>
+                  
+                  <AddToCartButton 
+                    product={{
+                      id: product.id.toString(),
+                      title: product.title,
+                      price: product.price,
+                      discount_price: product.discount_price,
+                      thumbnail: product.thumbnail
+                    }}
+                    className="w-full flex items-center justify-center gap-2 size-sm"
+                  />
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="col-span-full flex items-center justify-center text-gray-500 py-12">
+              No new arrivals found
             </div>
-          ))}
+          )}
         </div>
       </div>
     </section>

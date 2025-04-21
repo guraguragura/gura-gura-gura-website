@@ -4,10 +4,17 @@ import { useCurrency } from "@/hooks/useCurrency";
 import NavigationControls from "./top-selling/NavigationControls";
 import PromotionalBanner from "./top-selling/PromotionalBanner";
 import ProductCard from "./top-selling/ProductCard";
-import { products } from "./top-selling/data";
+import { useProducts } from "@/hooks/useProducts";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const TopSellingProducts = () => {
-  const { formatPrice, isLoading } = useCurrency();
+  const { formatPrice, isLoading: currencyLoading } = useCurrency();
+  const { products, isLoading: productsLoading } = useProducts({ 
+    limit: 4,  // Fetch only 4 products
+    // You can add more filters here like featured: true
+  });
+  
+  const isLoading = currencyLoading || productsLoading;
 
   return (
     <section className="py-12 bg-white">
@@ -25,14 +32,41 @@ const TopSellingProducts = () => {
           
           {/* Product Cards */}
           <div className="lg:col-span-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {products.map((product) => (
-              <ProductCard 
-                key={product.id}
-                product={product}
-                formatPrice={formatPrice}
-                isLoading={isLoading}
-              />
-            ))}
+            {isLoading ? (
+              // Loading Skeletons
+              Array(4).fill(0).map((_, index) => (
+                <div key={`loading-${index}`} className="border rounded-lg p-4 space-y-3">
+                  <Skeleton className="w-full h-40 rounded-md" />
+                  <Skeleton className="w-3/4 h-4 rounded" />
+                  <Skeleton className="w-1/2 h-4 rounded" />
+                  <Skeleton className="w-full h-8 rounded" />
+                </div>
+              ))
+            ) : products.length > 0 ? (
+              products.map((product) => (
+                <ProductCard 
+                  key={product.id}
+                  product={{
+                    id: product.id,
+                    title: product.title,
+                    price: product.price,
+                    oldPrice: product.discount_price ? product.price : undefined,
+                    salePrice: product.discount_price,
+                    image: product.thumbnail || "/placeholder.svg",
+                    new: product.is_new,
+                    sale: product.is_sale,
+                    rating: product.rating || 4.5,
+                    reviewsCount: product.reviews_count || 0
+                  }}
+                  formatPrice={formatPrice}
+                  isLoading={isLoading}
+                />
+              ))
+            ) : (
+              <div className="lg:col-span-4 flex items-center justify-center text-gray-500 py-12">
+                No products available
+              </div>
+            )}
           </div>
         </div>
       </div>
