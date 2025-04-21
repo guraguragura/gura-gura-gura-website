@@ -48,13 +48,11 @@ const TopSellingProducts = () => {
                   key={product.id}
                   product={{
                     id: product.id,
-                    title: product.title,
+                    name: product.title,
                     price: product.price,
-                    oldPrice: product.discount_price ? product.price : undefined,
-                    salePrice: product.discount_price,
+                    oldPrice: product.discount_price ? product.price : product.price * 1.2, // Fallback for display
                     image: product.thumbnail || "/placeholder.svg",
-                    new: product.is_new,
-                    sale: product.is_sale,
+                    badge: product.is_new ? 'New' : product.is_sale ? 'Sale' : null,
                     rating: product.rating || 4.5,
                     reviewsCount: product.reviews_count || 0
                   }}

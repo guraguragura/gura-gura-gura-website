@@ -38,17 +38,19 @@ const FeaturedProductsGrid = () => {
         <FeaturedProductCard 
           key={product.id} 
           product={{
-            id: product.id,
+            id: parseInt(product.id),
             title: product.title,
             price: product.price,
-            oldPrice: product.discount_price ? product.price : undefined,
+            oldPrice: product.discount_price ? product.price : product.price * 1.2,
             salePrice: product.discount_price,
             image: product.thumbnail || "/placeholder.svg",
             badges: [
               product.is_new ? 'new' : null,
               product.is_sale ? 'sale' : null
-            ].filter(Boolean),
-            rating: product.rating || 4.5
+            ].filter(Boolean) as string[],
+            rating: product.rating || 4.5,
+            name: product.title,
+            category: product.raw_metadata?.product_type || "Product"
           }}
         />
       ))}

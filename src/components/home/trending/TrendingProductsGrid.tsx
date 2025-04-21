@@ -40,17 +40,13 @@ const TrendingProductsGrid = () => {
         <TrendingProductCard 
           key={product.id} 
           product={{
-            id: product.id,
-            title: product.title,
+            id: parseInt(product.id),
+            name: product.title,
             price: product.price,
-            oldPrice: product.discount_price ? product.price : undefined,
-            salePrice: product.discount_price,
+            oldPrice: product.discount_price ? product.price : product.price * 1.2,
             image: product.thumbnail || "/placeholder.svg",
-            badges: [
-              product.is_new ? 'new' : null,
-              product.is_sale ? 'sale' : null
-            ].filter(Boolean),
-            rating: product.rating || 4.5
+            badge: product.is_sale ? 'Sale' : product.is_new ? 'New' : null,
+            category: product.raw_metadata?.product_type || "Product"
           }}
         />
       ))}

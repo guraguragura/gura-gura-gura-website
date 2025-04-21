@@ -3,7 +3,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { useCurrency } from "@/hooks/useCurrency";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import AddToCartButton from "@/components/product/AddToCartButton";
 import { useWishlist } from "@/contexts/WishlistContext";
@@ -123,7 +122,7 @@ const FeaturedProducts = () => {
                 
                 <div className="p-3">
                   <div className="text-xs text-gray-500 mb-1">
-                    {product.product_type || "Product"}
+                    {product.raw_metadata?.product_type || "Product"}
                   </div>
                   <h3 className="font-medium text-sm mb-2 line-clamp-1">{product.title}</h3>
                   
