@@ -1,3 +1,4 @@
+
 import React from "react";
 
 const ProductsSection = () => (
@@ -57,7 +58,7 @@ const ProductsSection = () => (
       <div className="border rounded-lg overflow-hidden">
         <div className="h-48 bg-pink-100">
           <img
-            src="https://images.unsplash.com/photo-1607006677169-a62beb975922"
+            src="/lovable-uploads/136dffde-6601-4233-8312-d998c24a2c74.png"
             alt="Beauty & Health"
             className="w-full h-full object-cover"
           />
