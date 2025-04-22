@@ -12,7 +12,7 @@ const ValuesSection = () => (
         </h2>
         <div className="h-[700px] overflow-hidden rounded-lg mb-4">
           <img
-            src="/lovable-uploads/f4b5925b-81f4-417d-9c6a-8e3013da6782.png"
+            src="/lovable-uploads/e29b79b5-804f-401e-9cf8-42e971915133.png"
             alt="Our Values"
             className="w-full h-full object-cover object-center"
           />
