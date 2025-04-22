@@ -47,7 +47,7 @@ const AboutUsPage = () => {
           </div>
           <div className="order-1 md:order-2 rounded-lg overflow-hidden h-80">
             <img 
-              src="/lovable-uploads/97209c9f-86e9-41e3-ae8c-ebfcabf91a15.png" 
+              src="/lovable-uploads/99aaf028-a794-4d40-a759-ec3226b6d4c2.png" 
               alt="Gura Vision" 
               className="w-full h-full object-cover"
             />
