@@ -48,8 +48,8 @@ const BusinessTypesTabs = () => {
             </div>
             <div className="bg-gray-100 rounded-lg h-64 overflow-hidden">
               <img 
-                src="/lovable-uploads/8b872c64-6416-41e9-bcd6-fa615c17062e.png" 
-                alt="Small Business Solutions" 
+                src="/lovable-uploads/1d57fa24-4d67-462b-8728-977582dff3c4.png" 
+                alt="Small Business Packaging and Shipping" 
                 className="w-full h-full object-cover"
               />
             </div>
@@ -122,8 +122,8 @@ const BusinessTypesTabs = () => {
             </div>
             <div className="bg-gray-100 rounded-lg h-64 overflow-hidden">
               <img 
-                src="/lovable-uploads/97209c9f-86e9-41e3-ae8c-ebfcabf91a15.png" 
-                alt="Large Corporation Solutions" 
+                src="/lovable-uploads/e53b7e82-761b-4302-88a9-4391941e4d93.png" 
+                alt="Large Corporation Shipping Containers" 
                 className="w-full h-full object-cover"
               />
             </div>
