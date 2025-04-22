@@ -7,7 +7,7 @@ const CallToActionSection = () => (
   <div className="text-center">
     <h2 className="text-2xl font-bold mb-6">Start Your Gura Journey Today</h2>
     <div className="flex flex-wrap justify-center gap-4">
-      <Link to="/shop">
+      <Link to="/">
         <Button size="lg" className="rounded-full">
           Start Shopping
         </Button>
