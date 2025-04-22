@@ -87,7 +87,7 @@ const ProductsSection = () => (
       <div className="border rounded-lg overflow-hidden">
         <div className="h-48 bg-red-100">
           <img
-            src="https://images.unsplash.com/photo-1542362567-b07e54358753"
+            src="/lovable-uploads/276f28c6-703b-4eb3-84f2-e3948836a4c6.png"
             alt="Automotive"
             className="w-full h-full object-cover"
           />
