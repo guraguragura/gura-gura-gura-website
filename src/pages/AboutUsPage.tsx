@@ -59,7 +59,7 @@ const AboutUsPage = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <h2 className="text-3xl font-bold mb-4">Our <span className="text-blue-500">Values</span></h2>
-              <div className="h-64 overflow-hidden rounded-lg mb-4">
+              <div className="h-96 overflow-hidden rounded-lg mb-4">
                 <img 
                   src="/lovable-uploads/7bdbfce2-09a7-4670-a2fa-950c8c5f256a.png" 
                   alt="Our Values" 
