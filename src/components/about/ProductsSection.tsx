@@ -1,3 +1,4 @@
+
 import React from "react";
 
 const ProductsSection = () => (
@@ -12,7 +13,7 @@ const ProductsSection = () => (
       <div className="border rounded-lg overflow-hidden">
         <div className="h-48 bg-yellow-100">
           <img
-            src="/lovable-uploads/e3ce3e2d-544e-4626-b3fa-b35dd86d950c.png"
+            src="/lovable-uploads/9278bf70-688c-4830-8bcd-9790868ec069.png"
             alt="Electronics"
             className="w-full h-full object-cover"
           />
@@ -27,7 +28,7 @@ const ProductsSection = () => (
       <div className="border rounded-lg overflow-hidden">
         <div className="h-48 bg-orange-100">
           <img
-            src="/lovable-uploads/9278bf70-688c-4830-8bcd-9790868ec069.png"
+            src="/lovable-uploads/216b1347-8cd7-4858-9487-d2409ffc6f8c.png"
             alt="Fashion"
             className="w-full h-full object-cover"
           />
@@ -42,7 +43,7 @@ const ProductsSection = () => (
       <div className="border rounded-lg overflow-hidden">
         <div className="h-48 bg-red-100">
           <img
-            src="/lovable-uploads/216b1347-8cd7-4858-9487-d2409ffc6f8c.png"
+            src="/lovable-uploads/e3ce3e2d-544e-4626-b3fa-b35dd86d950c.png"
             alt="Sports & Outdoors"
             className="w-full h-full object-cover"
           />
