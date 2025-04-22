@@ -30,7 +30,7 @@ const AboutUsPage = () => {
             />
           </div>
           <div>
-            <h2 className="text-3xl font-bold mb-4">Our <span className="text-gray-500">Mission</span></h2>
+            <h2 className="text-3xl font-bold mb-4">Our <span className="text-blue-500">Mission</span></h2>
             <p className="text-gray-600 mb-4">
               Our mission is to revolutionize the retail landscape in Rwanda by offering a convenient, reliable, and enjoyable online shopping experience. We strive to meet the diverse needs of our customers through a wide selection of products, competitive prices, and exceptional service.
             </p>
@@ -40,7 +40,7 @@ const AboutUsPage = () => {
         {/* Vision Section */}
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="order-2 md:order-1">
-            <h2 className="text-3xl font-bold mb-4">Our <span className="text-gray-500">Vision</span></h2>
+            <h2 className="text-3xl font-bold mb-4">Our <span className="text-blue-500">Vision</span></h2>
             <p className="text-gray-600 mb-4">
               Our vision is to be the premier online shopping destination in Rwanda, recognized for our commitment to quality, innovation, and customer satisfaction. We aim to continuously evolve and expand our offerings to stay ahead of market trends and customer expectations.
             </p>
