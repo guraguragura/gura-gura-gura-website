@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import { Card, CardContent } from '@/components/ui/card';
@@ -25,7 +24,7 @@ const AboutUsPage = () => {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="rounded-lg overflow-hidden h-80">
             <img 
-              src="/lovable-uploads/8bb30b2b-7c22-4d70-99e4-285be1712bb4.png" 
+              src="/lovable-uploads/1d4104e3-b829-451d-a439-3c761b393137.png" 
               alt="Gura Mission" 
               className="w-full h-full object-cover"
             />
