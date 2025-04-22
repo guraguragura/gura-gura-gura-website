@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -86,8 +85,8 @@ const BusinessTypesTabs = () => {
             </div>
             <div className="bg-gray-100 rounded-lg h-64 overflow-hidden">
               <img 
-                src="/lovable-uploads/2b4f1e1c-8388-4e0a-a05c-1efa3ecbb777.png" 
-                alt="Medium Enterprise Solutions" 
+                src="/lovable-uploads/be761724-f6f8-44e2-9203-2eb518479226.png" 
+                alt="Medium Enterprise Solutions Cityscape" 
                 className="w-full h-full object-cover"
               />
             </div>
