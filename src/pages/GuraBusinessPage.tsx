@@ -18,7 +18,7 @@ const GuraBusinessPage = () => {
       <KeyFeaturesSection />
 
       {/* Cargo Ship Image Banner */}
-      <section className="max-w-4xl mx-auto px-2 md:px-0">
+      <section className="container mx-auto px-4 md:px-0">
         <img 
           src="/lovable-uploads/365ae14c-33cb-40bf-9e0b-403f40a31a8e.png" 
           alt="Bulk shipping cargo ship"
@@ -44,7 +44,7 @@ const GuraBusinessPage = () => {
         <p className="text-gray-600 mb-6 max-w-xl mx-auto">
           For all business and wholesale purchases, please contact our dedicated sales team directly at{" "}
           <a href="mailto:sales@gura.rw" className="text-blue-600 underline">sales@gura.rw</a>. <br />
-          We’ll help you find the best solution for your business needs—no registration required.
+          We'll help you find the best solution for your business needs—no registration required.
         </p>
         <div className="flex justify-center">
           <a 
@@ -60,4 +60,3 @@ const GuraBusinessPage = () => {
 };
 
 export default GuraBusinessPage;
-
