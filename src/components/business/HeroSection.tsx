@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-blue-700 -mx-8 px-8 py-16 text-white text-center">
+    <div className="bg-gradient-to-r from-blue-600 to-blue-700 container mx-auto px-4 py-16 text-white text-center">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold mb-6">Gura for Business</h1>
         <p className="text-xl mb-8">
