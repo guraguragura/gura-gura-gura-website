@@ -9,7 +9,7 @@ const CallToAction = () => {
       <h2 className="text-2xl font-bold mb-4">Ready to experience the Gura advantage?</h2>
       <p className="text-blue-100 mb-6">Join the thousands of satisfied customers who shop with Gura every day.</p>
       <div className="flex flex-wrap justify-center gap-4">
-        <Link to="/shop">
+        <Link to="/">
           <Button variant="secondary" size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
             Start Shopping
           </Button>
