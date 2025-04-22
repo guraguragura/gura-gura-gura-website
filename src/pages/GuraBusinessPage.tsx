@@ -34,8 +34,22 @@ const GuraBusinessPage = () => {
       {/* Contact Section */}
       <ContactSection />
 
-      {/* CTA */}
-      <CTASection />
+      {/* Updated CTA Section */}
+      <section className="text-center px-4">
+        <h2 className="text-2xl font-bold mb-4">Interested in Bulk Purchasing?</h2>
+        <p className="text-gray-600 mb-6 max-w-xl mx-auto">
+          For businesses looking to purchase in bulk, please get in touch with our sales team directly at{" "}
+          <a href="mailto:sales@gura.rw" className="text-blue-600 underline">sales@gura.rw</a>. We will help tailor solutions to your specific needs.
+        </p>
+        <div className="flex justify-center">
+          <a 
+            href="mailto:sales@gura.rw" 
+            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            Contact Sales
+          </a>
+        </div>
+      </section>
     </PageLayout>
   );
 };
