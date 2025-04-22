@@ -27,7 +27,7 @@ const ProductsSection = () => (
       <div className="border rounded-lg overflow-hidden">
         <div className="h-48 bg-orange-100">
           <img
-            src="/lovable-uploads/216b1347-8cd7-4858-9487-d2409ffc6f8c.png"
+            src="/lovable-uploads/fc81f903-abf4-4674-86ad-ec3e27ff83ab.png"
             alt="Fashion"
             className="w-full h-full object-cover"
           />
