@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Settings, Users, Shield, Lightbulb } from "lucide-react";
@@ -9,7 +10,7 @@ const ValuesSection = () => (
         <h2 className="text-3xl font-bold mb-4">
           Our <span className="text-blue-500">Values</span>
         </h2>
-        <div className="h-[500px] overflow-hidden rounded-lg mb-4">
+        <div className="h-[700px] overflow-hidden rounded-lg mb-4">
           <img
             src="/lovable-uploads/f4b5925b-81f4-417d-9c6a-8e3013da6782.png"
             alt="Our Values"
