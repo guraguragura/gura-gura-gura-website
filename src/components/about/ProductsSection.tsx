@@ -10,9 +10,9 @@ const ProductsSection = () => (
     </div>
     <div className="grid md:grid-cols-3 gap-6">
       <div className="border rounded-lg overflow-hidden">
-        <div className="h-48 bg-red-100">
+        <div className="h-48 bg-orange-100">
           <img
-            src="/lovable-uploads/e3ce3e2d-544e-4626-b3fa-b35dd86d950c.png"
+            src="/lovable-uploads/216b1347-8cd7-4858-9487-d2409ffc6f8c.png"
             alt="Electronics"
             className="w-full h-full object-cover"
           />
