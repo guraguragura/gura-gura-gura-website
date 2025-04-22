@@ -1,4 +1,3 @@
-
 import React from "react";
 
 const ProductsSection = () => (
@@ -73,7 +72,7 @@ const ProductsSection = () => (
       <div className="border rounded-lg overflow-hidden">
         <div className="h-48 bg-blue-100">
           <img
-            src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6"
+            src="/lovable-uploads/5ecfbb92-2f19-4358-90d5-4b1b044f40ba.png"
             alt="Home & Art"
             className="w-full h-full object-cover"
           />
