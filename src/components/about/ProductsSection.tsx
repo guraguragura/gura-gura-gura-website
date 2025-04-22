@@ -1,4 +1,3 @@
-
 import React from "react";
 
 const ProductsSection = () => (
@@ -11,9 +10,9 @@ const ProductsSection = () => (
     </div>
     <div className="grid md:grid-cols-3 gap-6">
       <div className="border rounded-lg overflow-hidden">
-        <div className="h-48 bg-yellow-100">
+        <div className="h-48 bg-red-100">
           <img
-            src="/lovable-uploads/9278bf70-688c-4830-8bcd-9790868ec069.png"
+            src="/lovable-uploads/e3ce3e2d-544e-4626-b3fa-b35dd86d950c.png"
             alt="Electronics"
             className="w-full h-full object-cover"
           />
@@ -41,9 +40,9 @@ const ProductsSection = () => (
         </div>
       </div>
       <div className="border rounded-lg overflow-hidden">
-        <div className="h-48 bg-red-100">
+        <div className="h-48 bg-yellow-100">
           <img
-            src="/lovable-uploads/e3ce3e2d-544e-4626-b3fa-b35dd86d950c.png"
+            src="/lovable-uploads/9278bf70-688c-4830-8bcd-9790868ec069.png"
             alt="Sports & Outdoors"
             className="w-full h-full object-cover"
           />
