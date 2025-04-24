@@ -1,7 +1,6 @@
-
 import React from "react";
 import { Star } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import AddToCartButton from "@/components/product/AddToCartButton";
 import { Heart } from "lucide-react";
 import { useWishlist } from "@/contexts/WishlistContext";
-import "./ProductCard.css"; // Import custom CSS
+import "./ProductCard.css";
 
 interface ProductProps {
   product: {
@@ -31,6 +30,7 @@ interface ProductProps {
 const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice }) => {
   const { id, title, price, thumbnail, rating, reviews_count, discount_price, is_sale, description } = product;
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const navigate = useNavigate();
   
   const inWishlist = isInWishlist(id);
   
@@ -49,6 +49,10 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
         thumbnail
       });
     }
+  };
+
+  const handleBuyNow = () => {
+    navigate(`/checkout?productId=${id}`);
   };
   
   const totalInventory = 35;
@@ -119,23 +123,31 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
               )}
             </div>
             
-            <AddToCartButton 
-              product={{
-                id: id,
-                title: title,
-                price: price,
-                discount_price: discount_price,
-                thumbnail: thumbnail
-              }}
-              className="w-full py-2 text-sm flex items-center justify-center"
-            />
+            <div className="flex flex-col gap-2 w-full">
+              <AddToCartButton 
+                product={{
+                  id: id,
+                  title: title,
+                  price: price,
+                  discount_price: discount_price,
+                  thumbnail: thumbnail
+                }}
+                className="w-full py-2 text-sm"
+              />
+              <Button 
+                onClick={handleBuyNow}
+                variant="secondary" 
+                className="w-full py-2 text-sm"
+              >
+                Buy Now
+              </Button>
+            </div>
           </div>
         </div>
       </Card>
     );
   }
 
-  // Grid view with hybrid approach
   return (
     <Card className="product-card-grid overflow-hidden flex flex-col h-full transition-all duration-200 hover:shadow-md">
       <div className="product-image-container relative">
@@ -192,16 +204,25 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
       </CardContent>
       
       <CardFooter className="p-0 mt-auto">
-        <AddToCartButton 
-          product={{
-            id: id,
-            title: title,
-            price: price,
-            discount_price: discount_price,
-            thumbnail: thumbnail
-          }}
-          className="add-to-cart-button"
-        />
+        <div className="flex flex-col gap-2 w-full p-2">
+          <AddToCartButton 
+            product={{
+              id: id,
+              title: title,
+              price: price,
+              discount_price: discount_price,
+              thumbnail: thumbnail
+            }}
+            className="w-full py-2 text-sm"
+          />
+          <Button 
+            onClick={handleBuyNow}
+            variant="secondary" 
+            className="w-full py-2 text-sm"
+          >
+            Buy Now
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );
