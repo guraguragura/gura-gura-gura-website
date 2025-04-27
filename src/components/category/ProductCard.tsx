@@ -1,13 +1,13 @@
+
 import React from "react";
-import { Star } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import AddToCartButton from "@/components/product/AddToCartButton";
-import { Heart } from "lucide-react";
-import { useWishlist } from "@/contexts/WishlistContext";
+import WishlistButton from "./product-card/WishlistButton";
+import ProductRating from "./product-card/ProductRating";
+import ProductInventory from "./product-card/ProductInventory";
+import ProductPrice from "./product-card/ProductPrice";
+import ProductActions from "./product-card/ProductActions";
 import "./ProductCard.css";
 
 interface ProductProps {
@@ -29,35 +29,9 @@ interface ProductProps {
 
 const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice }) => {
   const { id, title, price, thumbnail, rating, reviews_count, discount_price, is_sale, description } = product;
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  const navigate = useNavigate();
-  
-  const inWishlist = isInWishlist(id);
-  
-  const toggleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (inWishlist) {
-      removeFromWishlist(id);
-    } else {
-      addToWishlist({
-        id,
-        title,
-        price,
-        discount_price,
-        thumbnail
-      });
-    }
-  };
-
-  const handleBuyNow = () => {
-    navigate(`/checkout?productId=${id}`);
-  };
   
   const totalInventory = 35;
   const soldItems = 18;
-  const inventoryPercentage = (soldItems / totalInventory) * 100;
   
   const discountPercentage = discount_price && price 
     ? Math.round(((price - discount_price) / price) * 100) 
@@ -82,12 +56,7 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
                 />
               </div>
             </Link>
-            <button 
-              onClick={toggleWishlist}
-              className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-gray-50 transition-colors"
-            >
-              <Heart className={`h-4 w-4 ${inWishlist ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
-            </button>
+            <WishlistButton product={product} />
           </div>
           
           <div className="flex-grow p-4">
@@ -99,49 +68,13 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
             
             <p className="text-gray-600 text-sm mb-3 line-clamp-2">{description}</p>
             
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-base font-bold text-blue-600">{rating.toFixed(1)}</span>
-              <Star className="h-4 w-4 fill-blue-500 text-blue-500" />
-              <span className="text-sm text-gray-500">({reviews_count > 1000 ? `${(reviews_count/1000).toFixed(0)}k` : reviews_count})</span>
-            </div>
-            
-            <Progress value={inventoryPercentage} className="h-1.5 mb-1" />
-            <div className="text-xs text-gray-600 mb-3">
-              Sold: {soldItems}/{totalInventory}
-            </div>
+            <ProductRating rating={rating} reviews_count={reviews_count} />
+            <ProductInventory soldItems={soldItems} totalInventory={totalInventory} />
           </div>
           
           <div className="p-4 flex flex-col justify-between md:w-48 flex-shrink-0 border-t md:border-t-0 md:border-l">
-            <div className="flex flex-col items-end mb-3">
-              {discount_price ? (
-                <>
-                  <span className="text-gray-500 line-through text-sm">{formatPrice(price)}</span>
-                  <span className="text-lg font-bold text-blue-600">{formatPrice(discount_price)}</span>
-                </>
-              ) : (
-                <span className="text-lg font-bold text-blue-600">{formatPrice(price)}</span>
-              )}
-            </div>
-            
-            <div className="flex flex-col gap-2 w-full">
-              <AddToCartButton 
-                product={{
-                  id: id,
-                  title: title,
-                  price: price,
-                  discount_price: discount_price,
-                  thumbnail: thumbnail
-                }}
-                className="w-full py-2 text-sm"
-              />
-              <Button 
-                onClick={handleBuyNow}
-                variant="secondary" 
-                className="w-full py-2 text-sm"
-              >
-                Buy Now
-              </Button>
-            </div>
+            <ProductPrice price={price} discount_price={discount_price} formatPrice={formatPrice} />
+            <ProductActions product={product} />
           </div>
         </div>
       </Card>
@@ -165,12 +98,7 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
             />
           </div>
         </Link>
-        <button 
-          onClick={toggleWishlist}
-          className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-gray-50 transition-colors"
-        >
-          <Heart className={`h-4 w-4 ${inWishlist ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
-        </button>
+        <WishlistButton product={product} />
       </div>
       
       <CardContent className="product-content">
@@ -181,47 +109,16 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
         </Link>
         
         <div className="rating-container">
-          <span className="rating-value">{rating.toFixed(1)}</span>
-          <Star className="rating-star" />
-          <span className="reviews-count">({reviews_count > 1000 ? `${(reviews_count/1000).toFixed(1)}k` : reviews_count} reviews)</span>
+          <ProductRating rating={rating} reviews_count={reviews_count} />
         </div>
         
-        <Progress value={inventoryPercentage} className="inventory-progress" />
-        <div className="inventory-text">
-          {soldItems} items sold
-        </div>
-        
-        <div className="price-container">
-          {discount_price ? (
-            <>
-              <span className="original-price">{formatPrice(price)}</span>
-              <span className="discount-price">{formatPrice(discount_price)}</span>
-            </>
-          ) : (
-            <span className="discount-price">{formatPrice(price)}</span>
-          )}
-        </div>
+        <ProductInventory soldItems={soldItems} totalInventory={totalInventory} />
+        <ProductPrice price={price} discount_price={discount_price} formatPrice={formatPrice} />
       </CardContent>
       
       <CardFooter className="p-0 mt-auto">
-        <div className="flex flex-col gap-2 w-full p-2">
-          <AddToCartButton 
-            product={{
-              id: id,
-              title: title,
-              price: price,
-              discount_price: discount_price,
-              thumbnail: thumbnail
-            }}
-            className="w-full py-2 text-sm"
-          />
-          <Button 
-            onClick={handleBuyNow}
-            variant="secondary" 
-            className="w-full py-2 text-sm"
-          >
-            Buy Now
-          </Button>
+        <div className="w-full p-2">
+          <ProductActions product={product} />
         </div>
       </CardFooter>
     </Card>
