@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -45,7 +46,7 @@ const ComingSoonPage = () => {
           <img 
             src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
             alt="Gura Logo" 
-            className="h-16 mx-auto"
+            className="h-16 mx-auto opacity-90 brightness-0 invert" 
           />
         </Link>
         
