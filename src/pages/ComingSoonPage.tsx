@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -41,7 +40,6 @@ const ComingSoonPage = () => {
 
   return (
     <div className="h-screen flex items-center bg-white text-black font-sans relative overflow-hidden">
-      {/* Background gradients */}
       <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-gradient-to-l from-emerald-400/20 to-transparent rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-yellow-400/20 to-transparent rounded-full blur-3xl" />
       
@@ -60,7 +58,7 @@ const ComingSoonPage = () => {
               Coming Soon
             </h1>
             <p className="text-lg text-gray-600">
-              Join the movement redefining convenience.
+              Local delivery, unleashed. Gura is coming. Join the movement bringing your community together.
             </p>
           </div>
 
