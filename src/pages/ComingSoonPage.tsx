@@ -43,7 +43,7 @@ const ComingSoonPage = () => {
       <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-gradient-to-l from-emerald-400/20 to-transparent rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-yellow-400/20 to-transparent rounded-full blur-3xl" />
       
-      <div className="w-full grid md:grid-cols-2 min-h-[600px] items-center relative z-10">
+      <div className="w-full grid md:grid-cols-2 min-h-[300px] items-center relative z-10">
         <div className="px-8 space-y-6 max-w-xl mx-auto w-full">
           <Link to="/" className="inline-block">
             <img 
@@ -101,11 +101,11 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        <div className="hidden md:block h-[600px] relative">
+        <div className="hidden md:block h-[300px] relative">
           <img 
             src="/lovable-uploads/718ff92d-98f1-4faf-8b25-5d46dd88c736.png"
             alt="Happy Customer" 
-            className="h-full w-full object-cover object-top"
+            className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/30 to-yellow-400/30 mix-blend-overlay" />
         </div>
