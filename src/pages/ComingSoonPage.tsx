@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -40,52 +40,77 @@ const ComingSoonPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#7EC4CF] to-[#6BB1BD] px-4 font-sans">
-      <div className="text-center space-y-8 max-w-3xl mx-auto">
-        <Link to="/" className="inline-block">
-          <img 
-            src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
-            alt="Gura Logo" 
-            className="h-16 mx-auto opacity-90 brightness-0 invert" 
-          />
-        </Link>
-        
-        <div className="relative">
-          <img 
-            src="/lovable-uploads/1e19e6db-d806-4982-a3e1-2f8f6e0119da.png"
-            alt="Gura Delivery" 
-            className="w-64 md:w-80 mx-auto my-8 rounded-lg shadow-xl"
-          />
-          <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-[#4A9B55]/90 text-white px-6 py-2 rounded-full backdrop-blur-sm">
-            Coming Soon
+    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-4 font-sans relative overflow-hidden">
+      {/* Decorative gradients */}
+      <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-gradient-to-l from-emerald-400/20 to-transparent rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-yellow-400/20 to-transparent rounded-full blur-3xl" />
+      
+      <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center relative z-10">
+        <div className="space-y-8">
+          <Link to="/" className="inline-block">
+            <img 
+              src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
+              alt="Gura Logo" 
+              className="h-16 opacity-90 brightness-0 invert" 
+            />
+          </Link>
+          
+          <div className="space-y-4">
+            <h1 className="text-6xl font-bold tracking-tight">
+              Launching soon
+            </h1>
+            <p className="text-xl text-gray-400 max-w-lg">
+              Revolutionizing delivery isn't just about speed—it's about creating connections.
+              Join us as we reimagine local delivery for your community.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubscribe} className="max-w-md space-y-4">
+            <div className="flex gap-2">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/60"
+              />
+              <Button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="bg-yellow-400 hover:bg-yellow-500 text-black flex items-center gap-2"
+              >
+                <Mail className="h-4 w-4" />
+                Contact Us
+              </Button>
+            </div>
+          </form>
+
+          <div className="flex items-center gap-6 pt-4">
+            <span className="text-sm text-gray-500">SOCIAL</span>
+            <div className="h-[1px] w-12 bg-gray-800" />
+            <div className="flex gap-4">
+              <a href="#" className="text-gray-400 hover:text-yellow-400">
+                Twitter
+              </a>
+              <a href="#" className="text-gray-400 hover:text-yellow-400">
+                Instagram
+              </a>
+              <a href="#" className="text-gray-400 hover:text-yellow-400">
+                Facebook
+              </a>
+            </div>
           </div>
         </div>
-        
-        <p className="text-xl text-white mt-8 font-medium font-sans">
-          We're gearing up to revolutionize delivery in your area.
-          <br />Stay tuned for something amazing!
-        </p>
 
-        <form onSubmit={handleSubscribe} className="max-w-md mx-auto space-y-4">
-          <div className="flex gap-2">
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/60 font-sans"
-            />
-            <Button 
-              type="submit" 
-              disabled={isSubmitting}
-              className="bg-[#4A9B55] hover:bg-[#4A9B55]/90 text-white flex items-center gap-2 font-sans"
-            >
-              <Mail className="h-4 w-4" />
-              Subscribe
-            </Button>
-          </div>
-        </form>
+        <div className="relative aspect-square w-full max-w-lg mx-auto">
+          <img 
+            src="/lovable-uploads/73b08ba1-f96c-40a0-add0-a175d4efabbf.png"
+            alt="Happy Customer" 
+            className="rounded-full object-cover w-full h-full"
+          />
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-400/30 to-yellow-400/30 mix-blend-overlay" />
+        </div>
       </div>
     </div>
   );
