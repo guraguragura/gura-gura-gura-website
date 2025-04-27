@@ -105,11 +105,11 @@ const ComingSoonPage = () => {
 
         <div className="relative aspect-[3/4] w-full max-w-lg mx-auto">
           <img 
-            src="/lovable-uploads/2ea3fe3f-9258-4e75-96d9-ea1b9aeb3b15.png"
+            src="/lovable-uploads/718ff92d-98f1-4faf-8b25-5d46dd88c736.png"
             alt="Happy Customer" 
-            className="rounded-2xl object-cover w-full h-full"
+            className="object-cover w-full h-full"
           />
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-400/30 to-yellow-400/30 mix-blend-overlay" />
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/30 to-yellow-400/30 mix-blend-overlay" />
         </div>
       </div>
     </div>
