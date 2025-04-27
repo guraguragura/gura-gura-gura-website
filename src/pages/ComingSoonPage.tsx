@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -49,7 +50,7 @@ const ComingSoonPage = () => {
             <img 
               src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
               alt="Gura Logo" 
-              className="h-16 brightness-0" 
+              className="h-16" 
             />
           </Link>
           
@@ -76,7 +77,7 @@ const ComingSoonPage = () => {
               <Button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="bg-yellow-400 hover:bg-yellow-500 text-black flex items-center gap-2"
+                className="bg-brand-teal hover:bg-brand-teal/90 text-black flex items-center gap-2"
               >
                 <Mail className="h-4 w-4" />
                 Contact Us
@@ -115,3 +116,4 @@ const ComingSoonPage = () => {
 };
 
 export default ComingSoonPage;
+
