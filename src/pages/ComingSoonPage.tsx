@@ -43,7 +43,7 @@ const ComingSoonPage = () => {
       <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-gradient-to-l from-emerald-400/20 to-transparent rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-yellow-400/20 to-transparent rounded-full blur-3xl" />
       
-      <div className="w-full grid md:grid-cols-2 min-h-[300px] items-center relative z-10">
+      <div className="w-full grid md:grid-cols-2 min-h-[500px] items-center relative z-10">
         <div className="px-8 space-y-6 max-w-xl mx-auto w-full">
           <Link to="/" className="inline-block">
             <img 
@@ -101,7 +101,7 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        <div className="hidden md:block h-[300px] relative">
+        <div className="hidden md:block h-[500px] relative">
           <img 
             src="/lovable-uploads/7c04b772-82ad-4506-a4fa-d24aba808745.png"
             alt="Happy Customer with Shopping Bags" 
