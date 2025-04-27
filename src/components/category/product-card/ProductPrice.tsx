@@ -1,4 +1,5 @@
 import React from "react";
+import "./ProductPrice.css";
 
 interface ProductPriceProps {
   price: number;
@@ -22,5 +23,3 @@ const ProductPrice: React.FC<ProductPriceProps> = ({ price, discount_price, form
 };
 
 export default ProductPrice;
-
-import "./ProductPrice.css";

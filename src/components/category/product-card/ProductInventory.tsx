@@ -1,5 +1,6 @@
 import React from "react";
 import { Progress } from "@/components/ui/progress";
+import "./ProductInventory.css";
 
 interface ProductInventoryProps {
   soldItems: number;
@@ -20,5 +21,3 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ soldItems, totalInv
 };
 
 export default ProductInventory;
-
-import "./ProductInventory.css";
