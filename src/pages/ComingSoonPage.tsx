@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,16 @@ const ComingSoonPage = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Prevent scrolling when component mounts
+    document.body.style.overflow = 'hidden';
+    
+    // Re-enable scrolling when component unmounts
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,11 +50,11 @@ const ComingSoonPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans">
-      <div className="w-full grid md:grid-cols-2 min-h-screen">
+    <div className="h-screen w-full bg-white text-black font-sans overflow-hidden">
+      <div className="grid md:grid-cols-2 h-full">
         {/* Left Content */}
-        <div className="flex items-center justify-center p-8 lg:p-16">
-          <div className="space-y-8 max-w-xl w-full">
+        <div className="flex items-center px-16 h-full">
+          <div className="space-y-8 max-w-xl">
             <Link to="/" className="inline-block">
               <img 
                 src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
@@ -54,16 +64,16 @@ const ComingSoonPage = () => {
             </Link>
             
             <div className="space-y-4">
-              <h1 className="text-6xl font-bold tracking-tight">
+              <h1 className="text-6xl font-bold tracking-tight text-black">
                 Coming Soon
               </h1>
-              <p className="text-xl text-gray-600 leading-relaxed">
+              <p className="text-xl leading-relaxed text-gray-600">
                 Local delivery, unleashed. Gura is coming.<br />
                 Join the movement bringing your community together.
               </p>
             </div>
 
-            <form onSubmit={handleSubscribe} className="space-y-6">
+            <form onSubmit={handleSubscribe} className="w-full">
               <div className="flex gap-2">
                 <Input
                   type="email"
@@ -71,12 +81,12 @@ const ComingSoonPage = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-gray-50 border-gray-200 text-lg"
+                  className="bg-white border-gray-300 text-lg flex-1"
                 />
                 <Button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="bg-brand-teal hover:bg-brand-teal/90 text-black flex items-center gap-2 px-6"
+                  className="bg-[#84D1D3] hover:bg-[#84D1D3]/90 text-black px-6 flex items-center gap-2"
                 >
                   <Mail className="h-4 w-4" />
                   Contact Us
@@ -84,17 +94,17 @@ const ComingSoonPage = () => {
               </div>
             </form>
 
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-6">
               <span className="text-sm font-medium text-gray-500">SOCIAL</span>
               <div className="h-[1px] w-12 bg-gray-200" />
               <div className="flex gap-6">
-                <a href="#" className="text-gray-600 hover:text-yellow-400 text-sm font-medium">
+                <a href="#" className="text-gray-600 hover:text-[#84D1D3] text-sm font-medium">
                   Twitter
                 </a>
-                <a href="#" className="text-gray-600 hover:text-yellow-400 text-sm font-medium">
+                <a href="#" className="text-gray-600 hover:text-[#84D1D3] text-sm font-medium">
                   Instagram
                 </a>
-                <a href="#" className="text-gray-600 hover:text-yellow-400 text-sm font-medium">
+                <a href="#" className="text-gray-600 hover:text-[#84D1D3] text-sm font-medium">
                   Facebook
                 </a>
               </div>
@@ -103,9 +113,9 @@ const ComingSoonPage = () => {
         </div>
 
         {/* Right Image */}
-        <div className="hidden md:block relative bg-gray-50">
+        <div className="hidden md:block bg-[#F7D44C]">
           <img 
-            src="/lovable-uploads/7c04b772-82ad-4506-a4fa-d24aba808745.png"
+            src="/lovable-uploads/bb100cb3-c811-4920-b8e4-3f0f1485d98a.png"
             alt="Happy Customer with Shopping Bags" 
             className="h-full w-full object-cover"
           />
