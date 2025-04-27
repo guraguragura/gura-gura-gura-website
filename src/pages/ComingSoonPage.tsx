@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -41,7 +40,6 @@ const ComingSoonPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white text-black px-4 font-sans relative overflow-hidden">
-      {/* Decorative gradients */}
       <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-gradient-to-l from-emerald-400/20 to-transparent rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-yellow-400/20 to-transparent rounded-full blur-3xl" />
       
@@ -103,11 +101,11 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        <div className="relative aspect-[3/4] w-full max-w-lg mx-auto">
+        <div className="relative w-full mx-auto">
           <img 
             src="/lovable-uploads/718ff92d-98f1-4faf-8b25-5d46dd88c736.png"
             alt="Happy Customer" 
-            className="object-cover w-full h-full"
+            className="object-contain w-full"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/30 to-yellow-400/30 mix-blend-overlay" />
         </div>
