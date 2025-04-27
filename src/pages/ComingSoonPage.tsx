@@ -40,7 +40,7 @@ const ComingSoonPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-4 font-sans relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white text-black px-4 font-sans relative overflow-hidden">
       {/* Decorative gradients */}
       <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-gradient-to-l from-emerald-400/20 to-transparent rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-yellow-400/20 to-transparent rounded-full blur-3xl" />
@@ -51,7 +51,7 @@ const ComingSoonPage = () => {
             <img 
               src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
               alt="Gura Logo" 
-              className="h-16 opacity-90 brightness-0 invert" 
+              className="h-16 brightness-0" 
             />
           </Link>
           
@@ -59,7 +59,7 @@ const ComingSoonPage = () => {
             <h1 className="text-6xl font-bold tracking-tight">
               Launching soon
             </h1>
-            <p className="text-xl text-gray-400 max-w-lg">
+            <p className="text-xl text-gray-600 max-w-lg">
               Revolutionizing delivery isn't just about speed—it's about creating connections.
               Join us as we reimagine local delivery for your community.
             </p>
@@ -73,7 +73,7 @@ const ComingSoonPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/60"
+                className="bg-gray-50 border-gray-200"
               />
               <Button 
                 type="submit" 
@@ -88,28 +88,28 @@ const ComingSoonPage = () => {
 
           <div className="flex items-center gap-6 pt-4">
             <span className="text-sm text-gray-500">SOCIAL</span>
-            <div className="h-[1px] w-12 bg-gray-800" />
+            <div className="h-[1px] w-12 bg-gray-200" />
             <div className="flex gap-4">
-              <a href="#" className="text-gray-400 hover:text-yellow-400">
+              <a href="#" className="text-gray-600 hover:text-yellow-400">
                 Twitter
               </a>
-              <a href="#" className="text-gray-400 hover:text-yellow-400">
+              <a href="#" className="text-gray-600 hover:text-yellow-400">
                 Instagram
               </a>
-              <a href="#" className="text-gray-400 hover:text-yellow-400">
+              <a href="#" className="text-gray-600 hover:text-yellow-400">
                 Facebook
               </a>
             </div>
           </div>
         </div>
 
-        <div className="relative aspect-square w-full max-w-lg mx-auto">
+        <div className="relative aspect-[3/4] w-full max-w-lg mx-auto">
           <img 
-            src="/lovable-uploads/73b08ba1-f96c-40a0-add0-a175d4efabbf.png"
+            src="/lovable-uploads/2ea3fe3f-9258-4e75-96d9-ea1b9aeb3b15.png"
             alt="Happy Customer" 
-            className="rounded-full object-cover w-full h-full"
+            className="rounded-2xl object-cover w-full h-full"
           />
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-400/30 to-yellow-400/30 mix-blend-overlay" />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-400/30 to-yellow-400/30 mix-blend-overlay" />
         </div>
       </div>
     </div>
