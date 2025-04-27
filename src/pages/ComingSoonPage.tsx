@@ -53,8 +53,8 @@ const ComingSoonPage = () => {
     <div className="h-screen w-full bg-white text-black font-sans overflow-hidden">
       <div className="grid md:grid-cols-2 h-full">
         {/* Left Content */}
-        <div className="flex items-center px-16 h-full">
-          <div className="space-y-8 max-w-xl">
+        <div className="flex items-center justify-center px-16 h-full">
+          <div className="space-y-12 max-w-xl -mt-24">
             <Link to="/" className="inline-block">
               <img 
                 src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
