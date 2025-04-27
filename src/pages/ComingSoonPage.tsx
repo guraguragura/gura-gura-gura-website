@@ -40,7 +40,7 @@ const ComingSoonPage = () => {
 
   return (
     <div className="min-h-screen flex items-center bg-white text-black font-sans">
-      <div className="w-full grid md:grid-cols-2 min-h-[575px] items-center">
+      <div className="w-full grid md:grid-cols-2 min-h-[660px] items-center">
         <div className="px-8 space-y-6 max-w-xl mx-auto w-full">
           <Link to="/" className="inline-block">
             <img 
@@ -98,7 +98,7 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        <div className="hidden md:block h-[575px] relative">
+        <div className="hidden md:block h-[660px] relative">
           <img 
             src="/lovable-uploads/7c04b772-82ad-4506-a4fa-d24aba808745.png"
             alt="Happy Customer with Shopping Bags" 
