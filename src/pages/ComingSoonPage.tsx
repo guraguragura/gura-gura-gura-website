@@ -39,30 +39,30 @@ const ComingSoonPage = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col items-center justify-center bg-white text-black px-4 font-sans relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white text-black px-4 font-sans relative overflow-hidden">
       <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-gradient-to-l from-emerald-400/20 to-transparent rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-yellow-400/20 to-transparent rounded-full blur-3xl" />
       
-      <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-8 items-center relative z-10">
-        <div className="space-y-6">
+      <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center relative z-10">
+        <div className="space-y-8">
           <Link to="/" className="inline-block">
             <img 
               src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
               alt="Gura Logo" 
-              className="h-12" 
+              className="h-16" 
             />
           </Link>
           
-          <div className="space-y-3">
-            <h1 className="text-5xl font-bold tracking-tight">
-              This isn't delivery.<br />This is Gura.
+          <div className="space-y-4">
+            <h1 className="text-6xl font-bold tracking-tight">
+              This isn't delivery. This is Gura.
             </h1>
-            <p className="text-lg text-gray-600 max-w-lg">
+            <p className="text-xl text-gray-600 max-w-lg">
               Join the movement redefining convenience.
             </p>
           </div>
 
-          <form onSubmit={handleSubscribe} className="max-w-md space-y-3">
+          <form onSubmit={handleSubscribe} className="max-w-md space-y-4">
             <div className="flex gap-2">
               <Input
                 type="email"
@@ -83,9 +83,9 @@ const ComingSoonPage = () => {
             </div>
           </form>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6 pt-4">
             <span className="text-sm text-gray-500">SOCIAL</span>
-            <div className="h-[1px] w-8 bg-gray-200" />
+            <div className="h-[1px] w-12 bg-gray-200" />
             <div className="flex gap-4">
               <a href="#" className="text-gray-600 hover:text-yellow-400">
                 Twitter
@@ -100,11 +100,11 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        <div className="relative w-full">
+        <div className="relative w-full mx-auto">
           <img 
             src="/lovable-uploads/718ff92d-98f1-4faf-8b25-5d46dd88c736.png"
             alt="Happy Customer" 
-            className="object-contain w-full max-h-[60vh]"
+            className="object-contain w-full"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/30 to-yellow-400/30 mix-blend-overlay" />
         </div>
