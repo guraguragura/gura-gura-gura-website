@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { mail } from "lucide-react";
+import { Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const ComingSoonPage = () => {
@@ -81,7 +81,7 @@ const ComingSoonPage = () => {
               disabled={isSubmitting}
               className="bg-[#4A9B55] hover:bg-[#4A9B55]/90 text-white flex items-center gap-2"
             >
-              <mail className="h-4 w-4" />
+              <Mail className="h-4 w-4" />
               Subscribe
             </Button>
           </div>
