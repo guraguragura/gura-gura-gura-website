@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -40,7 +39,7 @@ const ComingSoonPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#7EC4CF] to-[#6BB1BD] px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#7EC4CF] to-[#6BB1BD] px-4 font-sans">
       <div className="text-center space-y-8 max-w-3xl mx-auto">
         <Link to="/" className="inline-block">
           <img 
@@ -61,7 +60,7 @@ const ComingSoonPage = () => {
           </div>
         </div>
         
-        <p className="text-xl text-white mt-8 font-medium">
+        <p className="text-xl text-white mt-8 font-medium font-sans">
           We're gearing up to revolutionize delivery in your area.
           <br />Stay tuned for something amazing!
         </p>
@@ -74,12 +73,12 @@ const ComingSoonPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
+              className="bg-white/10 border-white/20 text-white placeholder:text-white/60 font-sans"
             />
             <Button 
               type="submit" 
               disabled={isSubmitting}
-              className="bg-[#4A9B55] hover:bg-[#4A9B55]/90 text-white flex items-center gap-2"
+              className="bg-[#4A9B55] hover:bg-[#4A9B55]/90 text-white flex items-center gap-2 font-sans"
             >
               <Mail className="h-4 w-4" />
               Subscribe
