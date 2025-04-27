@@ -103,8 +103,8 @@ const ComingSoonPage = () => {
 
         <div className="hidden md:block h-[300px] relative">
           <img 
-            src="/lovable-uploads/718ff92d-98f1-4faf-8b25-5d46dd88c736.png"
-            alt="Happy Customer" 
+            src="/lovable-uploads/7c04b772-82ad-4506-a4fa-d24aba808745.png"
+            alt="Happy Customer with Shopping Bags" 
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/30 to-yellow-400/30 mix-blend-overlay" />
