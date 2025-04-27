@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
@@ -30,6 +29,7 @@ import PaymentPage from "@/pages/PaymentPage";
 import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
 import PaymentErrorPage from "@/pages/PaymentErrorPage";
 import AuthPage from "@/pages/AuthPage";
+import ComingSoonPage from "@/pages/ComingSoonPage";
 
 import { CartProvider } from "@/contexts/CartContext";
 
@@ -40,7 +40,7 @@ function App() {
         <Route path="/" element={<IndexPage />} />
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/category/:id" element={<CategoryPage />} />
-        <Route path="/categories/:handle" element={<CategoryPage />} /> {/* Add this new route to support both formats */}
+        <Route path="/categories/:handle" element={<CategoryPage />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/about" element={<AboutUsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
@@ -63,6 +63,7 @@ function App() {
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/payment/success" element={<PaymentSuccessPage />} />
         <Route path="/payment/error" element={<PaymentErrorPage />} />
+        <Route path="/coming-soon" element={<ComingSoonPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
