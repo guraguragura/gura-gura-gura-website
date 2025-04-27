@@ -115,9 +115,9 @@ const ComingSoonPage = () => {
         {/* Right Image */}
         <div className="hidden md:block bg-[#F7D44C]">
           <img 
-            src="/lovable-uploads/bb100cb3-c811-4920-b8e4-3f0f1485d98a.png"
+            src="/lovable-uploads/91bfa46b-f06e-44de-bc8b-4315b8e5ff43.png"
             alt="Happy Customer with Shopping Bags" 
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover object-top"
           />
         </div>
       </div>
