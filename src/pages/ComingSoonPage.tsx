@@ -1,10 +1,44 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Clock } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import { mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const ComingSoonPage = () => {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase
+        .from('newsletter_subscriptions')
+        .insert([{ email }]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Thanks for subscribing!",
+        description: "We'll keep you updated on our progress.",
+      });
+      setEmail("");
+    } catch (error) {
+      toast({
+        title: "Subscription failed",
+        description: "This email may already be subscribed.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#7EC4CF] to-[#6BB1BD] px-4">
       <div className="text-center space-y-8 max-w-3xl mx-auto">
@@ -32,30 +66,26 @@ const ComingSoonPage = () => {
           <br />Stay tuned for something amazing!
         </p>
 
-        <div className="flex items-center justify-center gap-2 text-white/90">
-          <Clock className="h-6 w-6" />
-          <span className="text-lg">Launch Countdown</span>
-        </div>
-
-        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-          <Button 
-            asChild 
-            variant="outline" 
-            className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-          >
-            <Link to="/">
-              Return Home
-            </Link>
-          </Button>
-          <Button 
-            asChild
-            className="bg-[#4A9B55] hover:bg-[#4A9B55]/90 text-white"
-          >
-            <a href="mailto:contact@gura.com">
-              Contact Us
-            </a>
-          </Button>
-        </div>
+        <form onSubmit={handleSubscribe} className="max-w-md mx-auto space-y-4">
+          <div className="flex gap-2">
+            <Input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
+            />
+            <Button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="bg-[#4A9B55] hover:bg-[#4A9B55]/90 text-white flex items-center gap-2"
+            >
+              <mail className="h-4 w-4" />
+              Subscribe
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
