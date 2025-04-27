@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -56,11 +55,10 @@ const ComingSoonPage = () => {
           
           <div className="space-y-4">
             <h1 className="text-6xl font-bold tracking-tight">
-              Launching soon
+              This isn't delivery. This is Gura.
             </h1>
             <p className="text-xl text-gray-600 max-w-lg">
-              Revolutionizing delivery isn't just about speed—it's about creating connections.
-              Join us as we reimagine local delivery for your community.
+              Join the movement redefining convenience.
             </p>
           </div>
 
@@ -116,4 +114,3 @@ const ComingSoonPage = () => {
 };
 
 export default ComingSoonPage;
-
