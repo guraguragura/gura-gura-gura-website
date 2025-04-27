@@ -1,8 +1,8 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import AddToCartButton from "@/components/product/AddToCartButton";
+import "./ProductActions.css";
 
 interface ProductActionsProps {
   product: {

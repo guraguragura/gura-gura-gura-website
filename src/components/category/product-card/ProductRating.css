@@ -1,0 +1,30 @@
+
+.rating-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.rating-value {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #808080;
+}
+
+.rating-star {
+  width: 16px;
+  height: 16px;
+  fill: #3B93E5;
+  color: #3B93E5;
+}
+
+.reviews-count {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #808080;
+}

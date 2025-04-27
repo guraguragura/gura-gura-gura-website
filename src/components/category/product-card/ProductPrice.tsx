@@ -1,4 +1,3 @@
-
 import React from "react";
 
 interface ProductPriceProps {
@@ -23,3 +22,5 @@ const ProductPrice: React.FC<ProductPriceProps> = ({ price, discount_price, form
 };
 
 export default ProductPrice;
+
+import "./ProductPrice.css";

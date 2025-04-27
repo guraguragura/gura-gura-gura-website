@@ -1,3 +1,4 @@
+
 /* Product Card Grid Styles */
 .product-card-grid {
   width: 100%;
@@ -58,101 +59,6 @@
   min-height: 44px;
 }
 
-/* Rating Section */
-.rating-container {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 16px;
-}
-
-.rating-value {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 18px;
-  color: #808080;
-}
-
-.rating-star {
-  width: 16px;
-  height: 16px;
-  fill: #3B93E5;
-  color: #3B93E5;
-}
-
-.reviews-count {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 18px;
-  color: #808080;
-}
-
-/* Inventory Progress */
-.inventory-progress {
-  height: 4px;
-  background: #F1F1F1;
-  border-radius: 800px;
-  margin-bottom: 8px;
-}
-
-.inventory-text {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 18px;
-  color: #000000;
-  margin-bottom: 16px;
-}
-
-/* Price Section */
-.price-container {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.original-price {
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 24px;
-  text-decoration-line: line-through;
-  color: #999999;
-}
-
-.discount-price {
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 24px;
-  color: #000000;
-}
-
-/* Add To Cart Button */
-.add-to-cart-button {
-  width: 100%;
-  border-radius: 0 0 16px 16px;
-  background: #F1F1F1;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  color: #000000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px 0 12px;
-  gap: 8px;
-  border-top: 1px solid #E6E6E6;
-}
-
-.cart-icon {
-  width: 16px;
-  height: 16px;
-}
-
 /* Mobile adjustments */
 @media (max-width: 640px) {
   .product-card-grid {
@@ -170,31 +76,7 @@
     margin-bottom: 8px;
   }
   
-  .rating-container {
-    margin-bottom: 8px;
-  }
-  
-  .price-container {
-    margin-bottom: 8px;
-    flex-wrap: wrap;
-  }
-  
   .product-content {
     padding: 12px;
-  }
-  
-  .original-price,
-  .discount-price {
-    font-size: 14px;
-    line-height: 20px;
-  }
-  
-  .inventory-text {
-    margin-bottom: 8px;
-  }
-  
-  .add-to-cart-button {
-    font-size: 14px;
-    padding: 10px 0 8px;
   }
 }
