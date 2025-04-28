@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -13,10 +12,8 @@ const ComingSoonPage = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Prevent scrolling when component mounts
     document.body.style.overflow = 'hidden';
     
-    // Re-enable scrolling when component unmounts
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -52,9 +49,8 @@ const ComingSoonPage = () => {
   return (
     <div className="h-screen w-full bg-white text-black font-sans overflow-hidden">
       <div className="grid md:grid-cols-2 h-full">
-        {/* Left Content */}
         <div className="flex items-center justify-center px-16 h-full">
-          <div className="space-y-12 max-w-xl -mt-24">
+          <div className="space-y-8 max-w-xl">
             <Link to="/" className="inline-block">
               <img 
                 src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
@@ -112,7 +108,6 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        {/* Right Image */}
         <div className="hidden md:block bg-[#F7D44C]">
           <img 
             src="/lovable-uploads/91bfa46b-f06e-44de-bc8b-4315b8e5ff43.png"
