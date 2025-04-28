@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import ComingSoonPage from "@/pages/ComingSoonPage";
 import PageLayout from "@/components/layout/PageLayout";
 import AccountPage from "@/pages/AccountPage";
-import { Index } from "@/pages/Index";
+import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
 import FaqPage from "@/pages/FaqPage";
 import ContactPage from "@/pages/ContactPage";
