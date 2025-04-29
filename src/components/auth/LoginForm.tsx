@@ -42,27 +42,27 @@ const LoginForm = ({ error, setError }: LoginFormProps) => {
 
   return (
     <div className="w-full max-w-md">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold mb-1">Sign in</h1>
-        <p className="text-sm text-gray-600">
+      <div className="mb-6 md:mb-8">
+        <h1 className="text-xl md:text-2xl font-semibold mb-1">Sign in</h1>
+        <p className="text-xs md:text-sm text-gray-600">
           Welcome back! Please sign in to your account
         </p>
       </div>
       
       {error && (
-        <div className="bg-red-50 text-red-600 p-3 rounded-md mb-4 text-sm">
+        <div className="bg-red-50 text-red-600 p-2 md:p-3 rounded-md mb-4 text-xs md:text-sm">
           {error}
         </div>
       )}
       
       <form onSubmit={handleLogin} className="space-y-4">
-        <div className="space-y-2">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+        <div className="space-y-1 md:space-y-2">
+          <label htmlFor="email" className="block text-xs md:text-sm font-medium text-gray-700">
             E-mail
           </label>
           <div className="relative">
-            <span className="absolute left-3 top-3 text-gray-400">
-              <Mail className="h-4 w-4" />
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+              <Mail className="h-3.5 w-3.5 md:h-4 md:w-4" />
             </span>
             <Input 
               id="email" 
@@ -70,15 +70,15 @@ const LoginForm = ({ error, setError }: LoginFormProps) => {
               placeholder="name@example.com" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="pl-10"
+              className="pl-8 md:pl-10 text-xs md:text-sm h-9 md:h-10"
               required
             />
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1 md:space-y-2">
           <div className="flex justify-between">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-xs md:text-sm font-medium text-gray-700">
               Password
             </label>
             <Link to="/auth/forgot-password" className="text-xs text-gray-500 hover:underline">
@@ -86,8 +86,8 @@ const LoginForm = ({ error, setError }: LoginFormProps) => {
             </Link>
           </div>
           <div className="relative">
-            <span className="absolute left-3 top-3 text-gray-400">
-              <Lock className="h-4 w-4" />
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+              <Lock className="h-3.5 w-3.5 md:h-4 md:w-4" />
             </span>
             <Input 
               id="password" 
@@ -95,27 +95,31 @@ const LoginForm = ({ error, setError }: LoginFormProps) => {
               placeholder="••••••••" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="pl-10 pr-10"
+              className="pl-8 md:pl-10 pr-10 text-xs md:text-sm h-9 md:h-10"
               required
             />
             <button 
               type="button"
-              className="absolute right-3 top-3 text-gray-400"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showPassword ? 
+                <EyeOff className="h-3.5 w-3.5 md:h-4 md:w-4" /> : 
+                <Eye className="h-3.5 w-3.5 md:h-4 md:w-4" />
+              }
             </button>
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pt-1">
           <div className="flex items-center space-x-2">
             <Checkbox 
               id="remember-me" 
               checked={rememberMe}
               onCheckedChange={(checked) => setRememberMe(checked === true)}
+              className="h-3.5 w-3.5 md:h-4 md:w-4"
             />
-            <label htmlFor="remember-me" className="text-sm text-gray-600 cursor-pointer">
+            <label htmlFor="remember-me" className="text-xs md:text-sm text-gray-600 cursor-pointer">
               Remember me
             </label>
           </div>
@@ -123,7 +127,7 @@ const LoginForm = ({ error, setError }: LoginFormProps) => {
         
         <Button 
           type="submit" 
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white" 
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white mt-4 h-9 md:h-10 text-xs md:text-sm" 
           disabled={isLoading}
         >
           {isLoading ? "Signing in..." : "Sign in"}
