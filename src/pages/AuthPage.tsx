@@ -73,7 +73,7 @@ const AuthPage = () => {
           </h2>
         </div>
         <img 
-          src="/lovable-uploads/e8a84ea7-9ac0-4dc3-85bf-3476bcd5396e.png" 
+          src="/lovable-uploads/d6bdd8f8-3811-4b4e-8c28-1c6334fb88a1.png" 
           alt="Happy shopper" 
           className="absolute inset-0 w-full h-full object-contain object-center"
         />
