@@ -4,9 +4,11 @@ import { useCustomerProfile } from '@/hooks/useCustomerProfile';
 import PersonalInfoForm from './personal-info/PersonalInfoForm';
 import PasswordChangeForm from './personal-info/PasswordChangeForm';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const PersonalInfo = () => {
   const { isLoading, customer, setCustomer } = useCustomerProfile();
+  const { user } = useAuth();
 
   return (
     <div className="space-y-6 sm:space-y-8">

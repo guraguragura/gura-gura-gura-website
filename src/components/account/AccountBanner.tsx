@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface BannerContent {
   title: string;
@@ -11,26 +11,32 @@ interface BannerContent {
 const AccountBanner = () => {
   const location = useLocation();
   const [firstName, setFirstName] = useState('Customer');
+  const { user } = useAuth();
   
   // Fetch customer data to get the first name
   useEffect(() => {
     const fetchCustomerData = async () => {
+      if (!user) return;
+      
       try {
-        // Get first customer record as placeholder
-        // In a real application, you would fetch the specific customer based on authentication
+        // Get the customer record that matches the current user's email
         const { data, error } = await supabase
           .from('customer')
           .select('first_name')
-          .limit(1)
-          .single();
+          .eq('email', user.email)
+          .maybeSingle();
 
-        if (error) {
+        if (error && error.code !== 'PGRST116') {
           console.error('Error fetching customer data:', error);
           return;
         }
 
+        // If customer data found, use it
         if (data && data.first_name) {
           setFirstName(data.first_name);
+        } else if (user.user_metadata?.first_name) {
+          // Otherwise use data from auth metadata if available
+          setFirstName(user.user_metadata.first_name);
         }
       } catch (error) {
         console.error('Error in fetchCustomerData:', error);
@@ -38,7 +44,7 @@ const AccountBanner = () => {
     };
 
     fetchCustomerData();
-  }, []);
+  }, [user]);
   
   // Define content based on current path
   const getBannerContent = (): BannerContent => {
