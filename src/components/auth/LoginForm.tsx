@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -19,6 +19,7 @@ const LoginForm = ({ error, setError }: LoginFormProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +30,8 @@ const LoginForm = ({ error, setError }: LoginFormProps) => {
       const result = await signInWithEmail(email, password);
       if (result.error) {
         setError(result.error.message || 'Failed to sign in. Please check your credentials.');
+      } else {
+        navigate('/account/personal-info');
       }
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred');

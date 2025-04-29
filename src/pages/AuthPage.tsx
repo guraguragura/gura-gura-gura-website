@@ -21,7 +21,7 @@ const AuthPage = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/account');
+      navigate('/account/personal-info');
     }
     
     // Prevent scrolling on login page

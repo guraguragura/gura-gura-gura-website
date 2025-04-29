@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -18,6 +17,7 @@ import { toast } from 'sonner';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface NavItem {
   path: string;
@@ -35,11 +35,17 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { signOut } = useAuth();
 
-  const handleLogout = () => {
-    // This is a temporary mock logout function for development
-    toast.success('You have been signed out');
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast.success('You have been signed out');
+      navigate('/auth');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      toast.error('Failed to sign out');
+    }
   };
 
   const navItems: NavItem[] = [
@@ -52,7 +58,7 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
 
   const secondaryNavItems: NavItem[] = [
     { section: 'OTHER', path: '', label: '', icon: null },
-    { path: '/faq', label: 'FAQ', icon: <HelpCircle className="h-5 w-5" /> }, // Updated to use /faq
+    { path: '/faq', label: 'FAQ', icon: <HelpCircle className="h-5 w-5" /> },
     { path: '#', label: 'Sign Out', icon: <LogOut className="h-5 w-5 text-red-500" />, 
       onClick: handleLogout },
   ];
