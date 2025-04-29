@@ -1,17 +1,18 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import LoginForm from '@/components/auth/LoginForm';
 import SignupForm from '@/components/auth/SignupForm';
-import SocialLogin from '@/components/auth/SocialLogin';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Link } from 'react-router-dom';
 
 const AuthPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
-  const [isLogin, setIsLogin] = useState(true);
+  const [mode, setMode] = useState<'login' | 'signup'>(
+    searchParams.get('mode') === 'signup' ? 'signup' : 'login'
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,132 +21,55 @@ const AuthPage = () => {
       navigate('/account');
     }
     
-    // Only prevent scrolling on login page, not signup page
-    if (isLogin) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+    // Prevent scrolling on login page
+    document.body.style.overflow = 'hidden';
     
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [user, navigate, isLogin]);
+  }, [user, navigate]);
 
-  const authContent = (
-    <>
-      {isLogin ? (
-        <LoginForm error={error} setError={setError} />
-      ) : (
-        <SignupForm error={error} setError={setError} />
-      )}
+  // Update mode if search param changes
+  useEffect(() => {
+    setMode(searchParams.get('mode') === 'signup' ? 'signup' : 'login');
+  }, [searchParams]);
 
-      <SocialLogin isLoading={isLoading} />
-    </>
-  );
-
-  // Create a split-screen layout for login page, but keep standard layout for signup
-  if (isLogin) {
-    return (
-      <div className="min-h-screen flex flex-col md:flex-row">
-        {/* Left side - Login Form */}
-        <div className="w-full md:w-1/2 bg-white flex items-center justify-center p-4 md:p-8">
-          <div className="w-full max-w-md">
-            <div className="flex justify-center mb-8">
-              <img 
-                src="/lovable-uploads/fee0a176-d29e-4bbd-9e57-4c3c62a0be2b.png" 
-                alt="Gura Logo" 
-                className="h-20 w-auto"
-              />
-            </div>
-            
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold text-center">
-                  Sign In to Your Account
-                </CardTitle>
-                <CardDescription className="text-center">
-                  Welcome back! Sign in to access your account
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {authContent}
-              </CardContent>
-              <CardFooter>
-                <p className="text-center w-full">
-                  Don't have an account?{" "}
-                  <button
-                    onClick={() => {
-                      setIsLogin(false);
-                      setError(null);
-                    }}
-                    className="text-blue-600 hover:underline font-medium"
-                  >
-                    Sign up
-                  </button>
-                </p>
-              </CardFooter>
-            </Card>
-          </div>
-        </div>
-        
-        {/* Right side - Image Background */}
-        <div className="hidden md:flex md:w-1/2 bg-[#F8C4B4] relative overflow-hidden">
-          <div className="absolute top-16 left-10 z-10 text-left">
-            <h2 className="text-4xl font-bold text-white mb-4">Shop smart, shop fast,</h2>
-            <h2 className="text-4xl font-bold text-white">shop Gura.</h2>
-          </div>
-          <img 
-            src="/lovable-uploads/61870ac8-67b1-4faf-9fa6-e40f60010b9d.png" 
-            alt="Gura Shopping" 
-            className="absolute inset-0 w-full h-full object-cover object-center"
-          />
+  return (
+    <div className="min-h-screen flex flex-col md:flex-row">
+      {/* Left side - Login Form */}
+      <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-start p-8 md:p-16 overflow-y-auto">
+        <div className="w-full max-w-md">
+          <Link to="/" className="inline-block mb-12">
+            <img 
+              src="/lovable-uploads/fee0a176-d29e-4bbd-9e57-4c3c62a0be2b.png" 
+              alt="Gura Logo" 
+              className="h-12 w-auto"
+            />
+          </Link>
+          
+          {mode === 'login' ? (
+            <LoginForm error={error} setError={setError} />
+          ) : (
+            <SignupForm error={error} setError={setError} />
+          )}
         </div>
       </div>
-    );
-  }
-
-  // Standard layout for signup page
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8">
-      <div className="w-full max-w-2xl">
-        <div className="flex justify-center mb-8">
-          <img 
-            src="/lovable-uploads/fee0a176-d29e-4bbd-9e57-4c3c62a0be2b.png" 
-            alt="Gura Logo" 
-            className="h-20 w-auto"
-          />
+      
+      {/* Right side - Image Background */}
+      <div className="hidden md:block md:w-1/2 bg-[#84D1D3] relative overflow-hidden">
+        <div className="absolute top-16 left-10 z-10">
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Shop smart, shop fast,
+          </h2>
+          <h2 className="text-4xl font-bold text-white">
+            shop Gura.
+          </h2>
         </div>
-        
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">
-              Create a New Account
-            </CardTitle>
-            <CardDescription className="text-center">
-              New here? Create an account for yourself or your business and enjoy a whole new way of online shopping!
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="max-h-[70vh]">
-              {authContent}
-            </ScrollArea>
-          </CardContent>
-          <CardFooter>
-            <p className="text-center w-full">
-              Already have an account?{" "}
-              <button
-                onClick={() => {
-                  setIsLogin(true);
-                  setError(null);
-                }}
-                className="text-blue-600 hover:underline font-medium"
-              >
-                Sign in
-              </button>
-            </p>
-          </CardFooter>
-        </Card>
+        <img 
+          src="/lovable-uploads/73545f91-b036-425d-8d6f-97967acf46ca.png" 
+          alt="Happy shopper" 
+          className="absolute inset-0 w-full h-full object-cover object-right"
+        />
       </div>
     </div>
   );

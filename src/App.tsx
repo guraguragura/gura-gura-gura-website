@@ -15,6 +15,8 @@ import ProductPage from "@/pages/ProductPage";
 import CartPage from "@/pages/CartPage";
 import CheckoutPage from "@/pages/CheckoutPage";
 import GuraBusinessPage from "@/pages/GuraBusinessPage";
+import AuthPage from "@/pages/AuthPage";
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import "./App.css";
 
 function App() {
@@ -24,6 +26,10 @@ function App() {
         {/* Main Pages */}
         <Route path="/" element={<Index />} />
         <Route path="/coming-soon" element={<ComingSoonPage />} />
+        
+        {/* Auth Pages */}
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
         
         {/* Account Pages */}
         <Route path="/account/*" element={<AccountPage />} />
