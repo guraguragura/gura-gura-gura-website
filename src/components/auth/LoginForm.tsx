@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 type LoginFormProps = {
@@ -41,11 +41,11 @@ const LoginForm = ({ error, setError }: LoginFormProps) => {
   };
 
   return (
-    <div className="w-full max-w-sm">
+    <div className="w-full max-w-md">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold mb-1">Sign in</h1>
         <p className="text-sm text-gray-600">
-          Don't have an account? <Link to="/auth?mode=signup" className="text-blue-500 hover:underline">Create now</Link>
+          Welcome back! Please sign in to your account
         </p>
       </div>
       
@@ -60,15 +60,20 @@ const LoginForm = ({ error, setError }: LoginFormProps) => {
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">
             E-mail
           </label>
-          <Input 
-            id="email" 
-            type="email" 
-            placeholder="victor@gmail.com" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full"
-            required
-          />
+          <div className="relative">
+            <span className="absolute left-3 top-3 text-gray-400">
+              <Mail className="h-4 w-4" />
+            </span>
+            <Input 
+              id="email" 
+              type="email" 
+              placeholder="name@example.com" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="pl-10"
+              required
+            />
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -81,18 +86,21 @@ const LoginForm = ({ error, setError }: LoginFormProps) => {
             </Link>
           </div>
           <div className="relative">
+            <span className="absolute left-3 top-3 text-gray-400">
+              <Lock className="h-4 w-4" />
+            </span>
             <Input 
               id="password" 
               type={showPassword ? "text" : "password"} 
-              placeholder="••••••••••••" 
+              placeholder="••••••••" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full pr-10"
+              className="pl-10 pr-10"
               required
             />
             <button 
               type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute right-3 top-3 text-gray-400"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

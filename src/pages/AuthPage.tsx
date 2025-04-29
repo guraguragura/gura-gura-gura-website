@@ -38,7 +38,7 @@ const AuthPage = () => {
   }, [searchParams]);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Mobile Header - Only visible on mobile */}
       {isMobile && (
         <div className="bg-[#84D1D3] p-6 flex flex-col items-center">
@@ -57,11 +57,11 @@ const AuthPage = () => {
       )}
       
       <div className="flex flex-col md:flex-row flex-1">
-        {/* Left side - Login Form */}
+        {/* Left side - Auth Form */}
         <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-start p-6 md:p-16 overflow-y-auto">
           <div className="w-full max-w-md">
             {!isMobile && (
-              <Link to="/" className="inline-block mb-12">
+              <Link to="/" className="inline-block mb-6">
                 <img 
                   src="/lovable-uploads/fee0a176-d29e-4bbd-9e57-4c3c62a0be2b.png" 
                   alt="Gura Logo" 
@@ -73,11 +73,17 @@ const AuthPage = () => {
             {mode === 'login' ? (
               <>
                 <LoginForm error={error} setError={setError} />
+                <div className="mt-6 text-center text-sm">
+                  Don't have an account? <Link to="/auth?mode=signup" className="text-blue-500 hover:underline">Create now</Link>
+                </div>
                 <SocialLogin isLoading={isLoading} />
               </>
             ) : (
               <>
                 <SignupForm error={error} setError={setError} />
+                <div className="mt-6 text-center text-sm">
+                  Already have an account? <Link to="/auth" className="text-blue-500 hover:underline">Sign in</Link>
+                </div>
                 <SocialLogin isLoading={isLoading} />
               </>
             )}

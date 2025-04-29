@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, Lock, Phone } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 type SignupFormProps = {
@@ -18,9 +18,14 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const navigate = useNavigate();
+  
+  // Track gender selection
+  const [gender, setGender] = useState<'male' | 'female' | null>(null);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +42,9 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
       const result = await signUpWithEmail(email, password, firstName, lastName);
       if (result.error) {
         setError(result.error.message || 'Failed to sign up. Please try again.');
+      } else {
+        // Successfully registered, navigate to personal info
+        navigate('/account/personal-info');
       }
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred');
@@ -46,12 +54,10 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
   };
 
   return (
-    <div className="w-full max-w-sm">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold mb-1">Create account</h1>
-        <p className="text-sm text-gray-600">
-          Already have an account? <Link to="/auth" className="text-blue-500 hover:underline">Sign in</Link>
-        </p>
+    <div className="w-full max-w-md">
+      <div className="mb-6 text-center">
+        <h1 className="text-xl font-semibold text-gray-800 mb-1">New at Gura?</h1>
+        <p className="text-sm text-gray-600">Create an account to start your Gura shopping!</p>
       </div>
       
       {error && (
@@ -61,30 +67,80 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
       )}
       
       <form onSubmit={handleSignup} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-              First Name
-            </label>
+        <div className="flex space-x-4 mb-2">
+          <label className={`flex items-center space-x-2 border rounded-md p-2 cursor-pointer ${gender === 'male' ? 'bg-blue-50 border-blue-500' : 'border-gray-300'}`}>
+            <input
+              type="radio"
+              className="hidden"
+              checked={gender === 'male'}
+              onChange={() => setGender('male')}
+            />
+            <span className="text-sm">Male</span>
+          </label>
+          
+          <label className={`flex items-center space-x-2 border rounded-md p-2 cursor-pointer ${gender === 'female' ? 'bg-blue-50 border-blue-500' : 'border-gray-300'}`}>
+            <input
+              type="radio"
+              className="hidden"
+              checked={gender === 'female'}
+              onChange={() => setGender('female')}
+            />
+            <span className="text-sm">Female</span>
+          </label>
+        </div>
+        
+        <div className="space-y-2">
+          <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+            First name
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-3 text-gray-400">
+              <User className="h-4 w-4" />
+            </span>
             <Input 
               id="firstName" 
               type="text" 
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
+              className="pl-10"
               required
             />
           </div>
-          
-          <div className="space-y-2">
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-              Last Name
-            </label>
+        </div>
+        
+        <div className="space-y-2">
+          <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+            Last name
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-3 text-gray-400">
+              <User className="h-4 w-4" />
+            </span>
             <Input 
               id="lastName" 
               type="text" 
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
+              className="pl-10"
               required
+            />
+          </div>
+        </div>
+        
+        <div className="space-y-2">
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+            Phone
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-3 text-gray-400">
+              <Phone className="h-4 w-4" />
+            </span>
+            <Input 
+              id="phone" 
+              type="tel" 
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="pl-10"
             />
           </div>
         </div>
@@ -93,13 +149,19 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">
             Email
           </label>
-          <Input 
-            id="email" 
-            type="email" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <div className="relative">
+            <span className="absolute left-3 top-3 text-gray-400">
+              <Mail className="h-4 w-4" />
+            </span>
+            <Input 
+              id="email" 
+              type="email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="pl-10"
+              required
+            />
+          </div>
         </div>
 
         <div className="space-y-2">
@@ -107,88 +169,57 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
             Password
           </label>
           <div className="relative">
+            <span className="absolute left-3 top-3 text-gray-400">
+              <Lock className="h-4 w-4" />
+            </span>
             <Input 
               id="password" 
               type={showPassword ? "text" : "password"} 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="pr-10"
+              className="pl-10 pr-10"
               required
             />
             <button 
               type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute right-3 top-3 text-gray-400"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
-          <p className="text-xs text-gray-500 mt-1">Must be at least 8 characters</p>
+          <div className="text-xs text-gray-500 mt-2">
+            <p>Password safety criteria:</p>
+            <p>This password should include a user ID as prefix, uppercase, lowercase, and symbols to ensure your account's safety.</p>
+            <p>Your account will be blocked after three attempts, verification will be needed to unlock your account.</p>
+          </div>
         </div>
 
-        <div className="flex items-start space-x-2">
+        <div className="flex items-start pt-2">
           <Checkbox 
             id="terms" 
             checked={agreeTerms}
             onCheckedChange={(checked) => setAgreeTerms(checked === true)}
             className="mt-1"
           />
-          <label htmlFor="terms" className="text-xs text-gray-600">
-            By creating an account, I agree to Gura's <Link to="/terms" className="text-blue-500 hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-blue-500 hover:underline">Privacy Policy</Link>
+          <label htmlFor="terms" className="ml-2 text-xs text-gray-600">
+            I agree to the <Link to="/terms" className="text-blue-500 hover:underline">terms and conditions</Link> and <Link to="/privacy" className="text-blue-500 hover:underline">privacy policy</Link>
           </label>
         </div>
         
         <Button 
           type="submit" 
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white" 
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white mt-4" 
           disabled={isLoading}
         >
-          {isLoading ? "Creating account..." : "Create account"}
+          {isLoading ? "Creating account..." : "Sign up for my account"}
         </Button>
       </form>
 
-      <div className="mt-6">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">or</span>
-          </div>
-        </div>
-
-        <div className="mt-6 space-y-3">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={() => {/* Implement Google signup */}}
-            className="w-full flex items-center justify-center space-x-2"
-            disabled={isLoading}
-          >
-            <svg className="h-5 w-5" viewBox="0 0 24 24">
-              <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
-                <path fill="#4285F4" d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z" />
-                <path fill="#34A853" d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z" />
-                <path fill="#FBBC05" d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.724 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z" />
-                <path fill="#EA4335" d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z" />
-              </g>
-            </svg>
-            <span>Continue with Google</span>
-          </Button>
-          
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={() => {/* Implement Facebook signup */}}
-            className="w-full flex items-center justify-center space-x-2"
-            disabled={isLoading}
-          >
-            <svg className="h-5 w-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-              <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
-            </svg>
-            <span>Continue with Facebook</span>
-          </Button>
-        </div>
+      <div className="mt-6 text-center">
+        <p className="text-sm">
+          Already have an account? <Link to="/auth" className="text-blue-500 hover:underline">Log in</Link>
+        </p>
       </div>
     </div>
   );
