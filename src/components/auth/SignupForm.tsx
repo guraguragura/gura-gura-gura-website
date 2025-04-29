@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Eye, EyeOff, User, Mail, Lock, Phone } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 type SignupFormProps = {
   error: string | null;
@@ -67,26 +67,22 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
       )}
       
       <form onSubmit={handleSignup} className="space-y-4">
-        <div className="flex space-x-4 mb-2">
-          <label className={`flex items-center space-x-2 border rounded-md p-2 cursor-pointer ${gender === 'male' ? 'bg-blue-50 border-blue-500' : 'border-gray-300'}`}>
-            <input
-              type="radio"
-              className="hidden"
-              checked={gender === 'male'}
-              onChange={() => setGender('male')}
-            />
-            <span className="text-sm">Male</span>
-          </label>
-          
-          <label className={`flex items-center space-x-2 border rounded-md p-2 cursor-pointer ${gender === 'female' ? 'bg-blue-50 border-blue-500' : 'border-gray-300'}`}>
-            <input
-              type="radio"
-              className="hidden"
-              checked={gender === 'female'}
-              onChange={() => setGender('female')}
-            />
-            <span className="text-sm">Female</span>
-          </label>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Gender</label>
+          <RadioGroup 
+            value={gender || ''} 
+            onValueChange={(value) => setGender(value as 'male' | 'female')}
+            className="flex space-x-4"
+          >
+            <div className="flex items-center space-x-2 border rounded-md p-2 px-4">
+              <RadioGroupItem value="male" id="male" />
+              <label htmlFor="male" className="text-sm cursor-pointer">Male</label>
+            </div>
+            <div className="flex items-center space-x-2 border rounded-md p-2 px-4">
+              <RadioGroupItem value="female" id="female" />
+              <label htmlFor="female" className="text-sm cursor-pointer">Female</label>
+            </div>
+          </RadioGroup>
         </div>
         
         <div className="space-y-2">
