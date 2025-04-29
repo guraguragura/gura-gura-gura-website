@@ -11,10 +11,11 @@ import {
   FormLabel, 
   FormMessage 
 } from '@/components/ui/form';
-import { toast } from '@/hooks/use-toast'; 
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { supabase } from '@/integrations/supabase/client';
 
 const passwordSchema = z.object({
   current_password: z.string().min(1, 'Current password is required'),
@@ -43,16 +44,24 @@ const PasswordChangeForm = () => {
   const onSubmit = async (values: PasswordFormValues) => {
     setIsSubmitting(true);
     
-    // Mock password change for development
-    setTimeout(() => {
-      toast({
-        title: "Success",
-        description: "Your password has been updated.",
+    try {
+      // Update password using Supabase Auth API
+      const { error } = await supabase.auth.updateUser({ 
+        password: values.new_password 
       });
       
+      if (error) {
+        throw error;
+      }
+      
+      toast.success("Your password has been updated successfully");
       form.reset();
+    } catch (error: any) {
+      console.error('Error updating password:', error);
+      toast.error(error.message || "Failed to update password. Please try again.");
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (

@@ -24,11 +24,7 @@ export function useCustomerProfile() {
 
         if (customerError && customerError.code !== 'PGRST116') {
           console.error('Error fetching customer data:', customerError);
-          toast({
-            title: "Error",
-            description: "Failed to load customer data",
-            variant: "destructive",
-          });
+          toast.error("Failed to load customer data");
           return;
         }
 
@@ -50,11 +46,7 @@ export function useCustomerProfile() {
         }
       } catch (error) {
         console.error('Error in fetchCustomer:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load customer profile",
-          variant: "destructive",
-        });
+        toast.error("Failed to load customer profile");
       } finally {
         setIsLoading(false);
       }
