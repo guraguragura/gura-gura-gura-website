@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import LoginForm from '@/components/auth/LoginForm';
 import SignupForm from '@/components/auth/SignupForm';
 import { Link } from 'react-router-dom';
+import SocialLogin from '@/components/auth/SocialLogin';
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -48,9 +49,15 @@ const AuthPage = () => {
           </Link>
           
           {mode === 'login' ? (
-            <LoginForm error={error} setError={setError} />
+            <>
+              <LoginForm error={error} setError={setError} />
+              <SocialLogin isLoading={isLoading} />
+            </>
           ) : (
-            <SignupForm error={error} setError={setError} />
+            <>
+              <SignupForm error={error} setError={setError} />
+              <SocialLogin isLoading={isLoading} />
+            </>
           )}
         </div>
       </div>
@@ -66,9 +73,9 @@ const AuthPage = () => {
           </h2>
         </div>
         <img 
-          src="/lovable-uploads/73545f91-b036-425d-8d6f-97967acf46ca.png" 
+          src="/lovable-uploads/e8a84ea7-9ac0-4dc3-85bf-3476bcd5396e.png" 
           alt="Happy shopper" 
-          className="absolute inset-0 w-full h-full object-cover object-right"
+          className="absolute inset-0 w-full h-full object-contain object-center"
         />
       </div>
     </div>
