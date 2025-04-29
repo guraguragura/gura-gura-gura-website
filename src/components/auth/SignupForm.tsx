@@ -3,48 +3,132 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link, useNavigate } from 'react-router-dom';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Eye, EyeOff, User, Mail, Lock, Phone } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import BasicInfoFields from './BasicInfoFields';
+import TermsCheckbox from './TermsCheckbox';
+import AddressFields from './AddressFields';
+import SubmitButton from './SubmitButton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Mail, Phone } from 'lucide-react';
 
 type SignupFormProps = {
   error: string | null;
   setError: (error: string | null) => void;
 };
 
+type AddressData = {
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+};
+
+// Form state interface
+interface SignupFormState {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  password: string;
+  confirmPassword: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  agreeToTerms: boolean;
+  signupMethod: 'email' | 'phone';
+}
+
 const SignupForm = ({ error, setError }: SignupFormProps) => {
   const { signUpWithEmail } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [agreeTerms, setAgreeTerms] = useState(false);
   const navigate = useNavigate();
-  
-  // Track gender selection
-  const [gender, setGender] = useState<'male' | 'female' | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formState, setFormState] = useState<SignupFormState>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    password: '',
+    confirmPassword: '',
+    address: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: '',
+    agreeToTerms: false,
+    signupMethod: 'email'
+  });
+
+  const updateField = (field: keyof SignupFormState, value: string | boolean) => {
+    setFormState((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const validateForm = (): string | null => {
+    const { firstName, lastName, email, phone, password, confirmPassword, agreeToTerms, signupMethod } = formState;
+
+    if (!firstName || !lastName) {
+      return 'Please enter your first and last name';
+    }
+
+    if (signupMethod === 'email' && (!email || !/\S+@\S+\.\S+/.test(email))) {
+      return 'Please enter a valid email address';
+    }
+
+    if (signupMethod === 'phone' && (!phone || !/^\+?[1-9]\d{1,14}$/.test(phone))) {
+      return 'Please enter a valid phone number (e.g., +1234567890)';
+    }
+
+    if (!password || password.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+
+    if (password !== confirmPassword) {
+      return 'Passwords do not match';
+    }
+
+    if (!agreeToTerms) {
+      return 'You must agree to the terms and conditions';
+    }
+
+    return null;
+  };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     
-    if (!agreeTerms) {
-      setError('You must agree to the Terms of Service and Privacy Policy');
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
       return;
     }
-    
-    setError(null);
+
     setIsLoading(true);
 
     try {
-      const result = await signUpWithEmail(email, password, firstName, lastName);
+      const addressData: AddressData = {
+        address: formState.address,
+        city: formState.city,
+        state: formState.state,
+        zipCode: formState.zipCode,
+        country: formState.country,
+      };
+
+      // For now, we're using signUpWithEmail with both methods as Supabase doesn't
+      // have a separate signUpWithPhone method - we'd need to customize this
+      const result = await signUpWithEmail(
+        formState.signupMethod === 'email' ? formState.email : formState.phone,
+        formState.password,
+        formState.firstName,
+        formState.lastName,
+        addressData
+      );
+
       if (result.error) {
-        setError(result.error.message || 'Failed to sign up. Please try again.');
+        setError(result.error.message || 'An error occurred during signup');
       } else {
-        // Successfully registered, navigate to personal info
         navigate('/account/personal-info');
       }
     } catch (err: any) {
@@ -56,171 +140,138 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
 
   return (
     <div className="w-full max-w-md">
-      <div className="mb-4 md:mb-6 text-center">
-        <h1 className="text-lg md:text-xl font-semibold text-gray-800 mb-1">New at Gura?</h1>
-        <p className="text-xs md:text-sm text-gray-600">Create an account to start your Gura shopping!</p>
+      <div className="mb-6 md:mb-8">
+        <h1 className="text-xl md:text-2xl font-semibold mb-1">Create Account</h1>
+        <p className="text-xs md:text-sm text-gray-600">
+          Join Gura to shop your favorite products
+        </p>
       </div>
-      
+
       {error && (
         <div className="bg-red-50 text-red-600 p-2 md:p-3 rounded-md mb-4 text-xs md:text-sm">
           {error}
         </div>
       )}
-      
-      <form onSubmit={handleSignup} className="space-y-3 md:space-y-4">
-        <div className="space-y-1 md:space-y-2">
-          <label className="block text-xs md:text-sm font-medium text-gray-700">Gender</label>
-          <RadioGroup 
-            value={gender || ''} 
-            onValueChange={(value) => setGender(value as 'male' | 'female')}
-            className="flex space-x-3 md:space-x-4"
-          >
-            <div className="flex items-center space-x-1 md:space-x-2 border rounded-md p-1.5 md:p-2 px-3 md:px-4">
-              <RadioGroupItem value="male" id="male" className="h-3 w-3 md:h-4 md:w-4" />
-              <label htmlFor="male" className="text-xs md:text-sm cursor-pointer">Male</label>
-            </div>
-            <div className="flex items-center space-x-1 md:space-x-2 border rounded-md p-1.5 md:p-2 px-3 md:px-4">
-              <RadioGroupItem value="female" id="female" className="h-3 w-3 md:h-4 md:w-4" />
-              <label htmlFor="female" className="text-xs md:text-sm cursor-pointer">Female</label>
-            </div>
-          </RadioGroup>
-        </div>
-        
-        <div className="space-y-1 md:space-y-2">
-          <label htmlFor="firstName" className="block text-xs md:text-sm font-medium text-gray-700">
-            First name
-          </label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-              <User className="h-3.5 w-3.5 md:h-4 md:w-4" />
-            </span>
-            <Input 
-              id="firstName" 
-              type="text" 
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="pl-8 md:pl-10 text-xs md:text-sm h-9 md:h-10"
-              required
-            />
-          </div>
-        </div>
-        
-        <div className="space-y-1 md:space-y-2">
-          <label htmlFor="lastName" className="block text-xs md:text-sm font-medium text-gray-700">
-            Last name
-          </label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-              <User className="h-3.5 w-3.5 md:h-4 md:w-4" />
-            </span>
-            <Input 
-              id="lastName" 
-              type="text" 
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="pl-8 md:pl-10 text-xs md:text-sm h-9 md:h-10"
-              required
-            />
-          </div>
-        </div>
-        
-        <div className="space-y-1 md:space-y-2">
-          <label htmlFor="phone" className="block text-xs md:text-sm font-medium text-gray-700">
-            Phone
-          </label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-              <Phone className="h-3.5 w-3.5 md:h-4 md:w-4" />
-            </span>
-            <Input 
-              id="phone" 
-              type="tel" 
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="pl-8 md:pl-10 text-xs md:text-sm h-9 md:h-10"
-            />
-          </div>
-        </div>
-        
-        <div className="space-y-1 md:space-y-2">
-          <label htmlFor="email" className="block text-xs md:text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-              <Mail className="h-3.5 w-3.5 md:h-4 md:w-4" />
-            </span>
-            <Input 
-              id="email" 
-              type="email" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="pl-8 md:pl-10 text-xs md:text-sm h-9 md:h-10"
-              required
-            />
-          </div>
-        </div>
 
-        <div className="space-y-1 md:space-y-2">
-          <label htmlFor="password" className="block text-xs md:text-sm font-medium text-gray-700">
-            Password
-          </label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-              <Lock className="h-3.5 w-3.5 md:h-4 md:w-4" />
-            </span>
-            <Input 
-              id="password" 
-              type={showPassword ? "text" : "password"} 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="pl-8 md:pl-10 pr-10 text-xs md:text-sm h-9 md:h-10"
-              required
-            />
-            <button 
-              type="button"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? 
-                <EyeOff className="h-3.5 w-3.5 md:h-4 md:w-4" /> : 
-                <Eye className="h-3.5 w-3.5 md:h-4 md:w-4" />
-              }
-            </button>
-          </div>
-          <div className="text-[10px] md:text-xs text-gray-500 mt-1 md:mt-2">
-            <p>Password safety criteria:</p>
-            <p>This password should include uppercase, lowercase, and symbols to ensure your account's safety.</p>
-            <p>Your account will be blocked after three attempts, verification will be needed to unlock your account.</p>
-          </div>
-        </div>
+      <Tabs 
+        defaultValue="email" 
+        className="mb-4"
+        onValueChange={(value) => updateField('signupMethod', value as 'email' | 'phone')}
+      >
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="email">Email</TabsTrigger>
+          <TabsTrigger value="phone">Phone</TabsTrigger>
+        </TabsList>
 
-        <div className="flex items-start pt-1 md:pt-2">
-          <Checkbox 
-            id="terms" 
-            checked={agreeTerms}
-            onCheckedChange={(checked) => setAgreeTerms(checked === true)}
-            className="mt-0.5 h-3 w-3 md:h-4 md:w-4"
+        <form onSubmit={handleSignup} className="space-y-4 mt-4">
+          <BasicInfoFields 
+            firstName={formState.firstName}
+            lastName={formState.lastName}
+            setFirstName={(value) => updateField('firstName', value)}
+            setLastName={(value) => updateField('lastName', value)}
           />
-          <label htmlFor="terms" className="ml-2 text-[10px] md:text-xs text-gray-600">
-            I agree to the <Link to="/terms" className="text-blue-500 hover:underline">terms and conditions</Link> and <Link to="/privacy" className="text-blue-500 hover:underline">privacy policy</Link>
-          </label>
-        </div>
-        
-        <Button 
-          type="submit" 
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white mt-3 md:mt-4 h-9 md:h-10 text-xs md:text-sm" 
-          disabled={isLoading}
-        >
-          {isLoading ? "Creating account..." : "Sign up for my account"}
-        </Button>
-      </form>
 
-      <div className="mt-4 md:mt-6 text-center">
-        <p className="text-xs md:text-sm">
-          Already have an account? <Link to="/auth" className="text-blue-500 hover:underline">Log in</Link>
-        </p>
-      </div>
+          <TabsContent value="email">
+            <div className="space-y-1 md:space-y-2">
+              <label htmlFor="email" className="block text-xs md:text-sm font-medium text-gray-700">
+                Email*
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  <Mail className="h-3.5 w-3.5 md:h-4 md:w-4" />
+                </span>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  value={formState.email}
+                  onChange={(e) => updateField('email', e.target.value)}
+                  className="pl-8 md:pl-10 text-xs md:text-sm h-9 md:h-10"
+                  required={formState.signupMethod === 'email'}
+                />
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="phone">
+            <div className="space-y-1 md:space-y-2">
+              <label htmlFor="phone" className="block text-xs md:text-sm font-medium text-gray-700">
+                Phone Number*
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  <Phone className="h-3.5 w-3.5 md:h-4 md:w-4" />
+                </span>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="+1234567890"
+                  value={formState.phone}
+                  onChange={(e) => updateField('phone', e.target.value)}
+                  className="pl-8 md:pl-10 text-xs md:text-sm h-9 md:h-10"
+                  required={formState.signupMethod === 'phone'}
+                />
+              </div>
+            </div>
+          </TabsContent>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1 md:space-y-2">
+              <label htmlFor="password" className="block text-xs md:text-sm font-medium text-gray-700">
+                Password*
+              </label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={formState.password}
+                onChange={(e) => updateField('password', e.target.value)}
+                className="text-xs md:text-sm h-9 md:h-10"
+                required
+              />
+            </div>
+
+            <div className="space-y-1 md:space-y-2">
+              <label htmlFor="confirm-password" className="block text-xs md:text-sm font-medium text-gray-700">
+                Confirm Password*
+              </label>
+              <Input
+                id="confirm-password"
+                type="password"
+                placeholder="••••••••"
+                value={formState.confirmPassword}
+                onChange={(e) => updateField('confirmPassword', e.target.value)}
+                className="text-xs md:text-sm h-9 md:h-10"
+                required
+              />
+            </div>
+          </div>
+
+          <AddressFields
+            address={formState.address}
+            city={formState.city}
+            state={formState.state}
+            zipCode={formState.zipCode}
+            country={formState.country}
+            setAddress={(value) => updateField('address', value)}
+            setCity={(value) => updateField('city', value)}
+            setState={(value) => updateField('state', value)}
+            setZipCode={(value) => updateField('zipCode', value)}
+            setCountry={(value) => updateField('country', value)}
+          />
+
+          <TermsCheckbox
+            checked={formState.agreeToTerms}
+            onCheckedChange={(checked) => updateField('agreeToTerms', !!checked)}
+          />
+
+          <SubmitButton
+            isLoading={isLoading}
+            label="Create Account"
+            loadingLabel="Creating Account..."
+          />
+        </form>
+      </Tabs>
     </div>
   );
 };
