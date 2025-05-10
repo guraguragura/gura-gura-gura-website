@@ -54,12 +54,12 @@ const ComingSoonPage = () => {
       <div className="grid md:grid-cols-2 h-full">
         <div className="flex items-center justify-center px-4 sm:px-8 md:px-16 h-full relative z-10 md:pt-0 pt-40">
           <div className="space-y-4 md:space-y-8 max-w-xl">
-            {/* Logo positioned at the top left */}
+            {/* Logo positioned at the top left with increased size on mobile */}
             <Link to="/" className="absolute top-4 left-4 md:top-6 md:left-6">
               <img 
                 src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
                 alt="Gura Logo" 
-                className="h-8 sm:h-10 md:h-12 w-auto" 
+                className="h-12 sm:h-10 md:h-12 w-auto" 
               />
             </Link>
             
