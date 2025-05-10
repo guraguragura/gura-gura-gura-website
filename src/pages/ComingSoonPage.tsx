@@ -52,7 +52,7 @@ const ComingSoonPage = () => {
   return (
     <div className="h-screen w-full bg-white text-black font-sans overflow-hidden">
       <div className="grid md:grid-cols-2 h-full">
-        <div className="flex items-center justify-center px-4 sm:px-8 md:px-16 h-full relative z-10">
+        <div className="flex items-center justify-center px-4 sm:px-8 md:px-16 h-full relative z-10 md:pt-0 pt-24">
           <div className="space-y-4 md:space-y-8 max-w-xl">
             <Link to="/" className="inline-block">
               <img 
@@ -119,7 +119,8 @@ const ComingSoonPage = () => {
         {/* Mobile-only background image - absolutely positioned to show behind content */}
         <div className="absolute top-0 left-0 w-full h-full -z-0 md:hidden">
           <div className="relative h-full w-full">
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white via-white to-transparent z-10"></div>
+            {/* Updated gradient that shows more of the top and fades to white at the bottom */}
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-white/60 to-white z-10"></div>
             <img 
               src="/lovable-uploads/91bfa46b-f06e-44de-bc8b-4315b8e5ff43.png"
               alt="" 
