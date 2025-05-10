@@ -7,35 +7,27 @@ import { MapPin } from 'lucide-react';
 type AddressFieldsProps = {
   address: string;
   setAddress: (value: string) => void;
-  district: string;
-  setDistrict: (value: string) => void;
-  sector: string;
-  setSector: (value: string) => void;
-  cell: string;
-  setCell: (value: string) => void;
-  village: string;
-  setVillage: (value: string) => void;
-  postalCode: string;
-  setPostalCode: (value: string) => void;
-  landmark: string;
-  setLandmark: (value: string) => void;
+  city: string;
+  setCity: (value: string) => void;
+  state: string;
+  setState: (value: string) => void;
+  zipCode: string;
+  setZipCode: (value: string) => void;
+  country: string;
+  setCountry: (value: string) => void;
 };
 
 const AddressFields: React.FC<AddressFieldsProps> = ({
   address,
   setAddress,
-  district,
-  setDistrict,
-  sector,
-  setSector,
-  cell,
-  setCell,
-  village,
-  setVillage,
-  postalCode,
-  setPostalCode,
-  landmark,
-  setLandmark,
+  city,
+  setCity,
+  state,
+  setState,
+  zipCode,
+  setZipCode,
+  country,
+  setCountry,
 }) => {
   return (
     <div className="space-y-4">
@@ -59,66 +51,44 @@ const AddressFields: React.FC<AddressFieldsProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="district">District</Label>
+          <Label htmlFor="city">City</Label>
           <Input 
-            id="district" 
-            placeholder="District" 
-            value={district}
-            onChange={(e) => setDistrict(e.target.value)}
+            id="city" 
+            placeholder="City" 
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="sector">Sector</Label>
+          <Label htmlFor="state">State/Province</Label>
           <Input 
-            id="sector" 
-            placeholder="Sector" 
-            value={sector}
-            onChange={(e) => setSector(e.target.value)}
+            id="state" 
+            placeholder="State" 
+            value={state}
+            onChange={(e) => setState(e.target.value)}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="cell">Cell</Label>
+          <Label htmlFor="zipCode">Zip/Postal Code</Label>
           <Input 
-            id="cell" 
-            placeholder="Cell" 
-            value={cell}
-            onChange={(e) => setCell(e.target.value)}
+            id="zipCode" 
+            placeholder="Zip code" 
+            value={zipCode}
+            onChange={(e) => setZipCode(e.target.value)}
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="village">Village</Label>
-          <Input 
-            id="village" 
-            placeholder="Village" 
-            value={village}
-            onChange={(e) => setVillage(e.target.value)}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="postalCode">Postal/ZIP Code</Label>
-          <Input 
-            id="postalCode" 
-            placeholder="Postal code" 
-            value={postalCode}
-            onChange={(e) => setPostalCode(e.target.value)}
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="landmark">Nearby Landmark</Label>
-          <Input 
-            id="landmark" 
-            placeholder="Nearby landmark" 
-            value={landmark}
-            onChange={(e) => setLandmark(e.target.value)}
-          />
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="country">Country</Label>
+        <Input 
+          id="country" 
+          placeholder="Country" 
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+        />
       </div>
     </div>
   );

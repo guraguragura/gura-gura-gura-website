@@ -3,20 +3,20 @@ import React from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 
 type TermsCheckboxProps = {
-  agreeTerms: boolean;
-  setAgreeTerms: (checked: boolean) => void;
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
 };
 
 const TermsCheckbox: React.FC<TermsCheckboxProps> = ({
-  agreeTerms,
-  setAgreeTerms
+  checked,
+  onCheckedChange
 }) => {
   return (
     <div className="flex items-center space-x-2">
       <Checkbox 
         id="terms" 
-        checked={agreeTerms}
-        onCheckedChange={(checked) => setAgreeTerms(checked as boolean)}
+        checked={checked}
+        onCheckedChange={onCheckedChange}
       />
       <label
         htmlFor="terms"

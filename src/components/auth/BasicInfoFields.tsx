@@ -9,14 +9,6 @@ type BasicInfoFieldsProps = {
   setFirstName: (value: string) => void;
   lastName: string;
   setLastName: (value: string) => void;
-  email: string;
-  setEmail: (value: string) => void;
-  phoneNumber: string;
-  setPhoneNumber: (value: string) => void;
-  password: string;
-  setPassword: (value: string) => void;
-  showPassword: boolean;
-  setShowPassword: (value: boolean) => void;
 };
 
 const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
@@ -24,14 +16,6 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
   setFirstName,
   lastName,
   setLastName,
-  email,
-  setEmail,
-  phoneNumber,
-  setPhoneNumber,
-  password,
-  setPassword,
-  showPassword,
-  setShowPassword,
 }) => {
   return (
     <>
@@ -68,66 +52,6 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
               required
             />
           </div>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="signupEmail">Email</Label>
-        <div className="relative">
-          <span className="absolute left-3 top-3 text-gray-400">
-            <Mail className="h-4 w-4" />
-          </span>
-          <Input 
-            id="signupEmail" 
-            type="email" 
-            placeholder="name@example.com" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="pl-10"
-            required
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="phoneNumber">Phone Number</Label>
-        <div className="relative">
-          <span className="absolute left-3 top-3 text-gray-400">
-            <Phone className="h-4 w-4" />
-          </span>
-          <Input 
-            id="phoneNumber" 
-            type="tel" 
-            placeholder="+1234567890" 
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="signupPassword">Password</Label>
-        <div className="relative">
-          <span className="absolute left-3 top-3 text-gray-400">
-            <Lock className="h-4 w-4" />
-          </span>
-          <Input 
-            id="signupPassword" 
-            type={showPassword ? "text" : "password"} 
-            placeholder="••••••••" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="pl-10 pr-10"
-            required
-          />
-          <button 
-            type="button"
-            className="absolute right-3 top-3 text-gray-400"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </button>
         </div>
       </div>
     </>
