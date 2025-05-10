@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -85,7 +86,7 @@ const ComingSoonPage = () => {
                   className="bg-[#84D1D3] hover:bg-[#84D1D3]/90 text-black px-6 flex items-center gap-2"
                 >
                   <Mail className="h-4 w-4" />
-                  Contact Us
+                  Subscribe
                 </Button>
               </div>
             </form>
@@ -94,9 +95,6 @@ const ComingSoonPage = () => {
               <span className="text-sm font-medium text-gray-500">SOCIAL</span>
               <div className="h-[1px] w-12 bg-gray-200" />
               <div className="flex gap-6">
-                <a href="#" className="text-gray-600 hover:text-[#84D1D3] text-sm font-medium">
-                  Twitter
-                </a>
                 <a href="#" className="text-gray-600 hover:text-[#84D1D3] text-sm font-medium">
                   Instagram
                 </a>
