@@ -54,7 +54,8 @@ const ComingSoonPage = () => {
       <div className="grid md:grid-cols-2 h-full">
         <div className="flex items-center justify-center px-4 sm:px-8 md:px-16 h-full relative z-10 md:pt-0 pt-40">
           <div className="space-y-4 md:space-y-8 max-w-xl">
-            <Link to="/" className="inline-block">
+            {/* Hide logo on mobile - it will be shown at the bottom */}
+            <Link to="/" className="inline-block md:block hidden">
               <img 
                 src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
                 alt="Gura Logo" 
@@ -105,6 +106,15 @@ const ComingSoonPage = () => {
                 </a>
               </div>
             </div>
+            
+            {/* Logo displayed below social links on mobile */}
+            <Link to="/" className="block mt-6 md:hidden">
+              <img 
+                src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
+                alt="Gura Logo" 
+                className="h-8 w-auto" 
+              />
+            </Link>
           </div>
         </div>
 
