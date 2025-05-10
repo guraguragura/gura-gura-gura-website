@@ -68,7 +68,7 @@ const ComingSoonPage = () => {
                 Coming Soon
               </h1>
               <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-600">
-                Local delivery, unleashed. Gura is coming.<br className="hidden sm:block" />
+                Local delivery, unleashed. Gura is coming.<br />
                 Join the movement bringing your community together.
               </p>
             </div>
