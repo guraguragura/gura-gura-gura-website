@@ -1,105 +1,34 @@
 
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import BasicInfoFields from './BasicInfoFields';
 import TermsCheckbox from './TermsCheckbox';
 import AddressFields from './AddressFields';
 import SubmitButton from './SubmitButton';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Mail, Phone } from 'lucide-react';
+import PasswordFields from './PasswordFields';
+
+import { useSignupForm, AddressData } from './hooks/useSignupForm';
+import { validateSignupForm } from './utils/formValidation';
 
 type SignupFormProps = {
   error: string | null;
   setError: (error: string | null) => void;
 };
 
-type AddressData = {
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-};
-
-// Form state interface
-interface SignupFormState {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-  agreeToTerms: boolean;
-  signupMethod: 'email' | 'phone';
-}
-
 const SignupForm = ({ error, setError }: SignupFormProps) => {
   const { signUpWithEmail } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [formState, setFormState] = useState<SignupFormState>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: '',
-    agreeToTerms: false,
-    signupMethod: 'email'
-  });
-
-  const updateField = (field: keyof SignupFormState, value: string | boolean) => {
-    setFormState((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const validateForm = (): string | null => {
-    const { firstName, lastName, email, phone, password, confirmPassword, agreeToTerms, signupMethod } = formState;
-
-    if (!firstName || !lastName) {
-      return 'Please enter your first and last name';
-    }
-
-    if (signupMethod === 'email' && (!email || !/\S+@\S+\.\S+/.test(email))) {
-      return 'Please enter a valid email address';
-    }
-
-    if (signupMethod === 'phone' && (!phone || !/^\+?[1-9]\d{1,14}$/.test(phone))) {
-      return 'Please enter a valid phone number (e.g., +1234567890)';
-    }
-
-    if (!password || password.length < 8) {
-      return 'Password must be at least 8 characters';
-    }
-
-    if (password !== confirmPassword) {
-      return 'Passwords do not match';
-    }
-
-    if (!agreeToTerms) {
-      return 'You must agree to the terms and conditions';
-    }
-
-    return null;
-  };
+  const { formState, updateField } = useSignupForm();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     
-    const validationError = validateForm();
+    const validationError = validateSignupForm(formState);
     if (validationError) {
       setError(validationError);
       return;
@@ -167,85 +96,21 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
           <BasicInfoFields 
             firstName={formState.firstName}
             lastName={formState.lastName}
+            email={formState.email}
+            phone={formState.phone}
             setFirstName={(value) => updateField('firstName', value)}
             setLastName={(value) => updateField('lastName', value)}
+            setEmail={(value) => updateField('email', value)}
+            setPhone={(value) => updateField('phone', value)}
+            signupMethod={formState.signupMethod}
           />
 
-          <TabsContent value="email">
-            <div className="space-y-1 md:space-y-2">
-              <label htmlFor="email" className="block text-xs md:text-sm font-medium text-gray-700">
-                Email*
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                  <Mail className="h-3.5 w-3.5 md:h-4 md:w-4" />
-                </span>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  value={formState.email}
-                  onChange={(e) => updateField('email', e.target.value)}
-                  className="pl-8 md:pl-10 text-xs md:text-sm h-9 md:h-10"
-                  required={formState.signupMethod === 'email'}
-                />
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="phone">
-            <div className="space-y-1 md:space-y-2">
-              <label htmlFor="phone" className="block text-xs md:text-sm font-medium text-gray-700">
-                Phone Number*
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                  <Phone className="h-3.5 w-3.5 md:h-4 md:w-4" />
-                </span>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="+1234567890"
-                  value={formState.phone}
-                  onChange={(e) => updateField('phone', e.target.value)}
-                  className="pl-8 md:pl-10 text-xs md:text-sm h-9 md:h-10"
-                  required={formState.signupMethod === 'phone'}
-                />
-              </div>
-            </div>
-          </TabsContent>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1 md:space-y-2">
-              <label htmlFor="password" className="block text-xs md:text-sm font-medium text-gray-700">
-                Password*
-              </label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={formState.password}
-                onChange={(e) => updateField('password', e.target.value)}
-                className="text-xs md:text-sm h-9 md:h-10"
-                required
-              />
-            </div>
-
-            <div className="space-y-1 md:space-y-2">
-              <label htmlFor="confirm-password" className="block text-xs md:text-sm font-medium text-gray-700">
-                Confirm Password*
-              </label>
-              <Input
-                id="confirm-password"
-                type="password"
-                placeholder="••••••••"
-                value={formState.confirmPassword}
-                onChange={(e) => updateField('confirmPassword', e.target.value)}
-                className="text-xs md:text-sm h-9 md:h-10"
-                required
-              />
-            </div>
-          </div>
+          <PasswordFields
+            password={formState.password}
+            confirmPassword={formState.confirmPassword}
+            setPassword={(value) => updateField('password', value)}
+            setConfirmPassword={(value) => updateField('confirmPassword', value)}
+          />
 
           <AddressFields
             address={formState.address}
