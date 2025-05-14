@@ -7,17 +7,20 @@ import './index.css';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 import { WishlistProvider } from './contexts/WishlistContext.tsx';
 import { CartProvider } from './contexts/CartContext.tsx';
+import { CrispProvider } from './components/crisp/CrispProvider.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AuthProvider>
-      <WishlistProvider>
-        <CartProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </CartProvider>
-      </WishlistProvider>
-    </AuthProvider>
+    <CrispProvider>
+      <AuthProvider>
+        <WishlistProvider>
+          <CartProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </CartProvider>
+        </WishlistProvider>
+      </AuthProvider>
+    </CrispProvider>
   </React.StrictMode>,
 );
