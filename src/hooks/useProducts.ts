@@ -72,7 +72,7 @@ export function useProducts(options: ProductOptions = {}) {
         let query: any = supabase
           .from('product')
           .select('*, product_category_product(product_category_id, product_category:product_category(name, handle))')
-          .eq('deleted_at', null)
+          .is('deleted_at', null) // Changed from .eq('deleted_at', null) to .is('deleted_at', null)
           .order('created_at', { ascending: false });
         
         console.log("Fetching products with options:", options);
