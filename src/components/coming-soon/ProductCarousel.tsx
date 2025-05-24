@@ -18,7 +18,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   className = "" 
 }) => {
   return (
-    <div className={`w-full max-w-2xl h-auto flex items-center justify-center ${className}`}>
+    <div className={`w-full max-w-2xl h-auto flex items-center justify-start pl-4 ${className}`}>
       <Carousel 
         className="w-full h-auto"
         opts={{
