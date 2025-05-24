@@ -11,8 +11,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 
 const ComingSoonPage = () => {
@@ -49,6 +47,30 @@ const ComingSoonPage = () => {
     {
       src: "/lovable-uploads/421cc820-de3c-4d06-8795-da721aab3d41.png",
       alt: "Blue Desk Lamp"
+    },
+    {
+      src: "/lovable-uploads/136dffde-6601-4233-8312-d998c24a2c74.png",
+      alt: "New Product Image 1"
+    },
+    {
+      src: "/lovable-uploads/140ba952-70e0-44c3-91c3-6464a0ba3e8b.png",
+      alt: "New Product Image 2"
+    },
+    {
+      src: "/lovable-uploads/155f1dc2-a1c1-4394-b43c-8513d52e943c.png",
+      alt: "New Product Image 3"
+    },
+    {
+      src: "/lovable-uploads/189d5b38-0cf3-4a56-9606-2caba74233ca.png",
+      alt: "New Product Image 4"
+    },
+    {
+      src: "/lovable-uploads/19d49598-6533-4a1a-a7cb-95903bed38b3.png",
+      alt: "New Product Image 5"
+    },
+    {
+      src: "/lovable-uploads/1d4104e3-b829-451d-a439-3c761b393137.png",
+      alt: "New Product Image 6"
     }
   ];
 
@@ -151,7 +173,32 @@ const ComingSoonPage = () => {
 
         <div className="hidden md:flex bg-white items-center justify-start p-8 pl-2">
           <div className="w-full h-full flex items-center justify-start">
-            <Carousel className="w-full h-full">
+            <Carousel 
+              className="w-full h-full"
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              plugins={[
+                {
+                  init: (embla) => {
+                    const autoplay = () => {
+                      if (!embla.canScrollNext()) {
+                        embla.scrollTo(0);
+                      } else {
+                        embla.scrollNext();
+                      }
+                    };
+                    
+                    const interval = setInterval(autoplay, 3000);
+                    
+                    embla.on('destroy', () => {
+                      clearInterval(interval);
+                    });
+                  }
+                }
+              ]}
+            >
               <CarouselContent>
                 {carouselImages.map((image, index) => (
                   <CarouselItem key={index}>
@@ -163,8 +210,6 @@ const ComingSoonPage = () => {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
             </Carousel>
           </div>
         </div>
@@ -174,7 +219,32 @@ const ComingSoonPage = () => {
           <div className="relative h-full w-full">
             {/* Updated gradient that shows more of the top and fades to white at the bottom */}
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-white/50 to-white z-10"></div>
-            <Carousel className="h-full w-full">
+            <Carousel 
+              className="h-full w-full"
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              plugins={[
+                {
+                  init: (embla) => {
+                    const autoplay = () => {
+                      if (!embla.canScrollNext()) {
+                        embla.scrollTo(0);
+                      } else {
+                        embla.scrollNext();
+                      }
+                    };
+                    
+                    const interval = setInterval(autoplay, 3000);
+                    
+                    embla.on('destroy', () => {
+                      clearInterval(interval);
+                    });
+                  }
+                }
+              ]}
+            >
               <CarouselContent>
                 {carouselImages.map((image, index) => (
                   <CarouselItem key={index}>
@@ -187,8 +257,6 @@ const ComingSoonPage = () => {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
             </Carousel>
           </div>
         </div>
