@@ -97,7 +97,7 @@ const ComingSoonPage = () => {
             </div>
             
             <div className="space-y-2 md:space-y-4">
-              <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight text-black">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight text-black -ml-1">
                 Coming Soon
               </h1>
               <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-600">
