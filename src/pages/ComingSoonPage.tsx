@@ -7,12 +7,50 @@ import { useToast } from "@/hooks/use-toast";
 import { Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const ComingSoonPage = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const isMobile = useIsMobile();
+
+  const carouselImages = [
+    {
+      src: "/lovable-uploads/ce9b9eaa-2c95-4b45-afae-95c70f0357f1.png",
+      alt: "Happy Customer with Shopping Bags"
+    },
+    {
+      src: "/lovable-uploads/79b1dadf-50b5-4c46-b725-c002156e4bd9.png",
+      alt: "Washing Machine with Colorful Lighting"
+    },
+    {
+      src: "/lovable-uploads/315c7cdf-bd43-4bdd-85ed-60620d099bef.png",
+      alt: "Yellow Car Door Detail"
+    },
+    {
+      src: "/lovable-uploads/7ef7c88b-9638-4a9a-9877-f777d2258a7e.png",
+      alt: "Gaming Controller"
+    },
+    {
+      src: "/lovable-uploads/60add00d-527f-4202-9fe0-39893752ffe7.png",
+      alt: "Basketball on Court"
+    },
+    {
+      src: "/lovable-uploads/65dd7ad2-1ec4-48c2-ac7f-ee1f917ce9e2.png",
+      alt: "Yellow Earphones with Phone"
+    },
+    {
+      src: "/lovable-uploads/421cc820-de3c-4d06-8795-da721aab3d41.png",
+      alt: "Blue Desk Lamp"
+    }
+  ];
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -113,25 +151,45 @@ const ComingSoonPage = () => {
 
         <div className="hidden md:flex bg-white items-center justify-start p-8 pl-2">
           <div className="w-full h-full flex items-center justify-start">
-            <img 
-              src="/lovable-uploads/ce9b9eaa-2c95-4b45-afae-95c70f0357f1.png"
-              alt="Happy Customer with Shopping Bags" 
-              className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
-            />
+            <Carousel className="w-full h-full">
+              <CarouselContent>
+                {carouselImages.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <img 
+                      src={image.src}
+                      alt={image.alt} 
+                      className="max-w-full max-h-full object-contain rounded-lg shadow-lg w-full h-full"
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
           </div>
         </div>
         
-        {/* Mobile-only background image - absolutely positioned to show behind content */}
+        {/* Mobile-only background carousel - absolutely positioned to show behind content */}
         <div className="absolute top-0 left-0 w-full h-full -z-0 md:hidden">
           <div className="relative h-full w-full">
             {/* Updated gradient that shows more of the top and fades to white at the bottom */}
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-white/50 to-white z-10"></div>
-            <img 
-              src="/lovable-uploads/ce9b9eaa-2c95-4b45-afae-95c70f0357f1.png"
-              alt="" 
-              className="h-full w-full object-contain"
-              aria-hidden="true"
-            />
+            <Carousel className="h-full w-full">
+              <CarouselContent>
+                {carouselImages.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <img 
+                      src={image.src}
+                      alt="" 
+                      className="h-full w-full object-contain"
+                      aria-hidden="true"
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
           </div>
         </div>
       </div>
