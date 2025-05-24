@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import NewsletterForm from "@/components/coming-soon/NewsletterForm";
@@ -83,8 +82,8 @@ const ComingSoonPage = () => {
 
   return (
     <div className="h-screen w-full bg-white text-black font-sans overflow-hidden">
-      <div className="grid md:grid-cols-2 h-full">
-        {/* Mobile Layout - Updated positioning */}
+      <div className="grid md:grid-cols-2 h-full md:gap-4">
+        {/* Mobile Layout - Keep existing */}
         <div className="flex md:hidden flex-col h-full relative z-10">
           {/* Logo at the top */}
           <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
@@ -116,8 +115,8 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        {/* Desktop Layout - Keep existing */}
-        <div className="hidden md:flex items-center justify-center px-4 sm:px-8 md:px-16 h-full relative z-10 md:pt-0 pt-40">
+        {/* Desktop Layout - Move text closer to carousel */}
+        <div className="hidden md:flex items-center justify-end pr-8 h-full relative z-10">
           <div className="space-y-4 md:space-y-8 max-w-xl">
             <div className="flex justify-start mb-4">
               <Link to="/">
@@ -144,7 +143,7 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        <div className="hidden md:flex bg-white items-center justify-center p-8">
+        <div className="hidden md:flex bg-white items-center justify-start pl-4">
           <ProductCarousel 
             images={carouselImages} 
             autoplayPlugin={autoplayPlugin} 
