@@ -112,7 +112,7 @@ const ComingSoonPage = () => {
         <div className="hidden md:flex bg-white items-center justify-center p-8">
           <div className="w-4/5 h-4/5 max-w-md">
             <img 
-              src="/lovable-uploads/91bfa46b-f06e-44de-bc8b-4315b8e5ff43.png"
+              src="/lovable-uploads/d9450bd5-f417-4e0b-b947-cc100952fac8.png"
               alt="Happy Customer with Shopping Bags" 
               className="h-full w-full object-cover object-top rounded-lg shadow-lg"
             />
@@ -125,7 +125,7 @@ const ComingSoonPage = () => {
             {/* Updated gradient that shows more of the top and fades to white at the bottom */}
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-white/50 to-white z-10"></div>
             <img 
-              src="/lovable-uploads/91bfa46b-f06e-44de-bc8b-4315b8e5ff43.png"
+              src="/lovable-uploads/d9450bd5-f417-4e0b-b947-cc100952fac8.png"
               alt="" 
               className="h-full w-full object-cover object-top"
               aria-hidden="true"
