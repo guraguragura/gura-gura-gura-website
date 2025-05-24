@@ -9,28 +9,40 @@ import MobileBackgroundCarousel from "@/components/coming-soon/MobileBackgroundC
 const ComingSoonPage = () => {
   const carouselImages = [
     {
-      src: "/lovable-uploads/136dffde-6601-4233-8312-d998c24a2c74.png",
-      alt: "Product Image 1"
+      src: "/lovable-uploads/d5e58add-86a9-491c-b3e2-ca380524e254.png",
+      alt: "Washing Machine"
     },
     {
-      src: "/lovable-uploads/140ba952-70e0-44c3-91c3-6464a0ba3e8b.png",
-      alt: "Product Image 2"
+      src: "/lovable-uploads/bfa0e35e-65cd-4463-8936-12bb49a038ed.png",
+      alt: "Yellow Car"
     },
     {
-      src: "/lovable-uploads/155f1dc2-a1c1-4394-b43c-8513d52e943c.png",
-      alt: "Product Image 3"
+      src: "/lovable-uploads/2e970dc1-e8bd-4b6c-badd-cd0e005681e6.png",
+      alt: "Gaming Controller"
     },
     {
-      src: "/lovable-uploads/189d5b38-0cf3-4a56-9606-2caba74233ca.png",
-      alt: "Product Image 4"
+      src: "/lovable-uploads/72f88cbc-15c4-4d41-94fe-0de3eb6336a3.png",
+      alt: "Desk Lamp"
     },
     {
-      src: "/lovable-uploads/19d49598-6533-4a1a-a7cb-95903bed38b3.png",
-      alt: "Product Image 5"
+      src: "/lovable-uploads/e514159f-9955-4ab6-b125-cec4fa80e32c.png",
+      alt: "Yellow Earphones"
     },
     {
-      src: "/lovable-uploads/1d4104e3-b829-451d-a439-3c761b393137.png",
-      alt: "Product Image 6"
+      src: "/lovable-uploads/71a9030d-5d42-4ab2-9094-6e27ccb2f3fe.png",
+      alt: "iPhone and AirPods"
+    },
+    {
+      src: "/lovable-uploads/20baac49-7e2c-4aab-beff-16091ed03fa2.png",
+      alt: "Basketball"
+    },
+    {
+      src: "/lovable-uploads/ef568fa7-7d69-42cf-9696-866a4075928b.png",
+      alt: "Fashion Portrait"
+    },
+    {
+      src: "/lovable-uploads/8273b9c4-c7f0-464d-ba14-b2c91e9c18fc.png",
+      alt: "Tonic Bottle"
     }
   ];
 

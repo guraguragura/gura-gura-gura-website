@@ -30,11 +30,13 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
         <CarouselContent>
           {images.map((image, index) => (
             <CarouselItem key={index}>
-              <img 
-                src={image.src}
-                alt={image.alt} 
-                className="w-full h-96 object-contain rounded-lg shadow-lg"
-              />
+              <div className="w-full h-96 overflow-hidden rounded-lg shadow-lg">
+                <img 
+                  src={image.src}
+                  alt={image.alt} 
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </CarouselItem>
           ))}
         </CarouselContent>

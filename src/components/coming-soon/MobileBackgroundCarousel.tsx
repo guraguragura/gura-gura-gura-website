@@ -33,7 +33,7 @@ const MobileBackgroundCarousel: React.FC<MobileBackgroundCarouselProps> = ({
                 <img 
                   src={image.src}
                   alt="" 
-                  className="h-full w-full object-contain"
+                  className="h-full w-full object-cover"
                   aria-hidden="true"
                 />
               </CarouselItem>
