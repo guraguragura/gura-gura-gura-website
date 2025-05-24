@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import NewsletterForm from "@/components/coming-soon/NewsletterForm";
@@ -116,10 +115,10 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        {/* Desktop Layout - Move text closer to carousel */}
-        <div className="hidden md:flex items-center justify-end pr-8 h-full relative z-10">
-          <div className="space-y-4 md:space-y-8 max-w-xl">
-            <div className="flex justify-start mb-4">
+        {/* Desktop Layout - Center the content better */}
+        <div className="hidden md:flex items-center justify-center px-8 h-full relative z-10">
+          <div className="space-y-4 md:space-y-8 max-w-xl text-center">
+            <div className="flex justify-center mb-4">
               <Link to="/">
                 <img 
                   src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
@@ -130,7 +129,7 @@ const ComingSoonPage = () => {
             </div>
             
             <div className="space-y-2 md:space-y-4">
-              <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight text-black -ml-1">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight text-black">
                 Coming Soon!
               </h1>
               <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-600">
