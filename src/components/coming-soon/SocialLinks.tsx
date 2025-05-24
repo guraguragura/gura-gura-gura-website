@@ -16,9 +16,14 @@ const SocialLinks = () => {
         >
           Instagram
         </Button>
-        <a href="#" className="text-xs sm:text-sm text-gray-600 hover:text-[#84D1D3] font-medium">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-xs sm:text-sm text-gray-600 hover:text-[#84D1D3] font-medium p-0 h-auto"
+          onClick={() => window.open("https://www.facebook.com/profile.php?viewas=100000686899395&id=61563999841438", "_blank")}
+        >
           Facebook
-        </a>
+        </Button>
       </div>
     </div>
   );
