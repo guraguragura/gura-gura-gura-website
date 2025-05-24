@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -21,56 +20,28 @@ const ComingSoonPage = () => {
 
   const carouselImages = [
     {
-      src: "/lovable-uploads/ce9b9eaa-2c95-4b45-afae-95c70f0357f1.png",
-      alt: "Happy Customer with Shopping Bags"
-    },
-    {
-      src: "/lovable-uploads/79b1dadf-50b5-4c46-b725-c002156e4bd9.png",
-      alt: "Washing Machine with Colorful Lighting"
-    },
-    {
-      src: "/lovable-uploads/315c7cdf-bd43-4bdd-85ed-60620d099bef.png",
-      alt: "Yellow Car Door Detail"
-    },
-    {
-      src: "/lovable-uploads/7ef7c88b-9638-4a9a-9877-f777d2258a7e.png",
-      alt: "Gaming Controller"
-    },
-    {
-      src: "/lovable-uploads/60add00d-527f-4202-9fe0-39893752ffe7.png",
-      alt: "Basketball on Court"
-    },
-    {
-      src: "/lovable-uploads/65dd7ad2-1ec4-48c2-ac7f-ee1f917ce9e2.png",
-      alt: "Yellow Earphones with Phone"
-    },
-    {
-      src: "/lovable-uploads/421cc820-de3c-4d06-8795-da721aab3d41.png",
-      alt: "Blue Desk Lamp"
-    },
-    {
       src: "/lovable-uploads/136dffde-6601-4233-8312-d998c24a2c74.png",
-      alt: "New Product Image 1"
+      alt: "Product Image 1"
     },
     {
       src: "/lovable-uploads/140ba952-70e0-44c3-91c3-6464a0ba3e8b.png",
-      alt: "New Product Image 2"
+      alt: "Product Image 2"
     },
     {
       src: "/lovable-uploads/155f1dc2-a1c1-4394-b43c-8513d52e943c.png",
-      alt: "New Product Image 3"
+      alt: "Product Image 3"
     },
     {
       src: "/lovable-uploads/189d5b38-0cf3-4a56-9606-2caba74233ca.png",
-      alt: "New Product Image 4"
+      alt: "Product Image 4"
     },
     {
       src: "/lovable-uploads/19d49598-6533-4a1a-a7cb-95903bed38b3.png",
-      alt: "New Product Image 5"
+      alt: "Product Image 5"
     },
     {
       src: "/lovable-uploads/1d4104e3-b829-451d-a439-3c761b393137.png",
-      alt: "New Product Image 6"
+      alt: "Product Image 6"
     }
   ];
 
