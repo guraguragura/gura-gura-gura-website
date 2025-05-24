@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import NewsletterForm from "@/components/coming-soon/NewsletterForm";
@@ -84,7 +83,38 @@ const ComingSoonPage = () => {
   return (
     <div className="h-screen w-full bg-white text-black font-sans overflow-hidden">
       <div className="grid md:grid-cols-2 h-full">
-        <div className="flex items-center justify-center px-4 sm:px-8 md:px-16 h-full relative z-10 md:pt-0 pt-40">
+        {/* Mobile Layout - Redesigned */}
+        <div className="flex md:hidden flex-col items-center justify-center px-6 h-full relative z-10">
+          {/* Logo at the top */}
+          <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
+            <Link to="/">
+              <img 
+                src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
+                alt="Gura Logo" 
+                className="h-10 w-auto" 
+              />
+            </Link>
+          </div>
+          
+          {/* Main content centered */}
+          <div className="space-y-6 text-center max-w-sm">
+            <div className="space-y-3">
+              <h1 className="text-4xl font-bold tracking-tight text-black">
+                Coming Soon
+              </h1>
+              <p className="text-lg leading-relaxed text-gray-600">
+                Shop Local. Delivered Fast.<br />
+                Bringing Kigali closer, one delivery at a time.
+              </p>
+            </div>
+
+            <NewsletterForm />
+            <SocialLinks />
+          </div>
+        </div>
+
+        {/* Desktop Layout - Keep existing */}
+        <div className="hidden md:flex items-center justify-center px-4 sm:px-8 md:px-16 h-full relative z-10 md:pt-0 pt-40">
           <div className="space-y-4 md:space-y-8 max-w-xl">
             <div className="flex justify-start mb-4">
               <Link to="/">
