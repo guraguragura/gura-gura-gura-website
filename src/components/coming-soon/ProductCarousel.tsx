@@ -18,7 +18,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   className = "" 
 }) => {
   return (
-    <div className={`w-full max-w-2xl h-auto flex items-center justify-start pl-4 ${className}`}>
+    <div className={`w-full max-w-3xl h-auto flex items-center justify-start pl-8 ${className}`}>
       <Carousel 
         className="w-full h-auto"
         opts={{
@@ -30,7 +30,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
         <CarouselContent>
           {images.map((image, index) => (
             <CarouselItem key={index}>
-              <div className="w-full h-96 overflow-hidden rounded-lg shadow-lg">
+              <div className="w-full h-[450px] overflow-hidden rounded-lg shadow-lg">
                 <img 
                   src={image.src}
                   alt={image.alt} 
