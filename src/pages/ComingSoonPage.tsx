@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import NewsletterForm from "@/components/coming-soon/NewsletterForm";
@@ -46,10 +47,31 @@ const ComingSoonPage = () => {
   ];
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
+    // Only disable overflow on desktop, allow scrolling on mobile
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      if (e.matches) {
+        // Desktop - disable overflow
+        document.body.style.overflow = 'hidden';
+      } else {
+        // Mobile - enable overflow
+        document.body.style.overflow = 'unset';
+      }
+    };
+
+    // Set initial state
+    if (mediaQuery.matches) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    mediaQuery.addEventListener('change', handleMediaChange);
     
     return () => {
       document.body.style.overflow = 'unset';
+      mediaQuery.removeEventListener('change', handleMediaChange);
     };
   }, []);
 
@@ -81,11 +103,11 @@ const ComingSoonPage = () => {
   const autoplayPlugin = createAutoplayPlugin();
 
   return (
-    <div className="h-screen w-full bg-white text-black font-sans overflow-hidden">
-      {/* Mobile Layout - Keep existing */}
-      <div className="flex md:hidden flex-col h-full relative z-10">
+    <div className="h-screen w-full bg-white text-black font-sans md:overflow-hidden">
+      {/* Mobile Layout - Allow scrolling */}
+      <div className="flex md:hidden flex-col min-h-screen relative z-10">
         {/* Logo at the top */}
-        <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
+        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
           <Link to="/">
             <img 
               src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
