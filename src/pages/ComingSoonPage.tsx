@@ -134,7 +134,8 @@ const ComingSoonPage = () => {
               </h1>
               <p className="text-lg leading-relaxed text-gray-600">
                 Shop Local. Delivered Fast.<br />
-                Bringing Kigali closer, one delivery at a time.
+                Bringing Kigali closer,<br />
+                one delivery at a time.
               </p>
             </div>
 
