@@ -109,12 +109,14 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        <div className="hidden md:block bg-[#F7D44C]">
-          <img 
-            src="/lovable-uploads/91bfa46b-f06e-44de-bc8b-4315b8e5ff43.png"
-            alt="Happy Customer with Shopping Bags" 
-            className="h-full w-full object-cover object-top"
-          />
+        <div className="hidden md:flex bg-[#F7D44C] items-center justify-center p-8">
+          <div className="w-4/5 h-4/5 max-w-md">
+            <img 
+              src="/lovable-uploads/91bfa46b-f06e-44de-bc8b-4315b8e5ff43.png"
+              alt="Happy Customer with Shopping Bags" 
+              className="h-full w-full object-cover object-top rounded-lg shadow-lg"
+            />
+          </div>
         </div>
         
         {/* Mobile-only background image - absolutely positioned to show behind content */}
