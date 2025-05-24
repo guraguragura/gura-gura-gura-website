@@ -82,42 +82,43 @@ const ComingSoonPage = () => {
 
   return (
     <div className="h-screen w-full bg-white text-black font-sans overflow-hidden">
-      <div className="grid md:grid-cols-2 h-full md:gap-2">
-        {/* Mobile Layout - Keep existing */}
-        <div className="flex md:hidden flex-col h-full relative z-10">
-          {/* Logo at the top */}
-          <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
-            <Link to="/">
-              <img 
-                src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
-                alt="Gura Logo" 
-                className="h-10 w-auto" 
-              />
-            </Link>
-          </div>
-          
-          {/* Main content moved down below carousel */}
-          <div className="flex-1 flex items-end justify-center px-6 pb-20">
-            <div className="space-y-6 text-center max-w-sm">
-              <div className="space-y-3">
-                <h1 className="text-4xl font-bold tracking-tight text-black">
-                  Coming Soon!
-                </h1>
-                <p className="text-lg leading-relaxed text-gray-600">
-                  Shop Local. Delivered Fast.<br />
-                  Bringing Kigali closer, one delivery at a time.
-                </p>
-              </div>
-
-              <NewsletterForm />
-              <SocialLinks />
+      {/* Mobile Layout - Keep existing */}
+      <div className="flex md:hidden flex-col h-full relative z-10">
+        {/* Logo at the top */}
+        <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
+          <Link to="/">
+            <img 
+              src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
+              alt="Gura Logo" 
+              className="h-10 w-auto" 
+            />
+          </Link>
+        </div>
+        
+        {/* Main content moved down below carousel */}
+        <div className="flex-1 flex items-end justify-center px-6 pb-20">
+          <div className="space-y-6 text-center max-w-sm">
+            <div className="space-y-3">
+              <h1 className="text-4xl font-bold tracking-tight text-black">
+                Coming Soon!
+              </h1>
+              <p className="text-lg leading-relaxed text-gray-600">
+                Shop Local. Delivered Fast.<br />
+                Bringing Kigali closer, one delivery at a time.
+              </p>
             </div>
+
+            <NewsletterForm />
+            <SocialLinks />
           </div>
         </div>
+      </div>
 
-        {/* Desktop Layout - Position text slightly right of left center */}
-        <div className="hidden md:flex items-center justify-end pr-4 h-full relative z-10">
-          <div className="space-y-4 md:space-y-8 max-w-xl text-center">
+      {/* Desktop Layout - True centering with flexbox */}
+      <div className="hidden md:flex items-center justify-center h-full relative z-10">
+        <div className="flex items-center gap-8 max-w-6xl">
+          {/* Text Content */}
+          <div className="flex-shrink-0 space-y-4 md:space-y-8 max-w-xl text-center">
             <div className="flex justify-center mb-4">
               <Link to="/">
                 <img 
@@ -141,21 +142,21 @@ const ComingSoonPage = () => {
             <NewsletterForm />
             <SocialLinks />
           </div>
-        </div>
 
-        {/* Desktop carousel - Position slightly left within its column */}
-        <div className="hidden md:flex bg-white items-center justify-start pl-2">
-          <ProductCarousel 
-            images={carouselImages} 
-            autoplayPlugin={autoplayPlugin} 
-          />
+          {/* Carousel Content */}
+          <div className="flex-shrink-0">
+            <ProductCarousel 
+              images={carouselImages} 
+              autoplayPlugin={autoplayPlugin} 
+            />
+          </div>
         </div>
-        
-        <MobileBackgroundCarousel 
-          images={carouselImages} 
-          autoplayPlugin={createAutoplayPlugin()} 
-        />
       </div>
+      
+      <MobileBackgroundCarousel 
+        images={carouselImages} 
+        autoplayPlugin={createAutoplayPlugin()} 
+      />
     </div>
   );
 };
