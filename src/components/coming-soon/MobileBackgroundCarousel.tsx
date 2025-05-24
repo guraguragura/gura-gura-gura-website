@@ -16,7 +16,7 @@ const MobileBackgroundCarousel: React.FC<MobileBackgroundCarouselProps> = ({
   autoplayPlugin 
 }) => {
   return (
-    <div className="absolute top-20 left-0 w-full h-[calc(100%-5rem)] -z-0 md:hidden">
+    <div className="absolute top-32 left-0 w-full h-[calc(100%-8rem)] -z-0 md:hidden">
       <div className="relative h-full w-full">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-white/50 to-white z-10"></div>
         <Carousel 
