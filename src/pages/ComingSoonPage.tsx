@@ -82,7 +82,7 @@ const ComingSoonPage = () => {
 
   return (
     <div className="h-screen w-full bg-white text-black font-sans overflow-hidden">
-      <div className="grid md:grid-cols-2 h-full md:gap-4">
+      <div className="grid md:grid-cols-2 h-full md:gap-2">
         {/* Mobile Layout - Keep existing */}
         <div className="flex md:hidden flex-col h-full relative z-10">
           {/* Logo at the top */}
@@ -115,8 +115,8 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        {/* Desktop Layout - Center the content better */}
-        <div className="hidden md:flex items-center justify-center px-8 h-full relative z-10">
+        {/* Desktop Layout - Position text slightly right of left center */}
+        <div className="hidden md:flex items-center justify-end pr-4 h-full relative z-10">
           <div className="space-y-4 md:space-y-8 max-w-xl text-center">
             <div className="flex justify-center mb-4">
               <Link to="/">
@@ -143,7 +143,8 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        <div className="hidden md:flex bg-white items-center justify-start pl-4">
+        {/* Desktop carousel - Position slightly left within its column */}
+        <div className="hidden md:flex bg-white items-center justify-start pl-2">
           <ProductCarousel 
             images={carouselImages} 
             autoplayPlugin={autoplayPlugin} 
