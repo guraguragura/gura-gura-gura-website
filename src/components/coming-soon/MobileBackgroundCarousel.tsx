@@ -16,31 +16,28 @@ const MobileBackgroundCarousel: React.FC<MobileBackgroundCarouselProps> = ({
   autoplayPlugin 
 }) => {
   return (
-    <div className="absolute top-24 -left-8 w-[120%] h-[calc(100%-6rem)] -z-0 md:hidden">
-      <div className="relative h-full w-full">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-white/50 to-white z-10"></div>
-        <Carousel 
-          className="h-full w-full"
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          plugins={[autoplayPlugin]}
-        >
-          <CarouselContent>
-            {images.map((image, index) => (
-              <CarouselItem key={index}>
-                <img 
-                  src={image.src}
-                  alt="" 
-                  className="h-full w-full object-cover"
-                  aria-hidden="true"
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-      </div>
+    <div className="absolute top-0 left-0 w-full h-full">
+      <Carousel 
+        className="h-full w-full"
+        opts={{
+          align: "start",
+          loop: true,
+        }}
+        plugins={[autoplayPlugin]}
+      >
+        <CarouselContent>
+          {images.map((image, index) => (
+            <CarouselItem key={index}>
+              <img 
+                src={image.src}
+                alt="" 
+                className="h-full w-full object-cover"
+                aria-hidden="true"
+              />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
     </div>
   );
 };
