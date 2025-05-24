@@ -196,10 +196,10 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        <div className="hidden md:flex bg-white items-center justify-start p-8 pl-2">
-          <div className="w-full h-full flex items-center justify-start">
+        <div className="hidden md:flex bg-white items-center justify-center p-8">
+          <div className="w-full max-w-lg h-auto flex items-center justify-center">
             <Carousel 
-              className="w-full h-full"
+              className="w-full h-auto"
               opts={{
                 align: "start",
                 loop: true,
@@ -212,7 +212,7 @@ const ComingSoonPage = () => {
                     <img 
                       src={image.src}
                       alt={image.alt} 
-                      className="max-w-full max-h-full object-contain rounded-lg shadow-lg w-full h-full"
+                      className="w-full h-auto object-contain rounded-lg shadow-lg"
                     />
                   </CarouselItem>
                 ))}
