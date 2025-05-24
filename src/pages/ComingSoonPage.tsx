@@ -109,7 +109,7 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        <div className="hidden md:flex bg-[#F7D44C] items-center justify-center p-8">
+        <div className="hidden md:flex bg-white items-center justify-center p-8">
           <div className="w-4/5 h-4/5 max-w-md">
             <img 
               src="/lovable-uploads/91bfa46b-f06e-44de-bc8b-4315b8e5ff43.png"
