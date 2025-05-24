@@ -96,8 +96,8 @@ const ComingSoonPage = () => {
             </Link>
           </div>
           
-          {/* Main content moved down */}
-          <div className="flex-1 flex items-center justify-center px-6 pt-32">
+          {/* Main content moved down further */}
+          <div className="flex-1 flex items-center justify-center px-6 pt-48">
             <div className="space-y-6 text-center max-w-sm">
               <div className="space-y-3">
                 <h1 className="text-4xl font-bold tracking-tight text-black">
