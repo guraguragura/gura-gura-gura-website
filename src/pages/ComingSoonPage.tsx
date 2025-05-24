@@ -82,6 +82,31 @@ const ComingSoonPage = () => {
     };
   }, []);
 
+  const createAutoplayPlugin = () => {
+    let interval: NodeJS.Timeout;
+    
+    return {
+      name: 'autoplay',
+      options: {},
+      init: (embla: any) => {
+        const autoplay = () => {
+          if (!embla.canScrollNext()) {
+            embla.scrollTo(0);
+          } else {
+            embla.scrollNext();
+          }
+        };
+        
+        interval = setInterval(autoplay, 3000);
+      },
+      destroy: () => {
+        if (interval) {
+          clearInterval(interval);
+        }
+      }
+    };
+  };
+
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -179,25 +204,7 @@ const ComingSoonPage = () => {
                 align: "start",
                 loop: true,
               }}
-              plugins={[
-                {
-                  init: (embla) => {
-                    const autoplay = () => {
-                      if (!embla.canScrollNext()) {
-                        embla.scrollTo(0);
-                      } else {
-                        embla.scrollNext();
-                      }
-                    };
-                    
-                    const interval = setInterval(autoplay, 3000);
-                    
-                    embla.on('destroy', () => {
-                      clearInterval(interval);
-                    });
-                  }
-                }
-              ]}
+              plugins={[createAutoplayPlugin()]}
             >
               <CarouselContent>
                 {carouselImages.map((image, index) => (
@@ -225,25 +232,7 @@ const ComingSoonPage = () => {
                 align: "start",
                 loop: true,
               }}
-              plugins={[
-                {
-                  init: (embla) => {
-                    const autoplay = () => {
-                      if (!embla.canScrollNext()) {
-                        embla.scrollTo(0);
-                      } else {
-                        embla.scrollNext();
-                      }
-                    };
-                    
-                    const interval = setInterval(autoplay, 3000);
-                    
-                    embla.on('destroy', () => {
-                      clearInterval(interval);
-                    });
-                  }
-                }
-              ]}
+              plugins={[createAutoplayPlugin()]}
             >
               <CarouselContent>
                 {carouselImages.map((image, index) => (
