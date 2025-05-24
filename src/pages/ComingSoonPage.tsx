@@ -110,11 +110,11 @@ const ComingSoonPage = () => {
         </div>
 
         <div className="hidden md:flex bg-white items-center justify-center p-8">
-          <div className="w-4/5 h-4/5 max-w-md">
+          <div className="w-full h-full flex items-center justify-center">
             <img 
               src="/lovable-uploads/d9450bd5-f417-4e0b-b947-cc100952fac8.png"
               alt="Happy Customer with Shopping Bags" 
-              className="h-full w-full object-cover object-top rounded-lg shadow-lg"
+              className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
             />
           </div>
         </div>
@@ -127,7 +127,7 @@ const ComingSoonPage = () => {
             <img 
               src="/lovable-uploads/d9450bd5-f417-4e0b-b947-cc100952fac8.png"
               alt="" 
-              className="h-full w-full object-cover object-top"
+              className="h-full w-full object-contain"
               aria-hidden="true"
             />
           </div>
