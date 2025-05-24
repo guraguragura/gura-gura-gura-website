@@ -109,8 +109,8 @@ const ComingSoonPage = () => {
           </div>
         </div>
 
-        <div className="hidden md:flex bg-white items-center justify-center p-8">
-          <div className="w-full h-full flex items-center justify-center">
+        <div className="hidden md:flex bg-white items-center justify-start p-8 pl-2">
+          <div className="w-full h-full flex items-center justify-start">
             <img 
               src="/lovable-uploads/ce9b9eaa-2c95-4b45-afae-95c70f0357f1.png"
               alt="Happy Customer with Shopping Bags" 
