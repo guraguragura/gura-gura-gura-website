@@ -83,8 +83,8 @@ const ComingSoonPage = () => {
   return (
     <div className="h-screen w-full bg-white text-black font-sans overflow-hidden">
       <div className="grid md:grid-cols-2 h-full">
-        {/* Mobile Layout - Redesigned */}
-        <div className="flex md:hidden flex-col items-center justify-center px-6 h-full relative z-10">
+        {/* Mobile Layout - Updated positioning */}
+        <div className="flex md:hidden flex-col h-full relative z-10">
           {/* Logo at the top */}
           <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
             <Link to="/">
@@ -96,20 +96,22 @@ const ComingSoonPage = () => {
             </Link>
           </div>
           
-          {/* Main content centered */}
-          <div className="space-y-6 text-center max-w-sm">
-            <div className="space-y-3">
-              <h1 className="text-4xl font-bold tracking-tight text-black">
-                Coming Soon
-              </h1>
-              <p className="text-lg leading-relaxed text-gray-600">
-                Shop Local. Delivered Fast.<br />
-                Bringing Kigali closer, one delivery at a time.
-              </p>
-            </div>
+          {/* Main content moved down */}
+          <div className="flex-1 flex items-center justify-center px-6 pt-32">
+            <div className="space-y-6 text-center max-w-sm">
+              <div className="space-y-3">
+                <h1 className="text-4xl font-bold tracking-tight text-black">
+                  Coming Soon
+                </h1>
+                <p className="text-lg leading-relaxed text-gray-600">
+                  Shop Local. Delivered Fast.<br />
+                  Bringing Kigali closer, one delivery at a time.
+                </p>
+              </div>
 
-            <NewsletterForm />
-            <SocialLinks />
+              <NewsletterForm />
+              <SocialLinks />
+            </div>
           </div>
         </div>
 
