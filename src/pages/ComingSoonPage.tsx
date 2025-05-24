@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import NewsletterForm from "@/components/coming-soon/NewsletterForm";
@@ -106,7 +107,7 @@ const ComingSoonPage = () => {
       {/* Mobile Layout - Allow scrolling */}
       <div className="flex md:hidden flex-col min-h-screen relative">
         {/* Logo at the top */}
-        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
+        <div className="flex justify-center pt-8 pb-4 z-20 relative">
           <Link to="/">
             <img 
               src="/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png" 
@@ -116,8 +117,8 @@ const ComingSoonPage = () => {
           </Link>
         </div>
         
-        {/* Carousel section */}
-        <div className="h-80 relative">
+        {/* Carousel section directly under logo */}
+        <div className="h-64 relative mb-8">
           <MobileBackgroundCarousel 
             images={carouselImages} 
             autoplayPlugin={createAutoplayPlugin()} 
@@ -125,7 +126,7 @@ const ComingSoonPage = () => {
         </div>
         
         {/* Main content below carousel */}
-        <div className="flex-1 flex items-center justify-center px-6 py-12 bg-white">
+        <div className="flex-1 flex items-center justify-center px-6 py-8 bg-white">
           <div className="space-y-6 text-center max-w-sm">
             <div className="space-y-3">
               <h1 className="text-4xl font-bold tracking-tight text-black">
