@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import NewsletterForm from "@/components/coming-soon/NewsletterForm";
@@ -131,9 +132,8 @@ const ComingSoonPage = () => {
                 Coming Soon!
               </h1>
               <p className="text-lg leading-relaxed text-gray-600">
-                Shop Local. Delivered Fast.<br />
-                Bringing Kigali closer,<br />
-                one delivery at a time.
+                Kigali, get ready to click, shop, and enjoy!<br />
+                Sign up for exclusive offers and deals
               </p>
             </div>
 
@@ -162,8 +162,8 @@ const ComingSoonPage = () => {
                 Coming Soon!
               </h1>
               <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-600">
-                Shop Local. Delivered Fast.<br />
-                Bringing Kigali closer, one delivery at a time.
+                Kigali, get ready to click, shop, and enjoy!<br />
+                Sign up for exclusive offers and deals
               </p>
             </div>
 
