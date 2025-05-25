@@ -1,8 +1,6 @@
-
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import NewsletterForm from "@/components/coming-soon/NewsletterForm";
-import SocialLinks from "@/components/coming-soon/SocialLinks";
 import ProductCarousel from "@/components/coming-soon/ProductCarousel";
 import MobileBackgroundCarousel from "@/components/coming-soon/MobileBackgroundCarousel";
 
@@ -140,7 +138,6 @@ const ComingSoonPage = () => {
             </div>
 
             <NewsletterForm />
-            <SocialLinks />
           </div>
         </div>
       </div>
@@ -171,7 +168,6 @@ const ComingSoonPage = () => {
             </div>
 
             <NewsletterForm />
-            <SocialLinks />
           </div>
 
           {/* Carousel Content */}
