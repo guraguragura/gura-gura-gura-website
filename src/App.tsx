@@ -16,11 +16,12 @@ import GuraBusinessPage from "@/pages/GuraBusinessPage";
 import CheckoutPage from "@/pages/CheckoutPage";
 
 function App() {
-  // Check if we're in development mode
-  const isDevelopment = import.meta.env.DEV;
+  // Check if the full e-commerce site should be shown
+  // By default, show coming soon page in production
+  const showFullSite = import.meta.env.VITE_SHOW_FULL_SITE === 'true';
   
-  // If in development, only show coming soon page
-  if (isDevelopment) {
+  // If full site is not enabled, only show coming soon page
+  if (!showFullSite) {
     return (
       <>
         <Routes>
@@ -32,7 +33,7 @@ function App() {
     );
   }
 
-  // Production routes (when not in development)
+  // Full e-commerce site routes (when explicitly enabled)
   return (
     <>
       <Routes>
