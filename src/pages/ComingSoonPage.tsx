@@ -1,5 +1,4 @@
 
-
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import NewsletterForm from "@/components/coming-soon/NewsletterForm";
@@ -185,4 +184,3 @@ const ComingSoonPage = () => {
 };
 
 export default ComingSoonPage;
-
