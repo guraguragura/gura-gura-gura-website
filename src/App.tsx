@@ -16,11 +16,11 @@ import GuraBusinessPage from "@/pages/GuraBusinessPage";
 import CheckoutPage from "@/pages/CheckoutPage";
 
 function App() {
-  // Check if the full e-commerce site should be shown
-  // By default, show coming soon page in production
-  const showFullSite = import.meta.env.VITE_SHOW_FULL_SITE === 'true';
+  // Check if the full e-commerce site should be shown based on domain
+  const hostname = window.location.hostname;
+  const showFullSite = hostname === 'dev-portal-8ac7.gura.rw' || hostname === 'localhost';
   
-  // If full site is not enabled, only show coming soon page
+  // If full site is not enabled for this domain, only show coming soon page
   if (!showFullSite) {
     return (
       <>
@@ -33,7 +33,7 @@ function App() {
     );
   }
 
-  // Full e-commerce site routes (when explicitly enabled)
+  // Full e-commerce site routes (for dev-portal-8ac7.gura.rw and localhost)
   return (
     <>
       <Routes>
