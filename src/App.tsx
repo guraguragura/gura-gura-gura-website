@@ -18,7 +18,16 @@ import CheckoutPage from "@/pages/CheckoutPage";
 function App() {
   // Check if the full e-commerce site should be shown based on domain
   const hostname = window.location.hostname;
-  const showFullSite = hostname === 'dev-portal-8ac7.gura.rw' || hostname === 'localhost';
+  console.log('Current hostname:', hostname);
+  
+  // More flexible domain checking - include common development domains
+  const showFullSite = hostname === 'dev-portal-8ac7.gura.rw' || 
+                      hostname === 'localhost' || 
+                      hostname.includes('lovable.app') || // Lovable preview domains
+                      hostname.includes('127.0.0.1') ||   // Local IP
+                      hostname.includes('dev-portal');    // Any dev-portal subdomain
+  
+  console.log('Show full site:', showFullSite);
   
   // If full site is not enabled for this domain, only show coming soon page
   if (!showFullSite) {
