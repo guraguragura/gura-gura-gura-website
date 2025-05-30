@@ -24,6 +24,7 @@ function App() {
   const showFullSite = hostname === 'dev-portal-8ac7.gura.rw' || 
                       hostname === 'localhost' || 
                       hostname.includes('lovable.app') || // Lovable preview domains
+                      hostname.includes('lovableproject.com') || // Lovable preview domains (new format)
                       hostname.includes('127.0.0.1') ||   // Local IP
                       hostname.includes('dev-portal');    // Any dev-portal subdomain
   
