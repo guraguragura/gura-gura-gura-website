@@ -65,7 +65,7 @@ export interface InitiatePaymentResponse {
   };
 }
 
-const SANDBOX_BASE_URL = 'https://api.sandbox.irembopay.com';
+import { supabase } from '@/integrations/supabase/client';
 
 export class IremboPayService {
   private static generateTransactionId(): string {
@@ -79,7 +79,8 @@ export class IremboPayService {
   ): Promise<InvoiceResponse> {
     const transactionId = this.generateTransactionId();
     
-    const requestBody: CreateInvoiceRequest = {
+    const requestBody = {
+      action: 'createInvoice',
       transactionId,
       paymentItems: [
         {
@@ -97,21 +98,17 @@ export class IremboPayService {
 
     console.log('Creating invoice with data:', requestBody);
 
-    const response = await fetch(`${SANDBOX_BASE_URL}/payments/invoices`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody)
+    const { data, error } = await supabase.functions.invoke('irembopay', {
+      body: requestBody
     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to create invoice: ${response.statusText}`);
+    if (error) {
+      console.error('Edge function error:', error);
+      throw new Error(`Failed to create invoice: ${error.message}`);
     }
 
-    const result = await response.json();
-    console.log('Invoice created:', result);
-    return result;
+    console.log('Invoice created:', data);
+    return data;
   }
 
   static async initiatePayment(
@@ -120,7 +117,8 @@ export class IremboPayService {
     provider: 'MTN' | 'AIRTEL',
     transactionReference?: string
   ): Promise<InitiatePaymentResponse> {
-    const requestBody: InitiatePaymentRequest = {
+    const requestBody = {
+      action: 'initiatePayment',
       accountIdentifier: phoneNumber,
       paymentProvider: provider,
       invoiceNumber,
@@ -129,20 +127,16 @@ export class IremboPayService {
 
     console.log('Initiating payment with data:', requestBody);
 
-    const response = await fetch(`${SANDBOX_BASE_URL}/payments/transactions/initiate`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody)
+    const { data, error } = await supabase.functions.invoke('irembopay', {
+      body: requestBody
     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to initiate payment: ${response.statusText}`);
+    if (error) {
+      console.error('Edge function error:', error);
+      throw new Error(`Failed to initiate payment: ${error.message}`);
     }
 
-    const result = await response.json();
-    console.log('Payment initiated:', result);
-    return result;
+    console.log('Payment initiated:', data);
+    return data;
   }
 }
