@@ -50,6 +50,8 @@ serve(async (req) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'irembopay-secretKey': 'sk_live_4434c9c7db674088888fcbd1b928ab9d',
+          'X-API-Version': '2',
         },
         body: JSON.stringify(requestData)
       })
@@ -69,6 +71,8 @@ serve(async (req) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'irembopay-secretKey': 'sk_live_4434c9c7db674088888fcbd1b928ab9d',
+          'X-API-Version': '2',
         },
         body: JSON.stringify(requestData)
       })
