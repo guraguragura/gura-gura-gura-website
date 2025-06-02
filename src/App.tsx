@@ -14,6 +14,8 @@ import ContactPage from "@/pages/ContactPage";
 import AboutUsPage from "@/pages/AboutUsPage";
 import GuraBusinessPage from "@/pages/GuraBusinessPage";
 import CheckoutPage from "@/pages/CheckoutPage";
+import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
+import PaymentErrorPage from "@/pages/PaymentErrorPage";
 
 function App() {
   // Check if the full e-commerce site should be shown based on domain
@@ -64,6 +66,8 @@ function App() {
         {/* Shopping */}
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/payment-success" element={<PaymentSuccessPage />} />
+        <Route path="/payment-error" element={<PaymentErrorPage />} />
         
         {/* Info pages */}
         <Route path="/faq" element={<FaqPage />} />

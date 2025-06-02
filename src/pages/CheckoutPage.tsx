@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopInfoBar from '@/components/layout/TopInfoBar';
@@ -16,9 +15,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useCurrency } from '@/hooks/useCurrency';
-import { CreditCard, CalendarRange, Lock, ShieldCheck } from 'lucide-react';
+import { CreditCard, CalendarRange, Lock, ShieldCheck, Smartphone } from 'lucide-react';
 import { toast } from 'sonner';
 import { useCheckout } from '@/hooks/useCheckout';
+import { MoMoPaymentModal } from '@/components/checkout/MoMoPaymentModal';
 
 const checkoutSchema = z.object({
   firstName: z.string().min(2, { message: 'First name must be at least 2 characters' }),
@@ -30,7 +30,7 @@ const checkoutSchema = z.object({
   state: z.string().min(2, { message: 'State must be at least 2 characters' }),
   zipCode: z.string().min(5, { message: 'ZIP code must be at least 5 characters' }),
   sameShippingAddress: z.boolean().default(true),
-  paymentMethod: z.enum(['creditCard', 'paypal']),
+  paymentMethod: z.enum(['creditCard', 'paypal', 'momo']),
   cardNumber: z.string().optional(),
   cardName: z.string().optional(),
   expiryDate: z.string().optional(),
@@ -44,7 +44,14 @@ const CheckoutPage = () => {
   const { items, subtotal, total } = useCartContext();
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
-  const { processCheckout, isProcessing } = useCheckout();
+  const { 
+    processCheckout, 
+    isProcessing, 
+    invoice, 
+    showMoMoModal, 
+    setShowMoMoModal, 
+    handleMoMoPaymentSuccess 
+  } = useCheckout();
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
@@ -58,7 +65,7 @@ const CheckoutPage = () => {
       state: '',
       zipCode: '',
       sameShippingAddress: true,
-      paymentMethod: 'creditCard',
+      paymentMethod: 'momo',
       savePaymentInfo: false,
     },
   });
@@ -151,7 +158,7 @@ const CheckoutPage = () => {
                           <FormItem>
                             <FormLabel>Phone Number</FormLabel>
                             <FormControl>
-                              <Input placeholder="(123) 456-7890" {...field} />
+                              <Input placeholder="250781234567" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -185,7 +192,7 @@ const CheckoutPage = () => {
                           <FormItem>
                             <FormLabel>City</FormLabel>
                             <FormControl>
-                              <Input placeholder="New York" {...field} />
+                              <Input placeholder="Kigali" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -197,9 +204,9 @@ const CheckoutPage = () => {
                         name="state"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>State</FormLabel>
+                            <FormLabel>Province</FormLabel>
                             <FormControl>
-                              <Input placeholder="NY" {...field} />
+                              <Input placeholder="Kigali City" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -211,9 +218,9 @@ const CheckoutPage = () => {
                         name="zipCode"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>ZIP Code</FormLabel>
+                            <FormLabel>Postal Code</FormLabel>
                             <FormControl>
-                              <Input placeholder="10001" {...field} />
+                              <Input placeholder="00000" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -255,18 +262,26 @@ const CheckoutPage = () => {
                               className="space-y-3"
                             >
                               <div className="flex items-center space-x-2 border rounded-md p-3 cursor-pointer hover:bg-gray-50">
-                                <RadioGroupItem value="creditCard" id="creditCard" />
+                                <RadioGroupItem value="momo" id="momo" />
+                                <label htmlFor="momo" className="flex items-center cursor-pointer">
+                                  <Smartphone className="mr-2 h-5 w-5 text-green-500" />
+                                  <span>Mobile Money (MTN/Airtel)</span>
+                                </label>
+                              </div>
+
+                              <div className="flex items-center space-x-2 border rounded-md p-3 cursor-pointer hover:bg-gray-50 opacity-50">
+                                <RadioGroupItem value="creditCard" id="creditCard" disabled />
                                 <label htmlFor="creditCard" className="flex items-center cursor-pointer">
                                   <CreditCard className="mr-2 h-5 w-5 text-blue-500" />
-                                  <span>Credit or Debit Card</span>
+                                  <span>Credit or Debit Card (Coming Soon)</span>
                                 </label>
                               </div>
                               
-                              <div className="flex items-center space-x-2 border rounded-md p-3 cursor-pointer hover:bg-gray-50">
-                                <RadioGroupItem value="paypal" id="paypal" />
+                              <div className="flex items-center space-x-2 border rounded-md p-3 cursor-pointer hover:bg-gray-50 opacity-50">
+                                <RadioGroupItem value="paypal" id="paypal" disabled />
                                 <label htmlFor="paypal" className="flex items-center cursor-pointer">
                                   <img src="/placeholder.svg" alt="PayPal" className="h-5 mr-2" />
-                                  <span>PayPal</span>
+                                  <span>PayPal (Coming Soon)</span>
                                 </label>
                               </div>
                             </RadioGroup>
@@ -360,6 +375,14 @@ const CheckoutPage = () => {
                         />
                       </div>
                     )}
+
+                    {paymentMethod === 'momo' && (
+                      <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <p className="text-green-800 text-sm">
+                          You will be prompted to complete payment using your mobile money account after clicking "Place Order".
+                        </p>
+                      </div>
+                    )}
                   </Card>
                   
                   <div className="lg:hidden">
@@ -401,6 +424,14 @@ const CheckoutPage = () => {
           </div>
         </div>
       </div>
+      
+      <MoMoPaymentModal
+        isOpen={showMoMoModal}
+        onClose={() => setShowMoMoModal(false)}
+        invoice={invoice}
+        onPaymentSuccess={handleMoMoPaymentSuccess}
+      />
+      
       <Footer />
     </div>
   );
