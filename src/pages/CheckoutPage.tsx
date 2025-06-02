@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopInfoBar from '@/components/layout/TopInfoBar';
@@ -30,7 +31,7 @@ const checkoutSchema = z.object({
   state: z.string().min(2, { message: 'State must be at least 2 characters' }),
   zipCode: z.string().min(5, { message: 'ZIP code must be at least 5 characters' }),
   sameShippingAddress: z.boolean().default(true),
-  paymentMethod: z.enum(['creditCard', 'paypal', 'momo']),
+  paymentMethod: z.enum(['creditCard', 'momo']),
   cardNumber: z.string().optional(),
   cardName: z.string().optional(),
   expiryDate: z.string().optional(),
@@ -73,6 +74,7 @@ const CheckoutPage = () => {
   const paymentMethod = form.watch('paymentMethod');
 
   const onSubmit = (data: CheckoutFormValues) => {
+    console.log('Form submitted with data:', data);
     processCheckout({
       firstName: data.firstName,
       lastName: data.lastName,
@@ -103,6 +105,7 @@ const CheckoutPage = () => {
             <div className="lg:col-span-2">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                  {/* Contact Information */}
                   <Card className="p-6">
                     <h2 className="text-xl font-bold mb-4">Contact Information</h2>
                     
@@ -167,6 +170,7 @@ const CheckoutPage = () => {
                     </div>
                   </Card>
                   
+                  {/* Shipping Address */}
                   <Card className="p-6">
                     <h2 className="text-xl font-bold mb-4">Shipping Address</h2>
                     
@@ -247,6 +251,7 @@ const CheckoutPage = () => {
                     />
                   </Card>
                   
+                  {/* Payment Method */}
                   <Card className="p-6">
                     <h2 className="text-xl font-bold mb-4">Payment Method</h2>
                     
@@ -261,27 +266,25 @@ const CheckoutPage = () => {
                               value={field.value}
                               className="space-y-3"
                             >
-                              <div className="flex items-center space-x-2 border rounded-md p-3 cursor-pointer hover:bg-gray-50">
+                              <div className="flex items-center space-x-2 border rounded-md p-4 cursor-pointer hover:bg-gray-50">
                                 <RadioGroupItem value="momo" id="momo" />
-                                <label htmlFor="momo" className="flex items-center cursor-pointer">
-                                  <Smartphone className="mr-2 h-5 w-5 text-green-500" />
-                                  <span>Mobile Money (MTN/Airtel)</span>
+                                <label htmlFor="momo" className="flex items-center cursor-pointer flex-1">
+                                  <Smartphone className="mr-3 h-6 w-6 text-green-600" />
+                                  <div>
+                                    <span className="font-medium">Mobile Money (MTN/Airtel)</span>
+                                    <p className="text-sm text-gray-500">Pay with your mobile money account</p>
+                                  </div>
                                 </label>
                               </div>
 
-                              <div className="flex items-center space-x-2 border rounded-md p-3 cursor-pointer hover:bg-gray-50 opacity-50">
+                              <div className="flex items-center space-x-2 border rounded-md p-4 cursor-pointer hover:bg-gray-50 opacity-50">
                                 <RadioGroupItem value="creditCard" id="creditCard" disabled />
-                                <label htmlFor="creditCard" className="flex items-center cursor-pointer">
-                                  <CreditCard className="mr-2 h-5 w-5 text-blue-500" />
-                                  <span>Credit or Debit Card (Coming Soon)</span>
-                                </label>
-                              </div>
-                              
-                              <div className="flex items-center space-x-2 border rounded-md p-3 cursor-pointer hover:bg-gray-50 opacity-50">
-                                <RadioGroupItem value="paypal" id="paypal" disabled />
-                                <label htmlFor="paypal" className="flex items-center cursor-pointer">
-                                  <img src="/placeholder.svg" alt="PayPal" className="h-5 mr-2" />
-                                  <span>PayPal (Coming Soon)</span>
+                                <label htmlFor="creditCard" className="flex items-center cursor-pointer flex-1">
+                                  <CreditCard className="mr-3 h-6 w-6 text-blue-500" />
+                                  <div>
+                                    <span className="font-medium">Credit or Debit Card</span>
+                                    <p className="text-sm text-gray-500">Coming Soon</p>
+                                  </div>
                                 </label>
                               </div>
                             </RadioGroup>
@@ -378,9 +381,15 @@ const CheckoutPage = () => {
 
                     {paymentMethod === 'momo' && (
                       <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-                        <p className="text-green-800 text-sm">
-                          You will be prompted to complete payment using your mobile money account after clicking "Place Order".
-                        </p>
+                        <div className="flex items-start">
+                          <Smartphone className="h-5 w-5 text-green-600 mr-2 mt-0.5" />
+                          <div>
+                            <p className="text-green-800 text-sm font-medium">Mobile Money Payment</p>
+                            <p className="text-green-700 text-sm mt-1">
+                              You will be prompted to complete payment using your mobile money account after clicking "Place Order".
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </Card>
