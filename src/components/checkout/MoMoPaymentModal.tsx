@@ -76,7 +76,7 @@ export const MoMoPaymentModal: React.FC<MoMoPaymentModalProps> = ({
       console.log('Initiating payment with invoice:', invoice.data.invoiceNumber);
       
       window.IremboPay.initiate({
-        publicKey: "pk_live_4434c9c7db674088888fcbd1b928ab9d", // Replace with your actual public key
+        publicKey: "pk_live_ab2fbda299bc4f9c9b55c7277af4f885", // Your actual public key
         invoiceNumber: invoice.data.invoiceNumber,
         locale: window.IremboPay.locale.EN,
         callback: (err: any, resp: any) => {
