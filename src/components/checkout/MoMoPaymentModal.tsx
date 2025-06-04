@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Loader2, CreditCard } from 'lucide-react';
+import { CreditCard } from 'lucide-react';
 import { type InvoiceResponse } from '@/services/iremboPay';
 import { toast } from 'sonner';
 
@@ -43,6 +43,13 @@ export const MoMoPaymentModal: React.FC<MoMoPaymentModalProps> = ({
     const script = document.createElement('script');
     script.src = 'https://dashboard.sandbox.irembopay.com/assets/payment/inline.js';
     script.async = true;
+    script.onload = () => {
+      console.log('IremboPay widget loaded successfully');
+    };
+    script.onerror = () => {
+      console.error('Failed to load IremboPay widget');
+      toast.error('Failed to load payment system');
+    };
     document.head.appendChild(script);
 
     return () => {
@@ -53,21 +60,23 @@ export const MoMoPaymentModal: React.FC<MoMoPaymentModalProps> = ({
     };
   }, []);
 
-  const handlePayment = () => {
+  const makePayment = () => {
     if (!invoice) {
       toast.error('Invoice not found');
       return;
     }
 
-    // Check if IremboPay is loaded
+    // Check if IremboPay widget is loaded
     if (!window.IremboPay) {
-      toast.error('Payment system is loading, please try again');
+      toast.error('Payment system is loading, please try again in a moment');
       return;
     }
 
     try {
+      console.log('Initiating payment with invoice:', invoice.data.invoiceNumber);
+      
       window.IremboPay.initiate({
-        publicKey: "pk_live_4434c9c7db674088888fcbd1b928ab9d", // You'll need to provide the public key
+        publicKey: "pk_live_4434c9c7db674088888fcbd1b928ab9d", // Replace with your actual public key
         invoiceNumber: invoice.data.invoiceNumber,
         locale: window.IremboPay.locale.EN,
         callback: (err: any, resp: any) => {
@@ -78,13 +87,15 @@ export const MoMoPaymentModal: React.FC<MoMoPaymentModalProps> = ({
             onPaymentSuccess();
             onClose();
             
-            // Optionally close the IremboPay modal
-            window.IremboPay.closeModal();
+            // Close the IremboPay widget modal
+            if (window.IremboPay.closeModal) {
+              window.IremboPay.closeModal();
+            }
           } else {
-            // Payment failed
+            // Payment failed or error occurred
             console.error('Payment error:', err);
             
-            // Handle specific error scenarios
+            // Handle specific error scenarios based on IremboPay documentation
             if (err.code === 'INVALID_KEY') {
               toast.error('Invalid payment configuration');
             } else if (err.code === 'INVOICE_NOT_FOUND') {
@@ -136,14 +147,17 @@ export const MoMoPaymentModal: React.FC<MoMoPaymentModalProps> = ({
 
             <div className="space-y-4">
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <h4 className="font-medium text-blue-800 mb-2">Payment Options Available:</h4>
+                <h4 className="font-medium text-blue-800 mb-2">All Payment Options Available:</h4>
                 <ul className="text-sm text-blue-700 space-y-1">
                   <li>• MTN Mobile Money</li>
                   <li>• Airtel Money</li>
-                  <li>• Credit/Debit Cards</li>
+                  <li>• Credit/Debit Cards (Visa, MasterCard)</li>
                   <li>• Bank Transfer</li>
-                  <li>• Cash/Agents</li>
+                  <li>• Cash Payments via Agents</li>
                 </ul>
+                <p className="text-xs text-blue-600 mt-2">
+                  The payment widget will open with all available options for you to choose from.
+                </p>
               </div>
             </div>
 
@@ -152,15 +166,15 @@ export const MoMoPaymentModal: React.FC<MoMoPaymentModalProps> = ({
                 Cancel
               </Button>
               <Button 
-                onClick={handlePayment} 
-                className="flex-1"
+                onClick={makePayment} 
+                className="flex-1 bg-green-600 hover:bg-green-700"
               >
                 Pay Now
               </Button>
             </div>
 
             <p className="text-xs text-gray-500 text-center">
-              A secure payment window will open with all available payment options
+              A secure payment widget will open with all available payment methods
             </p>
           </div>
         )}

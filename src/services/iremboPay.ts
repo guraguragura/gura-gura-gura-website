@@ -53,6 +53,7 @@ export class IremboPayService {
     return `TXN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
+  // Create invoice via Supabase Edge Function (for backend security)
   static async createInvoice(
     total: number,
     customer: Customer,
@@ -88,7 +89,7 @@ export class IremboPayService {
       throw new Error(`Failed to create invoice: ${error.message}`);
     }
 
-    console.log('Invoice created:', data);
+    console.log('Invoice created successfully:', data);
     return data;
   }
 }

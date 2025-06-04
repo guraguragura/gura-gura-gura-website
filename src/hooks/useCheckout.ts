@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCartContext } from '@/contexts/CartContext';
@@ -66,9 +65,9 @@ export function useCheckout() {
 
       console.log("Processing order with data:", orderData);
 
-      // Handle different payment methods
-      if (formData.paymentMethod === 'momo') {
-        // Create invoice with IremboPay
+      // For the JavaScript Widget Integration, we create invoice for both payment methods
+      if (formData.paymentMethod === 'momo' || formData.paymentMethod === 'creditCard') {
+        // Create invoice with IremboPay - the widget will handle all payment methods
         const invoiceResponse = await IremboPayService.createInvoice(
           total,
           {
@@ -81,25 +80,13 @@ export function useCheckout() {
 
         if (invoiceResponse.success) {
           setInvoice(invoiceResponse);
-          setShowMoMoModal(true);
+          setShowMoMoModal(true); // This modal now handles all payment methods via the widget
         } else {
           throw new Error('Failed to create payment invoice');
         }
       } else {
-        // Handle other payment methods (credit card, etc.)
-        // PLACEHOLDER: For now, we'll simulate payment processing
-        const simulatePaymentSuccess = Math.random() < 0.8;
-        
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        if (!simulatePaymentSuccess) {
-          console.log("Simulated payment failure");
-          throw new Error("Payment processing failed. Please try again.");
-        }
-
-        // Complete the order
-        await completeOrder(orderData, isAuthenticated);
+        // Handle any other payment methods if needed
+        throw new Error("Unsupported payment method");
       }
       
     } catch (error) {
@@ -149,7 +136,7 @@ export function useCheckout() {
           email: invoice?.data.customer.email,
           phone: invoice?.data.customer.phoneNumber,
         },
-        payment_method: 'momo',
+        payment_method: 'widget_payment', // Since widget handles all methods
         total_amount: invoice?.data.amount,
         invoice_number: invoice?.data.invoiceNumber,
         transaction_id: invoice?.data.transactionId
