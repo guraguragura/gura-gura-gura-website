@@ -15,14 +15,13 @@ interface CheckoutFormData {
   state: string;
   zipCode: string;
   phone: string;
-  paymentMethod: string;
 }
 
 export function useCheckout() {
   const { items, total, clearCart } = useCartContext();
   const [isProcessing, setIsProcessing] = useState(false);
   const [invoice, setInvoice] = useState<InvoiceResponse | null>(null);
-  const [showMoMoModal, setShowMoMoModal] = useState(false);
+  const [showPaymentWidget, setShowPaymentWidget] = useState(false);
   const navigate = useNavigate();
 
   const processCheckout = async (formData: CheckoutFormData) => {
@@ -34,11 +33,7 @@ export function useCheckout() {
     setIsProcessing(true);
 
     try {
-      // Check if user is authenticated
-      const { data: sessionData } = await supabase.auth.getSession();
-      const isAuthenticated = !!sessionData.session;
-
-      console.log("Processing order with simplified flow");
+      console.log("Processing order and creating invoice");
 
       // Create invoice with IremboPay
       const invoiceResponse = await IremboPayService.createInvoice(
@@ -53,8 +48,8 @@ export function useCheckout() {
 
       if (invoiceResponse.success) {
         setInvoice(invoiceResponse);
-        setShowMoMoModal(true);
-        toast.success("Order created! Please complete your payment.");
+        setShowPaymentWidget(true);
+        toast.success("Order created! Payment widget will open shortly.");
       } else {
         throw new Error('Failed to create payment invoice');
       }
@@ -97,7 +92,7 @@ export function useCheckout() {
     navigate('/payment-success');
   };
 
-  const handleMoMoPaymentSuccess = async () => {
+  const handlePaymentSuccess = async () => {
     try {
       // Here you would typically verify the payment status
       // For now, we'll complete the order directly
@@ -119,15 +114,22 @@ export function useCheckout() {
     } catch (error) {
       console.error("Error completing payment:", error);
       toast.error("Payment completed but order processing failed. Please contact support.");
+    } finally {
+      setShowPaymentWidget(false);
     }
+  };
+
+  const handlePaymentClose = () => {
+    setShowPaymentWidget(false);
+    setInvoice(null);
   };
 
   return {
     processCheckout,
     isProcessing,
     invoice,
-    showMoMoModal,
-    setShowMoMoModal,
-    handleMoMoPaymentSuccess
+    showPaymentWidget,
+    handlePaymentSuccess,
+    handlePaymentClose
   };
 }

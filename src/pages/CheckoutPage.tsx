@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopInfoBar from '@/components/layout/TopInfoBar';
@@ -15,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useCurrency } from '@/hooks/useCurrency';
-import { ShieldCheck, Loader2 } from 'lucide-react';
+import { ShieldCheck, Loader2, CreditCard } from 'lucide-react';
 import { useCheckout } from '@/hooks/useCheckout';
 import { MoMoPaymentModal } from '@/components/checkout/MoMoPaymentModal';
 
@@ -41,9 +40,9 @@ const CheckoutPage = () => {
     processCheckout, 
     isProcessing, 
     invoice, 
-    showMoMoModal, 
-    setShowMoMoModal, 
-    handleMoMoPaymentSuccess 
+    showPaymentWidget, 
+    handlePaymentSuccess,
+    handlePaymentClose
   } = useCheckout();
 
   const form = useForm<CheckoutFormValues>({
@@ -71,8 +70,7 @@ const CheckoutPage = () => {
       address: data.address,
       city: data.city,
       state: data.state,
-      zipCode: data.zipCode,
-      paymentMethod: 'widget_payment' // Fixed payment method since we're using the widget
+      zipCode: data.zipCode
     });
   };
 
@@ -258,16 +256,19 @@ const CheckoutPage = () => {
                   <Button 
                     type="submit" 
                     size="lg" 
-                    className="w-full bg-green-600 hover:bg-green-700 text-lg py-4" 
+                    className="w-full bg-green-600 hover:bg-green-700 text-lg py-6" 
                     disabled={isProcessing}
                   >
                     {isProcessing ? (
                       <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Processing Order...
+                        <Loader2 className="mr-3 h-6 w-6 animate-spin" />
+                        Creating Order & Loading Payment...
                       </>
                     ) : (
-                      "Place Order and Pay"
+                      <>
+                        <CreditCard className="mr-3 h-6 w-6" />
+                        Place Order & Pay {formatPrice(total)}
+                      </>
                     )}
                   </Button>
                 </form>
@@ -287,10 +288,10 @@ const CheckoutPage = () => {
       </div>
       
       <MoMoPaymentModal
-        isOpen={showMoMoModal}
-        onClose={() => setShowMoMoModal(false)}
+        isOpen={showPaymentWidget}
+        onClose={handlePaymentClose}
         invoice={invoice}
-        onPaymentSuccess={handleMoMoPaymentSuccess}
+        onPaymentSuccess={handlePaymentSuccess}
       />
       
       <Footer />
