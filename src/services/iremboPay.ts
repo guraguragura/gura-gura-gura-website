@@ -46,25 +46,6 @@ export interface InvoiceResponse {
   };
 }
 
-export interface InitiatePaymentRequest {
-  accountIdentifier: string;
-  paymentProvider: 'MTN' | 'AIRTEL';
-  invoiceNumber: string;
-  transactionReference?: string;
-}
-
-export interface InitiatePaymentResponse {
-  message: string;
-  success: boolean;
-  data: {
-    amount: number;
-    paymentProvider: string;
-    accountIdentifier: string;
-    referenceId: string;
-    invoiceNumber: string;
-  };
-}
-
 import { supabase } from '@/integrations/supabase/client';
 
 export class IremboPayService {
@@ -108,35 +89,6 @@ export class IremboPayService {
     }
 
     console.log('Invoice created:', data);
-    return data;
-  }
-
-  static async initiatePayment(
-    invoiceNumber: string,
-    phoneNumber: string,
-    provider: 'MTN' | 'AIRTEL',
-    transactionReference?: string
-  ): Promise<InitiatePaymentResponse> {
-    const requestBody = {
-      action: 'initiatePayment',
-      accountIdentifier: phoneNumber,
-      paymentProvider: provider,
-      invoiceNumber,
-      transactionReference: transactionReference || ''
-    };
-
-    console.log('Initiating payment with data:', requestBody);
-
-    const { data, error } = await supabase.functions.invoke('irembopay', {
-      body: requestBody
-    });
-
-    if (error) {
-      console.error('Edge function error:', error);
-      throw new Error(`Failed to initiate payment: ${error.message}`);
-    }
-
-    console.log('Payment initiated:', data);
     return data;
   }
 }

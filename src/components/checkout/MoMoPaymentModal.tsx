@@ -1,13 +1,29 @@
 
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Loader2, Smartphone } from 'lucide-react';
-import { IremboPayService, type InvoiceResponse } from '@/services/iremboPay';
+import { Loader2, CreditCard } from 'lucide-react';
+import { type InvoiceResponse } from '@/services/iremboPay';
 import { toast } from 'sonner';
+
+// Declare IremboPay global variable
+declare global {
+  interface Window {
+    IremboPay: {
+      initiate: (config: {
+        publicKey: string;
+        invoiceNumber: string;
+        locale: string;
+        callback: (err: any, resp: any) => void;
+      }) => void;
+      closeModal: () => void;
+      locale: {
+        EN: string;
+        FR: string;
+      };
+    };
+  }
+}
 
 interface MoMoPaymentModalProps {
   isOpen: boolean;
@@ -22,71 +38,77 @@ export const MoMoPaymentModal: React.FC<MoMoPaymentModalProps> = ({
   invoice,
   onPaymentSuccess
 }) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [provider, setProvider] = useState<'MTN' | 'AIRTEL'>('MTN');
-  const [isProcessing, setIsProcessing] = useState(false);
+  useEffect(() => {
+    // Load IremboPay script when component mounts
+    const script = document.createElement('script');
+    script.src = 'https://dashboard.sandbox.irembopay.com/assets/payment/inline.js';
+    script.async = true;
+    document.head.appendChild(script);
 
-  const handlePayment = async () => {
-    if (!invoice || !phoneNumber) {
-      toast.error('Please enter your phone number');
+    return () => {
+      // Cleanup script when component unmounts
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, []);
+
+  const handlePayment = () => {
+    if (!invoice) {
+      toast.error('Invoice not found');
       return;
     }
 
-    if (phoneNumber.length < 10) {
-      toast.error('Please enter a valid phone number');
+    // Check if IremboPay is loaded
+    if (!window.IremboPay) {
+      toast.error('Payment system is loading, please try again');
       return;
     }
-
-    setIsProcessing(true);
 
     try {
-      const result = await IremboPayService.initiatePayment(
-        invoice.data.invoiceNumber,
-        phoneNumber,
-        provider
-      );
-
-      if (result.success) {
-        toast.success(result.message);
-        console.log('Payment initiated successfully:', result.data);
-        
-        // In a real implementation, you would check payment status
-        // For now, we'll simulate a successful payment after a delay
-        setTimeout(() => {
-          onPaymentSuccess();
-          onClose();
-        }, 2000);
-      } else {
-        toast.error('Payment initiation failed');
-      }
+      window.IremboPay.initiate({
+        publicKey: "pk_live_4434c9c7db674088888fcbd1b928ab9d", // You'll need to provide the public key
+        invoiceNumber: invoice.data.invoiceNumber,
+        locale: window.IremboPay.locale.EN,
+        callback: (err: any, resp: any) => {
+          if (!err) {
+            // Payment successful
+            console.log('Payment successful:', resp);
+            toast.success('Payment completed successfully!');
+            onPaymentSuccess();
+            onClose();
+            
+            // Optionally close the IremboPay modal
+            window.IremboPay.closeModal();
+          } else {
+            // Payment failed
+            console.error('Payment error:', err);
+            
+            // Handle specific error scenarios
+            if (err.code === 'INVALID_KEY') {
+              toast.error('Invalid payment configuration');
+            } else if (err.code === 'INVOICE_NOT_FOUND') {
+              toast.error('Invoice not found');
+            } else if (err.code === 'BAD_INVOICES_PAID') {
+              toast.error('Invoice has already been paid');
+            } else if (err.code === 'BAD_INVOICES_PAYMENT_EXPIRED') {
+              toast.error('Invoice has expired');
+            } else if (err.code === 'BAD_INVOICES_IN_BATCH') {
+              toast.error('Invoice is already linked to a batch');
+            } else if (err.code === 'INVOICE_MISSING') {
+              toast.error('Invoice required');
+            } else if (err.code === 'BAD_LOCALE') {
+              toast.error('Unsupported locale');
+            } else {
+              toast.error('Payment failed. Please try again.');
+            }
+          }
+        }
+      });
     } catch (error) {
-      console.error('Payment error:', error);
+      console.error('Error initiating payment:', error);
       toast.error('Failed to initiate payment. Please try again.');
-    } finally {
-      setIsProcessing(false);
     }
-  };
-
-  const formatPhoneNumber = (value: string) => {
-    // Remove any non-digit characters
-    const cleaned = value.replace(/\D/g, '');
-    
-    // Limit to 12 digits (250 + 9 digits)
-    if (cleaned.length > 12) return phoneNumber;
-    
-    // If it doesn't start with 250, add it
-    if (cleaned.length > 0 && !cleaned.startsWith('250')) {
-      if (cleaned.length <= 9) {
-        return '250' + cleaned;
-      }
-    }
-    
-    return cleaned;
-  };
-
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhoneNumber(e.target.value);
-    setPhoneNumber(formatted);
   };
 
   return (
@@ -94,8 +116,8 @@ export const MoMoPaymentModal: React.FC<MoMoPaymentModalProps> = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Smartphone className="h-5 w-5" />
-            Mobile Money Payment
+            <CreditCard className="h-5 w-5" />
+            Complete Payment
           </DialogTitle>
         </DialogHeader>
         
@@ -113,33 +135,15 @@ export const MoMoPaymentModal: React.FC<MoMoPaymentModalProps> = ({
             </div>
 
             <div className="space-y-4">
-              <div>
-                <Label htmlFor="provider">Select Provider</Label>
-                <RadioGroup value={provider} onValueChange={(value) => setProvider(value as 'MTN' | 'AIRTEL')}>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="MTN" id="mtn" />
-                    <Label htmlFor="mtn">MTN Mobile Money</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="AIRTEL" id="airtel" />
-                    <Label htmlFor="airtel">Airtel Money</Label>
-                  </div>
-                </RadioGroup>
-              </div>
-
-              <div>
-                <Label htmlFor="phone">Phone Number</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="250781234567"
-                  value={phoneNumber}
-                  onChange={handlePhoneChange}
-                  className="mt-1"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Enter your {provider} number (format: 250XXXXXXXXX)
-                </p>
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <h4 className="font-medium text-blue-800 mb-2">Payment Options Available:</h4>
+                <ul className="text-sm text-blue-700 space-y-1">
+                  <li>• MTN Mobile Money</li>
+                  <li>• Airtel Money</li>
+                  <li>• Credit/Debit Cards</li>
+                  <li>• Bank Transfer</li>
+                  <li>• Cash/Agents</li>
+                </ul>
               </div>
             </div>
 
@@ -149,22 +153,14 @@ export const MoMoPaymentModal: React.FC<MoMoPaymentModalProps> = ({
               </Button>
               <Button 
                 onClick={handlePayment} 
-                disabled={isProcessing || !phoneNumber}
                 className="flex-1"
               >
-                {isProcessing ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  'Pay Now'
-                )}
+                Pay Now
               </Button>
             </div>
 
             <p className="text-xs text-gray-500 text-center">
-              You will receive a prompt on your phone to approve the payment
+              A secure payment window will open with all available payment options
             </p>
           </div>
         )}

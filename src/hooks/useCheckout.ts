@@ -160,7 +160,7 @@ export function useCheckout() {
 
       await completeOrder(orderData, isAuthenticated);
     } catch (error) {
-      console.error("Error completing MoMo payment:", error);
+      console.error("Error completing payment:", error);
       toast.error("Payment completed but order processing failed. Please contact support.");
     }
   };
