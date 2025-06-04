@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCartContext } from '@/contexts/CartContext';
@@ -37,56 +38,25 @@ export function useCheckout() {
       const { data: sessionData } = await supabase.auth.getSession();
       const isAuthenticated = !!sessionData.session;
 
-      // Step 1: Prepare order data
-      const orderData = {
-        customer: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
+      console.log("Processing order with simplified flow");
+
+      // Create invoice with IremboPay
+      const invoiceResponse = await IremboPayService.createInvoice(
+        total,
+        {
           email: formData.email,
-          phone: formData.phone
+          phoneNumber: formData.phone,
+          name: `${formData.firstName} ${formData.lastName}`
         },
-        shipping_address: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          address_1: formData.address,
-          city: formData.city,
-          province: formData.state,
-          postal_code: formData.zipCode,
-          phone: formData.phone
-        },
-        items: items.map(item => ({
-          product_id: item.id,
-          quantity: item.quantity,
-          price: item.discount_price || item.price
-        })),
-        payment_method: formData.paymentMethod,
-        total_amount: total
-      };
+        `Order payment for ${items.length} item(s)`
+      );
 
-      console.log("Processing order with data:", orderData);
-
-      // For the JavaScript Widget Integration, we create invoice for both payment methods
-      if (formData.paymentMethod === 'momo' || formData.paymentMethod === 'creditCard') {
-        // Create invoice with IremboPay - the widget will handle all payment methods
-        const invoiceResponse = await IremboPayService.createInvoice(
-          total,
-          {
-            email: formData.email,
-            phoneNumber: formData.phone,
-            name: `${formData.firstName} ${formData.lastName}`
-          },
-          `Order payment for ${items.length} item(s)`
-        );
-
-        if (invoiceResponse.success) {
-          setInvoice(invoiceResponse);
-          setShowMoMoModal(true); // This modal now handles all payment methods via the widget
-        } else {
-          throw new Error('Failed to create payment invoice');
-        }
+      if (invoiceResponse.success) {
+        setInvoice(invoiceResponse);
+        setShowMoMoModal(true);
+        toast.success("Order created! Please complete your payment.");
       } else {
-        // Handle any other payment methods if needed
-        throw new Error("Unsupported payment method");
+        throw new Error('Failed to create payment invoice');
       }
       
     } catch (error) {
@@ -136,7 +106,7 @@ export function useCheckout() {
           email: invoice?.data.customer.email,
           phone: invoice?.data.customer.phoneNumber,
         },
-        payment_method: 'widget_payment', // Since widget handles all methods
+        payment_method: 'widget_payment',
         total_amount: invoice?.data.amount,
         invoice_number: invoice?.data.invoiceNumber,
         transaction_id: invoice?.data.transactionId

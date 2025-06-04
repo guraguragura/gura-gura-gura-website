@@ -11,13 +11,11 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useCurrency } from '@/hooks/useCurrency';
-import { CreditCard, CalendarRange, Lock, ShieldCheck, Smartphone } from 'lucide-react';
-import { toast } from 'sonner';
+import { ShieldCheck, Loader2 } from 'lucide-react';
 import { useCheckout } from '@/hooks/useCheckout';
 import { MoMoPaymentModal } from '@/components/checkout/MoMoPaymentModal';
 
@@ -31,12 +29,6 @@ const checkoutSchema = z.object({
   state: z.string().min(2, { message: 'State must be at least 2 characters' }),
   zipCode: z.string().min(5, { message: 'ZIP code must be at least 5 characters' }),
   sameShippingAddress: z.boolean().default(true),
-  paymentMethod: z.enum(['creditCard', 'momo']),
-  cardNumber: z.string().optional(),
-  cardName: z.string().optional(),
-  expiryDate: z.string().optional(),
-  cvv: z.string().optional(),
-  savePaymentInfo: z.boolean().default(false),
 });
 
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
@@ -66,12 +58,8 @@ const CheckoutPage = () => {
       state: '',
       zipCode: '',
       sameShippingAddress: true,
-      paymentMethod: 'momo',
-      savePaymentInfo: false,
     },
   });
-
-  const paymentMethod = form.watch('paymentMethod');
 
   const onSubmit = (data: CheckoutFormValues) => {
     console.log('Form submitted with data:', data);
@@ -84,7 +72,7 @@ const CheckoutPage = () => {
       city: data.city,
       state: data.state,
       zipCode: data.zipCode,
-      paymentMethod: data.paymentMethod
+      paymentMethod: 'widget_payment' // Fixed payment method since we're using the widget
     });
   };
 
@@ -251,149 +239,6 @@ const CheckoutPage = () => {
                     />
                   </Card>
                   
-                  {/* Payment Method */}
-                  <Card className="p-6">
-                    <h2 className="text-xl font-bold mb-4">Payment Method</h2>
-                    
-                    <FormField
-                      control={form.control}
-                      name="paymentMethod"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={field.onChange}
-                              value={field.value}
-                              className="space-y-3"
-                            >
-                              <div className="flex items-center space-x-2 border rounded-md p-4 cursor-pointer hover:bg-gray-50">
-                                <RadioGroupItem value="momo" id="momo" />
-                                <label htmlFor="momo" className="flex items-center cursor-pointer flex-1">
-                                  <Smartphone className="mr-3 h-6 w-6 text-green-600" />
-                                  <div>
-                                    <span className="font-medium">Mobile Money (MTN/Airtel)</span>
-                                    <p className="text-sm text-gray-500">Pay with your mobile money account</p>
-                                  </div>
-                                </label>
-                              </div>
-
-                              <div className="flex items-center space-x-2 border rounded-md p-4 cursor-pointer hover:bg-gray-50 opacity-50">
-                                <RadioGroupItem value="creditCard" id="creditCard" disabled />
-                                <label htmlFor="creditCard" className="flex items-center cursor-pointer flex-1">
-                                  <CreditCard className="mr-3 h-6 w-6 text-blue-500" />
-                                  <div>
-                                    <span className="font-medium">Credit or Debit Card</span>
-                                    <p className="text-sm text-gray-500">Coming Soon</p>
-                                  </div>
-                                </label>
-                              </div>
-                            </RadioGroup>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    
-                    {paymentMethod === 'creditCard' && (
-                      <div className="mt-4 space-y-4">
-                        <FormField
-                          control={form.control}
-                          name="cardNumber"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Card Number</FormLabel>
-                              <FormControl>
-                                <Input placeholder="1234 5678 9012 3456" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="cardName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Name on Card</FormLabel>
-                              <FormControl>
-                                <Input placeholder="John Doe" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <div className="grid grid-cols-2 gap-4">
-                          <FormField
-                            control={form.control}
-                            name="expiryDate"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Expiry Date</FormLabel>
-                                <FormControl>
-                                  <div className="relative">
-                                    <Input placeholder="MM/YY" {...field} />
-                                    <CalendarRange className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
-                                  </div>
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          
-                          <FormField
-                            control={form.control}
-                            name="cvv"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>CVV</FormLabel>
-                                <FormControl>
-                                  <div className="relative">
-                                    <Input placeholder="123" type="password" {...field} />
-                                    <Lock className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
-                                  </div>
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        
-                        <FormField
-                          control={form.control}
-                          name="savePaymentInfo"
-                          render={({ field }) => (
-                            <FormItem className="flex items-center space-x-2 mt-4">
-                              <FormControl>
-                                <Checkbox 
-                                  checked={field.value} 
-                                  onCheckedChange={field.onChange} 
-                                />
-                              </FormControl>
-                              <FormLabel className="cursor-pointer font-normal">
-                                Save this payment method for future purchases
-                              </FormLabel>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    )}
-
-                    {paymentMethod === 'momo' && (
-                      <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-                        <div className="flex items-start">
-                          <Smartphone className="h-5 w-5 text-green-600 mr-2 mt-0.5" />
-                          <div>
-                            <p className="text-green-800 text-sm font-medium">Mobile Money Payment</p>
-                            <p className="text-green-700 text-sm mt-1">
-                              You will be prompted to complete payment using your mobile money account after clicking "Place Order".
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </Card>
-                  
                   <div className="lg:hidden">
                     <OrderSummary 
                       items={items} 
@@ -413,10 +258,17 @@ const CheckoutPage = () => {
                   <Button 
                     type="submit" 
                     size="lg" 
-                    className="w-full" 
+                    className="w-full bg-green-600 hover:bg-green-700 text-lg py-4" 
                     disabled={isProcessing}
                   >
-                    {isProcessing ? "Processing..." : "Place Order"}
+                    {isProcessing ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Processing Order...
+                      </>
+                    ) : (
+                      "Place Order and Pay"
+                    )}
                   </Button>
                 </form>
               </Form>
