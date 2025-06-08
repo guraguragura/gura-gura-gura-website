@@ -5,6 +5,7 @@ import { useCartContext } from '@/contexts/CartContext';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { IremboPayService, type InvoiceResponse } from '@/services/iremboPay';
+import { useBrevo } from '@/hooks/useBrevo';
 
 interface CheckoutFormData {
   firstName: string;
@@ -23,6 +24,7 @@ export function useCheckout() {
   const [invoice, setInvoice] = useState<InvoiceResponse | null>(null);
   const [showPaymentWidget, setShowPaymentWidget] = useState(false);
   const navigate = useNavigate();
+  const { sendOrderConfirmation } = useBrevo();
 
   const processCheckout = async (formData: CheckoutFormData) => {
     if (items.length === 0) {
@@ -85,6 +87,25 @@ export function useCheckout() {
         throw new Error("Failed to store order information");
       }
     }
+
+    // Send order confirmation email via Brevo
+    try {
+      await sendOrderConfirmation({
+        email: orderData.customer.email,
+        orderNumber: orderData.invoice_number || `ORDER-${Date.now()}`,
+        customerName: orderData.customer.name || 'Customer',
+        items: items.map(item => ({
+          name: item.title,
+          quantity: item.quantity,
+          price: item.discount_price || item.price
+        })),
+        total: orderData.total_amount || total,
+        shippingAddress: orderData.shipping_address || 'Address provided during checkout'
+      });
+    } catch (emailError) {
+      console.error("Failed to send order confirmation email:", emailError);
+      // Don't fail the order if email fails
+    }
     
     // Clear cart and redirect to success page
     clearCart();
@@ -100,6 +121,7 @@ export function useCheckout() {
         customer: {
           email: invoice?.data.customer.email,
           phone: invoice?.data.customer.phoneNumber,
+          name: invoice?.data.customer.fullName,
         },
         payment_method: 'widget_payment',
         total_amount: invoice?.data.amount,

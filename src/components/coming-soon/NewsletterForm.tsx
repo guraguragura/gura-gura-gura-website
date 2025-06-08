@@ -2,39 +2,26 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
-import { Mail } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { Mail, Loader2 } from "lucide-react";
+import { useBrevo } from "@/hooks/useBrevo";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const NewsletterForm = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
+  const { subscribeToNewsletter } = useBrevo();
   const isMobile = useIsMobile();
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email) return;
+
     setIsSubmitting(true);
-
     try {
-      const { error } = await supabase
-        .from('newsletter_subscriptions')
-        .insert([{ email }]);
-
-      if (error) throw error;
-
-      toast({
-        title: "Thanks for subscribing!",
-        description: "We'll keep you updated on our progress.",
-      });
+      await subscribeToNewsletter({ email });
       setEmail("");
     } catch (error) {
-      toast({
-        title: "Subscription failed",
-        description: "This email may already be subscribed.",
-        variant: "destructive",
-      });
+      // Error handling is done in the hook
     } finally {
       setIsSubmitting(false);
     }
@@ -49,6 +36,7 @@ const NewsletterForm = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          disabled={isSubmitting}
           className="bg-white border-gray-300 text-sm md:text-lg flex-1"
         />
         <Button 
@@ -56,8 +44,17 @@ const NewsletterForm = () => {
           disabled={isSubmitting}
           className={`bg-[#84D1D3] hover:bg-[#84D1D3]/90 text-black ${isMobile && window.innerWidth < 400 ? 'w-full' : 'px-3 sm:px-4 md:px-6'} flex items-center gap-2`}
         >
-          <Mail className="h-3.5 w-3.5 md:h-4 md:w-4" />
-          <span className="text-sm md:text-base">Subscribe</span>
+          {isSubmitting ? (
+            <>
+              <Loader2 className="h-3.5 w-3.5 md:h-4 md:w-4 animate-spin" />
+              <span className="text-sm md:text-base">Subscribing...</span>
+            </>
+          ) : (
+            <>
+              <Mail className="h-3.5 w-3.5 md:h-4 md:w-4" />
+              <span className="text-sm md:text-base">Subscribe</span>
+            </>
+          )}
         </Button>
       </div>
     </form>
