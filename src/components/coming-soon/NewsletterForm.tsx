@@ -2,12 +2,15 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Loader2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Mail, Loader2, MessageCircle } from "lucide-react";
 import { useBrevo } from "@/hooks/useBrevo";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const NewsletterForm = () => {
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [whatsappOptIn, setWhatsappOptIn] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { subscribeToNewsletter } = useBrevo();
   const isMobile = useIsMobile();
@@ -18,8 +21,14 @@ const NewsletterForm = () => {
 
     setIsSubmitting(true);
     try {
-      await subscribeToNewsletter({ email });
+      await subscribeToNewsletter({ 
+        email, 
+        phone: phone || undefined,
+        whatsappOptIn: whatsappOptIn && !!phone
+      });
       setEmail("");
+      setPhone("");
+      setWhatsappOptIn(false);
     } catch (error) {
       // Error handling is done in the hook
     } finally {
@@ -28,7 +37,7 @@ const NewsletterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubscribe} className="w-full">
+    <form onSubmit={handleSubscribe} className="w-full space-y-4">
       <div className={`flex ${isMobile && window.innerWidth < 400 ? 'flex-col gap-2' : 'gap-2'}`}>
         <Input
           type="email"
@@ -56,6 +65,32 @@ const NewsletterForm = () => {
             </>
           )}
         </Button>
+      </div>
+      
+      <div className="space-y-3">
+        <Input
+          type="tel"
+          placeholder="Phone number (optional, for WhatsApp updates)"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          disabled={isSubmitting}
+          className="bg-white border-gray-300 text-sm md:text-lg"
+        />
+        
+        {phone && (
+          <div className="flex items-center space-x-2">
+            <Checkbox 
+              id="whatsapp-opt-in"
+              checked={whatsappOptIn}
+              onCheckedChange={setWhatsappOptIn}
+              disabled={isSubmitting}
+            />
+            <label htmlFor="whatsapp-opt-in" className="text-sm text-gray-600 flex items-center gap-1">
+              <MessageCircle className="h-4 w-4" />
+              Send me updates via WhatsApp
+            </label>
+          </div>
+        )}
       </div>
     </form>
   );
