@@ -10,9 +10,7 @@ interface NewsletterSubscriptionRequest {
   email: string;
   firstName?: string;
   lastName?: string;
-  phone?: string;
   listIds?: number[];
-  whatsappOptIn?: boolean;
 }
 
 interface TransactionalEmailRequest {
@@ -27,13 +25,6 @@ interface ContactEmailRequest {
   email: string;
   message: string;
   subject?: string;
-}
-
-interface WhatsAppMessageRequest {
-  to: string;
-  templateName: string;
-  params?: Record<string, any>;
-  language?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -69,10 +60,6 @@ const handler = async (req: Request): Promise<Response> => {
         result = await handleContactEmail(data as ContactEmailRequest, brevoHeaders);
         break;
       
-      case "sendWhatsApp":
-        result = await handleWhatsAppMessage(data as WhatsAppMessageRequest, brevoHeaders);
-        break;
-      
       default:
         throw new Error("Invalid action specified");
     }
@@ -98,15 +85,13 @@ async function handleNewsletterSubscription(
   data: NewsletterSubscriptionRequest,
   headers: Record<string, string>
 ) {
-  const { email, firstName, lastName, phone, listIds = [2], whatsappOptIn = false } = data;
+  const { email, firstName, lastName, listIds = [2] } = data; // Default list ID 2
 
   const contactData = {
     email,
     attributes: {
       FIRSTNAME: firstName || "",
       LASTNAME: lastName || "",
-      ...(phone && { PHONE: phone }),
-      WHATSAPP_OPT_IN: whatsappOptIn,
     },
     listIds,
     updateEnabled: true,
@@ -186,50 +171,6 @@ async function handleContactEmail(
     const error = await response.text();
     console.error("Brevo contact email error:", error);
     throw new Error(`Failed to send contact email: ${error}`);
-  }
-
-  const result = await response.json();
-  return { success: true, messageId: result.messageId };
-}
-
-async function handleWhatsAppMessage(
-  data: WhatsAppMessageRequest,
-  headers: Record<string, string>
-) {
-  const { to, templateName, params, language = "en" } = data;
-
-  const whatsappData = {
-    to: to.startsWith('+') ? to : `+${to}`,
-    type: "template",
-    template: {
-      name: templateName,
-      language: {
-        code: language
-      },
-      ...(params && {
-        components: [
-          {
-            type: "body",
-            parameters: Object.values(params).map(value => ({
-              type: "text",
-              text: String(value)
-            }))
-          }
-        ]
-      })
-    }
-  };
-
-  const response = await fetch("https://api.brevo.com/v3/whatsapp/sendMessage", {
-    method: "POST",
-    headers,
-    body: JSON.stringify(whatsappData),
-  });
-
-  if (!response.ok) {
-    const error = await response.text();
-    console.error("Brevo WhatsApp error:", error);
-    throw new Error(`Failed to send WhatsApp message: ${error}`);
   }
 
   const result = await response.json();

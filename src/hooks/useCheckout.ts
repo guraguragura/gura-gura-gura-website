@@ -88,11 +88,10 @@ export function useCheckout() {
       }
     }
 
-    // Send order confirmation email and WhatsApp via Brevo
+    // Send order confirmation email via Brevo
     try {
       await sendOrderConfirmation({
         email: orderData.customer.email,
-        phone: orderData.customer.phone,
         orderNumber: orderData.invoice_number || `ORDER-${Date.now()}`,
         customerName: orderData.customer.name || 'Customer',
         items: items.map(item => ({
@@ -101,12 +100,11 @@ export function useCheckout() {
           price: item.discount_price || item.price
         })),
         total: orderData.total_amount || total,
-        shippingAddress: orderData.shipping_address || 'Address provided during checkout',
-        sendWhatsApp: true // Enable WhatsApp notifications for orders
+        shippingAddress: orderData.shipping_address || 'Address provided during checkout'
       });
     } catch (emailError) {
-      console.error("Failed to send order confirmation:", emailError);
-      // Don't fail the order if email/WhatsApp fails
+      console.error("Failed to send order confirmation email:", emailError);
+      // Don't fail the order if email fails
     }
     
     // Clear cart and redirect to success page

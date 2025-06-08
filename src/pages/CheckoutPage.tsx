@@ -150,9 +150,6 @@ const CheckoutPage = () => {
                               <Input placeholder="250781234567" {...field} />
                             </FormControl>
                             <FormMessage />
-                            <p className="text-xs text-gray-500 mt-1">
-                              We'll send order updates via WhatsApp (optional)
-                            </p>
                           </FormItem>
                         )}
                       />
