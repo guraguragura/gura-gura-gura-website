@@ -25,8 +25,7 @@ const checkoutSchema = z.object({
   phone: z.string().min(10, { message: 'Please enter a valid phone number' }),
   address: z.string().min(5, { message: 'Address must be at least 5 characters' }),
   city: z.string().min(2, { message: 'City must be at least 2 characters' }),
-  state: z.string().min(2, { message: 'State must be at least 2 characters' }),
-  zipCode: z.string().min(5, { message: 'ZIP code must be at least 5 characters' }),
+  state: z.string().min(2, { message: 'Province must be at least 2 characters' }),
   sameShippingAddress: z.boolean().default(true),
 });
 
@@ -55,7 +54,6 @@ const CheckoutPage = () => {
       address: '',
       city: '',
       state: '',
-      zipCode: '',
       sameShippingAddress: true,
     },
   });
@@ -70,7 +68,7 @@ const CheckoutPage = () => {
       address: data.address,
       city: data.city,
       state: data.state,
-      zipCode: data.zipCode
+      zipCode: '' // Empty since we removed postal code
     });
   };
 
@@ -174,7 +172,7 @@ const CheckoutPage = () => {
                       )}
                     />
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <FormField
                         control={form.control}
                         name="city"
@@ -197,20 +195,6 @@ const CheckoutPage = () => {
                             <FormLabel>Province</FormLabel>
                             <FormControl>
                               <Input placeholder="Kigali City" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="zipCode"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Postal Code</FormLabel>
-                            <FormControl>
-                              <Input placeholder="00000" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

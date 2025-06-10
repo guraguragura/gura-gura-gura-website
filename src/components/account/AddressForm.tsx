@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { 
@@ -37,7 +36,6 @@ interface AddressFormValues {
   address_2: string;
   city: string;
   province: string;
-  postal_code: string;
   country_code: string;
   phone: string;
   is_default_shipping: boolean;
@@ -59,8 +57,7 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
       address_2: '',
       city: '',
       province: '',
-      postal_code: '',
-      country_code: 'US',
+      country_code: 'RW',
       phone: '',
       is_default_shipping: false,
       is_default_billing: false
@@ -122,7 +119,7 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
       // Generate a UUID for the address
       const addressId = crypto.randomUUID();
 
-      // Insert new address with the generated UUID
+      // Insert new address with the generated UUID (removed postal_code)
       const { error } = await supabase
         .from('customer_address')
         .insert({
@@ -136,7 +133,6 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
           address_2: data.address_2,
           city: data.city,
           province: data.province,
-          postal_code: data.postal_code,
           country_code: data.country_code,
           phone: data.phone,
           is_default_shipping: data.is_default_shipping,
@@ -299,9 +295,9 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
                   name="province"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>State/Province</FormLabel>
+                      <FormLabel>Province</FormLabel>
                       <FormControl>
-                        <Input placeholder="State/Province" {...field} />
+                        <Input placeholder="Province" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -309,50 +305,34 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="postal_code"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Postal/ZIP Code</FormLabel>
+              <FormField
+                control={form.control}
+                name="country_code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Country</FormLabel>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      defaultValue={field.value}
+                    >
                       <FormControl>
-                        <Input placeholder="Postal/ZIP code" {...field} />
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a country" />
+                        </SelectTrigger>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="country_code"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Country</FormLabel>
-                      <Select 
-                        onValueChange={field.onChange} 
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a country" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="US">United States</SelectItem>
-                          <SelectItem value="CA">Canada</SelectItem>
-                          <SelectItem value="GB">United Kingdom</SelectItem>
-                          <SelectItem value="AU">Australia</SelectItem>
-                          <SelectItem value="DE">Germany</SelectItem>
-                          <SelectItem value="FR">France</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                      <SelectContent>
+                        <SelectItem value="RW">Rwanda</SelectItem>
+                        <SelectItem value="UG">Uganda</SelectItem>
+                        <SelectItem value="KE">Kenya</SelectItem>
+                        <SelectItem value="TZ">Tanzania</SelectItem>
+                        <SelectItem value="BI">Burundi</SelectItem>
+                        <SelectItem value="CD">Democratic Republic of Congo</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}

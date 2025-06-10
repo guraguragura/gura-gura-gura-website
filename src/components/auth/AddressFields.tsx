@@ -24,8 +24,6 @@ const AddressFields: React.FC<AddressFieldsProps> = ({
   setCity,
   state,
   setState,
-  zipCode,
-  setZipCode,
   country,
   setCountry,
 }) => {
@@ -49,7 +47,7 @@ const AddressFields: React.FC<AddressFieldsProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="city">City</Label>
           <Input 
@@ -61,22 +59,12 @@ const AddressFields: React.FC<AddressFieldsProps> = ({
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="state">State/Province</Label>
+          <Label htmlFor="state">Province</Label>
           <Input 
             id="state" 
-            placeholder="State" 
+            placeholder="Province" 
             value={state}
             onChange={(e) => setState(e.target.value)}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="zipCode">Zip/Postal Code</Label>
-          <Input 
-            id="zipCode" 
-            placeholder="Zip code" 
-            value={zipCode}
-            onChange={(e) => setZipCode(e.target.value)}
           />
         </div>
       </div>

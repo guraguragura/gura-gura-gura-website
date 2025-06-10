@@ -17,7 +17,6 @@ interface AddressFormValues {
   sector: string;
   cell: string;
   village: string;
-  postal_code: string;
   nearby_landmark: string;
 }
 
@@ -86,7 +85,7 @@ const AddressFormFields = ({ form }: AddressFormFieldsProps) => {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           control={form.control}
           name="village"
@@ -95,20 +94,6 @@ const AddressFormFields = ({ form }: AddressFormFieldsProps) => {
               <FormLabel>Village</FormLabel>
               <FormControl>
                 <Input placeholder="Village" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        <FormField
-          control={form.control}
-          name="postal_code"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Postal/ZIP Code</FormLabel>
-              <FormControl>
-                <Input placeholder="12345" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
