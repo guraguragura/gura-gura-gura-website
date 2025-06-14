@@ -2,10 +2,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { WishlistProvider } from "@/contexts/WishlistContext";
-import { CartProvider } from "@/contexts/CartContext";
-import { CrispProvider } from "@/components/crisp/CrispProvider";
+import { Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
 import ProductPage from "./pages/ProductPage";
@@ -43,46 +40,38 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <CrispProvider>
-          <WishlistProvider>
-            <CartProvider>
-              <Toaster />
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/category/:slug" element={<CategoryPage />} />
-                  <Route path="/product/:handle" element={<ProductPage />} />
-                  <Route path="/cart" element={<CartPage />} />
-                  <Route path="/checkout" element={<CheckoutPage />} />
-                  <Route path="/payment" element={<PaymentPage />} />
-                  <Route path="/payment-success" element={<PaymentSuccessPage />} />
-                  <Route path="/payment-error" element={<PaymentErrorPage />} />
-                  <Route path="/auth" element={<AuthPage />} />
-                  <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                  <Route path="/account/*" element={<AccountPage />} />
-                  <Route path="/addresses" element={<AddressesPage />} />
-                  <Route path="/contact" element={<ContactPage />} />
-                  <Route path="/faq" element={<FaqPage />} />
-                  <Route path="/about" element={<AboutUsPage />} />
-                  <Route path="/advantages" element={<AdvantagesPage />} />
-                  <Route path="/business" element={<GuraBusinessPage />} />
-                  <Route path="/app" element={<GuraAppPage />} />
-                  <Route path="/partner" element={<PartnerWithGuraPage />} />
-                  <Route path="/coming-soon" element={<ComingSoonPage />} />
-                  <Route path="/careers" element={<CareersPage />} />
-                  <Route path="/press" element={<PressPage />} />
-                  <Route path="/terms" element={<TermsPage />} />
-                  <Route path="/privacy" element={<PrivacyPage />} />
-                  <Route path="/cookies" element={<CookiesPage />} />
-                  <Route path="/shipping" element={<ShippingPage />} />
-                  <Route path="/returns" element={<ReturnsPage />} />
-                  <Route path="/drivers" element={<DriverPage />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
-            </CartProvider>
-          </WishlistProvider>
-        </CrispProvider>
+        <Toaster />
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/category/:slug" element={<CategoryPage />} />
+          <Route path="/product/:handle" element={<ProductPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/payment-success" element={<PaymentSuccessPage />} />
+          <Route path="/payment-error" element={<PaymentErrorPage />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/account/*" element={<AccountPage />} />
+          <Route path="/addresses" element={<AddressesPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/faq" element={<FaqPage />} />
+          <Route path="/about" element={<AboutUsPage />} />
+          <Route path="/advantages" element={<AdvantagesPage />} />
+          <Route path="/business" element={<GuraBusinessPage />} />
+          <Route path="/app" element={<GuraAppPage />} />
+          <Route path="/partner" element={<PartnerWithGuraPage />} />
+          <Route path="/coming-soon" element={<ComingSoonPage />} />
+          <Route path="/careers" element={<CareersPage />} />
+          <Route path="/press" element={<PressPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/cookies" element={<CookiesPage />} />
+          <Route path="/shipping" element={<ShippingPage />} />
+          <Route path="/returns" element={<ReturnsPage />} />
+          <Route path="/drivers" element={<DriverPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </TooltipProvider>
     </QueryClientProvider>
   );
