@@ -1,88 +1,90 @@
 
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { Toaster } from "@/components/ui/toaster";
-import ComingSoonPage from "@/pages/ComingSoonPage";
-import Index from "@/pages/Index";
-import AccountPage from "@/pages/AccountPage";
-import AuthPage from "@/pages/AuthPage";
-import CategoryPage from "@/pages/CategoryPage";
-import ProductPage from "@/pages/ProductPage";
-import CartPage from "@/pages/CartPage";
-import FaqPage from "@/pages/FaqPage";
-import ContactPage from "@/pages/ContactPage";
-import AboutUsPage from "@/pages/AboutUsPage";
-import GuraBusinessPage from "@/pages/GuraBusinessPage";
-import CheckoutPage from "@/pages/CheckoutPage";
-import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
-import PaymentErrorPage from "@/pages/PaymentErrorPage";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { WishlistProvider } from "@/contexts/WishlistContext";
+import { CartProvider } from "@/contexts/CartContext";
+import { CrispProvider } from "@/components/crisp/CrispProvider";
+import Index from "./pages/Index";
+import CategoryPage from "./pages/CategoryPage";
+import ProductPage from "./pages/ProductPage";
+import CartPage from "./pages/CartPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import PaymentPage from "./pages/PaymentPage";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import PaymentErrorPage from "./pages/PaymentErrorPage";
+import AuthPage from "./pages/AuthPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import AccountPage from "./pages/AccountPage";
+import AddressesPage from "./pages/AddressesPage";
+import ContactPage from "./pages/ContactPage";
+import FaqPage from "./pages/FaqPage";
+import AboutUsPage from "./pages/AboutUsPage";
+import AdvantagesPage from "./pages/AdvantagesPage";
+import GuraBusinessPage from "./pages/GuraBusinessPage";
+import GuraAppPage from "./pages/GuraAppPage";
+import PartnerWithGuraPage from "./pages/PartnerWithGuraPage";
+import ComingSoonPage from "./pages/ComingSoonPage";
+import CareersPage from "./pages/CareersPage";
+import PressPage from "./pages/PressPage";
+import TermsPage from "./pages/TermsPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import CookiesPage from "./pages/CookiesPage";
+import ShippingPage from "./pages/ShippingPage";
+import ReturnsPage from "./pages/ReturnsPage";
+import NotFound from "./pages/NotFound";
+import DriverPage from "./pages/DriverPage";
+import "./App.css";
+
+const queryClient = new QueryClient();
 
 function App() {
-  // Check if the full e-commerce site should be shown based on domain
-  const hostname = window.location.hostname;
-  console.log('Current hostname:', hostname);
-  
-  // More flexible domain checking - include common development domains
-  const showFullSite = hostname === 'dev-portal-8ac7.gura.rw' || 
-                      hostname === 'localhost' || 
-                      hostname.includes('lovable.app') || // Lovable preview domains
-                      hostname.includes('lovableproject.com') || // Lovable preview domains (new format)
-                      hostname.includes('127.0.0.1') ||   // Local IP
-                      hostname.includes('dev-portal');    // Any dev-portal subdomain
-  
-  console.log('Show full site:', showFullSite);
-  
-  // If full site is not enabled for this domain, only show coming soon page
-  if (!showFullSite) {
-    return (
-      <>
-        <Routes>
-          <Route path="/coming-soon" element={<ComingSoonPage />} />
-          <Route path="*" element={<Navigate to="/coming-soon" replace />} />
-        </Routes>
-        <Toaster />
-      </>
-    );
-  }
-
-  // Full e-commerce site routes (for dev-portal-8ac7.gura.rw and localhost)
   return (
-    <>
-      <Routes>
-        {/* Main pages */}
-        <Route path="/" element={<Index />} />
-        <Route path="/coming-soon" element={<ComingSoonPage />} />
-        
-        {/* Auth */}
-        <Route path="/auth" element={<AuthPage />} />
-        
-        {/* Account pages */}
-        <Route path="/account/*" element={<AccountPage />} />
-        
-        {/* Product and category pages */}
-        <Route path="/categories/:categoryHandle" element={<CategoryPage />} />
-        <Route path="/products/:productHandle" element={<ProductPage />} />
-        
-        {/* Shopping */}
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/payment-success" element={<PaymentSuccessPage />} />
-        <Route path="/payment-error" element={<PaymentErrorPage />} />
-        
-        {/* Info pages */}
-        <Route path="/faq" element={<FaqPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/about" element={<AboutUsPage />} />
-        <Route path="/business" element={<GuraBusinessPage />} />
-        
-        {/* Collections alias for categories */}
-        <Route path="/collections" element={<Navigate to="/categories/all" replace />} />
-        
-        {/* 404 fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-      <Toaster />
-    </>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <CrispProvider>
+          <WishlistProvider>
+            <CartProvider>
+              <Toaster />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/category/:slug" element={<CategoryPage />} />
+                  <Route path="/product/:handle" element={<ProductPage />} />
+                  <Route path="/cart" element={<CartPage />} />
+                  <Route path="/checkout" element={<CheckoutPage />} />
+                  <Route path="/payment" element={<PaymentPage />} />
+                  <Route path="/payment-success" element={<PaymentSuccessPage />} />
+                  <Route path="/payment-error" element={<PaymentErrorPage />} />
+                  <Route path="/auth" element={<AuthPage />} />
+                  <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                  <Route path="/account/*" element={<AccountPage />} />
+                  <Route path="/addresses" element={<AddressesPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/faq" element={<FaqPage />} />
+                  <Route path="/about" element={<AboutUsPage />} />
+                  <Route path="/advantages" element={<AdvantagesPage />} />
+                  <Route path="/business" element={<GuraBusinessPage />} />
+                  <Route path="/app" element={<GuraAppPage />} />
+                  <Route path="/partner" element={<PartnerWithGuraPage />} />
+                  <Route path="/coming-soon" element={<ComingSoonPage />} />
+                  <Route path="/careers" element={<CareersPage />} />
+                  <Route path="/press" element={<PressPage />} />
+                  <Route path="/terms" element={<TermsPage />} />
+                  <Route path="/privacy" element={<PrivacyPage />} />
+                  <Route path="/cookies" element={<CookiesPage />} />
+                  <Route path="/shipping" element={<ShippingPage />} />
+                  <Route path="/returns" element={<ReturnsPage />} />
+                  <Route path="/drivers" element={<DriverPage />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </CartProvider>
+          </WishlistProvider>
+        </CrispProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 }
 

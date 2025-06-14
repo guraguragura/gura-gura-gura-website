@@ -1116,6 +1116,57 @@ export type Database = {
         }
         Relationships: []
       }
+      driver_profiles: {
+        Row: {
+          created_at: string
+          current_location: Json | null
+          driver_license: string | null
+          email: string | null
+          first_name: string
+          id: string
+          is_active: boolean | null
+          is_available: boolean | null
+          last_name: string
+          metadata: Json | null
+          phone: string | null
+          updated_at: string
+          user_id: string
+          vehicle_type: string | null
+        }
+        Insert: {
+          created_at?: string
+          current_location?: Json | null
+          driver_license?: string | null
+          email?: string | null
+          first_name: string
+          id?: string
+          is_active?: boolean | null
+          is_available?: boolean | null
+          last_name: string
+          metadata?: Json | null
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+          vehicle_type?: string | null
+        }
+        Update: {
+          created_at?: string
+          current_location?: Json | null
+          driver_license?: string | null
+          email?: string | null
+          first_name?: string
+          id?: string
+          is_active?: boolean | null
+          is_available?: boolean | null
+          last_name?: string
+          metadata?: Json | null
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+          vehicle_type?: string | null
+        }
+        Relationships: []
+      }
       fulfillment: {
         Row: {
           canceled_at: string | null
@@ -1873,18 +1924,25 @@ export type Database = {
       }
       order: {
         Row: {
+          assigned_at: string | null
           billing_address_id: string | null
           canceled_at: string | null
           created_at: string
           currency_code: string
           customer_id: string | null
           deleted_at: string | null
+          delivered_at: string | null
+          delivery_status:
+            | Database["public"]["Enums"]["delivery_status_enum"]
+            | null
           display_id: number | null
+          driver_id: string | null
           email: string | null
           id: string
           is_draft_order: boolean
           metadata: Json | null
           no_notification: boolean | null
+          picked_up_at: string | null
           region_id: string | null
           sales_channel_id: string | null
           shipping_address_id: string | null
@@ -1893,18 +1951,25 @@ export type Database = {
           version: number
         }
         Insert: {
+          assigned_at?: string | null
           billing_address_id?: string | null
           canceled_at?: string | null
           created_at?: string
           currency_code: string
           customer_id?: string | null
           deleted_at?: string | null
+          delivered_at?: string | null
+          delivery_status?:
+            | Database["public"]["Enums"]["delivery_status_enum"]
+            | null
           display_id?: number | null
+          driver_id?: string | null
           email?: string | null
           id: string
           is_draft_order?: boolean
           metadata?: Json | null
           no_notification?: boolean | null
+          picked_up_at?: string | null
           region_id?: string | null
           sales_channel_id?: string | null
           shipping_address_id?: string | null
@@ -1913,18 +1978,25 @@ export type Database = {
           version?: number
         }
         Update: {
+          assigned_at?: string | null
           billing_address_id?: string | null
           canceled_at?: string | null
           created_at?: string
           currency_code?: string
           customer_id?: string | null
           deleted_at?: string | null
+          delivered_at?: string | null
+          delivery_status?:
+            | Database["public"]["Enums"]["delivery_status_enum"]
+            | null
           display_id?: number | null
+          driver_id?: string | null
           email?: string | null
           id?: string
           is_draft_order?: boolean
           metadata?: Json | null
           no_notification?: boolean | null
+          picked_up_at?: string | null
           region_id?: string | null
           sales_channel_id?: string | null
           shipping_address_id?: string | null
@@ -1938,6 +2010,13 @@ export type Database = {
             columns: ["billing_address_id"]
             isOneToOne: false
             referencedRelation: "order_address"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "driver_profiles"
             referencedColumns: ["id"]
           },
           {
@@ -5847,6 +5926,15 @@ export type Database = {
         | "wrong_item"
         | "production_failure"
         | "other"
+      delivery_status_enum:
+        | "pending"
+        | "confirmed"
+        | "ready_for_pickup"
+        | "assigned_to_driver"
+        | "picked_up"
+        | "out_for_delivery"
+        | "delivered"
+        | "cancelled"
       order_claim_type_enum: "refund" | "replace"
       order_status_enum:
         | "pending"
@@ -5981,6 +6069,16 @@ export const Constants = {
         "wrong_item",
         "production_failure",
         "other",
+      ],
+      delivery_status_enum: [
+        "pending",
+        "confirmed",
+        "ready_for_pickup",
+        "assigned_to_driver",
+        "picked_up",
+        "out_for_delivery",
+        "delivered",
+        "cancelled",
       ],
       order_claim_type_enum: ["refund", "replace"],
       order_status_enum: [
