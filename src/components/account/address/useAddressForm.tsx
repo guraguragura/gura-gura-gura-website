@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -10,7 +9,6 @@ interface AddressFormValues {
   sector: string;
   cell: string;
   village: string;
-  postal_code: string;
   nearby_landmark: string;
   phone: string;
   is_default_shipping: boolean;
@@ -29,7 +27,6 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
       sector: '',
       cell: '',
       village: '',
-      postal_code: '',
       nearby_landmark: '',
       phone: '',
       is_default_shipping: false,
@@ -135,7 +132,6 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
           sector: data.sector,
           cell: data.cell,
           village: data.village,
-          postal_code: data.postal_code,
           nearby_landmark: data.nearby_landmark,
           phone: data.phone,
           is_default_shipping: data.is_default_shipping,
