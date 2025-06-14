@@ -4,11 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Clock, User, MapPin, Package, CheckCircle } from 'lucide-react';
+import { UnifiedOrderStatus, getUnifiedStatusLabel } from '@/utils/unifiedOrderStatusUtils';
 
 interface Order {
   id: string;
   display_id: number;
   status: string;
+  unified_status?: UnifiedOrderStatus;
   delivery_status: string;
   email: string;
   shipping_address_id: string;
@@ -19,7 +21,7 @@ interface OrderCardProps {
   order: Order;
   type: 'available' | 'assigned';
   onAcceptOrder?: (orderId: string) => void;
-  onStatusUpdate?: (orderId: string, status: string) => void;
+  onStatusUpdate?: (orderId: string, status: UnifiedOrderStatus) => void;
   getStatusColor: (status: string) => string;
   getNextStatus: (status: string) => string | null;
   getStatusLabel: (status: string) => string;
@@ -35,8 +37,17 @@ const OrderCard = ({
   getStatusLabel 
 }: OrderCardProps) => {
   const borderColor = type === 'available' ? 'border-l-green-500' : 'border-l-blue-500';
-  const badgeStyle = type === 'available' ? 'bg-green-100 text-green-800' : getStatusColor(order.delivery_status);
-  const badgeText = type === 'available' ? 'Ready for Pickup' : order.delivery_status.replace('_', ' ');
+  
+  // Use unified status if available, fallback to delivery_status
+  const currentStatus = order.unified_status || order.delivery_status;
+  const badgeStyle = type === 'available' ? 'bg-green-100 text-green-800' : getStatusColor(currentStatus);
+  const badgeText = type === 'available' 
+    ? 'Ready for Pickup' 
+    : order.unified_status 
+      ? getUnifiedStatusLabel(order.unified_status)
+      : currentStatus.replace('_', ' ');
+
+  const nextStatus = getNextStatus(currentStatus);
 
   return (
     <Card className={`border-l-4 ${borderColor}`}>
@@ -76,14 +87,14 @@ const OrderCard = ({
           </Button>
         )}
 
-        {type === 'assigned' && onStatusUpdate && getNextStatus(order.delivery_status) && (
+        {type === 'assigned' && onStatusUpdate && nextStatus && (
           <Button
-            onClick={() => onStatusUpdate(order.id, getNextStatus(order.delivery_status)!)}
+            onClick={() => onStatusUpdate(order.id, nextStatus as UnifiedOrderStatus)}
             className="w-full"
             size="sm"
           >
             <CheckCircle className="h-4 w-4 mr-2" />
-            {getStatusLabel(getNextStatus(order.delivery_status)!)}
+            {getStatusLabel(nextStatus)}
           </Button>
         )}
       </CardContent>

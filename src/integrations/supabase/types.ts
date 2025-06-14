@@ -1927,6 +1927,7 @@ export type Database = {
           assigned_at: string | null
           billing_address_id: string | null
           canceled_at: string | null
+          cancelled_at: string | null
           created_at: string
           currency_code: string
           customer_id: string | null
@@ -1938,15 +1939,23 @@ export type Database = {
           display_id: number | null
           driver_id: string | null
           email: string | null
+          failed_delivery_at: string | null
           id: string
           is_draft_order: boolean
           metadata: Json | null
           no_notification: boolean | null
+          paid_at: string | null
           picked_up_at: string | null
+          processing_started_at: string | null
+          ready_for_pickup_at: string | null
+          refunded_at: string | null
           region_id: string | null
           sales_channel_id: string | null
           shipping_address_id: string | null
           status: Database["public"]["Enums"]["order_status_enum"]
+          unified_status:
+            | Database["public"]["Enums"]["unified_order_status_enum"]
+            | null
           updated_at: string
           version: number
         }
@@ -1954,6 +1963,7 @@ export type Database = {
           assigned_at?: string | null
           billing_address_id?: string | null
           canceled_at?: string | null
+          cancelled_at?: string | null
           created_at?: string
           currency_code: string
           customer_id?: string | null
@@ -1965,15 +1975,23 @@ export type Database = {
           display_id?: number | null
           driver_id?: string | null
           email?: string | null
+          failed_delivery_at?: string | null
           id: string
           is_draft_order?: boolean
           metadata?: Json | null
           no_notification?: boolean | null
+          paid_at?: string | null
           picked_up_at?: string | null
+          processing_started_at?: string | null
+          ready_for_pickup_at?: string | null
+          refunded_at?: string | null
           region_id?: string | null
           sales_channel_id?: string | null
           shipping_address_id?: string | null
           status?: Database["public"]["Enums"]["order_status_enum"]
+          unified_status?:
+            | Database["public"]["Enums"]["unified_order_status_enum"]
+            | null
           updated_at?: string
           version?: number
         }
@@ -1981,6 +1999,7 @@ export type Database = {
           assigned_at?: string | null
           billing_address_id?: string | null
           canceled_at?: string | null
+          cancelled_at?: string | null
           created_at?: string
           currency_code?: string
           customer_id?: string | null
@@ -1992,15 +2011,23 @@ export type Database = {
           display_id?: number | null
           driver_id?: string | null
           email?: string | null
+          failed_delivery_at?: string | null
           id?: string
           is_draft_order?: boolean
           metadata?: Json | null
           no_notification?: boolean | null
+          paid_at?: string | null
           picked_up_at?: string | null
+          processing_started_at?: string | null
+          ready_for_pickup_at?: string | null
+          refunded_at?: string | null
           region_id?: string | null
           sales_channel_id?: string | null
           shipping_address_id?: string | null
           status?: Database["public"]["Enums"]["order_status_enum"]
+          unified_status?:
+            | Database["public"]["Enums"]["unified_order_status_enum"]
+            | null
           updated_at?: string
           version?: number
         }
@@ -5949,6 +5976,18 @@ export type Database = {
         | "received"
         | "partially_received"
         | "canceled"
+      unified_order_status_enum:
+        | "pending_payment"
+        | "paid"
+        | "processing"
+        | "ready_for_pickup"
+        | "assigned_to_driver"
+        | "picked_up"
+        | "out_for_delivery"
+        | "delivered"
+        | "failed_delivery"
+        | "cancelled"
+        | "refunded"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -6095,6 +6134,19 @@ export const Constants = {
         "received",
         "partially_received",
         "canceled",
+      ],
+      unified_order_status_enum: [
+        "pending_payment",
+        "paid",
+        "processing",
+        "ready_for_pickup",
+        "assigned_to_driver",
+        "picked_up",
+        "out_for_delivery",
+        "delivered",
+        "failed_delivery",
+        "cancelled",
+        "refunded",
       ],
     },
   },

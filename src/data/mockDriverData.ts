@@ -1,4 +1,6 @@
 
+import { UnifiedOrderStatus } from '@/utils/unifiedOrderStatusUtils';
+
 export const mockDriverProfile = {
   id: 'driver-123',
   user_id: 'user-456',
@@ -21,6 +23,7 @@ export const mockAvailableOrders = [
     id: 'order-001',
     display_id: 1234,
     status: 'pending',
+    unified_status: 'ready_for_pickup' as UnifiedOrderStatus,
     delivery_status: 'ready_for_pickup',
     customer_id: 'customer-001',
     shipping_address_id: 'addr-001',
@@ -39,6 +42,7 @@ export const mockAvailableOrders = [
     id: 'order-002',
     display_id: 1235,
     status: 'pending',
+    unified_status: 'ready_for_pickup' as UnifiedOrderStatus,
     delivery_status: 'ready_for_pickup',
     customer_id: 'customer-002',
     shipping_address_id: 'addr-003',
@@ -57,6 +61,7 @@ export const mockAvailableOrders = [
     id: 'order-003',
     display_id: 1236,
     status: 'pending',
+    unified_status: 'ready_for_pickup' as UnifiedOrderStatus,
     delivery_status: 'ready_for_pickup',
     customer_id: 'customer-003',
     shipping_address_id: 'addr-005',
@@ -78,6 +83,7 @@ export const mockAssignedOrders = [
     id: 'order-004',
     display_id: 1237,
     status: 'processing',
+    unified_status: 'assigned_to_driver' as UnifiedOrderStatus,
     delivery_status: 'assigned_to_driver',
     customer_id: 'customer-004',
     shipping_address_id: 'addr-007',
@@ -96,6 +102,7 @@ export const mockAssignedOrders = [
     id: 'order-005',
     display_id: 1238,
     status: 'processing',
+    unified_status: 'picked_up' as UnifiedOrderStatus,
     delivery_status: 'picked_up',
     customer_id: 'customer-005',
     shipping_address_id: 'addr-009',

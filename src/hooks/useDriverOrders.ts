@@ -2,11 +2,13 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { UnifiedOrderStatus } from '@/utils/unifiedOrderStatusUtils';
 
 interface Order {
   id: string;
   display_id: number;
   status: string;
+  unified_status: UnifiedOrderStatus;
   delivery_status: string;
   customer_id: string;
   shipping_address_id: string;
@@ -61,7 +63,7 @@ export const useDriverOrders = (driverProfileId?: string) => {
       const { data: available, error: availableError } = await supabase
         .from('order')
         .select('*')
-        .eq('delivery_status', 'ready_for_pickup')
+        .eq('unified_status', 'ready_for_pickup')
         .is('driver_id', null)
         .order('created_at', { ascending: true });
 
@@ -72,7 +74,7 @@ export const useDriverOrders = (driverProfileId?: string) => {
         .from('order')
         .select('*')
         .eq('driver_id', driverProfileId)
-        .in('delivery_status', ['assigned_to_driver', 'picked_up', 'out_for_delivery'])
+        .in('unified_status', ['assigned_to_driver', 'picked_up', 'out_for_delivery'])
         .order('assigned_at', { ascending: true });
 
       if (assignedError) throw assignedError;
@@ -95,7 +97,7 @@ export const useDriverOrders = (driverProfileId?: string) => {
         .from('order')
         .update({
           driver_id: driverProfileId,
-          delivery_status: 'assigned_to_driver',
+          unified_status: 'assigned_to_driver',
           assigned_at: new Date().toISOString()
         })
         .eq('id', orderId);
@@ -111,10 +113,12 @@ export const useDriverOrders = (driverProfileId?: string) => {
     }
   };
 
-  const updateOrderStatus = async (orderId: string, status: string) => {
+  const updateOrderStatus = async (orderId: string, status: UnifiedOrderStatus) => {
     try {
-      const updateData: any = { delivery_status: status };
+      const updateData: any = { unified_status: status };
       
+      // The timestamp updates are now handled by the database trigger
+      // but we can still set them explicitly if needed
       if (status === 'picked_up') {
         updateData.picked_up_at = new Date().toISOString();
       } else if (status === 'delivered') {

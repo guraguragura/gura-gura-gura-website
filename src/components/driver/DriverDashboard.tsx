@@ -9,7 +9,12 @@ import DriverHeader from './dashboard/DriverHeader';
 import OrderStatsCards from './dashboard/OrderStatsCards';
 import OrdersList from './dashboard/OrdersList';
 import OfflineMessage from './dashboard/OfflineMessage';
-import { getStatusColor, getNextStatus, getStatusLabel } from '@/utils/orderStatusUtils';
+import { 
+  getUnifiedStatusColor, 
+  getNextUnifiedStatus, 
+  getNextStatusActionLabel,
+  UnifiedOrderStatus 
+} from '@/utils/unifiedOrderStatusUtils';
 import { mockDriverProfile, mockAvailableOrders, mockAssignedOrders } from '@/data/mockDriverData';
 
 const DriverDashboard = () => {
@@ -53,7 +58,7 @@ const DriverDashboard = () => {
     }
   };
 
-  const handleStatusUpdate = async (orderId: string, status: string) => {
+  const handleStatusUpdate = async (orderId: string, status: UnifiedOrderStatus) => {
     if (!driverProfile) {
       toast.success(`Mock: Order marked as ${status.replace('_', ' ')}`);
       return;
@@ -133,9 +138,9 @@ const DriverDashboard = () => {
             emptyMessage="No assigned orders"
             emptySubMessage="Orders will appear here when assigned"
             onStatusUpdate={handleStatusUpdate}
-            getStatusColor={getStatusColor}
-            getNextStatus={getNextStatus}
-            getStatusLabel={getStatusLabel}
+            getStatusColor={getUnifiedStatusColor}
+            getNextStatus={getNextUnifiedStatus}
+            getStatusLabel={getNextStatusActionLabel}
           />
         )}
 
@@ -148,9 +153,9 @@ const DriverDashboard = () => {
             emptyMessage="No orders available at the moment"
             emptySubMessage="New orders will appear here when ready"
             onAcceptOrder={handleAcceptOrder}
-            getStatusColor={getStatusColor}
-            getNextStatus={getNextStatus}
-            getStatusLabel={getStatusLabel}
+            getStatusColor={getUnifiedStatusColor}
+            getNextStatus={getNextUnifiedStatus}
+            getStatusLabel={getNextStatusActionLabel}
           />
         ) : (
           <OfflineMessage />
