@@ -9,13 +9,26 @@ import DriverHeader from './dashboard/DriverHeader';
 import OrderStatsCards from './dashboard/OrderStatsCards';
 import OrdersList from './dashboard/OrdersList';
 import OfflineMessage from './dashboard/OfflineMessage';
+import { getStatusColor, getNextStatus, getStatusLabel } from '@/utils/orderStatusUtils';
+import { mockDriverProfile, mockAvailableOrders, mockAssignedOrders } from '@/data/mockDriverData';
 
 const DriverDashboard = () => {
   const { driverProfile, signOut, updateAvailability } = useDriverAuth();
   const { availableOrders, assignedOrders, loading, acceptOrder, updateOrderStatus, refreshOrders } = useDriverOrders(driverProfile?.id);
   const [updatingAvailability, setUpdatingAvailability] = useState(false);
 
+  // Use mock data if not authenticated
+  const currentProfile = driverProfile || mockDriverProfile;
+  const currentAvailableOrders = driverProfile ? availableOrders : mockAvailableOrders;
+  const currentAssignedOrders = driverProfile ? assignedOrders : mockAssignedOrders;
+  const currentLoading = driverProfile ? loading : false;
+
   const handleAvailabilityChange = async (isAvailable: boolean) => {
+    if (!driverProfile) {
+      toast.success(`Mock: You are now ${isAvailable ? 'available' : 'offline'}`);
+      return;
+    }
+
     setUpdatingAvailability(true);
     try {
       await updateAvailability(isAvailable);
@@ -28,6 +41,11 @@ const DriverDashboard = () => {
   };
 
   const handleAcceptOrder = async (orderId: string) => {
+    if (!driverProfile) {
+      toast.success('Mock: Order accepted successfully!');
+      return;
+    }
+
     try {
       await acceptOrder(orderId);
     } catch (error) {
@@ -36,6 +54,11 @@ const DriverDashboard = () => {
   };
 
   const handleStatusUpdate = async (orderId: string, status: string) => {
+    if (!driverProfile) {
+      toast.success(`Mock: Order marked as ${status.replace('_', ' ')}`);
+      return;
+    }
+
     try {
       await updateOrderStatus(orderId, status);
     } catch (error) {
@@ -43,35 +66,23 @@ const DriverDashboard = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'assigned_to_driver': return 'bg-blue-100 text-blue-800';
-      case 'picked_up': return 'bg-yellow-100 text-yellow-800';
-      case 'out_for_delivery': return 'bg-orange-100 text-orange-800';
-      case 'delivered': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+  const handleSignOut = () => {
+    if (!driverProfile) {
+      toast.info('Mock mode - no actual sign out needed');
+      return;
     }
+    signOut();
   };
 
-  const getNextStatus = (currentStatus: string) => {
-    switch (currentStatus) {
-      case 'assigned_to_driver': return 'picked_up';
-      case 'picked_up': return 'out_for_delivery';
-      case 'out_for_delivery': return 'delivered';
-      default: return null;
+  const handleRefreshOrders = () => {
+    if (!driverProfile) {
+      toast.info('Mock mode - orders refreshed');
+      return;
     }
+    refreshOrders();
   };
 
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'picked_up': return 'Mark as Picked Up';
-      case 'out_for_delivery': return 'Mark Out for Delivery';
-      case 'delivered': return 'Mark as Delivered';
-      default: return 'Update Status';
-    }
-  };
-
-  if (loading) {
+  if (currentLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -84,31 +95,39 @@ const DriverDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {!driverProfile && (
+        <div className="bg-yellow-100 border-b border-yellow-200 p-2 text-center">
+          <p className="text-yellow-800 text-sm">
+            🚧 Mock Mode - You're viewing sample data for development
+          </p>
+        </div>
+      )}
+      
       <DriverHeader
-        driverProfile={driverProfile!}
-        onSignOut={signOut}
+        driverProfile={currentProfile}
+        onSignOut={handleSignOut}
         onAvailabilityChange={handleAvailabilityChange}
         updatingAvailability={updatingAvailability}
       />
 
       <div className="p-4 space-y-6">
         <OrderStatsCards
-          availableCount={availableOrders.length}
-          assignedCount={assignedOrders.length}
+          availableCount={currentAvailableOrders.length}
+          assignedCount={currentAssignedOrders.length}
         />
 
         {/* Refresh Button */}
         <div className="flex justify-center">
-          <Button variant="outline" onClick={refreshOrders} disabled={loading}>
+          <Button variant="outline" onClick={handleRefreshOrders} disabled={currentLoading}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh Orders
           </Button>
         </div>
 
         {/* Assigned Orders */}
-        {assignedOrders.length > 0 && (
+        {currentAssignedOrders.length > 0 && (
           <OrdersList
-            orders={assignedOrders}
+            orders={currentAssignedOrders}
             title="My Orders"
             type="assigned"
             emptyMessage="No assigned orders"
@@ -121,9 +140,9 @@ const DriverDashboard = () => {
         )}
 
         {/* Available Orders */}
-        {driverProfile?.is_available ? (
+        {currentProfile?.is_available ? (
           <OrdersList
-            orders={availableOrders}
+            orders={currentAvailableOrders}
             title="Available Orders"
             type="available"
             emptyMessage="No orders available at the moment"

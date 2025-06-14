@@ -7,7 +7,10 @@ import DriverDashboard from '@/components/driver/DriverDashboard';
 const DriverPage = () => {
   const { isAuthenticated, loading } = useDriverAuth();
 
-  if (loading) {
+  // Always show dashboard with mock data for development
+  const showMockDashboard = true;
+
+  if (loading && !showMockDashboard) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -18,7 +21,7 @@ const DriverPage = () => {
     );
   }
 
-  return isAuthenticated ? <DriverDashboard /> : <DriverLogin />;
+  return (showMockDashboard || isAuthenticated) ? <DriverDashboard /> : <DriverLogin />;
 };
 
 export default DriverPage;
