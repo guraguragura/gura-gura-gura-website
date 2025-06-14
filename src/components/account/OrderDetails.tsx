@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCurrency } from '@/hooks/useCurrency';
 import { toast } from '@/hooks/use-toast';
+import { useCustomerOrders } from '@/hooks/useCustomerOrders';
 
 // Import refactored components
 import { OrderStatusCard } from './order-details/OrderStatusCard';
@@ -12,22 +13,14 @@ import { OrderInfoCard } from './order-details/OrderInfoCard';
 import { OrderItemsTable } from './order-details/OrderItemsTable';
 import { OrderActions } from './order-details/OrderActions';
 import { OrderNotFound } from './order-details/OrderNotFound';
-import { mockOrderDetails } from './order-details/mock-data';
-import { OrderStatus } from './Orders';
-
-const orderSteps = [
-  { status: 'pending', label: 'Order Placed' },
-  { status: 'processing', label: 'Processing' },
-  { status: 'out_for_delivery', label: 'Out for Delivery' },
-  { status: 'delivered', label: 'Delivered' }
-];
 
 export const OrderDetails = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const { formatPrice, isLoading } = useCurrency();
+  const { orders } = useCustomerOrders();
   
-  const order = orderId ? mockOrderDetails[orderId] : null;
+  const order = orders.find(o => o.id === orderId);
 
   const goBack = () => {
     navigate('/account/orders');
@@ -41,8 +34,12 @@ export const OrderDetails = () => {
   };
 
   const handleReturnOrder = () => {
-    if (order && order.items.length > 0) {
-      navigate(`/account/returns/new/${order.id}/${order.items[0].id}`);
+    if (order) {
+      // For now, just show a toast - this would integrate with a returns system
+      toast({
+        title: "Return request initiated",
+        description: `Return request for order #${order.display_id} has been started.`,
+      });
     }
   };
 
@@ -50,9 +47,8 @@ export const OrderDetails = () => {
     return <OrderNotFound onGoBack={goBack} />;
   }
 
-  const currentStepIndex = orderSteps.findIndex(step => step.status === order.status);
-  const isOrderCanceled = order.status === 'canceled';
-  const isOrderDelivered = order.status === 'delivered';
+  const isOrderCancelled = order.unified_status === 'cancelled';
+  const isOrderDelivered = order.unified_status === 'delivered';
 
   return (
     <div className="space-y-6">
@@ -65,11 +61,7 @@ export const OrderDetails = () => {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <OrderStatusCard 
-          order={order} 
-          currentStepIndex={currentStepIndex}
-          isOrderCanceled={isOrderCanceled}
-        />
+        <OrderStatusCard order={order} />
         <OrderInfoCard order={order} />
       </div>
 
@@ -80,7 +72,7 @@ export const OrderDetails = () => {
       />
 
       <OrderActions 
-        isOrderCanceled={isOrderCanceled}
+        isOrderCancelled={isOrderCancelled}
         isOrderDelivered={isOrderDelivered}
         onReturnOrder={handleReturnOrder}
         onCancelOrder={handleCancelOrder}

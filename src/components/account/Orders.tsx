@@ -1,100 +1,42 @@
 
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Clock, Package, CheckCircle, Truck, XCircle } from 'lucide-react';
-import { useCurrency } from '@/hooks/useCurrency';
+import React, { useState } from 'react';
+import { RefreshCw, Package } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useCustomerOrders } from '@/hooks/useCustomerOrders';
+import CustomerOrderCard from './CustomerOrderCard';
+import { UnifiedOrderStatus } from '@/utils/unifiedOrderStatusUtils';
 
-// Define the possible order statuses
-export type OrderStatus = 'pending' | 'processing' | 'out_for_delivery' | 'delivered' | 'canceled';
+const Orders = () => {
+  const { orders, loading, refreshOrders } = useCustomerOrders();
+  const [filterStatus, setFilterStatus] = useState<UnifiedOrderStatus | 'all'>('all');
 
-// Define the order interface
-interface Order {
-  id: string;
-  display_id: number;
-  status: OrderStatus;
-  date: string;
-  total: number;
-  thumbnail?: string; // Optional thumbnail image
-}
+  const filteredOrders = orders.filter(order => 
+    filterStatus === 'all' || order.unified_status === filterStatus
+  );
 
-// Status configuration with icons and colors
-const statusConfig: Record<OrderStatus, { icon: React.ReactNode; color: string; label: string }> = {
-  pending: { 
-    icon: <Clock className="h-5 w-5" />, 
-    color: 'text-yellow-500', 
-    label: 'Pending' 
-  },
-  processing: { 
-    icon: <Package className="h-5 w-5" />, 
-    color: 'text-blue-500', 
-    label: 'Processing' 
-  },
-  out_for_delivery: { 
-    icon: <Truck className="h-5 w-5" />, 
-    color: 'text-indigo-500', 
-    label: 'Out for Delivery' 
-  },
-  delivered: { 
-    icon: <CheckCircle className="h-5 w-5" />, 
-    color: 'text-green-500', 
-    label: 'Delivered' 
-  },
-  canceled: { 
-    icon: <XCircle className="h-5 w-5" />, 
-    color: 'text-red-500', 
-    label: 'Canceled' 
+  const statusFilters = [
+    { value: 'all' as const, label: 'All Orders' },
+    { value: 'processing' as UnifiedOrderStatus, label: 'Processing' },
+    { value: 'out_for_delivery' as UnifiedOrderStatus, label: 'Out for Delivery' },
+    { value: 'delivered' as UnifiedOrderStatus, label: 'Delivered' },
+  ];
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Orders</h2>
+          <p className="text-gray-500 mt-1">View and track your orders</p>
+        </div>
+        
+        <div className="flex items-center justify-center py-12">
+          <RefreshCw className="h-6 w-6 animate-spin" />
+          <span className="ml-2">Loading your orders...</span>
+        </div>
+      </div>
+    );
   }
-};
 
-// Mock orders data for development
-const mockOrders: Order[] = [
-  {
-    id: 'ord_1234',
-    display_id: 1234,
-    status: 'pending',
-    date: '2023-11-01',
-    total: 124.99,
-    thumbnail: '/lovable-uploads/4bed48db-95ec-4822-b3dd-a6c0d4c214ba.png'
-  },
-  {
-    id: 'ord_2345',
-    display_id: 2345,
-    status: 'processing',
-    date: '2023-10-27',
-    total: 79.95,
-    thumbnail: '/lovable-uploads/189d5b38-0cf3-4a56-9606-2caba74233ca.png'
-  },
-  {
-    id: 'ord_3456',
-    display_id: 3456,
-    status: 'out_for_delivery',
-    date: '2023-10-20',
-    total: 249.50,
-    thumbnail: '/lovable-uploads/2b4f1e1c-8388-4e0a-a05c-1efa3ecbb777.png'
-  },
-  {
-    id: 'ord_4567',
-    display_id: 4567,
-    status: 'delivered',
-    date: '2023-10-15',
-    total: 54.99,
-    thumbnail: '/lovable-uploads/9f9f6f6c-f423-47c6-8964-326b064c2fd8.png'
-  },
-  {
-    id: 'ord_5678',
-    display_id: 5678,
-    status: 'canceled',
-    date: '2023-10-10',
-    total: 199.99,
-    thumbnail: '/lovable-uploads/5bc8b271-aa7d-4103-8681-58b3e69bf415.png'
-  }
-];
-
-export const Orders = () => {
-  const [orders] = useState<Order[]>(mockOrders);
-  const { formatPrice, isLoading } = useCurrency();
-
-  // If you have no orders
   if (orders.length === 0) {
     return (
       <div className="space-y-6">
@@ -104,7 +46,9 @@ export const Orders = () => {
         </div>
         
         <div className="border rounded-lg p-6 text-center py-12">
-          <p className="text-gray-500">You haven't placed any orders yet.</p>
+          <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>
+          <p className="text-gray-500">When you place orders, they'll appear here for tracking.</p>
         </div>
       </div>
     );
@@ -112,66 +56,50 @@ export const Orders = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Orders</h2>
-        <p className="text-gray-500 mt-1">View and track your orders</p>
-      </div>
-      
-      <div className="border rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {orders.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">#{order.display_id}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {order.thumbnail && (
-                      <div className="flex-shrink-0 h-10 w-10">
-                        <img 
-                          className="h-10 w-10 rounded-md object-cover" 
-                          src={order.thumbnail} 
-                          alt={`Order #${order.display_id} thumbnail`} 
-                        />
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{order.date}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className={`flex items-center text-sm ${statusConfig[order.status].color}`}>
-                      {statusConfig[order.status].icon}
-                      <span className="ml-1.5">{statusConfig[order.status].label}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      {isLoading ? '...' : formatPrice(order.total)}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <Link to={`/account/orders/${order.id}`} className="text-blue-600 hover:text-blue-900">
-                      View
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Orders</h2>
+          <p className="text-gray-500 mt-1">View and track your orders</p>
         </div>
+        
+        <Button 
+          variant="outline" 
+          onClick={refreshOrders}
+          disabled={loading}
+        >
+          <RefreshCw className="h-4 w-4 mr-2" />
+          Refresh
+        </Button>
       </div>
+
+      {/* Status Filters */}
+      <div className="flex gap-2 flex-wrap">
+        {statusFilters.map((filter) => (
+          <Button
+            key={filter.value}
+            variant={filterStatus === filter.value ? "default" : "outline"}
+            size="sm"
+            onClick={() => setFilterStatus(filter.value)}
+          >
+            {filter.label}
+          </Button>
+        ))}
+      </div>
+
+      {/* Orders Grid */}
+      <div className="grid gap-4 md:gap-6">
+        {filteredOrders.map((order) => (
+          <CustomerOrderCard key={order.id} order={order} />
+        ))}
+      </div>
+
+      {filteredOrders.length === 0 && filterStatus !== 'all' && (
+        <div className="text-center py-8">
+          <p className="text-gray-500">No orders found with the selected status.</p>
+        </div>
+      )}
     </div>
   );
 };
+
+export { Orders };
