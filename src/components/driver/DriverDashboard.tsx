@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useDriverAuth } from '@/hooks/useDriverAuth';
 import { useDriverOrders } from '@/hooks/useDriverOrders';
@@ -16,7 +15,7 @@ import {
   Truck,
   User,
   Phone,
-  Refresh
+  RefreshCw
 } from 'lucide-react';
 
 const DriverDashboard = () => {
@@ -156,7 +155,7 @@ const DriverDashboard = () => {
         {/* Refresh Button */}
         <div className="flex justify-center">
           <Button variant="outline" onClick={refreshOrders} disabled={loading}>
-            <Refresh className="h-4 w-4 mr-2" />
+            <RefreshCw className="h-4 w-4 mr-2" />
             Refresh Orders
           </Button>
         </div>

@@ -15,7 +15,6 @@ interface AddressFormValues {
   sector: string;
   cell: string;
   village: string;
-  postal_code: string;
   nearby_landmark: string;
 }
 
@@ -35,7 +34,6 @@ const AddressInfoForm = ({ customer, address, onAddressUpdated }: AddressInfoFor
       sector: '',
       cell: '',
       village: '',
-      postal_code: '',
       nearby_landmark: '',
     },
   });
@@ -49,7 +47,6 @@ const AddressInfoForm = ({ customer, address, onAddressUpdated }: AddressInfoFor
         sector: address.sector || '',
         cell: address.cell || '',
         village: address.village || '',
-        postal_code: address.postal_code || '',
         nearby_landmark: address.nearby_landmark || '',
       });
     }
@@ -78,7 +75,6 @@ const AddressInfoForm = ({ customer, address, onAddressUpdated }: AddressInfoFor
             sector: values.sector,
             cell: values.cell,
             village: values.village,
-            postal_code: values.postal_code,
             nearby_landmark: values.nearby_landmark,
             updated_at: new Date().toISOString(),
           })
@@ -101,7 +97,6 @@ const AddressInfoForm = ({ customer, address, onAddressUpdated }: AddressInfoFor
             sector: values.sector,
             cell: values.cell,
             village: values.village,
-            postal_code: values.postal_code,
             nearby_landmark: values.nearby_landmark,
             is_default_shipping: true,
             is_default_billing: true,

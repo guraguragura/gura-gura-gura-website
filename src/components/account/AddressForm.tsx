@@ -119,7 +119,7 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
       // Generate a UUID for the address
       const addressId = crypto.randomUUID();
 
-      // Insert new address with the generated UUID (removed postal_code)
+      // Insert new address with the generated UUID
       const { error } = await supabase
         .from('customer_address')
         .insert({
