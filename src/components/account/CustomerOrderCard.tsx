@@ -12,21 +12,10 @@ import {
   getStatusProgress 
 } from '@/utils/unifiedOrderStatusUtils';
 import { useCurrency } from '@/hooks/useCurrency';
-
-interface CustomerOrder {
-  id: string;
-  display_id: number;
-  unified_status: UnifiedOrderStatus;
-  created_at: string;
-  metadata: any;
-  driver_id: string | null;
-  assigned_at: string | null;
-  picked_up_at: string | null;
-  delivered_at: string | null;
-}
+import { CustomerOrderDetails } from '@/hooks/useCustomerOrders';
 
 interface CustomerOrderCardProps {
-  order: CustomerOrder;
+  order: CustomerOrderDetails;
 }
 
 const CustomerOrderCard: React.FC<CustomerOrderCardProps> = ({ order }) => {
@@ -79,8 +68,6 @@ const CustomerOrderCard: React.FC<CustomerOrderCardProps> = ({ order }) => {
     return 'Processing order';
   };
 
-  const orderTotal = order.metadata?.total || 0;
-
   return (
     <Card className="hover:shadow-md transition-shadow">
       <CardContent className="p-6">
@@ -92,7 +79,7 @@ const CustomerOrderCard: React.FC<CustomerOrderCardProps> = ({ order }) => {
             </p>
           </div>
           <div className="text-right">
-            <p className="font-semibold">{formatPrice(orderTotal)}</p>
+            <p className="font-semibold">{formatPrice(order.total)}</p>
             <Badge className={`${statusColor} text-xs`}>
               <span className="flex items-center gap-1">
                 {getStatusIcon(order.unified_status)}

@@ -1,5 +1,5 @@
 
-import { OrderStatus } from '../Orders';
+import { UnifiedOrderStatus } from '@/utils/unifiedOrderStatusUtils';
 
 export interface OrderItem {
   id: string;
@@ -13,7 +13,7 @@ export interface OrderItem {
 export interface OrderDetails {
   id: string;
   display_id: number;
-  status: OrderStatus;
+  status: UnifiedOrderStatus;
   date: string;
   total: number;
   items: OrderItem[];
@@ -32,7 +32,7 @@ export const mockOrderDetails: Record<string, OrderDetails> = {
   'ord_1234': {
     id: 'ord_1234',
     display_id: 1234,
-    status: 'pending',
+    status: 'pending_payment',
     date: '2023-11-01',
     total: 124.99,
     items: [
@@ -111,7 +111,7 @@ export const mockOrderDetails: Record<string, OrderDetails> = {
   'ord_5678': {
     id: 'ord_5678',
     display_id: 5678,
-    status: 'canceled',
+    status: 'cancelled',
     date: '2023-10-10',
     total: 199.99,
     items: [
