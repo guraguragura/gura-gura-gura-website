@@ -23,7 +23,7 @@ function App() {
         <Route path="/" element={<Index />} />
         <Route path="/coming-soon" element={<ComingSoonPage />} />
         
-        {/* Auth */}
+        {/* Auth - Optional for users who want to create accounts */}
         <Route path="/auth" element={<AuthPage />} />
         
         {/* Account pages */}
