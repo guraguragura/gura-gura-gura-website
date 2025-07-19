@@ -16,23 +16,6 @@ import GuraBusinessPage from "@/pages/GuraBusinessPage";
 import CheckoutPage from "@/pages/CheckoutPage";
 
 function App() {
-  // Check if we're in development mode
-  const isDevelopment = import.meta.env.DEV;
-  
-  // If in development, only show coming soon page
-  if (isDevelopment) {
-    return (
-      <>
-        <Routes>
-          <Route path="/coming-soon" element={<ComingSoonPage />} />
-          <Route path="*" element={<Navigate to="/coming-soon" replace />} />
-        </Routes>
-        <Toaster />
-      </>
-    );
-  }
-
-  // Production routes (when not in development)
   return (
     <>
       <Routes>
