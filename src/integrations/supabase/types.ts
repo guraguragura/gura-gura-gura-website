@@ -158,6 +158,42 @@ export type Database = {
           },
         ]
       }
+      audit_log: {
+        Row: {
+          id: string
+          ip_address: unknown | null
+          new_data: Json | null
+          old_data: Json | null
+          operation: string
+          table_name: string
+          timestamp: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          id?: string
+          ip_address?: unknown | null
+          new_data?: Json | null
+          old_data?: Json | null
+          operation: string
+          table_name: string
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          id?: string
+          ip_address?: unknown | null
+          new_data?: Json | null
+          old_data?: Json | null
+          operation?: string
+          table_name?: string
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       auth_identity: {
         Row: {
           app_metadata: Json | null
@@ -5035,6 +5071,36 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          created_at: string | null
+          endpoint: string
+          id: string
+          ip_address: unknown | null
+          request_count: number | null
+          user_id: string | null
+          window_start: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          endpoint: string
+          id?: string
+          ip_address?: unknown | null
+          request_count?: number | null
+          user_id?: string | null
+          window_start?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          endpoint?: string
+          id?: string
+          ip_address?: unknown | null
+          request_count?: number | null
+          user_id?: string | null
+          window_start?: string | null
+        }
+        Relationships: []
+      }
       refund: {
         Row: {
           amount: number
@@ -6281,6 +6347,14 @@ export type Database = {
           },
         ]
       }
+      security_dashboard: {
+        Row: {
+          metric: string | null
+          period: string | null
+          value: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       accept_driver_order: {
@@ -6294,6 +6368,14 @@ export type Database = {
       calculate_driver_statistics: {
         Args: { p_driver_id: string }
         Returns: Json
+      }
+      check_rate_limit: {
+        Args: {
+          p_endpoint: string
+          p_max_requests?: number
+          p_window_minutes?: number
+        }
+        Returns: boolean
       }
       generate_delivery_proof_code: {
         Args: Record<PropertyKey, never>
@@ -6339,6 +6421,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      log_security_event: {
+        Args: { event_type: string; details: Json }
+        Returns: undefined
+      }
       map_unified_status_to_customer_status: {
         Args: {
           unified_status_val: Database["public"]["Enums"]["unified_order_status_enum"]
@@ -6356,6 +6442,14 @@ export type Database = {
       update_driver_rating: {
         Args: { p_driver_id: string }
         Returns: undefined
+      }
+      validate_email_format: {
+        Args: { email_text: string }
+        Returns: boolean
+      }
+      validate_input_length: {
+        Args: { input_text: string; max_length: number }
+        Returns: boolean
       }
       verify_delivery_proof: {
         Args: { p_order_id: string; p_proof_code: string }
