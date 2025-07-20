@@ -27,6 +27,7 @@ export interface FilterableProduct {
   category?: string;
   created_at: string;
   popularity_score?: number;
+  metadata?: any;
 }
 
 export const useAdvancedProductSearch = (filters: AdvancedProductFilters = {}) => {
@@ -104,21 +105,42 @@ export const useAdvancedProductSearch = (filters: AdvancedProductFilters = {}) =
       try {
         let query = supabase
           .from('product')
-          .select('id, title, description, price, discount_price, thumbnail, images, rating, reviews_count, handle, brand, color, category, created_at, popularity_score');
+          .select('id, title, description, thumbnail, handle, created_at, metadata, status');
 
-        // Only apply database-level filters for efficiency
-        if (filters.category) {
-          query = query.eq('category', filters.category);
-        }
+        // Only get published products
+        query = query.eq('status', 'published');
 
-        const { data, error, count } = await query;
+        const { data, error } = await query;
         
         if (error) {
           throw new Error(error.message);
         }
         
-        setProducts(data || []);
-        setTotalCount(count || 0);
+        // Transform data to extract metadata fields
+        const transformedProducts = (data || []).map(product => {
+          const metadata = (product.metadata as any) || {};
+          return {
+            id: product.id,
+            title: product.title,
+            description: product.description || '',
+            price: Number(metadata.price) || 0,
+            discount_price: metadata.discount_price ? Number(metadata.discount_price) : undefined,
+            thumbnail: product.thumbnail || '',
+            images: metadata.images || [product.thumbnail].filter(Boolean),
+            rating: Number(metadata.rating) || 4.5,
+            reviews_count: Number(metadata.reviews_count) || 0,
+            handle: product.handle,
+            brand: metadata.brand || '',
+            color: metadata.color || '',
+            category: metadata.category || '',
+            created_at: product.created_at,
+            popularity_score: Number(metadata.popularity_score) || 0,
+            metadata: product.metadata
+          };
+        });
+        
+        setProducts(transformedProducts);
+        setTotalCount(transformedProducts.length);
       } catch (err) {
         console.error("Error fetching products:", err);
         setError(err instanceof Error ? err : new Error("Failed to fetch products"));

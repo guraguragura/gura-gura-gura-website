@@ -4394,6 +4394,45 @@ export type Database = {
           },
         ]
       }
+      product_reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          helpful_count: number
+          id: string
+          product_id: string
+          rating: number
+          title: string
+          updated_at: string
+          user_id: string | null
+          verified_purchase: boolean
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          helpful_count?: number
+          id?: string
+          product_id: string
+          rating: number
+          title: string
+          updated_at?: string
+          user_id?: string | null
+          verified_purchase?: boolean
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          helpful_count?: number
+          id?: string
+          product_id?: string
+          rating?: number
+          title?: string
+          updated_at?: string
+          user_id?: string | null
+          verified_purchase?: boolean
+        }
+        Relationships: []
+      }
       product_sales_channel: {
         Row: {
           created_at: string
@@ -4713,6 +4752,33 @@ export type Database = {
           price_set_id?: string
           updated_at?: string
           variant_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }

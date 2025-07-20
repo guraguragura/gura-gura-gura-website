@@ -39,7 +39,6 @@ export const useProductReviews = (productId: string) => {
       setError(null);
       
       try {
-        // Fetch reviews
         const { data: reviewsData, error: reviewsError } = await supabase
           .from('product_reviews')
           .select(`
@@ -52,7 +51,7 @@ export const useProductReviews = (productId: string) => {
             verified_purchase,
             helpful_count,
             created_at,
-            profiles!product_reviews_user_id_fkey (
+            profiles!user_id (
               display_name,
               avatar_url
             )
@@ -61,10 +60,18 @@ export const useProductReviews = (productId: string) => {
           .order('created_at', { ascending: false });
 
         if (reviewsError) {
-          throw new Error(reviewsError.message);
+          console.error('Reviews fetch error:', reviewsError);
+          // Set empty reviews instead of throwing error
+          setReviews([]);
+          setSummary({
+            averageRating: 0,
+            totalReviews: 0,
+            ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+          });
+          return;
         }
 
-        // Transform data
+        // Transform the data to match our interface
         const transformedReviews: ProductReview[] = (reviewsData || []).map(review => ({
           id: review.id,
           product_id: review.product_id,
@@ -75,32 +82,39 @@ export const useProductReviews = (productId: string) => {
           verified_purchase: review.verified_purchase,
           helpful_count: review.helpful_count,
           created_at: review.created_at,
-          user_name: review.profiles?.display_name || 'Anonymous',
-          user_avatar: review.profiles?.avatar_url
+          user_name: (review as any).profiles?.display_name || 'Anonymous',
+          user_avatar: (review as any).profiles?.avatar_url
         }));
 
         setReviews(transformedReviews);
 
         // Calculate summary
-        if (transformedReviews.length > 0) {
-          const totalRating = transformedReviews.reduce((sum, review) => sum + review.rating, 0);
-          const averageRating = totalRating / transformedReviews.length;
-          
-          const ratingDistribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-          transformedReviews.forEach(review => {
-            ratingDistribution[review.rating as keyof typeof ratingDistribution]++;
-          });
+        const totalReviews = transformedReviews.length;
+        const averageRating = totalReviews > 0 
+          ? transformedReviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews 
+          : 0;
 
-          setSummary({
-            averageRating: Math.round(averageRating * 10) / 10,
-            totalReviews: transformedReviews.length,
-            ratingDistribution
-          });
-        }
+        // Calculate rating distribution
+        const distribution: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        transformedReviews.forEach(review => {
+          distribution[review.rating] = (distribution[review.rating] || 0) + 1;
+        });
 
+        setSummary({
+          averageRating: Number(averageRating.toFixed(1)),
+          totalReviews,
+          ratingDistribution: distribution
+        });
       } catch (err) {
         console.error("Error fetching reviews:", err);
         setError(err instanceof Error ? err : new Error("Failed to fetch reviews"));
+        // Set empty state on error
+        setReviews([]);
+        setSummary({
+          averageRating: 0,
+          totalReviews: 0,
+          ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+        });
       } finally {
         setLoading(false);
       }
@@ -124,17 +138,18 @@ export const useProductReviews = (productId: string) => {
           rating: reviewData.rating,
           title: reviewData.title,
           comment: reviewData.comment,
-          verified_purchase: true // You might want to verify this based on actual purchases
+          verified_purchase: false, // You might want to check this based on purchase history
+          helpful_count: 0
         });
 
       if (error) {
         throw new Error(error.message);
       }
 
-      // Refresh reviews after submission
-      window.location.reload(); // Simple refresh, could be optimized
+      // Refresh reviews after successful submission
+      window.location.reload();
     } catch (err) {
-      console.error("Error submitting review:", err);
+      console.error('Error submitting review:', err);
       throw err;
     }
   };

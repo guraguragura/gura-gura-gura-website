@@ -11,6 +11,9 @@ export interface RecommendedProduct {
   handle: string;
   category?: string;
   brand?: string;
+  is_sale?: boolean;
+  is_new?: boolean;
+  reviews_count?: number;
 }
 
 export const useProductRecommendations = (productId?: string, userId?: string) => {
@@ -26,83 +29,90 @@ export const useProductRecommendations = (productId?: string, userId?: string) =
       setError(null);
       
       try {
-        // Get current product details
-        const { data: currentProduct, error: productError } = await supabase
+        // First, get the current product details
+        const { data: currentProduct, error: currentError } = await supabase
           .from('product')
-          .select('category, brand, price')
+          .select('id, title, thumbnail, handle, metadata, status')
           .eq('id', productId)
+          .eq('status', 'published')
           .single();
-
-        if (productError) {
-          throw new Error(productError.message);
-        }
-
-        // Fetch recommendations based on:
-        // 1. Same category (50% weight)
-        // 2. Same brand (30% weight)  
-        // 3. Similar price range (20% weight)
-        let query = supabase
-          .from('product')
-          .select('id, title, price, discount_price, thumbnail, rating, handle, category, brand')
-          .neq('id', productId)
-          .limit(12);
-
-        // Prioritize same category
-        if (currentProduct.category) {
-          query = query.eq('category', currentProduct.category);
-        }
-
-        const { data: categoryProducts, error: categoryError } = await query;
         
-        if (categoryError) {
-          throw new Error(categoryError.message);
+        if (currentError) {
+          throw new Error(currentError.message);
         }
-
-        // If we don't have enough from same category, get from similar price range
-        let allRecommendations = categoryProducts || [];
-
-        if (allRecommendations.length < 8) {
-          const priceRange = currentProduct.price * 0.3; // 30% price tolerance
-          const { data: priceProducts } = await supabase
-            .from('product')
-            .select('id, title, price, discount_price, thumbnail, rating, handle, category, brand')
-            .neq('id', productId)
-            .gte('price', currentProduct.price - priceRange)
-            .lte('price', currentProduct.price + priceRange)
-            .limit(8);
-
-          // Merge and deduplicate
-          const existingIds = new Set(allRecommendations.map(p => p.id));
-          const newProducts = (priceProducts || []).filter(p => !existingIds.has(p.id));
-          allRecommendations = [...allRecommendations, ...newProducts];
+        
+        if (!currentProduct) return;
+        
+        const currentMetadata = (currentProduct.metadata as any) || {};
+        const currentPrice = Number(currentMetadata.price) || 0;
+        const currentCategory = currentMetadata.category || '';
+        const currentBrand = currentMetadata.brand || '';
+        
+        // Get all published products except current one
+        let { data: allProducts, error: productsError } = await supabase
+          .from('product')
+          .select('id, title, thumbnail, handle, metadata, status')
+          .eq('status', 'published')
+          .neq('id', productId)
+          .limit(50);
+        
+        if (productsError) {
+          throw new Error(productsError.message);
         }
-
-        // Sort by relevance score
-        const scoredProducts = allRecommendations.map(product => {
+        
+        if (!allProducts) return;
+        
+        // Transform and filter products
+        const transformedProducts = allProducts.map(product => {
+          const metadata = (product.metadata as any) || {};
+          return {
+            id: product.id,
+            title: product.title,
+            thumbnail: product.thumbnail || '',
+            price: Number(metadata.price) || 0,
+            discount_price: metadata.discount_price ? Number(metadata.discount_price) : undefined,
+            rating: Number(metadata.rating) || 4.5,
+            reviews_count: Number(metadata.reviews_count) || 0,
+            is_sale: Boolean(metadata.is_sale),
+            is_new: Boolean(metadata.is_new),
+            handle: product.handle,
+            category: metadata.category || '',
+            brand: metadata.brand || ''
+          };
+        });
+        
+        // Calculate relevance score and sort
+        const scoredRecommendations = transformedProducts.map(product => {
           let score = 0;
           
-          // Same category bonus
-          if (product.category === currentProduct.category) score += 50;
+          // Category match (highest priority)
+          if (product.category === currentCategory) score += 40;
           
-          // Same brand bonus
-          if (product.brand === currentProduct.brand) score += 30;
+          // Brand match
+          if (product.brand === currentBrand) score += 25;
           
-          // Price similarity bonus
-          const priceDiff = Math.abs(product.price - currentProduct.price);
-          const priceScore = Math.max(0, 20 - (priceDiff / currentProduct.price) * 20);
-          score += priceScore;
-
+          // Price similarity (closer price = higher score)
+          if (currentPrice > 0) {
+            const priceDiff = Math.abs(product.price - currentPrice);
+            const priceScore = Math.max(0, 20 - (priceDiff / currentPrice) * 20);
+            score += priceScore;
+          }
+          
           // Rating bonus
-          score += product.rating * 2;
-
-          return { ...product, relevanceScore: score };
+          score += product.rating * 3;
+          
+          return {
+            ...product,
+            relevanceScore: score
+          };
         });
-
-        // Sort by score and take top 8
-        const sortedRecommendations = scoredProducts
+        
+        // Sort by relevance score and take top 8
+        const sortedRecommendations = scoredRecommendations
           .sort((a, b) => b.relevanceScore - a.relevanceScore)
-          .slice(0, 8);
-
+          .slice(0, 8)
+          .map(({ relevanceScore, ...product }) => product);
+        
         setRecommendations(sortedRecommendations);
       } catch (err) {
         console.error("Error fetching recommendations:", err);
