@@ -2,6 +2,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
+import ProductSearchPage from "@/components/product/ProductSearchPage";
 import ComingSoonPage from "@/pages/ComingSoonPage";
 import Index from "@/pages/Index";
 import AccountPage from "@/pages/AccountPage";
