@@ -6437,14 +6437,6 @@ export type Database = {
           },
         ]
       }
-      security_dashboard: {
-        Row: {
-          metric: string | null
-          period: string | null
-          value: number | null
-        }
-        Relationships: []
-      }
     }
     Functions: {
       accept_driver_order: {

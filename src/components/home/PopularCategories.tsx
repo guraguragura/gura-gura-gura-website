@@ -54,12 +54,7 @@ const PopularCategories: React.FC<PopularCategoriesProps> = ({
       })
     : staticCategories;
 
-  // Debug output to verify images
-  console.log("Popular Categories:", displayCategories.map(c => ({
-    name: c.name,
-    handle: c.handle,
-    image: c.image
-  })));
+  // Categories are ready for display
 
   return (
     <section className="py-12">

@@ -91,7 +91,9 @@ export const createErrorBoundaryProps = (context: string) => ({
     
     // In production, send to error monitoring service
     if (process.env.NODE_ENV === 'production') {
-      // TODO: Send to Sentry or other monitoring service
+      import('../lib/sentry').then(({ captureError }) => {
+        captureError(error, { context, errorInfo });
+      });
     }
   }
 });

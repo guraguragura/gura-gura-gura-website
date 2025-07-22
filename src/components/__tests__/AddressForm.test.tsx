@@ -35,7 +35,7 @@ describe('AddressForm', () => {
     onAddressAdded: mockOnAddressAdded
   }
 
-  it('should render component', () => {
+  it('should render component without crashing', () => {
     const { container } = render(<AddressForm {...defaultProps} />)
     expect(container).toBeTruthy()
   })
