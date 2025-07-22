@@ -8,6 +8,10 @@ import { AuthProvider } from './contexts/AuthContext.tsx';
 import { WishlistProvider } from './contexts/WishlistContext.tsx';
 import { CartProvider } from './contexts/CartContext.tsx';
 import { CrispProvider } from './components/crisp/CrispProvider.tsx';
+import { initSentry } from './lib/sentry';
+
+// Initialize error monitoring
+initSentry();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
