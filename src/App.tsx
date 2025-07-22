@@ -1,57 +1,50 @@
 
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { Toaster } from "@/components/ui/toaster";
-import { ErrorBoundary } from "@/components/common/ErrorBoundary";
-import ProductSearchPage from "@/components/product/ProductSearchPage";
-import ComingSoonPage from "@/pages/ComingSoonPage";
-import Index from "@/pages/Index";
-import AccountPage from "@/pages/AccountPage";
-import AuthPage from "@/pages/AuthPage";
-import CategoryPage from "@/pages/CategoryPage";
-import ProductPage from "@/pages/ProductPage";
-import CartPage from "@/pages/CartPage";
-import FaqPage from "@/pages/FaqPage";
-import ContactPage from "@/pages/ContactPage";
-import AboutUsPage from "@/pages/AboutUsPage";
-import GuraBusinessPage from "@/pages/GuraBusinessPage";
-import CheckoutPage from "@/pages/CheckoutPage";
+import React, { Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { Toaster } from '@/components/ui/sonner';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { ErrorBoundary } from '@/components/common/ErrorBoundary';
+import { usePerformanceTracking } from '@/hooks/usePerformanceTracking';
+
+// Lazy load pages for better performance
+const Index = React.lazy(() => import('./pages/Index'));
+const AuthPage = React.lazy(() => import('./pages/AuthPage'));
+const CategoryPage = React.lazy(() => import('./pages/CategoryPage'));
+const ProductPage = React.lazy(() => import('./pages/ProductPage'));
+const CartPage = React.lazy(() => import('./pages/CartPage'));
+const CheckoutPage = React.lazy(() => import('./pages/CheckoutPage'));
+const AccountPage = React.lazy(() => import('./pages/AccountPage'));
+const AboutUsPage = React.lazy(() => import('./pages/AboutUsPage'));
+const ContactPage = React.lazy(() => import('./pages/ContactPage'));
+const FaqPage = React.lazy(() => import('./pages/FaqPage'));
+const NotFound = React.lazy(() => import('./pages/NotFound'));
 
 function App() {
+  // Track performance metrics
+  usePerformanceTracking();
+
   return (
     <ErrorBoundary>
-      <Routes>
-        {/* Main pages */}
-        <Route path="/" element={<Index />} />
-        <Route path="/coming-soon" element={<ComingSoonPage />} />
-        
-        {/* Auth - Optional for users who want to create accounts */}
-        <Route path="/auth" element={<AuthPage />} />
-        
-        {/* Account pages */}
-        <Route path="/account/*" element={<AccountPage />} />
-        
-        {/* Product and category pages */}
-        <Route path="/categories/:categoryHandle" element={<CategoryPage />} />
-        <Route path="/products/:productHandle" element={<ProductPage />} />
-        
-        {/* Shopping */}
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
-        
-        {/* Info pages */}
-        <Route path="/faq" element={<FaqPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/about" element={<AboutUsPage />} />
-        <Route path="/business" element={<GuraBusinessPage />} />
-        
-        {/* Collections alias for categories */}
-        <Route path="/collections" element={<Navigate to="/categories/all" replace />} />
-        
-        {/* 404 fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-      <Toaster />
+      <div className="min-h-screen bg-background">
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/auth/*" element={<AuthPage />} />
+            <Route path="/category/:categoryName" element={<CategoryPage />} />
+            <Route path="/product/:productId" element={<ProductPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/account" element={<AccountPage />} />
+            <Route path="/account/*" element={<AccountPage />} />
+            <Route path="/about" element={<AboutUsPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/faq" element={<FaqPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+        <Toaster />
+      </div>
     </ErrorBoundary>
   );
 }
