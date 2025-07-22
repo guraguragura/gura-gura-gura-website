@@ -1,6 +1,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, waitFor, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
+import { waitFor, screen } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 import CheckoutPage from '../../../pages/CheckoutPage'
