@@ -8,16 +8,20 @@ import useCategoryData from "./useCategoryData";
 
 const CategoryPage = () => {
   // Use destructuring to get both potential parameter names
-  const { handle, id } = useParams<{ handle?: string; id?: string }>();
+  const { handle, id, categoryName } = useParams<{ 
+    handle?: string; 
+    id?: string; 
+    categoryName?: string; 
+  }>();
   
-  // Use whichever parameter is available (handle from /categories/:handle or id from /category/:id)
-  const categoryHandle = handle || id;
+  // Use whichever parameter is available (handle from /categories/:handle, id from /category/:id, or categoryName from either)
+  const categoryHandle = handle || id || categoryName;
   
   const { formatPrice } = useCurrency();
   const { 
     products, 
     loading, 
-    categoryName, 
+    categoryName: resolvedCategoryName, 
     sortBy, 
     setSortBy, 
     viewMode,
@@ -35,7 +39,7 @@ const CategoryPage = () => {
   return (
     <PageLayout fullWidth={false}>
       <CategoryContent
-        categoryName={categoryName}
+        categoryName={resolvedCategoryName}
         products={displayedProducts}
         loading={loading}
         formatPrice={formatPrice}
