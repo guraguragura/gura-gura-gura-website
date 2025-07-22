@@ -336,8 +336,12 @@ export type Database = {
           customer_id: string | null
           deleted_at: string | null
           first_name: string | null
+          geocoded_address: string | null
           id: string
+          is_location_confirmed: boolean | null
           last_name: string | null
+          latitude: number | null
+          longitude: number | null
           metadata: Json | null
           phone: string | null
           postal_code: string | null
@@ -354,8 +358,12 @@ export type Database = {
           customer_id?: string | null
           deleted_at?: string | null
           first_name?: string | null
+          geocoded_address?: string | null
           id: string
+          is_location_confirmed?: boolean | null
           last_name?: string | null
+          latitude?: number | null
+          longitude?: number | null
           metadata?: Json | null
           phone?: string | null
           postal_code?: string | null
@@ -372,8 +380,12 @@ export type Database = {
           customer_id?: string | null
           deleted_at?: string | null
           first_name?: string | null
+          geocoded_address?: string | null
           id?: string
+          is_location_confirmed?: boolean | null
           last_name?: string | null
+          latitude?: number | null
+          longitude?: number | null
           metadata?: Json | null
           phone?: string | null
           postal_code?: string | null
@@ -1015,10 +1027,14 @@ export type Database = {
           deleted_at: string | null
           district: string | null
           first_name: string | null
+          geocoded_address: string | null
           id: string
           is_default_billing: boolean
           is_default_shipping: boolean
+          is_location_confirmed: boolean | null
           last_name: string | null
+          latitude: number | null
+          longitude: number | null
           metadata: Json | null
           nearby_landmark: string | null
           phone: string | null
@@ -1036,10 +1052,14 @@ export type Database = {
           deleted_at?: string | null
           district?: string | null
           first_name?: string | null
+          geocoded_address?: string | null
           id: string
           is_default_billing?: boolean
           is_default_shipping?: boolean
+          is_location_confirmed?: boolean | null
           last_name?: string | null
+          latitude?: number | null
+          longitude?: number | null
           metadata?: Json | null
           nearby_landmark?: string | null
           phone?: string | null
@@ -1057,10 +1077,14 @@ export type Database = {
           deleted_at?: string | null
           district?: string | null
           first_name?: string | null
+          geocoded_address?: string | null
           id?: string
           is_default_billing?: boolean
           is_default_shipping?: boolean
+          is_location_confirmed?: boolean | null
           last_name?: string | null
+          latitude?: number | null
+          longitude?: number | null
           metadata?: Json | null
           nearby_landmark?: string | null
           phone?: string | null

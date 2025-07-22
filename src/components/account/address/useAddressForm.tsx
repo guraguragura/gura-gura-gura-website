@@ -17,10 +17,20 @@ interface AddressFormValues {
   is_default_billing: boolean;
 }
 
+interface LocationData {
+  latitude: number;
+  longitude: number;
+  geocodedAddress?: string;
+  isConfirmed: boolean;
+}
+
 export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAdded: () => void) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [customerData, setCustomerData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showLocationConfirmation, setShowLocationConfirmation] = useState(false);
+  const [pendingFormData, setPendingFormData] = useState<AddressFormValues | null>(null);
+  const [confirmedLocation, setConfirmedLocation] = useState<LocationData | null>(null);
   
   const form = useForm<AddressFormValues>({
     defaultValues: {
@@ -109,37 +119,50 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
   }, [isOpen, form]);
 
   const onSubmit = async (data: AddressFormValues) => {
+    if (!customerData) {
+      console.error('No customer data available');
+      toast.error('Customer profile not found. Please try again.');
+      return;
+    }
+
+    // Store form data and show location confirmation
+    setPendingFormData(data);
+    setShowLocationConfirmation(true);
+  };
+
+  const handleLocationConfirmed = async (location: LocationData) => {
+    if (!pendingFormData || !customerData) return;
+
     try {
       setIsSubmitting(true);
-      
-      if (!customerData) {
-        console.error('No customer data available');
-        toast.error('Customer profile not found. Please try again.');
-        return;
-      }
+      setConfirmedLocation(location);
 
       // Generate a UUID for the address
       const addressId = crypto.randomUUID();
 
-      // Insert new address with the generated UUID
+      // Insert new address with location data
       const { error } = await supabase
         .from('customer_address')
         .insert({
           id: addressId,
           customer_id: customerData.id,
-          address: data.address,
+          address: pendingFormData.address,
           first_name: customerData.first_name || '',
           last_name: customerData.last_name || '',
           company: customerData.company_name || '',
-          district: data.district,
-          sector: data.sector,
-          cell: data.cell,
-          village: data.village,
-          postal_code: data.postal_code,
-          nearby_landmark: data.nearby_landmark,
-          phone: data.phone,
-          is_default_shipping: data.is_default_shipping,
-          is_default_billing: data.is_default_billing
+          district: pendingFormData.district,
+          sector: pendingFormData.sector,
+          cell: pendingFormData.cell,
+          village: pendingFormData.village,
+          postal_code: pendingFormData.postal_code,
+          nearby_landmark: pendingFormData.nearby_landmark,
+          phone: pendingFormData.phone,
+          is_default_shipping: pendingFormData.is_default_shipping,
+          is_default_billing: pendingFormData.is_default_billing,
+          latitude: location.latitude,
+          longitude: location.longitude,
+          geocoded_address: location.geocodedAddress,
+          is_location_confirmed: location.isConfirmed
         });
 
       if (error) {
@@ -148,8 +171,11 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
         return;
       }
 
-      toast.success('Address added successfully');
+      toast.success('Address added successfully with location confirmed');
       form.reset();
+      setPendingFormData(null);
+      setConfirmedLocation(null);
+      setShowLocationConfirmation(false);
       onAddressAdded();
       onClose();
     } catch (error) {
@@ -160,11 +186,20 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
     }
   };
 
+  const handleLocationDialogClose = () => {
+    setShowLocationConfirmation(false);
+    setPendingFormData(null);
+  };
+
   return {
     form,
     isLoading,
     isSubmitting,
     onSubmit,
-    customerData
+    customerData,
+    showLocationConfirmation,
+    handleLocationConfirmed,
+    handleLocationDialogClose,
+    pendingFormData
   };
 };

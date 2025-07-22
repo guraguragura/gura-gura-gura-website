@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useAddressForm } from './useAddressForm';
 import AddressFormFields from './AddressFormFields';
+import { DeliveryLocationConfirmation } from '../DeliveryLocationConfirmation';
 
 interface AddressFormProps {
   isOpen: boolean;
@@ -19,7 +20,17 @@ interface AddressFormProps {
 }
 
 const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
-  const { form, isLoading, isSubmitting, onSubmit, customerData } = useAddressForm(isOpen, onClose, onAddressAdded);
+  const { 
+    form, 
+    isLoading, 
+    isSubmitting, 
+    onSubmit, 
+    customerData, 
+    showLocationConfirmation, 
+    handleLocationConfirmed, 
+    handleLocationDialogClose, 
+    pendingFormData 
+  } = useAddressForm(isOpen, onClose, onAddressAdded);
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -85,6 +96,19 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
           </Form>
         )}
       </DialogContent>
+      
+      <DeliveryLocationConfirmation
+        isOpen={showLocationConfirmation}
+        onClose={handleLocationDialogClose}
+        initialAddress={pendingFormData ? {
+          address: pendingFormData.address,
+          district: pendingFormData.district,
+          sector: pendingFormData.sector,
+          cell: pendingFormData.cell,
+          village: pendingFormData.village
+        } : undefined}
+        onLocationConfirmed={handleLocationConfirmed}
+      />
     </Dialog>
   );
 };

@@ -18,7 +18,8 @@ import * as z from 'zod';
 import { useCurrency } from '@/hooks/useCurrency';
 import { CreditCard, CalendarRange, Lock, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
-import { useCheckout } from '@/hooks/useCheckout';
+import { useCheckoutWithLocation } from '@/hooks/useCheckoutWithLocation';
+import { DeliveryLocationConfirmation } from '@/components/address/DeliveryLocationConfirmation';
 
 const checkoutSchema = z.object({
   firstName: z.string().min(2, { message: 'First name must be at least 2 characters' }),
@@ -44,7 +45,14 @@ const CheckoutPage = () => {
   const { items, subtotal, total } = useCartContext();
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
-  const { processCheckout, isProcessing } = useCheckout();
+  const { 
+    initiateCheckout, 
+    handleLocationConfirmed, 
+    handleLocationDialogClose, 
+    showLocationConfirmation, 
+    pendingCheckoutData, 
+    isProcessing 
+  } = useCheckoutWithLocation();
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
@@ -66,7 +74,7 @@ const CheckoutPage = () => {
   const paymentMethod = form.watch('paymentMethod');
 
   const onSubmit = (data: CheckoutFormValues) => {
-    processCheckout({
+    initiateCheckout({
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
@@ -402,6 +410,19 @@ const CheckoutPage = () => {
         </div>
       </div>
       <Footer />
+      
+      <DeliveryLocationConfirmation
+        isOpen={showLocationConfirmation}
+        onClose={handleLocationDialogClose}
+        initialAddress={pendingCheckoutData ? {
+          address: pendingCheckoutData.address,
+          district: '', // Map city to district for Rwanda
+          sector: '', 
+          cell: '',
+          village: pendingCheckoutData.city
+        } : undefined}
+        onLocationConfirmed={handleLocationConfirmed}
+      />
     </div>
   );
 };
