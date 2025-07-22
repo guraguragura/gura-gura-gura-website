@@ -1,6 +1,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
+import { screen } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
 import { AuthProvider, useAuth } from '../../../contexts/AuthContext'
 import { supabase } from '@/integrations/supabase/client'
@@ -18,6 +19,39 @@ vi.mock('@/integrations/supabase/client', () => ({
     }
   }
 }))
+
+// Create proper mock User object
+const mockUser = {
+  id: 'test-user-id',
+  email: 'test@example.com',
+  app_metadata: {},
+  user_metadata: {},
+  aud: 'authenticated',
+  created_at: '2023-01-01T00:00:00.000Z',
+  confirmed_at: '2023-01-01T00:00:00.000Z',
+  email_confirmed_at: '2023-01-01T00:00:00.000Z',
+  phone: null,
+  phone_confirmed_at: null,
+  last_sign_in_at: '2023-01-01T00:00:00.000Z',
+  role: 'authenticated',
+  updated_at: '2023-01-01T00:00:00.000Z'
+}
+
+// Create proper mock Subscription object
+const mockSubscription = {
+  id: 'test-subscription-id',
+  callback: vi.fn(),
+  unsubscribe: vi.fn()
+}
+
+// Create proper mock AuthError
+const mockAuthError = {
+  name: 'AuthError',
+  message: 'Invalid credentials',
+  code: 'invalid_credentials',
+  status: 400,
+  __isAuthError: true as const
+}
 
 // Test component to access auth context
 const TestComponent = () => {
@@ -44,7 +78,6 @@ describe('AuthContext', () => {
     vi.clearAllMocks()
     
     // Mock successful auth state setup
-    const mockSubscription = { unsubscribe: vi.fn() }
     vi.mocked(supabase.auth.onAuthStateChange).mockReturnValue({
       data: { subscription: mockSubscription }
     })
@@ -68,7 +101,7 @@ describe('AuthContext', () => {
     const user = userEvent.setup()
     
     vi.mocked(supabase.auth.signInWithPassword).mockResolvedValue({
-      data: { user: { email: 'test@example.com' }, session: null },
+      data: { user: mockUser, session: null },
       error: null
     })
 
@@ -92,7 +125,7 @@ describe('AuthContext', () => {
     const user = userEvent.setup()
     
     vi.mocked(supabase.auth.signUp).mockResolvedValue({
-      data: { user: { email: 'test@example.com' }, session: null },
+      data: { user: mockUser, session: null },
       error: null
     })
 
@@ -142,7 +175,7 @@ describe('AuthContext', () => {
     
     vi.mocked(supabase.auth.signInWithPassword).mockResolvedValue({
       data: { user: null, session: null },
-      error: new Error('Invalid credentials')
+      error: mockAuthError
     })
 
     render(

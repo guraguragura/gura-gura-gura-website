@@ -1,6 +1,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
+import { screen } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 import CheckoutPage from '../../../pages/CheckoutPage'
@@ -56,7 +57,7 @@ describe('Checkout Integration', () => {
         thumbnail: '/test-image.jpg'
       }
     ]
-    localStorage.setItem('gura-cart', JSON.stringify(cartItems))
+    localStorage.setItem('cart', JSON.stringify(cartItems))
   })
 
   it('should render checkout page with cart items', async () => {
@@ -85,7 +86,7 @@ describe('Checkout Integration', () => {
   })
 
   it('should handle empty cart state', async () => {
-    localStorage.setItem('gura-cart', JSON.stringify([]))
+    localStorage.setItem('cart', JSON.stringify([]))
     
     render(
       <TestWrapper>

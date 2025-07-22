@@ -1,8 +1,9 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
+import { screen } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
-import { CartProvider, useCart } from '../../../contexts/CartContext'
+import { CartProvider, useCartContext } from '../../../contexts/CartContext'
 
 // Mock product data
 const mockProduct = {
@@ -14,15 +15,15 @@ const mockProduct = {
 
 // Test component to access cart context
 const TestComponent = () => {
-  const { items, addToCart, removeFromCart, updateQuantity, clearCart, total } = useCart()
+  const { items, addItem, removeItem, updateItemQuantity, clearCart, total } = useCartContext()
   
   return (
     <div>
       <div data-testid="cart-count">{items.length}</div>
       <div data-testid="cart-total">${total.toFixed(2)}</div>
-      <button onClick={() => addToCart(mockProduct)}>Add to Cart</button>
-      <button onClick={() => removeFromCart('test-product-1')}>Remove from Cart</button>
-      <button onClick={() => updateQuantity('test-product-1', 2)}>Update Quantity</button>
+      <button onClick={() => addItem(mockProduct)}>Add to Cart</button>
+      <button onClick={() => removeItem('test-product-1')}>Remove from Cart</button>
+      <button onClick={() => updateItemQuantity('test-product-1', 2)}>Update Quantity</button>
       <button onClick={clearCart}>Clear Cart</button>
       {items.map(item => (
         <div key={item.id} data-testid={`cart-item-${item.id}`}>
@@ -157,7 +158,7 @@ describe('CartContext', () => {
     await user.click(screen.getByText('Add to Cart'))
     
     await waitFor(() => {
-      const savedCart = JSON.parse(localStorage.getItem('gura-cart') || '[]')
+      const savedCart = JSON.parse(localStorage.getItem('cart') || '[]')
       expect(savedCart).toHaveLength(1)
       expect(savedCart[0].id).toBe('test-product-1')
     })

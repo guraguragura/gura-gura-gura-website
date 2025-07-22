@@ -26,9 +26,9 @@ export class PerformanceMonitor {
     
     if (navigationEntry) {
       const metrics: PerformanceMetrics = {
-        loadTime: navigationEntry.loadEventEnd - navigationEntry.navigationStart,
-        renderTime: navigationEntry.domContentLoadedEventEnd - navigationEntry.navigationStart,
-        interactionTime: navigationEntry.domInteractive - navigationEntry.navigationStart
+        loadTime: navigationEntry.loadEventEnd - navigationEntry.fetchStart,
+        renderTime: navigationEntry.domContentLoadedEventEnd - navigationEntry.fetchStart,
+        interactionTime: navigationEntry.domInteractive - navigationEntry.fetchStart
       }
 
       // Track memory usage if available
