@@ -8,15 +8,15 @@ type AuthContextType = {
   session: Session | null;
   user: User | null;
   loading: boolean;
-  signInWithEmail: (email: string, password: string) => Promise<{error: any | null}>;
-  signInWithPhone: (phone: string, password: string) => Promise<{error: any | null}>;
+  signInWithEmail: (email: string, password: string) => Promise<{error: Error | null}>;
+  signInWithPhone: (phone: string, password: string) => Promise<{error: Error | null}>;
   signUpWithEmail: (
     email: string, 
     password: string, 
     firstName: string, 
     lastName: string, 
     addressData?: Record<string, string>
-  ) => Promise<{error: any | null}>;
+  ) => Promise<{error: Error | null}>;
   signInWithGoogle: () => Promise<void>;
   signInWithFacebook: () => Promise<void>;
   signOut: () => Promise<void>;

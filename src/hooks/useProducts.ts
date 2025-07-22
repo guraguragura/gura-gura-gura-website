@@ -68,14 +68,14 @@ export function useProducts(options: ProductOptions = {}) {
       setError(null);
       
       try {
-        // Use the any type for the query to avoid TypeScript's excessive type checking
-        let query: any = supabase
+        // Build the query step by step to maintain type safety
+        let query = supabase
           .from('product')
           .select('*, product_category_product(product_category_id, product_category:product_category(name, handle))')
           .is('deleted_at', null) // Changed from .eq('deleted_at', null) to .is('deleted_at', null)
           .order('created_at', { ascending: false });
         
-        console.log("Fetching products with options:", options);
+        
         
         // Apply individual filters
         if (options.category) {
@@ -83,18 +83,15 @@ export function useProducts(options: ProductOptions = {}) {
         }
         
         if (options.featured) {
-          console.log("Filtering for featured products");
-          query = query.eq('metadata->is_featured', true);
+          query = query.eq('metadata->>is_featured', 'true');
         }
         
         if (options.onSale) {
-          console.log("Filtering for on sale products");
-          query = query.eq('metadata->is_sale', true);
+          query = query.eq('metadata->>is_sale', 'true');
         }
         
         if (options.new) {
-          console.log("Filtering for new products");
-          query = query.eq('metadata->is_new', true);
+          query = query.eq('metadata->>is_new', 'true');
         }
         
         if (options.limit) {
@@ -109,7 +106,7 @@ export function useProducts(options: ProductOptions = {}) {
           setError("Failed to load products");
           setProducts([]);
         } else if (data) {
-          console.log("Raw product data:", data);
+          
           
           // Transform data to match our Product interface without circular references
           const formattedProducts = data.map(item => {
@@ -118,7 +115,7 @@ export function useProducts(options: ProductOptions = {}) {
               ? item.metadata 
               : {};
             
-            console.log("Product metadata for", item.title, ":", rawMetadata);
+            
             
             // Extract all values we need
             const price = extractNumber(rawMetadata, 'price', 19.99);
@@ -132,12 +129,6 @@ export function useProducts(options: ProductOptions = {}) {
             const isNew = extractBoolean(rawMetadata, 'is_new', false);
             const isFeatured = extractBoolean(rawMetadata, 'is_featured', false);
             
-            console.log(`Product ${item.title} flags:`, { 
-              isFeatured, isNew, isSale,
-              metadata_featured: rawMetadata.is_featured,
-              metadata_new: rawMetadata.is_new,
-              metadata_sale: rawMetadata.is_sale
-            });
             
             // Build a completely flat product object
             const product: Product = {
@@ -158,13 +149,6 @@ export function useProducts(options: ProductOptions = {}) {
             };
             
             return product;
-          });
-          
-          console.log("Formatted products count:", formattedProducts.length);
-          console.log("Products with specific flags:", {
-            featured: formattedProducts.filter(p => p.is_featured).length,
-            new: formattedProducts.filter(p => p.is_new).length,
-            onSale: formattedProducts.filter(p => p.is_sale).length
           });
           
           setProducts(formattedProducts);

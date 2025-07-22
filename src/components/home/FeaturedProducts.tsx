@@ -37,7 +37,7 @@ const FeaturedProducts = () => {
     }
   };
 
-  console.log("FeaturedProducts component - products:", products);
+  
 
   return (
     <section className="py-12 bg-white">

@@ -61,7 +61,7 @@ export function useCheckout() {
         total_amount: total
       };
 
-      console.log("Processing order with data:", orderData);
+      
 
       // PLACEHOLDER: For now, we'll simulate payment processing
       // with an 80% success rate for testing both scenarios
@@ -72,7 +72,7 @@ export function useCheckout() {
       
       if (!simulatePaymentSuccess) {
         // Simulate payment failure for testing
-        console.log("Simulated payment failure");
+        
         throw new Error("Payment processing failed. Please try again.");
       }
       

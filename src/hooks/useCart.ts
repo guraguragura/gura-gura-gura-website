@@ -45,7 +45,7 @@ export function useCart() {
         // Example of checking session - we would use this to sync with backend
         const { data: session } = await supabase.auth.getSession();
         if (session?.session) {
-          console.log('User is logged in, would sync with Medusa here');
+          
           // Here we would make API calls to sync local cart with Medusa cart
         }
       } catch (error) {
@@ -91,7 +91,7 @@ export function useCart() {
       try {
         const { data: session } = await supabase.auth.getSession();
         if (session?.session) {
-          console.log('User is logged in, would sync item with Medusa here', item);
+          
           // API call to update Medusa cart
         }
       } catch (error) {
@@ -120,7 +120,7 @@ export function useCart() {
       try {
         const { data: session } = await supabase.auth.getSession();
         if (session?.session) {
-          console.log(`Would update item ${id} quantity to ${quantity} in Medusa`);
+          
           // API call to update item quantity
         }
       } catch (error) {
@@ -146,7 +146,7 @@ export function useCart() {
       try {
         const { data: session } = await supabase.auth.getSession();
         if (session?.session) {
-          console.log(`Would remove item ${id} from Medusa cart`);
+          
           // API call to remove item
         }
       } catch (error) {
@@ -166,7 +166,7 @@ export function useCart() {
       try {
         const { data: session } = await supabase.auth.getSession();
         if (session?.session) {
-          console.log('Would clear Medusa cart');
+          
           // API call to clear cart
         }
       } catch (error) {

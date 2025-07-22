@@ -51,7 +51,7 @@ const Index = () => {
           }));
           
           setCategories(fetchedCategories);
-          console.log("Available categories:", fetchedCategories);
+          
         }
       } catch (error) {
         console.error("Failed to fetch categories:", error);

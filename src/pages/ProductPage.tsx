@@ -16,12 +16,12 @@ const ProductPage = () => {
   const { product, loading, error } = useProductDetails(id);
 
   const addToCart = (quantity: number) => {
-    console.log(`Added ${quantity} of ${product?.title} to cart`);
+    
     // Implement cart functionality here
   };
 
   const addToWishlist = () => {
-    console.log(`Added ${product?.title} to wishlist`);
+    
     // Implement wishlist functionality here
   };
 

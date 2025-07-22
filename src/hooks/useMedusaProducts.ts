@@ -37,7 +37,7 @@ export function useMedusaProducts(options: ProductOptions = {}) {
       setError(null);
       
       try {
-        console.log("Fetching products via Medusa API with options:", options);
+        
         
         // Build query parameters
         const params = new URLSearchParams();
@@ -62,7 +62,7 @@ export function useMedusaProducts(options: ProductOptions = {}) {
           throw new Error(functionError.message || 'Failed to fetch products');
         }
         
-        console.log("Medusa products response:", data);
+        
         
         if (data.error) {
           console.error("Medusa API error:", data.error);
@@ -70,7 +70,7 @@ export function useMedusaProducts(options: ProductOptions = {}) {
           setProducts([]);
         } else {
           setProducts(data.products || []);
-          console.log(`Loaded ${data.products?.length || 0} products from Medusa`);
+          
         }
         
       } catch (err) {

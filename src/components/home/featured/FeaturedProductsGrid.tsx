@@ -10,7 +10,7 @@ const FeaturedProductsGrid = () => {
     featured: true
   });
 
-  console.log("FeaturedProductsGrid - featured products:", products);
+  
 
   if (isLoading) {
     return (

@@ -12,7 +12,7 @@ interface CategoryItemProps {
 
 const CategoryItem: React.FC<CategoryItemProps> = ({ id, name, handle, image, color }) => {
   // Debug image URL
-  console.log(`CategoryItem for ${name}:`, { handle, image });
+  
   
   return (
     <Link to={`/categories/${handle}`} className="block group">

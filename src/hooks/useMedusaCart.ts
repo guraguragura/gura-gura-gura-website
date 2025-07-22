@@ -47,7 +47,7 @@ export function useMedusaCart() {
           });
           
           if (error || data.error) {
-            console.log('Cart not found, creating new one');
+            
             cartId = null;
           } else {
             setCart(data.cart);

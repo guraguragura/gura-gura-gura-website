@@ -96,7 +96,7 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
             form.setValue('phone', data.phone || '');
           } else {
             // If no customer data exists, we'll continue without pre-filling
-            console.log('No customer data found, continuing with empty form');
+            
           }
         } catch (error) {
           console.error('Error in fetchCustomerData:', error);

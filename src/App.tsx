@@ -2,6 +2,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
+import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 import ProductSearchPage from "@/components/product/ProductSearchPage";
 import ComingSoonPage from "@/pages/ComingSoonPage";
 import Index from "@/pages/Index";
@@ -18,7 +19,7 @@ import CheckoutPage from "@/pages/CheckoutPage";
 
 function App() {
   return (
-    <>
+    <ErrorBoundary>
       <Routes>
         {/* Main pages */}
         <Route path="/" element={<Index />} />
@@ -51,7 +52,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Toaster />
-    </>
+    </ErrorBoundary>
   );
 }
 

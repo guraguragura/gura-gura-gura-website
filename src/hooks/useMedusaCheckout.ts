@@ -29,7 +29,7 @@ export function useMedusaCheckout() {
     setIsProcessing(true);
 
     try {
-      console.log("Processing checkout with Medusa for cart:", cartId);
+      
 
       // Step 1: Add shipping address to cart
       const shippingAddress = {
@@ -101,7 +101,7 @@ export function useMedusaCheckout() {
         throw new Error(orderError?.message || orderData.error || 'Failed to complete order');
       }
 
-      console.log('Order completed successfully:', orderData.order?.display_id);
+      
       
       // Clear cart from localStorage
       localStorage.removeItem('medusa_cart_id');

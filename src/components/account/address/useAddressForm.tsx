@@ -101,7 +101,7 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
               
               if (newCustomer) {
                 setCustomerData(newCustomer);
-                console.log('Created new customer profile:', newCustomer);
+                
               }
             } catch (createErr) {
               console.error('Error in customer creation:', createErr);
