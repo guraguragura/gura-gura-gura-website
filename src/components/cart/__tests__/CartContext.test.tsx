@@ -1,16 +1,17 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, waitFor } from '@testing-library/react'
-import { screen } from '@testing-library/dom'
+import { render, waitFor, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { CartProvider, useCartContext } from '../../../contexts/CartContext'
+import type { CartItem } from '../../../contexts/CartContext'
 
-// Mock product data
-const mockProduct = {
+// Mock cart item data with correct structure
+const mockCartItem: CartItem = {
   id: 'test-product-1',
   title: 'Test Product',
   price: 25.99,
-  thumbnail: '/test-image.jpg'
+  thumbnail: '/test-image.jpg',
+  quantity: 1
 }
 
 // Test component to access cart context
@@ -21,7 +22,7 @@ const TestComponent = () => {
     <div>
       <div data-testid="cart-count">{items.length}</div>
       <div data-testid="cart-total">${total.toFixed(2)}</div>
-      <button onClick={() => addItem(mockProduct)}>Add to Cart</button>
+      <button onClick={() => addItem(mockCartItem)}>Add to Cart</button>
       <button onClick={() => removeItem('test-product-1')}>Remove from Cart</button>
       <button onClick={() => updateItemQuantity('test-product-1', 2)}>Update Quantity</button>
       <button onClick={clearCart}>Clear Cart</button>

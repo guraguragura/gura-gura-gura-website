@@ -1,5 +1,6 @@
+
 import React, { Suspense, memo } from 'react'
-import { LoadingSpinner } from '@/components/common/LoadingSpinner'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
 import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 
 interface LazyLoadWrapperProps {
