@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { useNewsletter } from "@/hooks/useNewsletter";
 import { Link } from "react-router-dom";
 import { Mail, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -12,13 +13,14 @@ const Footer = () => {
   const [email, setEmail] = useState("");
   const isMobile = useIsMobile();
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
+  const { subscribe, isSubmitting } = useNewsletter({ source: 'footer' });
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle newsletter subscription
-    
-    // Reset form
-    setEmail("");
+    const success = await subscribe(email);
+    if (success) {
+      setEmail("");
+    }
   };
 
   const toggleSection = (section: string) => {
@@ -82,11 +84,16 @@ const Footer = () => {
                   className="pl-10 w-full md:w-56 lg:w-72"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled={isSubmitting}
                   required
                 />
               </div>
-              <Button type="submit" className="bg-brand-teal hover:bg-brand-teal/90">
-                SEND
+              <Button 
+                type="submit" 
+                className="bg-brand-teal hover:bg-brand-teal/90"
+                disabled={isSubmitting || !email}
+              >
+                {isSubmitting ? 'SENDING...' : 'SEND'}
               </Button>
             </form>
             <p className="text-xs text-gray-500 mt-2">

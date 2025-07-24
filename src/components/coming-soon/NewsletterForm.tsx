@@ -2,41 +2,20 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
 import { Mail } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useNewsletter } from "@/hooks/useNewsletter";
 
 const NewsletterForm = () => {
   const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
+  const { subscribe, isSubmitting } = useNewsletter({ source: 'coming_soon_page' });
   const isMobile = useIsMobile();
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const { error } = await supabase
-        .from('newsletter_subscriptions')
-        .insert([{ email }]);
-
-      if (error) throw error;
-
-      toast({
-        title: "Thanks for subscribing!",
-        description: "We'll keep you updated on our progress.",
-      });
+    const success = await subscribe(email);
+    if (success) {
       setEmail("");
-    } catch (error) {
-      toast({
-        title: "Subscription failed",
-        description: "This email may already be subscribed.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 

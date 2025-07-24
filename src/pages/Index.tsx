@@ -13,6 +13,7 @@ import TrendingPurchasesWithPromo from "@/components/home/TrendingPurchasesWithP
 import CyberMondayBanner from "@/components/home/CyberMondayBanner";
 import GiftsForEveryone from "@/components/home/GiftsForEveryone";
 import PromotionalBannerCards from "@/components/home/PromotionalBannerCards";
+import Newsletter from "@/components/home/Newsletter";
 import Footer from "@/components/layout/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -81,6 +82,7 @@ const Index = () => {
           <PromotionalBannerCards />
           <RecentlyViewed />
         </div>
+        <Newsletter />
       </div>
       <Footer />
     </div>
