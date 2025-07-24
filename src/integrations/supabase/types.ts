@@ -6463,6 +6463,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      geocode_kigali_address: {
+        Args: { p_address: string; p_city: string; p_district: string }
+        Returns: Json
+      }
       get_customer_id_for_user: {
         Args: Record<PropertyKey, never>
         Returns: string
