@@ -120,8 +120,11 @@ const TrackOrderPage = () => {
                     <Badge className="bg-blue-500">{trackingResult.status}</Badge>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-700 mb-2">Estimated Delivery</h3>
+                    <h3 className="font-semibold text-gray-700 mb-2">Estimated Arrival</h3>
                     <p className="text-lg font-bold text-green-600">{trackingResult.estimatedDelivery ? formatDate(trackingResult.estimatedDelivery) : 'Not available yet'}</p>
+                    {typeof trackingResult.etaMinutes === 'number' && (
+                      <p className="text-sm text-gray-600">About {trackingResult.etaMinutes} min{trackingResult.etaConfidence ? ` (${trackingResult.etaConfidence})` : ''}</p>
+                    )}
                   </div>
                 </div>
                 

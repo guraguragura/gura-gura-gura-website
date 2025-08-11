@@ -58,6 +58,19 @@ function buildSteps(current: string, history: Array<{ new_status?: string; creat
   })
 }
 
+function toRad(val: number) {
+  return (val * Math.PI) / 180
+}
+
+function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371 // km
+  const dLat = toRad(lat2 - lat1)
+  const dLon = toRad(lon2 - lon1)
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  return R * c
+}
+
 Deno.serve(async (req) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -111,6 +124,7 @@ Deno.serve(async (req) => {
           'delivered_at',
           'failed_delivery_at',
           'cancelled_at',
+          'driver_id',
         ].join(', ')
       )
       .eq('display_id', orderNumber)
@@ -150,12 +164,48 @@ Deno.serve(async (req) => {
 
     const deliveryAddr = order.metadata?.delivery_address || null
 
+    // Compute ETA based on driver current location and delivery coords
+    let etaMinutes: number | null = null
+    let etaConfidence: 'high' | 'medium' | 'low' | null = null
+    let estimatedDeliveryCalc: string | null = order.delivered_at ? order.delivered_at : null
+
+    try {
+      const canEta = ['assigned_to_driver', 'picked_up', 'out_for_delivery'].includes(unified)
+      const destLat = Number(deliveryAddr?.latitude ?? NaN)
+      const destLon = Number(deliveryAddr?.longitude ?? NaN)
+      if (!estimatedDeliveryCalc && canEta && Number.isFinite(destLat) && Number.isFinite(destLon) && order.driver_id) {
+        const { data: driverProfile } = await supabase
+          .from('driver_profiles')
+          .select('current_location, updated_at, user_id, id')
+          .or(`user_id.eq.${order.driver_id},id.eq.${order.driver_id}`)
+          .maybeSingle()
+
+        const dLoc: any = driverProfile?.current_location || null
+        const dLat = Number(dLoc?.latitude ?? dLoc?.lat ?? NaN)
+        const dLon = Number(dLoc?.longitude ?? dLoc?.lng ?? dLoc?.lon ?? NaN)
+        if (Number.isFinite(dLat) && Number.isFinite(dLon)) {
+          const distanceKm = haversineKm(dLat, dLon, destLat, destLon)
+          const speedKmh = 25 // conservative default for urban delivery
+          const bufferMin = 5
+          etaMinutes = Math.max(1, Math.ceil((distanceKm / speedKmh) * 60) + bufferMin)
+          estimatedDeliveryCalc = new Date(Date.now() + etaMinutes * 60000).toISOString()
+          const updatedAt = driverProfile?.updated_at ? new Date(driverProfile.updated_at).getTime() : Date.now()
+          const freshnessMin = (Date.now() - updatedAt) / 60000
+          etaConfidence = freshnessMin <= 10 ? 'high' : freshnessMin <= 30 ? 'medium' : 'low'
+        }
+      }
+    } catch (e) {
+      console.error('ETA computation error', e)
+    }
+
     const response = {
       success: true,
       data: {
         orderNumber: order.display_id,
         status: DELIVERY_STATUS_LABELS[unified] || unified,
-        estimatedDelivery: order.delivered_at ? order.delivered_at : null,
+        estimatedDelivery: estimatedDeliveryCalc,
+        etaMinutes: etaMinutes,
+        etaConfidence: etaConfidence,
         currentLocation:
           unified === 'out_for_delivery'
             ? 'On the way to your address'
