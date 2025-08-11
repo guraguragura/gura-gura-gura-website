@@ -51,7 +51,7 @@ function buildSteps(current: string, history: Array<{ new_status?: string; creat
     const hist = orderedHistory.find((h) => h.new_status === s)
     return {
       title: label,
-      completed: i < currentIndex || s === 'delivered',
+      completed: i < currentIndex,
       current: i === currentIndex,
       date: hist?.created_at || undefined,
     }

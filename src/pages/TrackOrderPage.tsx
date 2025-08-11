@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Package, Truck, MapPin, CheckCircle, Clock, Search, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-
+import { format } from "date-fns";
 
 const TrackOrderPage = () => {
   const [orderNumber, setOrderNumber] = useState("");
@@ -16,14 +16,33 @@ const TrackOrderPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const orderNrRegex = /^[A-Za-z0-9-]{3,20}$/;
+  const isValid = orderNrRegex.test(orderNumber.trim());
+
+  useEffect(() => {
+    document.title = "Track Order — Gura";
+  }, []);
+
+  const formatDate = (value?: string | null) => {
+    if (!value) return undefined;
+    try {
+      return format(new Date(value), "PPP p");
+    } catch {
+      return value as string;
+    }
+  };
   const handleTrackOrder = async () => {
-    if (!orderNumber.trim()) return;
+    const trimmed = orderNumber.trim();
+    if (!trimmed || !isValid) {
+      setError('Please enter a valid order number.');
+      return;
+    }
     setLoading(true);
     setError(null);
     setTrackingResult(null);
     try {
       const { data, error: fnError } = await supabase.functions.invoke('order-tracking-lookup', {
-        body: { orderNumber: orderNumber.trim() },
+        body: { orderNumber: trimmed },
       });
 
       if (fnError || !data?.success) {
@@ -66,7 +85,7 @@ const TrackOrderPage = () => {
                     onChange={(e) => setOrderNumber(e.target.value)}
                     className="flex-1"
                   />
-<Button onClick={handleTrackOrder} disabled={loading || !orderNumber.trim()} className="flex items-center gap-2">
+<Button onClick={handleTrackOrder} disabled={loading || !isValid} className="flex items-center gap-2">
   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
   {loading ? 'Tracking...' : 'Track Order'}
 </Button>
@@ -76,6 +95,9 @@ const TrackOrderPage = () => {
   <p className="text-sm text-gray-600">
     You can find your order number in your confirmation email or account dashboard.
   </p>
+  {orderNumber && !isValid && (
+    <p className="text-sm text-destructive">Invalid order number format.</p>
+  )}
   {error && <p className="text-sm text-destructive">{error}</p>}
 </div>
             </div>
@@ -99,7 +121,7 @@ const TrackOrderPage = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-700 mb-2">Estimated Delivery</h3>
-                    <p className="text-lg font-bold text-green-600">{trackingResult.estimatedDelivery || '-'}</p>
+                    <p className="text-lg font-bold text-green-600">{trackingResult.estimatedDelivery ? formatDate(trackingResult.estimatedDelivery) : 'Not available yet'}</p>
                   </div>
                 </div>
                 
@@ -150,7 +172,7 @@ const TrackOrderPage = () => {
                           {step.current && <Badge className="ml-2 bg-blue-500">Current</Badge>}
                         </h4>
                         {step.date && (
-                          <p className="text-sm text-gray-600 mt-1">{step.date}</p>
+                          <p className="text-sm text-gray-600 mt-1">{formatDate(step.date) || '-'}</p>
                         )}
                       </div>
                     </div>
@@ -159,6 +181,24 @@ const TrackOrderPage = () => {
               </CardContent>
             </Card>
 
+            {trackingResult.attempts?.length > 0 && (
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-bold mb-4">Delivery Attempts</h3>
+                  <div className="space-y-3">
+                    {trackingResult.attempts.map((a: any, idx: number) => (
+                      <div key={idx} className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Clock className="h-4 w-4 text-gray-500" />
+                          <span className="font-medium">{a.status}</span>
+                        </div>
+                        <span className="text-sm text-gray-600">{formatDate(a.attempted_at) || '-'}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
             {/* Delivery Information */}
             <Card>
               <CardContent className="p-6">
