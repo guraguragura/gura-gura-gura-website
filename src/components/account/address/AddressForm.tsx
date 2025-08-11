@@ -64,25 +64,6 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
         ) : (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                <h3 className="font-medium text-sm text-gray-700 mb-2">Personal Information</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-gray-500">First Name</p>
-                    <p className="font-medium">{customerData.first_name || '—'}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Last Name</p>
-                    <p className="font-medium">{customerData.last_name || '—'}</p>
-                  </div>
-                  {customerData.company_name && (
-                    <div className="col-span-2">
-                      <p className="text-sm text-gray-500">Company</p>
-                      <p className="font-medium">{customerData.company_name}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
 
               <AddressFormFields form={form} />
               

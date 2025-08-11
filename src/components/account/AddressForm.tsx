@@ -129,8 +129,8 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
           id: addressId,
           customer_id: customerData.id,
           address_name: data.address_name,
-          first_name: data.first_name,
-          last_name: data.last_name,
+          first_name: customerData.first_name || '',
+          last_name: customerData.last_name || '',
           company: data.company,
           address_1: data.address_1,
           address_2: data.address_2,
@@ -193,35 +193,6 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
         ) : (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="first_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>First Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="First name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="last_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Last Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Last name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
 
               <FormField
                 control={form.control}
