@@ -16,28 +16,58 @@ const AccountBanner = () => {
   // Fetch customer data to get the first name
   useEffect(() => {
     const fetchCustomerData = async () => {
-      if (!user) return;
-      
+      if (!user) {
+        setFirstName('Customer');
+        return;
+      }
+
       try {
-        // Get the customer record that matches the current user's email
-        const { data, error } = await supabase
+        // 1) Try customer table by email (most reliable)
+        const { data: customer, error: custErr } = await supabase
           .from('customer')
-          .select('first_name')
+          .select('id, first_name')
           .eq('email', user.email)
           .maybeSingle();
 
-        if (error && error.code !== 'PGRST116') {
-          console.error('Error fetching customer data:', error);
+        if (custErr && custErr.code !== 'PGRST116') {
+          console.error('Error fetching customer data:', custErr);
+        }
+
+        if (customer?.first_name) {
+          setFirstName(customer.first_name);
           return;
         }
 
-        // If customer data found, use it
-        if (data && data.first_name) {
-          setFirstName(data.first_name);
-        } else if (user.user_metadata?.first_name) {
-          // Otherwise use data from auth metadata if available
-          setFirstName(user.user_metadata.first_name);
+        // 2) Try default shipping address first_name
+        if (customer?.id) {
+          const { data: addr } = await supabase
+            .from('customer_address')
+            .select('first_name, is_default_shipping')
+            .eq('customer_id', customer.id)
+            .order('is_default_shipping', { ascending: false })
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle();
+          if (addr?.first_name) {
+            setFirstName(addr.first_name);
+            return;
+          }
         }
+
+        // 3) Try auth metadata fallbacks
+        const metaFirst = (user.user_metadata?.first_name as string) || '';
+        if (metaFirst) {
+          setFirstName(metaFirst);
+          return;
+        }
+        const fullName = (user.user_metadata?.full_name as string) || (user.user_metadata?.name as string) || '';
+        if (fullName) {
+          setFirstName(fullName.split(' ')[0]);
+          return;
+        }
+
+        // 4) Fallback
+        setFirstName('Customer');
       } catch (error) {
         console.error('Error in fetchCustomerData:', error);
       }
