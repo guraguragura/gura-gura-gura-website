@@ -7,6 +7,7 @@ import FaqSearch from '@/components/faq/FaqSearch';
 import FaqCategory from '@/components/faq/FaqCategory';
 import { faqData } from '@/components/faq/faqData';
 import { Button } from '@/components/ui/button';
+import ChatButton from '@/components/crisp/ChatButton';
 
 const FaqPage = () => {
   const [searchResults, setSearchResults] = useState(faqData);
@@ -91,9 +92,7 @@ const FaqPage = () => {
               <Button className="bg-blue-600 hover:bg-blue-700">
                 Contact Support
               </Button>
-              <Button variant="outline">
-                Live Chat
-              </Button>
+              <ChatButton variant="outline" label="Live Chat" />
             </div>
           </div>
         </div>
