@@ -8,7 +8,7 @@ interface Currency {
 }
 
 export const useCurrency = () => {
-  const [currency, setCurrency] = useState<Currency>({ code: 'USD', symbol: '$' });
+  const [currency, setCurrency] = useState<Currency>({ code: 'RWF', symbol: 'RWF ' });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -55,7 +55,17 @@ export const useCurrency = () => {
   }, []);
 
   const formatPrice = (price: number) => {
-    return `${currency.symbol}${price.toFixed(2)}`;
+    try {
+      const isRWF = currency.code?.toUpperCase() === 'RWF'
+      const formatted = new Intl.NumberFormat(undefined, {
+        style: 'decimal',
+        minimumFractionDigits: isRWF ? 0 : 2,
+        maximumFractionDigits: isRWF ? 0 : 2,
+      }).format(isRWF ? Math.round(price) : price)
+      return `${currency.symbol}${formatted}`
+    } catch {
+      return `${currency.symbol}${currency.code?.toUpperCase() === 'RWF' ? Math.round(price) : price.toFixed(2)}`
+    }
   };
 
   return { currency, isLoading, error, formatPrice };

@@ -16,6 +16,7 @@ serve(async (req) => {
   try {
     const url = new URL(req.url);
     const params = url.searchParams;
+    const desiredCurrency = (params.get('currency') || 'rwf').toLowerCase();
     
     // Build Medusa API query parameters
     const medusaParams = new URLSearchParams();
@@ -65,7 +66,9 @@ serve(async (req) => {
     // Transform Medusa products to match frontend interface
     const transformedProducts = (data.products || []).map((product: any) => {
       const variant = product.variants?.[0];
-      const price = variant?.prices?.[0]?.amount ? variant.prices[0].amount / 100 : 0;
+      const prices = variant?.prices || [];
+      const priceEntry = prices.find((p: any) => (p.currency_code || '').toLowerCase() === desiredCurrency) || prices[0];
+      const price = priceEntry?.amount ? priceEntry.amount / 100 : 0;
       
       return {
         id: product.id,

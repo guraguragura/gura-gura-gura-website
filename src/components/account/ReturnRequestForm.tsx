@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface OrderItem {
   id: string;
@@ -29,6 +30,7 @@ const ReturnRequestForm = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -113,7 +115,7 @@ const ReturnRequestForm = () => {
         <div key={item.id} className="mb-4 p-4 border rounded-md">
           <h3 className="text-lg font-semibold">{item.name}</h3>
           <p>Quantity: {item.quantity}</p>
-          <p>Price: ${item.price}</p>
+          <p>Price: {formatPrice(item.price)}</p>
         </div>
       ))}
       <form onSubmit={handleSubmit} className="space-y-4">
