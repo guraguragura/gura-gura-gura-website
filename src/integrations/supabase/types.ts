@@ -6459,6 +6459,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      current_user_email: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       generate_delivery_proof_code: {
         Args: Record<PropertyKey, never>
         Returns: string

@@ -77,6 +77,14 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
           } else {
             // If no customer data exists, create a new customer record
             try {
+              // Get authenticated user to access email
+              const { data: authData, error: authErr } = await supabase.auth.getUser();
+              if (authErr || !authData?.user?.email) {
+                console.error('Error getting authenticated user for customer creation:', authErr);
+                toast.error('Could not create customer profile');
+                return;
+              }
+
               // Generate a UUID for the new customer
               const newCustomerId = crypto.randomUUID();
               
@@ -86,7 +94,8 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
                   id: newCustomerId, 
                   first_name: '',
                   last_name: '',
-                  email: '',
+                  // Store authenticated email to satisfy RLS policies
+                  email: authData.user.email,
                   phone: '',
                   has_account: true
                 })

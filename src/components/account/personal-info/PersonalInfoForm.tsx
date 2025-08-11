@@ -62,7 +62,8 @@ const PersonalInfoForm = ({ customer, setCustomer }: PersonalInfoFormProps) => {
             id: newCustomerId,
             first_name: values.first_name,
             last_name: values.last_name,
-            email: values.email,
+            // Always store the authenticated email to satisfy RLS policies
+            email: user.email,
             phone: values.phone,
             company_name: values.company_name,
             has_account: true
@@ -82,7 +83,8 @@ const PersonalInfoForm = ({ customer, setCustomer }: PersonalInfoFormProps) => {
           .update({
             first_name: values.first_name,
             last_name: values.last_name,
-            email: values.email,
+            // Always store the authenticated email to satisfy RLS policies
+            email: user.email,
             phone: values.phone,
             company_name: values.company_name,
             updated_at: new Date().toISOString(),
@@ -163,6 +165,8 @@ const PersonalInfoForm = ({ customer, setCustomer }: PersonalInfoFormProps) => {
                       placeholder="john.doe@example.com" 
                       {...field} 
                       className="text-sm sm:text-base"
+                      readOnly
+                      disabled
                     />
                   </FormControl>
                   <FormMessage className="text-xs sm:text-sm" />
