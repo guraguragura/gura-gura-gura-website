@@ -8,7 +8,7 @@ import { useWishlist } from "@/contexts/WishlistContext";
 
 interface TrendingProductProps {
   product: {
-    id: number;
+    id: string;
     name: string;
     price: number;
     oldPrice: number;

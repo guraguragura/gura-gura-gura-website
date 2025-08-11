@@ -40,7 +40,7 @@ const FeaturedProductsGrid = () => {
         <FeaturedProductCard 
           key={product.id} 
           product={{
-            id: parseInt(product.id),
+            id: product.id,
             name: product.title,
             price: product.price,
             oldPrice: product.discount_price ? product.price : product.price * 1.2,

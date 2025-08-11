@@ -3,7 +3,7 @@ import { Product } from "./types";
 
 export const products: Product[] = [
   {
-    id: 1,
+    id: '1',
     name: "Taylor Farms Broccoli Florets Vegetables",
     price: 14.99,
     oldPrice: 28.99,
@@ -11,7 +11,7 @@ export const products: Product[] = [
     badge: "Sale 50%"
   },
   {
-    id: 2,
+    id: '2',
     name: "Taylor Farms Broccoli Florets Vegetables",
     price: 14.99,
     oldPrice: 28.99,
@@ -19,7 +19,7 @@ export const products: Product[] = [
     badge: "New"
   },
   {
-    id: 3,
+    id: '3',
     name: "Taylor Farms Broccoli Florets Vegetables",
     price: 14.99,
     oldPrice: 28.99,
@@ -27,7 +27,7 @@ export const products: Product[] = [
     badge: "Best seller"
   },
   {
-    id: 4,
+    id: '4',
     name: "Taylor Farms Broccoli Florets Vegetables",
     price: 14.99,
     oldPrice: 28.99,
