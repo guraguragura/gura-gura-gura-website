@@ -2,7 +2,7 @@
 import React from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+
 
 const ContactPage = () => {
   return (
@@ -100,25 +100,6 @@ const ContactPage = () => {
               </div>
             </div>
 
-            <Separator className="my-8" />
-
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Business Hours</h3>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <p>Monday - Friday</p>
-                  <p>8:00 AM - 6:00 PM</p>
-                </div>
-                <div className="flex justify-between">
-                  <p>Saturday</p>
-                  <p>9:00 AM - 5:00 PM</p>
-                </div>
-                <div className="flex justify-between">
-                  <p>Sunday</p>
-                  <p>Closed</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
