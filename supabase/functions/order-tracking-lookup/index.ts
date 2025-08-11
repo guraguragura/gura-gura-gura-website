@@ -198,14 +198,53 @@ Deno.serve(async (req) => {
       console.error('ETA computation error', e)
     }
 
+    // Fallback ETA heuristics if driver location is unavailable
+    try {
+      const canEta = ['assigned_to_driver', 'picked_up', 'out_for_delivery'].includes(unified)
+      const destLat = Number(deliveryAddr?.latitude ?? NaN)
+      const destLon = Number(deliveryAddr?.longitude ?? NaN)
+      if (!estimatedDeliveryCalc && canEta && Number.isFinite(destLat) && Number.isFinite(destLon)) {
+        const wh = order.metadata?.warehouse_location || {}
+        const whLat = Number(wh?.latitude ?? NaN)
+        const whLon = Number(wh?.longitude ?? NaN)
+        if (Number.isFinite(whLat) && Number.isFinite(whLon)) {
+          const distanceKm = haversineKm(whLat, whLon, destLat, destLon)
+          const speedKmh = 20 // slower fallback speed
+          const bufferMin = 10
+          etaMinutes = Math.max(10, Math.ceil((distanceKm / speedKmh) * 60) + bufferMin)
+          estimatedDeliveryCalc = new Date(Date.now() + etaMinutes * 60000).toISOString()
+          etaConfidence = 'medium'
+        }
+      }
+      // Status-based rough defaults
+      if (!estimatedDeliveryCalc) {
+        const defaults: Record<string, number> = {
+          out_for_delivery: 45,
+          picked_up: 30,
+          assigned_to_driver: 90,
+        }
+        const mins = defaults[unified]
+        if (mins) {
+          etaMinutes = mins
+          estimatedDeliveryCalc = new Date(Date.now() + mins * 60000).toISOString()
+          etaConfidence = 'low'
+        }
+      }
+    } catch {
+      // ignore
+    }
+
     const response = {
       success: true,
       data: {
+        generatedAt: new Date().toISOString(),
         orderNumber: order.display_id,
         status: DELIVERY_STATUS_LABELS[unified] || unified,
+        rawStatus: unified,
         estimatedDelivery: estimatedDeliveryCalc,
         etaMinutes: etaMinutes,
         etaConfidence: etaConfidence,
+        refreshSuggestedSeconds: 60,
         currentLocation:
           unified === 'out_for_delivery'
             ? 'On the way to your address'

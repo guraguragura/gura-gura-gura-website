@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Package, Truck, MapPin, CheckCircle, Clock, Search, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 
 const TrackOrderPage = () => {
   const [orderNumber, setOrderNumber] = useState("");
@@ -56,7 +56,31 @@ const TrackOrderPage = () => {
       setLoading(false);
     }
   };
+  const refreshTrackingSilently = async () => {
+    const trimmed = orderNumber.trim();
+    if (!trimmed || !isValid) return;
+    try {
+      const { data } = await supabase.functions.invoke('order-tracking-lookup', {
+        body: { orderNumber: trimmed },
+      });
+      if (data?.success) {
+        setTrackingResult((data as any).data);
+      }
+    } catch (e) {
+      // silent
+    }
+  };
 
+  useEffect(() => {
+    const raw = trackingResult?.rawStatus as string | undefined;
+    const inTransit = raw ? ['assigned_to_driver','picked_up','out_for_delivery'].includes(raw) : false;
+    if (!inTransit) return;
+    const intervalSec = (trackingResult?.refreshSuggestedSeconds as number) || 60;
+    const id = setInterval(() => {
+      refreshTrackingSilently();
+    }, intervalSec * 1000);
+    return () => clearInterval(id);
+  }, [trackingResult?.rawStatus, orderNumber]);
 
   return (
     <PageLayout>
@@ -127,7 +151,16 @@ const TrackOrderPage = () => {
                     )}
                   </div>
                 </div>
-                
+                <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                  <Clock className="h-4 w-4" />
+                  <span>
+                    Last updated {trackingResult.generatedAt ? formatDistanceToNow(new Date(trackingResult.generatedAt), { addSuffix: true }) : 'just now'}
+                  </span>
+                  {['assigned_to_driver','picked_up','out_for_delivery'].includes(trackingResult.rawStatus || '') && (
+                    <span className="text-gray-500">• Auto-refreshing every {trackingResult.refreshSuggestedSeconds || 60}s</span>
+                  )}
+                </div>
+
                 <div className="mt-6 p-4 bg-blue-50 rounded-lg flex items-center gap-3">
                   <MapPin className="h-5 w-5 text-blue-500" />
                   <div>
