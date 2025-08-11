@@ -58,3 +58,7 @@ verify_jwt = false
 
 [analytics]
 enabled = false
+
+[functions.order-tracking-lookup]
+verify_jwt = false
+

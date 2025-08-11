@@ -6,31 +6,38 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Package, Truck, MapPin, CheckCircle, Clock, Search } from "lucide-react";
+import { Package, Truck, MapPin, CheckCircle, Clock, Search, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
 
 const TrackOrderPage = () => {
   const [orderNumber, setOrderNumber] = useState("");
-  const [trackingResult, setTrackingResult] = useState(null);
+  const [trackingResult, setTrackingResult] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleTrackOrder = () => {
-    // Mock tracking data
-    if (orderNumber) {
-      setTrackingResult({
-        orderNumber: orderNumber,
-        status: "In Transit",
-        estimatedDelivery: "Tomorrow, Dec 23",
-        currentLocation: "Kigali Distribution Center",
-        steps: [
-          { title: "Order Confirmed", completed: true, date: "Dec 20, 10:30 AM" },
-          { title: "Processing", completed: true, date: "Dec 20, 2:15 PM" },
-          { title: "Shipped", completed: true, date: "Dec 21, 9:00 AM" },
-          { title: "In Transit", completed: true, date: "Dec 22, 1:45 PM", current: true },
-          { title: "Out for Delivery", completed: false, date: "" },
-          { title: "Delivered", completed: false, date: "" }
-        ]
+  const handleTrackOrder = async () => {
+    if (!orderNumber.trim()) return;
+    setLoading(true);
+    setError(null);
+    setTrackingResult(null);
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke('order-tracking-lookup', {
+        body: { orderNumber: orderNumber.trim() },
       });
+
+      if (fnError || !data?.success) {
+        setError((data as any)?.error || 'Order not found');
+      } else {
+        setTrackingResult((data as any).data);
+      }
+    } catch (e) {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
+
 
   return (
     <PageLayout>
@@ -59,15 +66,18 @@ const TrackOrderPage = () => {
                     onChange={(e) => setOrderNumber(e.target.value)}
                     className="flex-1"
                   />
-                  <Button onClick={handleTrackOrder} className="flex items-center gap-2">
-                    <Search className="h-4 w-4" />
-                    Track Order
-                  </Button>
+<Button onClick={handleTrackOrder} disabled={loading || !orderNumber.trim()} className="flex items-center gap-2">
+  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+  {loading ? 'Tracking...' : 'Track Order'}
+</Button>
                 </div>
               </div>
-              <p className="text-sm text-gray-600">
-                You can find your order number in your confirmation email or account dashboard.
-              </p>
+<div className="space-y-2">
+  <p className="text-sm text-gray-600">
+    You can find your order number in your confirmation email or account dashboard.
+  </p>
+  {error && <p className="text-sm text-destructive">{error}</p>}
+</div>
             </div>
           </CardContent>
         </Card>
@@ -89,7 +99,7 @@ const TrackOrderPage = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-700 mb-2">Estimated Delivery</h3>
-                    <p className="text-lg font-bold text-green-600">{trackingResult.estimatedDelivery}</p>
+                    <p className="text-lg font-bold text-green-600">{trackingResult.estimatedDelivery || '-'}</p>
                   </div>
                 </div>
                 
@@ -157,9 +167,18 @@ const TrackOrderPage = () => {
                   <div>
                     <h4 className="font-semibold mb-2">Delivery Address</h4>
                     <p className="text-gray-600">
-                      123 Main Street<br />
-                      Kigali, Rwanda<br />
-                      +250 788 123 456
+                      {trackingResult?.deliveryAddress ? (
+                        <>
+                          {trackingResult.deliveryAddress.address}
+                          {trackingResult.deliveryAddress.address_2 && (<><br />{trackingResult.deliveryAddress.address_2}</>)}
+                          <br />
+                          {[trackingResult.deliveryAddress.city, trackingResult.deliveryAddress.district].filter(Boolean).join(', ')}
+                          <br />
+                          {trackingResult.deliveryAddress.geocoded_address || trackingResult.deliveryAddress.country_code || 'Rwanda'}
+                        </>
+                      ) : (
+                        'Address details not available yet.'
+                      )}
                     </p>
                   </div>
                   <div>
