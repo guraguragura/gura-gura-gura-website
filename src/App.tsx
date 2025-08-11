@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import PageLoader from '@/components/common/PageLoader';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { usePerformanceTracking } from '@/hooks/usePerformanceTracking';
 
@@ -48,7 +48,7 @@ function App() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-background">
-        <Suspense fallback={<LoadingSpinner />}>
+        <Suspense fallback={<PageLoader message="Loading page..." />}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<AuthPage />} />

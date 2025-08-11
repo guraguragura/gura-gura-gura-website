@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { LoadingState } from './LoadingSpinner';
+import PageLoader from '@/components/common/PageLoader';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -17,7 +17,7 @@ export const ProtectedRoute = ({
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <LoadingState message="Checking authentication..." />;
+    return <PageLoader message="Checking authentication..." />;
   }
 
   if (requireAuth && !user) {
