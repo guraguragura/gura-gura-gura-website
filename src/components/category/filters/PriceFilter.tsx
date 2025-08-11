@@ -2,6 +2,7 @@
 import React from "react";
 import { Slider } from "@/components/ui/slider";
 import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface PriceFilterProps {
   priceRange: number[];
@@ -9,6 +10,7 @@ interface PriceFilterProps {
 }
 
 const PriceFilter = ({ priceRange, setPriceRange }: PriceFilterProps) => {
+  const { formatPrice } = useCurrency();
   return (
     <AccordionItem value="price" className="border-0">
       <AccordionTrigger className="text-lg font-semibold py-0">Filter by Price</AccordionTrigger>
@@ -24,10 +26,10 @@ const PriceFilter = ({ priceRange, setPriceRange }: PriceFilterProps) => {
           />
           <div className="flex justify-between mt-2">
             <div className="bg-gray-100 rounded-md px-3 py-1 text-sm">
-              ${priceRange[0]}
+              {formatPrice(priceRange[0])}
             </div>
             <div className="bg-gray-100 rounded-md px-3 py-1 text-sm">
-              ${priceRange[1]}
+              {formatPrice(priceRange[1])}
             </div>
           </div>
           <button className="mt-4 bg-blue-500 text-white w-full rounded-md py-2 text-sm">
