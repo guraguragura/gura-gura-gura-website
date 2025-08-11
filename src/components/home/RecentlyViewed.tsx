@@ -74,7 +74,7 @@ const RecentlyViewed = () => {
     e.preventDefault();
     e.stopPropagation();
     
-    const productId = product.id.toString();
+    const productId = `recent-${product.id}`;
     
     if (isInWishlist(productId)) {
       removeFromWishlist(productId);
@@ -148,7 +148,7 @@ const RecentlyViewed = () => {
                   onClick={(e) => handleWishlistToggle(product, e)}
                   className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-100"
                 >
-                  <Heart className={`h-4 w-4 ${isInWishlist(product.id.toString()) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
+                  <Heart className={`h-4 w-4 ${isInWishlist(`recent-${product.id}`) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
                 </button>
               </div>
               

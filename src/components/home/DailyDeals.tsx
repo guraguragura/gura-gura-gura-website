@@ -72,7 +72,7 @@ const DailyDeals = () => {
     e.preventDefault();
     e.stopPropagation();
     
-    const productId = product.id.toString();
+    const productId = `daily-${product.id}`;
     
     if (isInWishlist(productId)) {
       removeFromWishlist(productId);
@@ -119,7 +119,7 @@ const DailyDeals = () => {
                     onClick={(e) => handleWishlistToggle(product, e)}
                     className="absolute top-2 right-2 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
                   >
-                    <Heart className={`h-4 w-4 ${isInWishlist(product.id.toString()) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
+                    <Heart className={`h-4 w-4 ${isInWishlist(`daily-${product.id}`) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
                   </button>
                 </div>
                 <CardContent className="p-4">
