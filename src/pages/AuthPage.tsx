@@ -23,13 +23,6 @@ const AuthPage = () => {
     if (user) {
       navigate('/account/personal-info');
     }
-    
-    // Prevent scrolling on login page
-    document.body.style.overflow = 'hidden';
-    
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
   }, [user, navigate]);
 
   // Update mode if search param changes
