@@ -53,17 +53,27 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
       if (isOpen) {
         setIsLoading(true);
         try {
-          // Fetch customer data to get customer ID and personal info
+          // Ensure we have authenticated user's email
+          const { data: authData, error: authErr } = await supabase.auth.getUser();
+          if (authErr || !authData?.user?.email) {
+            console.error('Error getting authenticated user for customer lookup:', authErr);
+            toast.error('You must be signed in to manage addresses');
+            return;
+          }
+          const userEmail = authData.user.email;
+          
+          // Fetch customer data to get customer ID and personal info (deterministic latest)
           const { data, error } = await supabase
             .from('customer')
             .select('*')
-            .limit(1)
+            .eq('email', userEmail)
+            .order('created_at', { ascending: false })
             .maybeSingle(); // Using maybeSingle instead of single to handle no results
 
           if (error && error.code !== 'PGRST116') {
             // Only show error if it's not the "no rows returned" error
             console.error('Error fetching customer data:', error);
-            toast.error('Error fetching customer data');
+            toast.error(`Error fetching customer data: ${error.message}`);
             return;
           }
 
@@ -77,13 +87,8 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
           } else {
             // If no customer data exists, create a new customer record
             try {
-              // Get authenticated user to access email
-              const { data: authData, error: authErr } = await supabase.auth.getUser();
-              if (authErr || !authData?.user?.email) {
-                console.error('Error getting authenticated user for customer creation:', authErr);
-                toast.error('Could not create customer profile');
-                return;
-              }
+              // Reuse authenticated email captured earlier
+              const userEmailForCreate = userEmail;
 
               // Generate a UUID for the new customer
               const newCustomerId = crypto.randomUUID();
@@ -95,7 +100,7 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
                   first_name: '',
                   last_name: '',
                   // Store authenticated email to satisfy RLS policies
-                  email: authData.user.email,
+                  email: userEmailForCreate,
                   phone: '',
                   has_account: true
                 })
@@ -176,7 +181,7 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
 
       if (error) {
         console.error('Error adding address:', error);
-        toast.error('Failed to add address');
+        toast.error(`Failed to add address: ${error.message || 'Unknown error'}`);
         return;
       }
 
