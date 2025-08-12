@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render } from '@testing-library/react'
-import AddressForm from '../account/AddressForm'
+import { render, screen } from '@testing-library/react'
+import AddressForm from '../account/address/AddressForm'
 
 // Mock dependencies
 vi.mock('@/contexts/AuthContext', () => ({
@@ -12,7 +12,7 @@ vi.mock('@/contexts/AuthContext', () => ({
 
 vi.mock('@/hooks/useCustomerProfile', () => ({
   useCustomerProfile: () => ({
-    customer: { id: 'test-customer' },
+    customer: { id: 'test-customer', first_name: 'John', last_name: 'Doe' },
     isLoading: false
   })
 }))
@@ -38,5 +38,12 @@ describe('AddressForm', () => {
   it('should render component without crashing', () => {
     const { container } = render(<AddressForm {...defaultProps} />)
     expect(container).toBeTruthy()
+    expect(screen.getByTestId('address-modal-title')).toHaveTextContent('Add New Address')
+  })
+
+  it('should NOT render first and last name fields', () => {
+    render(<AddressForm {...defaultProps} />)
+    expect(screen.queryByText(/First Name/i)).toBeNull()
+    expect(screen.queryByText(/Last Name/i)).toBeNull()
   })
 })

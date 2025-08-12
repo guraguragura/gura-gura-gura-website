@@ -36,7 +36,7 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add New Address</DialogTitle>
+          <DialogTitle data-testid="address-modal-title">Add New Address</DialogTitle>
           <DialogDescription>
             Fill in the details to add a new shipping or billing address.
           </DialogDescription>
