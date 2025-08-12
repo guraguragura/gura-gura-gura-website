@@ -46,7 +46,7 @@ const ProductCard = ({ product, formatPrice, isLoading }: ProductCardProps) => {
             {product.badge}
           </div>
         )}
-        <div className="p-4">
+        <div className="p-4 flex h-full flex-col">
           <div className="aspect-square overflow-hidden rounded-md mb-4">
             <img 
               src={product.image} 
@@ -54,9 +54,9 @@ const ProductCard = ({ product, formatPrice, isLoading }: ProductCardProps) => {
               className="w-full h-full object-cover"
             />
           </div>
-          <CardContent className="p-0">
+          <CardContent className="p-0 flex flex-col flex-1">
             <Link to={`/product/${product.id}`} className="block">
-              <h3 className="font-medium text-sm mb-2 line-clamp-2">{product.name}</h3>
+              <h3 className="font-medium text-sm mb-2 line-clamp-2 min-h-10">{product.name}</h3>
               <div className="flex items-center gap-2 mb-4">
                 {isLoading ? (
                   <div className="animate-pulse h-5 bg-gray-200 rounded w-16"></div>
@@ -68,7 +68,7 @@ const ProductCard = ({ product, formatPrice, isLoading }: ProductCardProps) => {
                 )}
               </div>
             </Link>
-            <div className="flex items-center justify-between">
+            <div className="mt-auto flex items-center justify-between gap-2">
               <AddToCartButton 
                 product={{
                   id: product.id.toString(),
@@ -77,12 +77,12 @@ const ProductCard = ({ product, formatPrice, isLoading }: ProductCardProps) => {
                   discount_price: product.oldPrice > product.price ? product.price : undefined,
                   thumbnail: product.image
                 }}
-                className="flex items-center gap-1 px-3 py-1 h-8 w-full mr-2"
+                className="flex items-center gap-1 px-3 h-9 w-full"
               />
               <Button 
                 variant="outline" 
                 size="icon" 
-                className="rounded-full h-8 w-8 flex-shrink-0"
+                className="rounded-full h-9 w-9 flex-shrink-0"
                 onClick={handleWishlistToggle}
               >
                 <Heart 
