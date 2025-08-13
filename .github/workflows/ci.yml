@@ -40,7 +40,7 @@ jobs:
         ls -la
     
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
       timeout-minutes: 5
     
     - name: Debug dependencies
@@ -86,7 +86,7 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
       timeout-minutes: 5
     
     - name: Run security audit
