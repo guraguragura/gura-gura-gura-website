@@ -4,10 +4,12 @@ import { z } from 'zod';
 export const emailSchema = z.string().email('Please enter a valid email address');
 
 // Phone validation schema
-export const phoneSchema = z.string().regex(
-  /^\+?[1-9]\d{1,14}$/,
-  'Please enter a valid phone number'
-);
+export const phoneSchema = z.string()
+  .min(3, 'Phone number must be at least 3 digits')
+  .regex(
+    /^\+?[1-9]\d{2,14}$/,
+    'Please enter a valid phone number'
+  );
 
 // Password validation schema
 export const passwordSchema = z.string()

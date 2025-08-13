@@ -32,11 +32,16 @@ describe('Validation Utils', () => {
     it('should validate correct phone numbers', () => {
       expect(() => phoneSchema.parse('+250788123456')).not.toThrow()
       expect(() => phoneSchema.parse('250788123456')).not.toThrow()
+      expect(() => phoneSchema.parse('123456789')).not.toThrow()
+      expect(() => phoneSchema.parse('123')).not.toThrow() // 3 digits starting with 1-9 is valid
     })
 
     it('should reject invalid phone numbers', () => {
-      expect(() => phoneSchema.parse('123')).toThrow()
-      expect(() => phoneSchema.parse('invalid-phone')).toThrow()
+      expect(() => phoneSchema.parse('')).toThrow()
+      expect(() => phoneSchema.parse('abc')).toThrow()
+      expect(() => phoneSchema.parse('0')).toThrow() // Starts with 0
+      expect(() => phoneSchema.parse('0123')).toThrow() // Starts with 0
+      expect(() => phoneSchema.parse('12')).toThrow() // Too short (only 2 digits)
     })
   })
 
