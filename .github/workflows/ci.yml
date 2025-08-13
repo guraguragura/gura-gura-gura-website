@@ -32,9 +32,22 @@ jobs:
         node-version: '18'
         cache: 'npm'
     
+    - name: Debug Node.js version
+      run: |
+        node --version
+        npm --version
+        pwd
+        ls -la
+    
     - name: Install dependencies
       run: npm ci
       timeout-minutes: 5
+    
+    - name: Debug dependencies
+      run: |
+        npm list --depth=0
+        npm list vitest
+        npm list @testing-library/react
     
     - name: Run linting
       run: npm run lint
@@ -45,15 +58,15 @@ jobs:
       timeout-minutes: 3
     
     - name: Run unit tests
-      run: npm run test:unit
+      run: npm run test:unit --run --reporter=verbose
       timeout-minutes: 5
     
     - name: Run integration tests
-      run: npm run test:integration
+      run: npm run test:integration --run --reporter=verbose
       timeout-minutes: 5
     
     - name: Generate test coverage
-      run: npm run test:coverage
+      run: npm run test:coverage --run --reporter=verbose
       timeout-minutes: 5
     
     - name: Build application
