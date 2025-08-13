@@ -49,7 +49,7 @@ export const useProductRecommendations = (productId?: string, userId?: string) =
         const currentBrand = currentMetadata.brand || '';
         
         // Get all published products except current one
-        let { data: allProducts, error: productsError } = await supabase
+        const { data: allProducts, error: productsError } = await supabase
           .from('product')
           .select('id, title, thumbnail, handle, metadata, status')
           .eq('status', 'published')

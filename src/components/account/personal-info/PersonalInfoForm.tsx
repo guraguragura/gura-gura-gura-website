@@ -49,7 +49,7 @@ const PersonalInfoForm = ({ customer, setCustomer }: PersonalInfoFormProps) => {
     
     setIsSubmitting(true);
     try {
-      let customerId = customer?.id;
+      const customerId = customer?.id;
       
       // If no customer record exists, create one
       if (!customerId) {

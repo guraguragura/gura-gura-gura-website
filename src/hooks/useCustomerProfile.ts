@@ -33,7 +33,7 @@ export function useCustomerProfile() {
           setCustomer(customerData);
         } else {
           // Otherwise, create a new customer profile with user data
-          let newCustomerData = {
+          const newCustomerData = {
             id: crypto.randomUUID(),
             email: user.email,
             first_name: user.user_metadata?.first_name || '',
