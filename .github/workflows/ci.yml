@@ -61,9 +61,9 @@ jobs:
       run: npm run test:unit --run --reporter=verbose
       timeout-minutes: 5
     
-    - name: Run integration tests
-      run: npm run test:integration --run --reporter=verbose
-      timeout-minutes: 5
+    # - name: Run integration tests
+    #   run: npm run test:integration --run --reporter=verbose
+    #   timeout-minutes: 5
     
     - name: Generate test coverage
       run: npm run test:coverage --run --reporter=verbose

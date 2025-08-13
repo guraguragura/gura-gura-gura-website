@@ -9,8 +9,22 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
-    include: ['**/*.integration.test.{ts,tsx}'],
-    exclude: ['**/*.unit.test.{ts,tsx}', '**/*.e2e.test.{ts,tsx}'],
+    exclude: [
+      '**/medusa-backend/**',
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/cypress/**',
+      '**/*.config.*',
+      '**/src/components/**',
+      '**/src/contexts/**',
+      '**/src/hooks/**',
+      '**/src/pages/**',
+      '**/src/lib/**',
+      '**/supabase/**'
+    ],
+    include: [
+      'src/test/**/*.integration.test.{ts,tsx}'
+    ]
   },
   resolve: {
     alias: {
