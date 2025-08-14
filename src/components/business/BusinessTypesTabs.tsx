@@ -29,23 +29,23 @@ const BusinessTypesTabs = () => {
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Access to Wholesale Pricing – Buy in bulk at discounted rates, helping you increase profit margins.</span>
+                  <span><strong>Access to Wholesale Pricing</strong> – Buy in bulk at discounted rates, helping you increase profit margins.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>One-Stop Shop – Source multiple product categories from a single trusted supplier.</span>
+                  <span><strong>One-Stop Shop</strong> – Source multiple product categories from a single trusted supplier.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Flexible Order Sizes – Start with smaller bulk orders and scale up as demand grows.</span>
+                  <span><strong>Flexible Order Sizes</strong> – Start with smaller bulk orders and scale up as demand grows.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Reliable Delivery – Get your stock delivered quickly and safely to your business location.</span>
+                  <span><strong>Reliable Delivery</strong> – Get your stock delivered quickly and safely to your business location.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>No Hidden Costs – Transparent pricing with no surprise fees.</span>
+                  <span><strong>No Hidden Costs</strong> – Transparent pricing with no surprise fees.</span>
                 </li>
               </ul>
               <Button className="mt-6">Get Started</Button>
@@ -70,23 +70,23 @@ const BusinessTypesTabs = () => {
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Stable Supply Chain – Consistent stock availability so you can meet customer demand year-round.</span>
+                  <span><strong>Stable Supply Chain</strong> – Consistent stock availability so you can meet customer demand year-round.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Custom Bulk Packages – Tailored deals for your business needs and seasonal sales.</span>
+                  <span><strong>Custom Bulk Packages</strong> – Tailored deals for your business needs and seasonal sales.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Credit Terms Available – For trusted partners, flexible payment terms to manage cash flow.</span>
+                  <span><strong>Credit Terms Available</strong> – For trusted partners, flexible payment terms to manage cash flow.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Dedicated Account Support – A Gura representative to handle your orders and questions.</span>
+                  <span><strong>Dedicated Account Support</strong> – A Gura representative to handle your orders and questions.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Product Variety – From electronics to home goods, access a wide range in one place.</span>
+                  <span><strong>Product Variety</strong> – From electronics to home goods, access a wide range in one place.</span>
                 </li>
               </ul>
               <Button className="mt-6">Contact Sales</Button>
@@ -111,23 +111,23 @@ const BusinessTypesTabs = () => {
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Volume-Based Discounts – Bigger orders mean greater savings, helping reduce procurement costs.</span>
+                  <span><strong>Volume-Based Discounts</strong> – Bigger orders mean greater savings, helping reduce procurement costs.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Priority Fulfilment – Large orders processed and delivered on an accelerated schedule.</span>
+                  <span><strong>Priority Fulfilment</strong> – Large orders processed and delivered on an accelerated schedule.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Data-Driven Purchasing – Access to purchase history and product performance insights.</span>
+                  <span><strong>Data-Driven Purchasing</strong> – Access to purchase history and product performance insights.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Custom Logistics Solutions – Special delivery schedules, warehousing options, and packaging tailored to your needs.</span>
+                  <span><strong>Custom Logistics Solutions</strong> – Special delivery schedules, warehousing options, and packaging tailored to your needs.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Strategic Partnership Opportunities – Co-marketing campaigns and exclusive product lines for your retail network.</span>
+                  <span><strong>Strategic Partnership Opportunities</strong> – Co-marketing campaigns and exclusive product lines for your retail network.</span>
                 </li>
               </ul>
               <Button className="mt-6">Schedule Consultation</Button>
