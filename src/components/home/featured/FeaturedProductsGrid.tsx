@@ -14,7 +14,7 @@ const FeaturedProductsGrid = () => {
 
   if (isLoading) {
     return (
-      <div className="lg:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-2">
+      <div className="lg:col-span-4 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {Array(4).fill(0).map((_, index) => (
           <div key={`loading-${index}`} className="border rounded-lg p-3">
             <Skeleton className="w-full aspect-square mb-2" />
@@ -35,7 +35,7 @@ const FeaturedProductsGrid = () => {
   }
 
   return (
-    <div className="lg:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-2">
+    <div className="lg:col-span-4 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {products.map((product) => (
         <FeaturedProductCard 
           key={product.id} 
