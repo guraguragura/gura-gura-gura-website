@@ -60,7 +60,7 @@ const CollectionsPage = () => {
         </div>
 
         {loading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
@@ -85,7 +85,7 @@ const CollectionsPage = () => {
             <p className="text-muted-foreground">No collections found.</p>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {collections.map((collection) => (
               <Card key={collection.id} className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
