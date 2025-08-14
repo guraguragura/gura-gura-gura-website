@@ -21,7 +21,7 @@ import PartnerBenefits from './PartnerWithGuraPage/PartnerBenefits';
 import HowItWorks from './PartnerWithGuraPage/HowItWorks';
 import SellerTypesTabs from './PartnerWithGuraPage/SellerTypesTabs';
 import SellerTools from './PartnerWithGuraPage/SellerTools';
-import FeeStructure from './PartnerWithGuraPage/FeeStructure';
+import ProcessFlow from './PartnerWithGuraPage/ProcessFlow';
 import TestimonialsSection from './PartnerWithGuraPage/TestimonialsSection';
 import ApplicationSection from './PartnerWithGuraPage/ApplicationSection';
 import FaqSection from './PartnerWithGuraPage/FaqSection';
@@ -67,7 +67,7 @@ const PartnerWithGuraPage = () => {
       <HowItWorks />
       <SellerTypesTabs />
       <SellerTools />
-      <FeeStructure />
+      <ProcessFlow />
       <TestimonialsSection />
       <ApplicationSection />
       <FaqSection />
