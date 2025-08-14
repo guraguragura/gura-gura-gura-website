@@ -26,11 +26,13 @@ export const useProductSearch = (query: string) => {
       setError(null);
       
       try {
+        // Enhanced search with better matching
         const { data, error } = await supabase
           .from('product')
           .select('id, title, thumbnail, handle')
-          .ilike('title', `%${query}%`)
-          .limit(5);
+          .or(`title.ilike.%${query}%, description.ilike.%${query}%`)
+          .eq('status', 'published')
+          .limit(8);
         
         if (error) {
           throw new Error(error.message);

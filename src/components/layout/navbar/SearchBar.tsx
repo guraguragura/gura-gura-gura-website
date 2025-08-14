@@ -138,7 +138,17 @@ const SearchBar = () => {
             </ul>
           ) : (
             <div className="p-3 sm:p-4 text-center text-xs sm:text-sm text-gray-500">
-              No products found
+              <div className="mb-2">No products found</div>
+              <div className="text-xs text-gray-400">Try a different search term or</div>
+              <button 
+                className="text-xs text-brand-teal hover:underline mt-1"
+                onClick={() => {
+                  navigate(`/search?q=${encodeURIComponent(query)}`);
+                  setIsOpen(false);
+                }}
+              >
+                view all search results
+              </button>
             </div>
           )}
         </div>

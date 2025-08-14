@@ -40,6 +40,7 @@ const DealsPage = React.lazy(() => import('./pages/DealsPage'));
 const GiftsPage = React.lazy(() => import('./pages/GiftsPage'));
 const HistoryPage = React.lazy(() => import('./pages/HistoryPage'));
 const TrackOrderPage = React.lazy(() => import('./pages/TrackOrderPage'));
+const ProductSearchPage = React.lazy(() => import('./pages/ProductSearchPage'));
 
 function App() {
   // Track performance metrics
@@ -65,6 +66,9 @@ function App() {
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/account/*" element={<AccountPage />} />
+            
+            {/* Search page */}
+            <Route path="/search" element={<ProductSearchPage />} />
             
             {/* Add routes for existing page components */}
             <Route path="/business" element={<GuraBusinessPage />} />
