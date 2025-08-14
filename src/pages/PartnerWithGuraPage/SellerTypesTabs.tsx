@@ -23,29 +23,30 @@ export default function SellerTypesTabs() {
         <TabsContent value="small" className="p-6 bg-white rounded-lg shadow-sm">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4">Small Sellers & Artisans</h3>
-              <p className="text-gray-700 mb-4">
-                Perfect for independent creators, small shops, and individual entrepreneurs looking to expand their reach.
-              </p>
+              <h3 className="text-2xl font-bold mb-4">Benefits for Small Sellers & Artisans</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Low commission rates and no monthly fees</span>
+                  <span><strong>Instant Online Presence</strong> – Get your products on a professional e-commerce platform without needing your own website.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Simple product listing tools with step-by-step guidance</span>
+                  <span><strong>No Tech Skills Needed</strong> – We handle photography, listings, payments, and delivery.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Optional fulfillment services if you can't handle shipping</span>
+                  <span><strong>Low Entry Barrier</strong> – Start selling with small quantities; scale up as demand grows.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Weekly payment processing</span>
+                  <span><strong>Access to More Customers</strong> – Reach buyers across Kigali and beyond.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="mt-1 text-green-500">✓</div>
+                  <span><strong>Fair & Transparent Commissions</strong> – Only pay a percentage when you make sales.</span>
                 </li>
               </ul>
-              <Button className="mt-6">Apply Now</Button>
+              <Button className="mt-6">Get Started</Button>
             </div>
             <div className="bg-gray-100 rounded-lg h-64 overflow-hidden">
               <img 
@@ -60,26 +61,27 @@ export default function SellerTypesTabs() {
         <TabsContent value="medium" className="p-6 bg-white rounded-lg shadow-sm">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4">Medium Businesses</h3>
-              <p className="text-gray-700 mb-4">
-                Tailored for established businesses looking to expand their online presence and reach new customers.
-              </p>
+              <h3 className="text-2xl font-bold mb-4">Benefits for Medium Businesses</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Competitive commission rates with volume discounts</span>
+                  <span><strong>New Sales Channel</strong> – Expand beyond physical stores into online retail.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Advanced inventory management and bulk uploading tools</span>
+                  <span><strong>Full Logistics Support</strong> – We store, package, and deliver your products.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Featured placement opportunities and promotional support</span>
+                  <span><strong>Marketing Push</strong> – Benefit from Gura's advertising, social media, and email campaigns.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Bi-weekly payment processing</span>
+                  <span><strong>Real-Time Stock & Sales Tracking</strong> – Know exactly what's selling and what's in stock.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="mt-1 text-green-500">✓</div>
+                  <span><strong>Flexible Partnership Terms</strong> – We adapt to your business needs and seasonal demand.</span>
                 </li>
               </ul>
               <Button className="mt-6">Contact Sales</Button>
@@ -97,26 +99,27 @@ export default function SellerTypesTabs() {
         <TabsContent value="large" className="p-6 bg-white rounded-lg shadow-sm">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4">Large Enterprises</h3>
-              <p className="text-gray-700 mb-4">
-                Enterprise solutions for manufacturers, distributors, and large retailers with extensive product catalogs.
-              </p>
+              <h3 className="text-2xl font-bold mb-4">Benefits for Large Enterprises</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Lowest commission rates and customized fee structures</span>
+                  <span><strong>Nationwide Reach</strong> – Get your products in front of thousands of Rwandan customers.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>API integration for seamless inventory and order management</span>
+                  <span><strong>Efficient Warehousing & Fulfilment</strong> – Reduce operational costs by outsourcing storage and delivery.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Dedicated account manager and priority seller support</span>
+                  <span><strong>Brand Visibility</strong> – Featured placement in our marketplace and promotions.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Weekly payment processing with custom options available</span>
+                  <span><strong>Data-Driven Insights</strong> – Access detailed reports on sales trends, customer behavior, and product performance.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="mt-1 text-green-500">✓</div>
+                  <span><strong>Streamlined Operations</strong> – We integrate your product lines seamlessly into our sales, logistics, and customer service system.</span>
                 </li>
               </ul>
               <Button className="mt-6">Enterprise Solutions</Button>
