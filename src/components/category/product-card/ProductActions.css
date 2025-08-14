@@ -6,9 +6,31 @@
   width: 100%;
 }
 
+.action-button {
+  width: 100%;
+  height: 36px;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  text-align: center;
+  white-space: nowrap;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 640px) {
   .actions-container {
     gap: 4px;
+  }
+  
+  .action-button {
+    height: 32px;
+    min-height: 32px;
+    padding: 6px 10px;
+    font-size: 0.8125rem;
   }
 }
 

@@ -44,18 +44,18 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   return (
     <Button 
       onClick={handleAddToCart}
-      className={className}
+      className={`min-h-[36px] ${className}`}
       disabled={isAdding}
     >
       {isAdding ? (
         <>
-          <Check className="mr-2 h-4 w-4" />
-          Added to Cart
+          <Check className="mr-2 h-4 w-4 flex-shrink-0" />
+          <span className="truncate">Added to Cart</span>
         </>
       ) : (
         <>
-          <ShoppingCart className="mr-2 h-4 w-4" />
-          Add to Cart
+          <ShoppingCart className="mr-2 h-4 w-4 flex-shrink-0" />
+          <span className="truncate">Add to Cart</span>
         </>
       )}
     </Button>

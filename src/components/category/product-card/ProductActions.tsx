@@ -22,15 +22,15 @@ const ProductActions: React.FC<ProductActionsProps> = ({ product }) => {
   };
 
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="actions-container">
       <AddToCartButton 
         product={product}
-        className="w-full py-2 text-sm"
+        className="action-button"
       />
       <Button 
         onClick={handleBuyNow}
         variant="secondary" 
-        className="w-full py-2 text-sm"
+        className="action-button"
       >
         Buy Now
       </Button>
