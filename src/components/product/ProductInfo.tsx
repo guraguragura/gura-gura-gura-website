@@ -213,18 +213,6 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         </Button>
       </div>
       
-      {/* Key Features */}
-      {product.features && product.features.length > 0 && (
-        <div className="mt-auto">
-          <Separator className="mb-4" />
-          <h3 className="font-semibold mb-2">Key Features:</h3>
-          <ul className="list-disc ml-5 text-gray-700 space-y-1">
-            {product.features.map((feature, index) => (
-              <li key={index}>{feature}</li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 };
