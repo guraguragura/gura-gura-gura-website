@@ -132,7 +132,7 @@ const RecentlyViewed = () => {
         
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {recentProducts.map((product) => (
-            <div key={product.id} className="border rounded-lg overflow-hidden">
+            <div key={product.id} className="flex flex-col h-full border rounded-lg overflow-hidden">
               <div className="relative">
                 <img 
                   src={product.image} 
@@ -152,11 +152,11 @@ const RecentlyViewed = () => {
                 </button>
               </div>
               
-              <div className="p-3">
+              <div className="flex flex-col flex-1 p-3">
                 <div className="text-xs text-gray-500 mb-1">{product.category}</div>
-                <h3 className="font-medium text-sm mb-2 line-clamp-1">{product.name}</h3>
+                <h3 className="font-medium text-sm mb-2 line-clamp-2 min-h-[2.5rem]">{product.name}</h3>
                 
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2 mb-4">
                   {isLoading ? (
                     <div className="animate-pulse h-5 bg-gray-200 rounded w-16"></div>
                   ) : (
@@ -167,16 +167,18 @@ const RecentlyViewed = () => {
                   )}
                 </div>
                 
-                <AddToCartButton 
-                  product={{
-                    id: product.id.toString(),
-                    title: product.name,
-                    price: product.price,
-                    discount_price: product.oldPrice > product.price ? product.price : undefined,
-                    thumbnail: product.image
-                  }}
-                  className="w-full flex items-center justify-center gap-2"
-                />
+                <div className="mt-auto">
+                  <AddToCartButton 
+                    product={{
+                      id: product.id.toString(),
+                      title: product.name,
+                      price: product.price,
+                      discount_price: product.oldPrice > product.price ? product.price : undefined,
+                      thumbnail: product.image
+                    }}
+                    className="w-full flex items-center justify-center gap-2"
+                  />
+                </div>
               </div>
             </div>
           ))}
