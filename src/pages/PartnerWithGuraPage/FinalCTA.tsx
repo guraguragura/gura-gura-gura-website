@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+
 
 export default function FinalCTA() {
   return (
@@ -10,12 +10,9 @@ export default function FinalCTA() {
       <p className="text-gray-600 mb-6">
         Join thousands of successful sellers on Rwanda's leading e-commerce platform.
       </p>
-      <div className="flex flex-wrap justify-center gap-4">
+      <div className="flex justify-center">
         <Button size="lg" asChild>
-          <a href="#apply">Apply Now</a>
-        </Button>
-        <Button variant="outline" size="lg" asChild>
-          <Link to="/faq">Learn More</Link>
+          <a href="mailto:sales@gura.rw">Get in Touch</a>
         </Button>
       </div>
     </section>

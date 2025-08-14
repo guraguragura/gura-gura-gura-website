@@ -11,10 +11,6 @@ const faqs = [
     answer: "Payments are processed weekly or bi-weekly depending on your seller level. You'll receive payments directly to your registered bank account."
   },
   {
-    question: "What happens if a customer returns a product?",
-    answer: "We have a fair returns policy. If a return is initiated within our policy guidelines, the commission will be refunded along with the product cost."
-  },
-  {
     question: "Can I sell internationally through Gura?",
     answer: "Currently, Gura focuses on the Rwandan market, but we're expanding to neighboring countries soon. Stay tuned for international selling opportunities."
   },
