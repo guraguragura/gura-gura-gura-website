@@ -1,45 +1,53 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
 import PageLayout from "@/components/layout/PageLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Grid3X3, Layers, Star, TrendingUp } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Grid3X3, Layers, Star, TrendingUp, ShoppingBag, Gift } from "lucide-react";
+import { useCollections } from "@/hooks/useCollections";
+
+const getCollectionIcon = (title: string) => {
+  switch (title) {
+    case "10K Shop":
+      return <ShoppingBag className="h-6 w-6" />;
+    case "This Week's Deals":
+      return <Star className="h-6 w-6" />;
+    case "Sports & Outdoors":
+      return <TrendingUp className="h-6 w-6" />;
+    case "Perfect for Gifting":
+      return <Gift className="h-6 w-6" />;
+    case "Customer Top Picks":
+      return <Grid3X3 className="h-6 w-6" />;
+    case "Back to School":
+      return <Layers className="h-6 w-6" />;
+    default:
+      return <Grid3X3 className="h-6 w-6" />;
+  }
+};
+
+const getCollectionDescription = (title: string) => {
+  switch (title) {
+    case "10K Shop":
+      return "Premium products under 10,000 RWF";
+    case "This Week's Deals":
+      return "Special discounts and limited-time offers";
+    case "Sports & Outdoors":
+      return "Sports equipment and outdoor gear";
+    case "Perfect for Gifting":
+      return "Thoughtfully curated gifts for every occasion";
+    case "Customer Top Picks":
+      return "Most loved products chosen by our customers";
+    case "Back to School":
+      return "Everything you need for the new school year";
+    default:
+      return "Discover amazing products in this collection";
+  }
+};
 
 const CollectionsPage = () => {
-  const collections = [
-    {
-      id: 1,
-      name: "Electronics",
-      description: "Latest gadgets and electronic devices",
-      itemCount: 1250,
-      image: "/placeholder.svg",
-      icon: <Grid3X3 className="h-6 w-6" />
-    },
-    {
-      id: 2,
-      name: "Fashion & Apparel",
-      description: "Trendy clothing and accessories",
-      itemCount: 890,
-      image: "/placeholder.svg",
-      icon: <Star className="h-6 w-6" />
-    },
-    {
-      id: 3,
-      name: "Home & Garden",
-      description: "Everything for your home and garden",
-      itemCount: 675,
-      image: "/placeholder.svg",
-      icon: <Layers className="h-6 w-6" />
-    },
-    {
-      id: 4,
-      name: "Sports & Outdoors",
-      description: "Sports equipment and outdoor gear",
-      itemCount: 445,
-      image: "/placeholder.svg",
-      icon: <TrendingUp className="h-6 w-6" />
-    }
-  ];
+  const { collections, loading, error } = useCollections();
 
   return (
     <PageLayout>
@@ -51,25 +59,58 @@ const CollectionsPage = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {collections.map((collection) => (
-            <Card key={collection.id} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-2 bg-brand-teal/10 rounded-lg text-brand-teal">
-                    {collection.icon}
+        {loading ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <Card key={index} className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <Skeleton className="h-10 w-10 rounded-lg" />
+                    <Skeleton className="h-4 w-16" />
                   </div>
-                  <span className="text-sm text-gray-500">{collection.itemCount} items</span>
-                </div>
-                <h3 className="text-lg font-semibold mb-2">{collection.name}</h3>
-                <p className="text-gray-600 text-sm mb-4">{collection.description}</p>
-                <Button className="w-full" variant="outline">
-                  View Collection
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                  <Skeleton className="h-6 w-3/4 mb-2" />
+                  <Skeleton className="h-4 w-full mb-4" />
+                  <Skeleton className="h-10 w-full" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-600 mb-4">Error loading collections: {error}</p>
+            <Button onClick={() => window.location.reload()}>Try Again</Button>
+          </div>
+        ) : collections.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">No collections found.</p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {collections.map((collection) => (
+              <Card key={collection.id} className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                      {getCollectionIcon(collection.title)}
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {collection.productCount} {collection.productCount === 1 ? 'item' : 'items'}
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">{collection.title}</h3>
+                  <p className="text-muted-foreground text-sm mb-4">
+                    {getCollectionDescription(collection.title)}
+                  </p>
+                  <Button className="w-full" variant="outline" asChild>
+                    <Link to={`/collections/${collection.handle}`}>
+                      View Collection
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     </PageLayout>
   );
