@@ -6,28 +6,28 @@ import { Card, CardContent } from "@/components/ui/card";
 const partnerBenefits = [
   {
     icon: Building,
-    title: "Trusted & Recognized Brand",
-    description: "Join Rwanda's leading e-commerce platform with a strong reputation for quality and reliability that customers trust."
+    title: "Full E-commerce Management",
+    description: "We take care of product listings, customer service, and payments so you can focus on your business."
   },
   {
     icon: Users,
-    title: "Large & Growing Customer Base",
-    description: "Gain immediate access to our extensive customer base across Rwanda, with thousands of daily active shoppers."
+    title: "Secure Storage",
+    description: "Your products are stored safely in our warehouse with proper inventory management and security."
   },
   {
     icon: ChartBar,
-    title: "Expand Your Reach",
-    description: "Extend your market reach beyond your physical location to customers throughout Rwanda with our nationwide delivery network."
+    title: "Nationwide Delivery",
+    description: "We ensure fast, reliable delivery to customers throughout Rwanda with our established logistics network."
   },
   {
     icon: Megaphone,
-    title: "Marketing & Visibility Support",
-    description: "Benefit from our marketing campaigns, featured product placements, and promotions to increase your products' visibility."
+    title: "Marketing Boost",
+    description: "Your products are featured in our marketing campaigns and promotional activities to maximize visibility."
   },
   {
     icon: DollarSign,
-    title: "Secure Payments & Seller Support",
-    description: "Receive timely payments with our secure payment processing and dedicated seller support team to help you succeed."
+    title: "Transparent Reporting",
+    description: "Regular updates on sales and inventory with detailed reporting so you're always informed about your business."
   }
 ];
 
@@ -35,9 +35,9 @@ export default function PartnerBenefits() {
   return (
     <section>
       <div className="text-center mb-10">
-        <h2 className="text-3xl font-bold">Why Sell on Gura?</h2>
+        <h2 className="text-3xl font-bold">Why Partner with Us?</h2>
         <p className="text-xl text-gray-600 mt-2">
-          Discover the advantages that make Gura the preferred marketplace for thousands of sellers
+          Discover the advantages of letting Gura handle your online sales completely
         </p>
       </div>
 
