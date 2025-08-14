@@ -62,7 +62,7 @@ const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) =>
           ))}
           <DropdownMenuItem asChild>
             <Link to="/collections" className="w-full text-blue-600">
-              View All Categories
+              View Collections
             </Link>
           </DropdownMenuItem>
           

@@ -51,7 +51,7 @@ const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuP
                 </SelectItem>
               ))}
               <SelectItem value="view-all" className="text-brand-teal font-medium">
-                View All Categories →
+                View Collections →
               </SelectItem>
             </SelectGroup>
           </SelectContent>
