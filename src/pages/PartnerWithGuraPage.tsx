@@ -20,7 +20,7 @@ import StatisticsBanner from './PartnerWithGuraPage/StatisticsBanner';
 import PartnerBenefits from './PartnerWithGuraPage/PartnerBenefits';
 import HowItWorks from './PartnerWithGuraPage/HowItWorks';
 import SellerTypesTabs from './PartnerWithGuraPage/SellerTypesTabs';
-import SellerTools from './PartnerWithGuraPage/SellerTools';
+
 import ProcessFlow from './PartnerWithGuraPage/ProcessFlow';
 import TestimonialsSection from './PartnerWithGuraPage/TestimonialsSection';
 import ApplicationSection from './PartnerWithGuraPage/ApplicationSection';
@@ -66,7 +66,7 @@ const PartnerWithGuraPage = () => {
       <PartnerBenefits />
       <HowItWorks />
       <SellerTypesTabs />
-      <SellerTools />
+      
       <ProcessFlow />
       <TestimonialsSection />
       <ApplicationSection />
