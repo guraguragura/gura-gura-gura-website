@@ -22,26 +22,30 @@ const BusinessTypesTabs = () => {
         <TabsContent value="small" className="p-6 bg-white rounded-lg shadow-sm">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4">Small Business Solutions</h3>
+              <h3 className="text-2xl font-bold mb-4">Benefits for Small Businesses</h3>
               <p className="text-gray-700 mb-4">
-                Affordable procurement solutions designed to help small businesses thrive without the overhead.
+                Essential solutions to help small businesses grow with competitive pricing and flexible terms.
               </p>
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Access to business pricing without minimum order requirements</span>
+                  <span>Access to Wholesale Pricing – Buy in bulk at discounted rates, helping you increase profit margins.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Simple monthly invoicing to manage cash flow</span>
+                  <span>One-Stop Shop – Source multiple product categories from a single trusted supplier.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Basic reporting and order management tools</span>
+                  <span>Flexible Order Sizes – Start with smaller bulk orders and scale up as demand grows.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Free delivery for orders above 100,000 RWF</span>
+                  <span>Reliable Delivery – Get your stock delivered quickly and safely to your business location.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="mt-1 text-green-500">✓</div>
+                  <span>No Hidden Costs – Transparent pricing with no surprise fees.</span>
                 </li>
               </ul>
               <Button className="mt-6">Get Started</Button>
@@ -59,26 +63,30 @@ const BusinessTypesTabs = () => {
         <TabsContent value="medium" className="p-6 bg-white rounded-lg shadow-sm">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4">Medium Enterprise Solutions</h3>
+              <h3 className="text-2xl font-bold mb-4">Benefits for Medium Businesses</h3>
               <p className="text-gray-700 mb-4">
-                Comprehensive procurement solutions for growing businesses with more complex needs.
+                Advanced solutions for growing businesses that need reliable supply chains and dedicated support.
               </p>
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Volume discounts and competitive business pricing</span>
+                  <span>Stable Supply Chain – Consistent stock availability so you can meet customer demand year-round.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Dedicated account manager for personalized service</span>
+                  <span>Custom Bulk Packages – Tailored deals for your business needs and seasonal sales.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Advanced reporting and approval workflows</span>
+                  <span>Credit Terms Available – For trusted partners, flexible payment terms to manage cash flow.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Flexible payment terms up to 30 days</span>
+                  <span>Dedicated Account Support – A Gura representative to handle your orders and questions.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="mt-1 text-green-500">✓</div>
+                  <span>Product Variety – From electronics to home goods, access a wide range in one place.</span>
                 </li>
               </ul>
               <Button className="mt-6">Contact Sales</Button>
@@ -96,26 +104,30 @@ const BusinessTypesTabs = () => {
         <TabsContent value="large" className="p-6 bg-white rounded-lg shadow-sm">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4">Large Corporation Solutions</h3>
+              <h3 className="text-2xl font-bold mb-4">Benefits for Large Enterprises</h3>
               <p className="text-gray-700 mb-4">
-                Enterprise-grade procurement solutions with maximum customization and support.
+                Enterprise-grade solutions with strategic partnerships and data-driven insights for maximum efficiency.
               </p>
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Custom pricing with maximum volume discounts</span>
+                  <span>Volume-Based Discounts – Bigger orders mean greater savings, helping reduce procurement costs.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Full procurement integration with your ERP systems</span>
+                  <span>Priority Fulfilment – Large orders processed and delivered on an accelerated schedule.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Comprehensive analytics and spending controls</span>
+                  <span>Data-Driven Purchasing – Access to purchase history and product performance insights.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 text-green-500">✓</div>
-                  <span>Customizable payment terms up to 60 days</span>
+                  <span>Custom Logistics Solutions – Special delivery schedules, warehousing options, and packaging tailored to your needs.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="mt-1 text-green-500">✓</div>
+                  <span>Strategic Partnership Opportunities – Co-marketing campaigns and exclusive product lines for your retail network.</span>
                 </li>
               </ul>
               <Button className="mt-6">Schedule Consultation</Button>
