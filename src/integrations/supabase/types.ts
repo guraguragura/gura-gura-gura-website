@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -6440,7 +6440,7 @@ export type Database = {
     }
     Functions: {
       accept_driver_order: {
-        Args: { p_order_id: string; p_driver_id: string }
+        Args: { p_driver_id: string; p_order_id: string }
         Returns: Json
       }
       calculate_driver_period_earnings: {
@@ -6463,6 +6463,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      ensure_customer_for_current_user: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       generate_delivery_proof_code: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -6478,26 +6482,26 @@ export type Database = {
       get_products_by_category: {
         Args: { cid: string }
         Returns: {
-          id: string
-          title: string
-          description: string
-          thumbnail: string
-          handle: string
           category_id: string
+          description: string
+          handle: string
+          id: string
+          thumbnail: string
+          title: string
         }[]
       }
       get_related_products: {
         Args: { current_product_id: string }
         Returns: {
-          id: string
-          title: string
-          thumbnail: string
-          price: number
           discount_price: number
+          id: string
+          is_new: boolean
+          is_sale: boolean
+          price: number
           rating: number
           reviews_count: number
-          is_sale: boolean
-          is_new: boolean
+          thumbnail: string
+          title: string
         }[]
       }
       get_user_role: {
@@ -6506,13 +6510,13 @@ export type Database = {
       }
       has_role: {
         Args: {
-          _user_id: string
           _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
         }
         Returns: boolean
       }
       log_security_event: {
-        Args: { event_type: string; details: Json }
+        Args: { details: Json; event_type: string }
         Returns: undefined
       }
       map_unified_status_to_customer_status: {
@@ -6522,11 +6526,11 @@ export type Database = {
         Returns: Database["public"]["Enums"]["order_status_enum"]
       }
       populate_order_metadata: {
-        Args: { p_order_id: string; p_customer_id: string; p_cart_id?: string }
+        Args: { p_cart_id?: string; p_customer_id: string; p_order_id: string }
         Returns: Json
       }
       refuse_driver_order: {
-        Args: { p_order_id: string; p_driver_id: string; p_reason?: string }
+        Args: { p_driver_id: string; p_order_id: string; p_reason?: string }
         Returns: Json
       }
       update_driver_rating: {
