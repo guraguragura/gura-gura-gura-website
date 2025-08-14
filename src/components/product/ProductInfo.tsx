@@ -140,8 +140,6 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         )}
       </div>
       
-      {/* Product Description */}
-      <p className="text-gray-700 mb-6">{product.description}</p>
       
       {/* Product Variants if any */}
       {product.variants && product.variants.length > 0 && (
