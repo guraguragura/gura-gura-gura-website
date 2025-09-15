@@ -3,14 +3,14 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 
 interface OrderActionsProps {
-  isOrderCanceled: boolean;
+  isOrderCancelled: boolean;
   isOrderDelivered: boolean;
   onReturnOrder: () => void;
   onCancelOrder: () => void;
 }
 
 export const OrderActions: React.FC<OrderActionsProps> = ({
-  isOrderCanceled,
+  isOrderCancelled,
   isOrderDelivered,
   onReturnOrder,
   onCancelOrder
@@ -20,7 +20,7 @@ export const OrderActions: React.FC<OrderActionsProps> = ({
       <Button variant="outline" className="mr-2">
         Need Help?
       </Button>
-      {!isOrderCanceled && (
+      {!isOrderCancelled && (
         isOrderDelivered ? (
           <Button 
             onClick={onReturnOrder}

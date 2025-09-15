@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useCartContext } from '@/contexts/CartContext';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { IremboPayService, type InvoiceResponse } from '@/services/iremboPay';
+import { useBrevo } from '@/hooks/useBrevo';
 
 interface CheckoutFormData {
   firstName: string;
@@ -14,13 +16,15 @@ interface CheckoutFormData {
   state: string;
   zipCode: string;
   phone: string;
-  paymentMethod: string;
 }
 
 export function useCheckout() {
   const { items, total, clearCart } = useCartContext();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [invoice, setInvoice] = useState<InvoiceResponse | null>(null);
+  const [showPaymentWidget, setShowPaymentWidget] = useState(false);
   const navigate = useNavigate();
+  const { sendOrderConfirmation } = useBrevo();
 
   const processCheckout = async (formData: CheckoutFormData) => {
     if (items.length === 0) {
@@ -31,78 +35,26 @@ export function useCheckout() {
     setIsProcessing(true);
 
     try {
-      // Check if user is authenticated
-      const { data: sessionData } = await supabase.auth.getSession();
-      const isAuthenticated = !!sessionData.session;
+      console.log("Processing order and creating invoice");
 
-      // Step 1: Prepare order data
-      const orderData = {
-        customer: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
+      // Create invoice with IremboPay
+      const invoiceResponse = await IremboPayService.createInvoice(
+        total,
+        {
           email: formData.email,
-          phone: formData.phone
+          phoneNumber: formData.phone,
+          name: `${formData.firstName} ${formData.lastName}`
         },
-        shipping_address: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          address_1: formData.address,
-          city: formData.city,
-          province: formData.state,
-          postal_code: formData.zipCode,
-          phone: formData.phone
-        },
-        items: items.map(item => ({
-          product_id: item.id,
-          quantity: item.quantity,
-          price: item.discount_price || item.price
-        })),
-        payment_method: formData.paymentMethod,
-        total_amount: total
-      };
+        `Order payment for ${items.length} item(s)`
+      );
 
-      console.log("Processing order with data:", orderData);
-
-      // PLACEHOLDER: For now, we'll simulate payment processing
-      // with an 80% success rate for testing both scenarios
-      const simulatePaymentSuccess = Math.random() < 0.8;
-      
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      if (!simulatePaymentSuccess) {
-        // Simulate payment failure for testing
-        console.log("Simulated payment failure");
-        throw new Error("Payment processing failed. Please try again.");
+      if (invoiceResponse.success) {
+        setInvoice(invoiceResponse);
+        setShowPaymentWidget(true);
+        toast.success("Order created! Payment widget will open shortly.");
+      } else {
+        throw new Error('Failed to create payment invoice');
       }
-      
-      // Store order in Supabase for guest checkout or if needed
-      if (!isAuthenticated) {
-        // Instead of trying to store in a non-existent table, let's use customer_return_requests
-        // for now as a temporary storage (this is just a placeholder until we properly set up the backend)
-        const { error } = await supabase
-          .from('customer_return_requests')
-          .insert({
-            order_id: `GUEST-${Date.now()}`,
-            order_item_id: 'cart-item',
-            reason: 'guest_checkout',
-            description: JSON.stringify({
-              email: formData.email,
-              order_data: orderData,
-              status: 'pending'
-            })
-          });
-          
-        if (error) {
-          console.error("Error storing guest order:", error);
-          throw new Error("Failed to store order information");
-        }
-      }
-      
-      // Clear cart and redirect to success page
-      clearCart();
-      toast.success("Order placed successfully!");
-      navigate('/payment-success');
       
     } catch (error) {
       console.error("Checkout error:", error);
@@ -113,8 +65,93 @@ export function useCheckout() {
     }
   };
 
+  const completeOrder = async (orderData: any, isAuthenticated: boolean) => {
+    // Store order in Supabase for guest checkout or if needed
+    if (!isAuthenticated) {
+      // Store guest order information
+      const { error } = await supabase
+        .from('customer_return_requests')
+        .insert({
+          order_id: `GUEST-${Date.now()}`,
+          order_item_id: 'cart-item',
+          reason: 'guest_checkout',
+          description: JSON.stringify({
+            email: orderData.customer.email,
+            order_data: orderData,
+            status: 'completed'
+          })
+        });
+        
+      if (error) {
+        console.error("Error storing guest order:", error);
+        throw new Error("Failed to store order information");
+      }
+    }
+
+    // Send order confirmation email via Brevo
+    try {
+      await sendOrderConfirmation({
+        email: orderData.customer.email,
+        orderNumber: orderData.invoice_number || `ORDER-${Date.now()}`,
+        customerName: orderData.customer.name || 'Customer',
+        items: items.map(item => ({
+          name: item.title,
+          quantity: item.quantity,
+          price: item.discount_price || item.price
+        })),
+        total: orderData.total_amount || total,
+        shippingAddress: orderData.shipping_address || 'Address provided during checkout'
+      });
+    } catch (emailError) {
+      console.error("Failed to send order confirmation email:", emailError);
+      // Don't fail the order if email fails
+    }
+    
+    // Clear cart and redirect to success page
+    clearCart();
+    toast.success("Order placed successfully!");
+    navigate('/payment-success');
+  };
+
+  const handlePaymentSuccess = async () => {
+    try {
+      // Here you would typically verify the payment status
+      // For now, we'll complete the order directly
+      const orderData = {
+        customer: {
+          email: invoice?.data.customer.email,
+          phone: invoice?.data.customer.phoneNumber,
+          name: invoice?.data.customer.fullName,
+        },
+        payment_method: 'widget_payment',
+        total_amount: invoice?.data.amount,
+        invoice_number: invoice?.data.invoiceNumber,
+        transaction_id: invoice?.data.transactionId
+      };
+
+      const { data: sessionData } = await supabase.auth.getSession();
+      const isAuthenticated = !!sessionData.session;
+
+      await completeOrder(orderData, isAuthenticated);
+    } catch (error) {
+      console.error("Error completing payment:", error);
+      toast.error("Payment completed but order processing failed. Please contact support.");
+    } finally {
+      setShowPaymentWidget(false);
+    }
+  };
+
+  const handlePaymentClose = () => {
+    setShowPaymentWidget(false);
+    setInvoice(null);
+  };
+
   return {
     processCheckout,
-    isProcessing
+    isProcessing,
+    invoice,
+    showPaymentWidget,
+    handlePaymentSuccess,
+    handlePaymentClose
   };
 }

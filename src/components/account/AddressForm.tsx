@@ -29,16 +29,12 @@ interface AddressFormProps {
 }
 
 interface AddressFormValues {
-  address_name: string;
-  first_name: string;
-  last_name: string;
-  company: string;
-  address_1: string;
-  address_2: string;
-  city: string;
-  province: string;
-  postal_code: string;
-  country_code: string;
+  address: string;
+  district: string;
+  sector: string;
+  cell: string;
+  village: string;
+  nearby_landmark: string;
   phone: string;
   is_default_shipping: boolean;
   is_default_billing: boolean;
@@ -51,16 +47,12 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
   
   const form = useForm<AddressFormValues>({
     defaultValues: {
-      address_name: '',
-      first_name: '',
-      last_name: '',
-      company: '',
-      address_1: '',
-      address_2: '',
-      city: '',
-      province: '',
-      postal_code: '',
-      country_code: 'US',
+      address: '',
+      district: '',
+      sector: '',
+      cell: '',
+      village: '',
+      nearby_landmark: '',
       phone: '',
       is_default_shipping: false,
       is_default_billing: false
@@ -90,13 +82,42 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
           if (data) {
             setCustomerData(data);
             
-            // Pre-fill the first name and last name fields from the customer data
-            form.setValue('first_name', data.first_name || '');
-            form.setValue('last_name', data.last_name || '');
-            form.setValue('phone', data.phone || '');
+            // Pre-fill the phone number field from the customer data if available
+            if (data.phone) {
+              form.setValue('phone', data.phone);
+            }
           } else {
-            // If no customer data exists, we'll continue without pre-filling
-            console.log('No customer data found, continuing with empty form');
+            // If no customer data exists, create a new customer record
+            try {
+              // Generate a UUID for the new customer
+              const newCustomerId = crypto.randomUUID();
+              
+              const { data: newCustomer, error: createError } = await supabase
+                .from('customer')
+                .insert({
+                  id: newCustomerId, 
+                  first_name: '',
+                  last_name: '',
+                  email: '',
+                  phone: '',
+                  has_account: true
+                })
+                .select()
+                .single();
+                
+              if (createError) {
+                console.error('Error creating customer profile:', createError);
+                toast.error('Could not create customer profile');
+                return;
+              }
+              
+              if (newCustomer) {
+                setCustomerData(newCustomer);
+                console.log('Created new customer profile:', newCustomer);
+              }
+            } catch (createErr) {
+              console.error('Error in customer creation:', createErr);
+            }
           }
         } catch (error) {
           console.error('Error in fetchCustomerData:', error);
@@ -115,7 +136,7 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
       
       if (!customerData) {
         console.error('No customer data available');
-        toast.error('Customer profile not found. Please create a profile first.');
+        toast.error('Customer profile not found. Please try again.');
         return;
       }
 
@@ -128,16 +149,15 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
         .insert({
           id: addressId,
           customer_id: customerData.id,
-          address_name: data.address_name,
-          first_name: data.first_name,
-          last_name: data.last_name,
-          company: data.company,
-          address_1: data.address_1,
-          address_2: data.address_2,
-          city: data.city,
-          province: data.province,
-          postal_code: data.postal_code,
-          country_code: data.country_code,
+          address: data.address,
+          first_name: customerData.first_name || '',
+          last_name: customerData.last_name || '',
+          company: customerData.company_name || '',
+          district: data.district,
+          sector: data.sector,
+          cell: data.cell,
+          village: data.village,
+          nearby_landmark: data.nearby_landmark,
           phone: data.phone,
           is_default_shipping: data.is_default_shipping,
           is_default_billing: data.is_default_billing
@@ -193,44 +213,34 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
         ) : (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="first_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>First Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="First name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+              <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                <h3 className="font-medium text-sm text-gray-700 mb-2">Personal Information</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">First Name</p>
+                    <p className="font-medium">{customerData.first_name || '—'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Last Name</p>
+                    <p className="font-medium">{customerData.last_name || '—'}</p>
+                  </div>
+                  {customerData.company_name && (
+                    <div className="col-span-2">
+                      <p className="text-sm text-gray-500">Company</p>
+                      <p className="font-medium">{customerData.company_name}</p>
+                    </div>
                   )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="last_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Last Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Last name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                </div>
               </div>
 
               <FormField
                 control={form.control}
-                name="address_name"
+                name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Address Nickname (e.g. Home, Work)</FormLabel>
+                    <FormLabel>Address Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Address nickname" {...field} />
+                      <Input placeholder="e.g., Home, Work, etc." {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -239,40 +249,12 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
 
               <FormField
                 control={form.control}
-                name="company"
+                name="district"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Company (Optional)</FormLabel>
+                    <FormLabel>District</FormLabel>
                     <FormControl>
-                      <Input placeholder="Company name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="address_1"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address Line 1</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Street address, P.O. box" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="address_2"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address Line 2 (Optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Apartment, suite, unit, building, floor, etc." {...field} />
+                      <Input placeholder="District" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -282,12 +264,12 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
-                  name="city"
+                  name="sector"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>City</FormLabel>
+                      <FormLabel>Sector</FormLabel>
                       <FormControl>
-                        <Input placeholder="City" {...field} />
+                        <Input placeholder="Sector" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -296,12 +278,12 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
                 
                 <FormField
                   control={form.control}
-                  name="province"
+                  name="cell"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>State/Province</FormLabel>
+                      <FormLabel>Cell</FormLabel>
                       <FormControl>
-                        <Input placeholder="State/Province" {...field} />
+                        <Input placeholder="Cell" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -312,12 +294,12 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
-                  name="postal_code"
+                  name="village"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Postal/ZIP Code</FormLabel>
+                      <FormLabel>Village</FormLabel>
                       <FormControl>
-                        <Input placeholder="Postal/ZIP code" {...field} />
+                        <Input placeholder="Village" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -326,28 +308,13 @@ const AddressForm = ({ isOpen, onClose, onAddressAdded }: AddressFormProps) => {
                 
                 <FormField
                   control={form.control}
-                  name="country_code"
+                  name="nearby_landmark"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Country</FormLabel>
-                      <Select 
-                        onValueChange={field.onChange} 
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a country" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="US">United States</SelectItem>
-                          <SelectItem value="CA">Canada</SelectItem>
-                          <SelectItem value="GB">United Kingdom</SelectItem>
-                          <SelectItem value="AU">Australia</SelectItem>
-                          <SelectItem value="DE">Germany</SelectItem>
-                          <SelectItem value="FR">France</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <FormLabel>Nearby Landmark</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Nearby landmark" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}

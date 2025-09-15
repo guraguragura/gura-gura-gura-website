@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopInfoBar from '@/components/layout/TopInfoBar';
@@ -11,14 +10,13 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useCurrency } from '@/hooks/useCurrency';
-import { CreditCard, CalendarRange, Lock, ShieldCheck } from 'lucide-react';
-import { toast } from 'sonner';
+import { ShieldCheck, Loader2, CreditCard } from 'lucide-react';
 import { useCheckout } from '@/hooks/useCheckout';
+import { MoMoPaymentModal } from '@/components/checkout/MoMoPaymentModal';
 
 const checkoutSchema = z.object({
   firstName: z.string().min(2, { message: 'First name must be at least 2 characters' }),
@@ -27,15 +25,8 @@ const checkoutSchema = z.object({
   phone: z.string().min(10, { message: 'Please enter a valid phone number' }),
   address: z.string().min(5, { message: 'Address must be at least 5 characters' }),
   city: z.string().min(2, { message: 'City must be at least 2 characters' }),
-  state: z.string().min(2, { message: 'State must be at least 2 characters' }),
-  zipCode: z.string().min(5, { message: 'ZIP code must be at least 5 characters' }),
+  state: z.string().min(2, { message: 'Province must be at least 2 characters' }),
   sameShippingAddress: z.boolean().default(true),
-  paymentMethod: z.enum(['creditCard', 'paypal']),
-  cardNumber: z.string().optional(),
-  cardName: z.string().optional(),
-  expiryDate: z.string().optional(),
-  cvv: z.string().optional(),
-  savePaymentInfo: z.boolean().default(false),
 });
 
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
@@ -44,7 +35,14 @@ const CheckoutPage = () => {
   const { items, subtotal, total } = useCartContext();
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
-  const { processCheckout, isProcessing } = useCheckout();
+  const { 
+    processCheckout, 
+    isProcessing, 
+    invoice, 
+    showPaymentWidget, 
+    handlePaymentSuccess,
+    handlePaymentClose
+  } = useCheckout();
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
@@ -56,16 +54,12 @@ const CheckoutPage = () => {
       address: '',
       city: '',
       state: '',
-      zipCode: '',
       sameShippingAddress: true,
-      paymentMethod: 'creditCard',
-      savePaymentInfo: false,
     },
   });
 
-  const paymentMethod = form.watch('paymentMethod');
-
   const onSubmit = (data: CheckoutFormValues) => {
+    console.log('Form submitted with data:', data);
     processCheckout({
       firstName: data.firstName,
       lastName: data.lastName,
@@ -74,8 +68,7 @@ const CheckoutPage = () => {
       address: data.address,
       city: data.city,
       state: data.state,
-      zipCode: data.zipCode,
-      paymentMethod: data.paymentMethod
+      zipCode: '' // Empty since we removed postal code
     });
   };
 
@@ -96,6 +89,7 @@ const CheckoutPage = () => {
             <div className="lg:col-span-2">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                  {/* Contact Information */}
                   <Card className="p-6">
                     <h2 className="text-xl font-bold mb-4">Contact Information</h2>
                     
@@ -151,7 +145,7 @@ const CheckoutPage = () => {
                           <FormItem>
                             <FormLabel>Phone Number</FormLabel>
                             <FormControl>
-                              <Input placeholder="(123) 456-7890" {...field} />
+                              <Input placeholder="250781234567" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -160,6 +154,7 @@ const CheckoutPage = () => {
                     </div>
                   </Card>
                   
+                  {/* Shipping Address */}
                   <Card className="p-6">
                     <h2 className="text-xl font-bold mb-4">Shipping Address</h2>
                     
@@ -177,7 +172,7 @@ const CheckoutPage = () => {
                       )}
                     />
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <FormField
                         control={form.control}
                         name="city"
@@ -185,7 +180,7 @@ const CheckoutPage = () => {
                           <FormItem>
                             <FormLabel>City</FormLabel>
                             <FormControl>
-                              <Input placeholder="New York" {...field} />
+                              <Input placeholder="Kigali" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -197,23 +192,9 @@ const CheckoutPage = () => {
                         name="state"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>State</FormLabel>
+                            <FormLabel>Province</FormLabel>
                             <FormControl>
-                              <Input placeholder="NY" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="zipCode"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>ZIP Code</FormLabel>
-                            <FormControl>
-                              <Input placeholder="10001" {...field} />
+                              <Input placeholder="Kigali City" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -240,128 +221,6 @@ const CheckoutPage = () => {
                     />
                   </Card>
                   
-                  <Card className="p-6">
-                    <h2 className="text-xl font-bold mb-4">Payment Method</h2>
-                    
-                    <FormField
-                      control={form.control}
-                      name="paymentMethod"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={field.onChange}
-                              value={field.value}
-                              className="space-y-3"
-                            >
-                              <div className="flex items-center space-x-2 border rounded-md p-3 cursor-pointer hover:bg-gray-50">
-                                <RadioGroupItem value="creditCard" id="creditCard" />
-                                <label htmlFor="creditCard" className="flex items-center cursor-pointer">
-                                  <CreditCard className="mr-2 h-5 w-5 text-blue-500" />
-                                  <span>Credit or Debit Card</span>
-                                </label>
-                              </div>
-                              
-                              <div className="flex items-center space-x-2 border rounded-md p-3 cursor-pointer hover:bg-gray-50">
-                                <RadioGroupItem value="paypal" id="paypal" />
-                                <label htmlFor="paypal" className="flex items-center cursor-pointer">
-                                  <img src="/placeholder.svg" alt="PayPal" className="h-5 mr-2" />
-                                  <span>PayPal</span>
-                                </label>
-                              </div>
-                            </RadioGroup>
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    
-                    {paymentMethod === 'creditCard' && (
-                      <div className="mt-4 space-y-4">
-                        <FormField
-                          control={form.control}
-                          name="cardNumber"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Card Number</FormLabel>
-                              <FormControl>
-                                <Input placeholder="1234 5678 9012 3456" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="cardName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Name on Card</FormLabel>
-                              <FormControl>
-                                <Input placeholder="John Doe" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <div className="grid grid-cols-2 gap-4">
-                          <FormField
-                            control={form.control}
-                            name="expiryDate"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Expiry Date</FormLabel>
-                                <FormControl>
-                                  <div className="relative">
-                                    <Input placeholder="MM/YY" {...field} />
-                                    <CalendarRange className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
-                                  </div>
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          
-                          <FormField
-                            control={form.control}
-                            name="cvv"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>CVV</FormLabel>
-                                <FormControl>
-                                  <div className="relative">
-                                    <Input placeholder="123" type="password" {...field} />
-                                    <Lock className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
-                                  </div>
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                        
-                        <FormField
-                          control={form.control}
-                          name="savePaymentInfo"
-                          render={({ field }) => (
-                            <FormItem className="flex items-center space-x-2 mt-4">
-                              <FormControl>
-                                <Checkbox 
-                                  checked={field.value} 
-                                  onCheckedChange={field.onChange} 
-                                />
-                              </FormControl>
-                              <FormLabel className="cursor-pointer font-normal">
-                                Save this payment method for future purchases
-                              </FormLabel>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    )}
-                  </Card>
-                  
                   <div className="lg:hidden">
                     <OrderSummary 
                       items={items} 
@@ -381,10 +240,20 @@ const CheckoutPage = () => {
                   <Button 
                     type="submit" 
                     size="lg" 
-                    className="w-full" 
+                    className="w-full bg-green-600 hover:bg-green-700 text-lg py-6" 
                     disabled={isProcessing}
                   >
-                    {isProcessing ? "Processing..." : "Place Order"}
+                    {isProcessing ? (
+                      <>
+                        <Loader2 className="mr-3 h-6 w-6 animate-spin" />
+                        Creating Order & Loading Payment...
+                      </>
+                    ) : (
+                      <>
+                        <CreditCard className="mr-3 h-6 w-6" />
+                        Place Order & Pay {formatPrice(total)}
+                      </>
+                    )}
                   </Button>
                 </form>
               </Form>
@@ -401,6 +270,14 @@ const CheckoutPage = () => {
           </div>
         </div>
       </div>
+      
+      <MoMoPaymentModal
+        isOpen={showPaymentWidget}
+        onClose={handlePaymentClose}
+        invoice={invoice}
+        onPaymentSuccess={handlePaymentSuccess}
+      />
+      
       <Footer />
     </div>
   );
