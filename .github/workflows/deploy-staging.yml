@@ -80,6 +80,9 @@ jobs:
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
           "cd ${{ secrets.TARGET_DIR }}/releases && ls -t | tail -n +6 | xargs -r rm -rf"
         
+        # Set release directory for post-deploy step
+        echo "RELEASE_DIR=$REL" >> $GITHUB_ENV
+        
         echo "Deployment completed successfully"
     
     - name: Run post-deploy script
@@ -87,8 +90,8 @@ jobs:
       run: |
         set -euo pipefail
         
-        TS=$(date -u +%Y%m%d_%H%M%S)
-        REL="${{ secrets.TARGET_DIR }}/releases/$TS"
+        # Use the release directory from the previous step
+        REL="${{ env.RELEASE_DIR }}"
         
         # Copy post-deploy script to server
         scp -i key -o StrictHostKeyChecking=no -P ${{ secrets.SSH_PORT || '22' }} \
