@@ -1,14 +1,93 @@
-name: Deploy to Development
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ development ]
+    branches: [ main, development, staging ]
+  pull_request:
+    branches: [ development, staging ]
 
 jobs:
-  deploy:
+  ci:
     runs-on: ubuntu-latest
     timeout-minutes: 12
-    environment: development
+    outputs:
+      should-deploy: ${{ steps.check-branch.outputs.should-deploy }}
+      environment: ${{ steps.check-branch.outputs.environment }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Check branch and set deployment flags
+      id: check-branch
+      run: |
+        if [[ "${{ github.event_name }}" == "push" ]]; then
+          case "${{ github.ref_name }}" in
+            "development")
+              echo "should-deploy=true" >> $GITHUB_OUTPUT
+              echo "environment=development" >> $GITHUB_OUTPUT
+              ;;
+            "staging")
+              echo "should-deploy=true" >> $GITHUB_OUTPUT
+              echo "environment=staging" >> $GITHUB_OUTPUT
+              ;;
+            *)
+              echo "should-deploy=false" >> $GITHUB_OUTPUT
+              echo "environment=none" >> $GITHUB_OUTPUT
+              ;;
+          esac
+        else
+          echo "should-deploy=false" >> $GITHUB_OUTPUT
+          echo "environment=none" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+      timeout-minutes: 5
+    
+    - name: Run linting
+      run: npm run lint --if-present
+      timeout-minutes: 3
+    
+    - name: Run tests
+      run: npm test --if-present
+      timeout-minutes: 5
+    
+    - name: Build application
+      run: npm run build
+      timeout-minutes: 8
+    
+    - name: Detect build output directory
+      id: detect-out
+      run: |
+        if [ -d "./dist" ]; then
+          echo "out=dist" >> $GITHUB_OUTPUT
+        elif [ -d "./build" ]; then
+          echo "out=build" >> $GITHUB_OUTPUT
+        else
+          echo "::warning::Neither ./dist nor ./build directory found"
+          echo "out=dist" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-dist
+        path: ${{ steps.detect-out.outputs.out }}
+        retention-days: 7
+
+  deploy:
+    needs: ci
+    if: needs.ci.outputs.should-deploy == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    environment: ${{ needs.ci.outputs.environment }}
     
     steps:
     - name: Checkout code
