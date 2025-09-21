@@ -153,6 +153,11 @@ jobs:
         REL="${{ secrets.TARGET_DIR }}/releases/$TS"
         
         echo "Deploying to release: $REL"
+        echo "Build output directory: ${{ steps.detect-out.outputs.out }}"
+        
+        # Debug: List what we're about to sync
+        echo "Contents of build directory:"
+        ls -la ${{ steps.detect-out.outputs.out }}/
         
         # Create release directory on server
         ssh -i key -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT || '22' }} \
@@ -160,6 +165,7 @@ jobs:
           "mkdir -p $REL"
         
         # Sync build output to release directory
+        echo "Syncing ${{ steps.detect-out.outputs.out }}/ to ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$REL/"
         rsync -avz --delete -e "ssh -i key -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT || '22' }}" \
           ${{ steps.detect-out.outputs.out }}/ \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$REL/
