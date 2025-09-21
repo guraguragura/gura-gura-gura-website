@@ -1,0 +1,188 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, development, staging ]
+  pull_request:
+    branches: [ development, staging ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    outputs:
+      should-deploy: ${{ steps.check-branch.outputs.should-deploy }}
+      environment: ${{ steps.check-branch.outputs.environment }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Check branch and set deployment flags
+      id: check-branch
+      run: |
+        if [[ "${{ github.event_name }}" == "push" ]]; then
+          case "${{ github.ref_name }}" in
+            "development")
+              echo "should-deploy=true" >> $GITHUB_OUTPUT
+              echo "environment=development" >> $GITHUB_OUTPUT
+              ;;
+            "staging")
+              echo "should-deploy=true" >> $GITHUB_OUTPUT
+              echo "environment=staging" >> $GITHUB_OUTPUT
+              ;;
+            *)
+              echo "should-deploy=false" >> $GITHUB_OUTPUT
+              echo "environment=none" >> $GITHUB_OUTPUT
+              ;;
+          esac
+        else
+          echo "should-deploy=false" >> $GITHUB_OUTPUT
+          echo "environment=none" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+      timeout-minutes: 5
+    
+    - name: Run linting
+      run: npm run lint --if-present
+      timeout-minutes: 3
+    
+    - name: Run tests
+      run: npm test --if-present
+      timeout-minutes: 5
+    
+    - name: Build application
+      run: npm run build
+      timeout-minutes: 8
+    
+    - name: Detect build output directory
+      id: detect-out
+      run: |
+        if [ -d "./dist" ]; then
+          echo "out=dist" >> $GITHUB_OUTPUT
+        elif [ -d "./build" ]; then
+          echo "out=build" >> $GITHUB_OUTPUT
+        else
+          echo "::warning::Neither ./dist nor ./build directory found"
+          echo "out=dist" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-dist
+        path: ${{ steps.detect-out.outputs.out }}
+        retention-days: 7
+
+  deploy:
+    needs: ci
+    if: needs.ci.outputs.should-deploy == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    environment: ${{ needs.ci.outputs.environment }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+    
+    - name: Build application
+      run: |
+        set -euo pipefail
+        ${{ vars.BUILD_CMD || 'npm ci && npm run build' }}
+    
+    - name: Detect build output directory
+      id: detect-out
+      run: |
+        set -euo pipefail
+        if [ -d "./dist" ]; then
+          echo "out=dist" >> $GITHUB_OUTPUT
+        elif [ -d "./build" ]; then
+          echo "out=build" >> $GITHUB_OUTPUT
+        else
+          echo "::error::Build output directory not found. Expected ./dist or ./build"
+          exit 1
+        fi
+        
+        # Verify output directory is not empty
+        if [ ! "$(ls -A ${{ steps.detect-out.outputs.out }})" ]; then
+          echo "::error::Build output directory is empty"
+          exit 1
+        fi
+    
+    - name: Setup SSH key
+      run: |
+        set -euo pipefail
+        echo "${{ secrets.SSH_KEY }}" > key
+        chmod 600 key
+    
+    - name: Deploy to server
+      run: |
+        set -euo pipefail
+        
+        # Generate timestamp for release
+        TS=$(date -u +%Y%m%d_%H%M%S)
+        REL="${{ secrets.TARGET_DIR }}/releases/$TS"
+        
+        echo "Deploying to release: $REL"
+        
+        # Create release directory on server
+        ssh -i key -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT || '22' }} \
+          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+          "mkdir -p $REL"
+        
+        # Sync build output to release directory
+        rsync -avz --delete -e "ssh -i key -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT || '22' }}" \
+          ${{ steps.detect-out.outputs.out }}/ \
+          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$REL/
+        
+        # Update current symlink
+        ssh -i key -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT || '22' }} \
+          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+          "ln -sfn $REL ${{ secrets.TARGET_DIR }}/current"
+        
+        # Clean up old releases (keep last 5)
+        ssh -i key -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT || '22' }} \
+          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+          "cd ${{ secrets.TARGET_DIR }}/releases && ls -t | tail -n +6 | xargs -r rm -rf"
+        
+        # Set release directory for post-deploy step
+        echo "RELEASE_DIR=$REL" >> $GITHUB_ENV
+        
+        echo "Deployment completed successfully"
+    
+    - name: Run post-deploy script
+      if: hashFiles('deploy/post-deploy.sh') != ''
+      run: |
+        set -euo pipefail
+        
+        # Use the release directory from the previous step
+        REL="${{ env.RELEASE_DIR }}"
+        
+        # Copy post-deploy script to server
+        scp -i key -o StrictHostKeyChecking=no -P ${{ secrets.SSH_PORT || '22' }} \
+          deploy/post-deploy.sh \
+          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$REL/
+        
+        # Make script executable and run it
+        ssh -i key -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT || '22' }} \
+          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+          "chmod +x $REL/post-deploy.sh && cd $REL && ./post-deploy.sh"
+    
+    - name: Cleanup
+      if: always()
+      run: |
+        rm -f key

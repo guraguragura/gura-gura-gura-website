@@ -31,7 +31,7 @@ export const useFuzzyProductSearch = (query: string) => {
       
       try {
         // First try exact and partial matches
-        let { data: exactMatches, error: exactError } = await supabase
+        const { data: exactMatches, error: exactError } = await supabase
           .from('product')
           .select('id, title, thumbnail, handle, metadata')
           .or(`title.ilike.%${query}%, description.ilike.%${query}%`)
