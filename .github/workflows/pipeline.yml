@@ -21,24 +21,33 @@ jobs:
     - name: Check branch and set deployment flags
       id: check-branch
       run: |
+        echo "Event: ${{ github.event_name }}"
+        echo "Ref: ${{ github.ref }}"
+        echo "Ref name: ${{ github.ref_name }}"
+        echo "Branch: ${{ github.head_ref || github.ref_name }}"
+        
         if [[ "${{ github.event_name }}" == "push" ]]; then
           case "${{ github.ref_name }}" in
             "development")
               echo "should-deploy=true" >> $GITHUB_OUTPUT
               echo "environment=development" >> $GITHUB_OUTPUT
+              echo "✅ Will deploy to development"
               ;;
             "staging")
               echo "should-deploy=true" >> $GITHUB_OUTPUT
               echo "environment=staging" >> $GITHUB_OUTPUT
+              echo "✅ Will deploy to staging"
               ;;
             *)
               echo "should-deploy=false" >> $GITHUB_OUTPUT
               echo "environment=none" >> $GITHUB_OUTPUT
+              echo "❌ No deployment for branch: ${{ github.ref_name }}"
               ;;
           esac
         else
           echo "should-deploy=false" >> $GITHUB_OUTPUT
           echo "environment=none" >> $GITHUB_OUTPUT
+          echo "❌ No deployment for event: ${{ github.event_name }}"
         fi
     
     - name: Setup Node.js
@@ -90,6 +99,12 @@ jobs:
     environment: ${{ needs.ci.outputs.environment }}
     
     steps:
+    - name: Debug deployment conditions
+      run: |
+        echo "CI should-deploy: ${{ needs.ci.outputs.should-deploy }}"
+        echo "CI environment: ${{ needs.ci.outputs.environment }}"
+        echo "Current environment: ${{ needs.ci.outputs.environment }}"
+    
     - name: Checkout code
       uses: actions/checkout@v4
     
@@ -138,6 +153,11 @@ jobs:
         REL="${{ secrets.TARGET_DIR }}/releases/$TS"
         
         echo "Deploying to release: $REL"
+        echo "Build output directory: ${{ steps.detect-out.outputs.out }}"
+        
+        # Debug: List what we're about to sync
+        echo "Contents of build directory:"
+        ls -la ${{ steps.detect-out.outputs.out }}/
         
         # Create release directory on server
         ssh -i key -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT || '22' }} \
@@ -145,6 +165,7 @@ jobs:
           "mkdir -p $REL"
         
         # Sync build output to release directory
+        echo "Syncing ${{ steps.detect-out.outputs.out }}/ to ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$REL/"
         rsync -avz --delete -e "ssh -i key -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT || '22' }}" \
           ${{ steps.detect-out.outputs.out }}/ \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$REL/
