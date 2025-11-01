@@ -49,6 +49,10 @@ function App() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-background">
+        <p style={{ textAlign: "center", color: "gray", fontSize: "14px", paddingTop: "10px" }}>
+         🚀 Staging deployment test — updated by Victor ({new Date().toLocaleDateString()})
+        </p>
+        
         <Suspense fallback={<PageLoader message="Loading page..." />}>
           <Routes>
             <Route path="/" element={<Index />} />
