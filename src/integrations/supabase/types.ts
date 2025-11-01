@@ -161,7 +161,7 @@ export type Database = {
       audit_log: {
         Row: {
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           new_data: Json | null
           old_data: Json | null
           operation: string
@@ -172,7 +172,7 @@ export type Database = {
         }
         Insert: {
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           new_data?: Json | null
           old_data?: Json | null
           operation: string
@@ -183,7 +183,7 @@ export type Database = {
         }
         Update: {
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           new_data?: Json | null
           old_data?: Json | null
           operation?: string
@@ -959,6 +959,7 @@ export type Database = {
           metadata: Json | null
           phone: string | null
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           company_name?: string | null
@@ -973,6 +974,7 @@ export type Database = {
           metadata?: Json | null
           phone?: string | null
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           company_name?: string | null
@@ -987,6 +989,7 @@ export type Database = {
           metadata?: Json | null
           phone?: string | null
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -5166,7 +5169,7 @@ export type Database = {
           created_at: string | null
           endpoint: string
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           request_count: number | null
           user_id: string | null
           window_start: string | null
@@ -5175,7 +5178,7 @@ export type Database = {
           created_at?: string | null
           endpoint: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           request_count?: number | null
           user_id?: string | null
           window_start?: string | null
@@ -5184,7 +5187,7 @@ export type Database = {
           created_at?: string | null
           endpoint?: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           request_count?: number | null
           user_id?: string | null
           window_start?: string | null
@@ -6459,26 +6462,14 @@ export type Database = {
         }
         Returns: boolean
       }
-      current_user_email: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      ensure_customer_for_current_user: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      generate_delivery_proof_code: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      current_user_email: { Args: never; Returns: string }
+      ensure_customer_for_current_user: { Args: never; Returns: string }
+      generate_delivery_proof_code: { Args: never; Returns: string }
       geocode_kigali_address: {
         Args: { p_address: string; p_city: string; p_district: string }
         Returns: Json
       }
-      get_customer_id_for_user: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      get_customer_id_for_user: { Args: never; Returns: string }
       get_products_by_category: {
         Args: { cid: string }
         Returns: {
@@ -6537,10 +6528,7 @@ export type Database = {
         Args: { p_driver_id: string }
         Returns: undefined
       }
-      validate_email_format: {
-        Args: { email_text: string }
-        Returns: boolean
-      }
+      validate_email_format: { Args: { email_text: string }; Returns: boolean }
       validate_input_length: {
         Args: { input_text: string; max_length: number }
         Returns: boolean

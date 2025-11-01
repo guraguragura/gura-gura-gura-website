@@ -20,18 +20,39 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const { email, source = 'website' }: NewsletterRequest = await req.json();
 
-    if (!email || !email.includes('@')) {
+    // Enhanced email validation
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email || !emailRegex.test(email) || email.length > 255) {
       return new Response(
         JSON.stringify({ error: 'Valid email address is required' }),
         { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
       );
     }
 
-    // Initialize Supabase client
+    // Initialize Supabase client for rate limiting
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
+
+    // Check rate limit (10 requests per hour per IP)
+    const clientIp = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+    const { data: rateLimitCheck, error: rateLimitError } = await supabase
+      .rpc('check_rate_limit', {
+        p_endpoint: 'newsletter-subscription',
+        p_max_requests: 10,
+        p_window_minutes: 60
+      });
+
+    if (rateLimitError) {
+      console.error('Rate limit check error:', rateLimitError);
+    } else if (rateLimitCheck === false) {
+      return new Response(
+        JSON.stringify({ error: 'Too many requests. Please try again later.' }),
+        { status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+      );
+    }
+
 
     // Check if email already exists in our database
     const { data: existingSubscription } = await supabase

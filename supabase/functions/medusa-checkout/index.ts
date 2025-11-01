@@ -68,13 +68,58 @@ serve(async (req) => {
       case 'complete-cart': {
         const { cart_id } = body;
         
+        // Fetch cart data to validate before completion
+        const cartResponse = await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cart_id}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (!cartResponse.ok) {
+          throw new Error('Failed to fetch cart for validation');
+        }
+        
+        const cartData = await cartResponse.json();
+        const cart = cartData.cart;
+        
+        // Server-side validation: Verify all product prices against database
+        if (cart.items && cart.items.length > 0) {
+          for (const item of cart.items) {
+            // Fetch product from Medusa to verify price
+            const productResponse = await fetch(`${MEDUSA_BACKEND_URL}/store/products/${item.variant.product_id}`, {
+              method: 'GET',
+              headers: { 'Content-Type': 'application/json' }
+            });
+            
+            if (productResponse.ok) {
+              const productData = await productResponse.json();
+              const variant = productData.product.variants.find((v: any) => v.id === item.variant_id);
+              
+              if (variant && variant.prices) {
+                const expectedPrice = variant.prices[0]?.amount || 0;
+                
+                // Validate that cart item price matches database price
+                if (Math.abs(item.unit_price - expectedPrice) > 1) {
+                  console.error('Price manipulation detected:', {
+                    product_id: item.variant.product_id,
+                    cart_price: item.unit_price,
+                    expected_price: expectedPrice
+                  });
+                  
+                  throw new Error('Cart validation failed: Price mismatch detected. Please refresh your cart.');
+                }
+              }
+            }
+          }
+        }
+        
+        // If validation passes, complete the cart
         const response = await fetch(`${MEDUSA_BACKEND_URL}/store/carts/${cart_id}/complete`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         });
 
         const data = await response.json();
-        console.log('Completed cart:', cart_id);
+        console.log('Completed cart:', cart_id, 'after validation');
 
         // Send order confirmation email via Brevo
         if (data.order && user?.email) {
