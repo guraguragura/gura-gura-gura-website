@@ -16,6 +16,7 @@ interface ProductMetadata {
   is_sale?: boolean;
   is_new?: boolean;
   variants?: any[];
+  delivery_time?: string;
 }
 
 export interface ProductDetails {
@@ -36,6 +37,7 @@ export interface ProductDetails {
   is_sale?: boolean;
   is_new?: boolean;
   variants?: any[];
+  delivery_time?: string;
   metadata: ProductMetadata;
   categoryName?: string;
   categoryHandle?: string;
@@ -202,6 +204,7 @@ export function useProductDetails(productKey: string | undefined) {
           const specifications = safeExtractObject(rawMetadata, 'specifications', {});
           const features = safeExtractArray(rawMetadata, 'features', []);
           const variants = safeExtractArray(rawMetadata, 'variants', []);
+          const deliveryTime = safeExtract(rawMetadata, 'delivery_time', 'string', 'Same-day');
           
           // Extract category information (use first category if multiple exist)
           let categoryName: string | undefined;
@@ -236,7 +239,8 @@ export function useProductDetails(productKey: string | undefined) {
             features,
             is_sale: isSale,
             is_new: isNew,
-            variants
+            variants,
+            delivery_time: deliveryTime
           };
           
           // Build product with directly assigned properties
@@ -258,6 +262,7 @@ export function useProductDetails(productKey: string | undefined) {
             is_sale: isSale,
             is_new: isNew,
             variants,
+            delivery_time: deliveryTime,
             metadata: productMetadata,
             categoryName,
             categoryHandle,
