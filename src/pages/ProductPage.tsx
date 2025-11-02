@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
@@ -10,10 +10,24 @@ import ProductImageGallery from "@/components/product/ProductImageGallery";
 import ProductInfo from "@/components/product/ProductInfo";
 import ProductTabs from "@/components/product/ProductTabs";
 import { useProductDetails } from "@/hooks/useProductDetails";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const { product, loading, error } = useProductDetails(id);
+  const { addToRecentlyViewed } = useRecentlyViewed();
+
+  // Track product view when product loads
+  useEffect(() => {
+    if (product && !loading) {
+      addToRecentlyViewed({
+        id: product.id,
+        title: product.title,
+        price: product.discount_price || product.price,
+        thumbnail: product.thumbnail || '/placeholder.svg'
+      });
+    }
+  }, [product, loading, addToRecentlyViewed]);
 
   const addToCart = (quantity: number) => {
     

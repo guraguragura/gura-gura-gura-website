@@ -1,50 +1,21 @@
-
 import React from "react";
-import PageLayout from "@/components/layout/PageLayout";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Eye, ShoppingCart, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ShoppingCart, Heart, Search, Clock } from "lucide-react";
+import PageLayout from "@/components/layout/PageLayout";
+import { Link } from "react-router-dom";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
+import { useCurrency } from "@/hooks/useCurrency";
+import { useWishlist } from "@/contexts/WishlistContext";
+import { useCart } from "@/contexts/CartContext";
+import { format } from "date-fns";
 
 const HistoryPage = () => {
-  const recentlyViewed = [
-    {
-      id: 1,
-      name: "Wireless Headphones",
-      price: 89.99,
-      image: "/placeholder.svg",
-      viewedAt: "2 hours ago",
-      inCart: false,
-      inWishlist: true
-    },
-    {
-      id: 2,
-      name: "Smart Watch Series 5",
-      price: 299.99,
-      image: "/placeholder.svg",
-      viewedAt: "1 day ago",
-      inCart: true,
-      inWishlist: false
-    },
-    {
-      id: 3,
-      name: "Bluetooth Speaker",
-      price: 79.99,
-      image: "/placeholder.svg",
-      viewedAt: "2 days ago",
-      inCart: false,
-      inWishlist: false
-    },
-    {
-      id: 4,
-      name: "Gaming Keyboard",
-      price: 129.99,
-      image: "/placeholder.svg",
-      viewedAt: "3 days ago",
-      inCart: false,
-      inWishlist: true
-    }
-  ];
+  const { recentlyViewed, clearRecentlyViewed } = useRecentlyViewed();
+  const { formatPrice } = useCurrency();
+  const { isInWishlist } = useWishlist();
+  const { items } = useCart();
 
   const searchHistory = [
     { query: "wireless headphones", date: "Today" },
@@ -67,99 +38,97 @@ const HistoryPage = () => {
           </p>
         </div>
 
-        {/* Recently Viewed Products */}
-        <div>
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <Eye className="h-6 w-6 text-blue-500" />
-              <h2 className="text-2xl font-bold">Recently Viewed</h2>
+        {/* Recently Viewed Section */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Recently Viewed Products</CardTitle>
+              <CardDescription>Products you've looked at recently</CardDescription>
             </div>
-            <Button variant="outline" size="sm">
-              Clear History
-            </Button>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {recentlyViewed.map((product) => (
-              <Card key={product.id} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-4">
-                  <div className="relative mb-4">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-48 object-cover rounded-lg"
-                    />
-                    {product.inCart && (
-                      <Badge className="absolute top-2 left-2 bg-green-500">
-                        In Cart
-                      </Badge>
-                    )}
-                    {product.inWishlist && (
-                      <Heart className="absolute top-2 right-2 h-5 w-5 text-red-500 fill-current" />
-                    )}
-                  </div>
+            {recentlyViewed.length > 0 && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={clearRecentlyViewed}
+              >
+                Clear History
+              </Button>
+            )}
+          </CardHeader>
+          <CardContent>
+            {recentlyViewed.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <p>No recently viewed products yet.</p>
+                <p className="text-sm mt-2">Browse our catalog to see items here.</p>
+                <Link to="/shop">
+                  <Button className="mt-4">Start Shopping</Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {recentlyViewed.map((product) => {
+                  const inCart = items.some(item => item.id === product.id);
+                  const inWishlist = isInWishlist(product.id);
                   
-                  <h3 className="font-semibold mb-2">{product.name}</h3>
-                  
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-lg font-bold text-brand-teal">
-                      RWF {(product.price * 1300).toLocaleString()}
-                    </span>
-                  </div>
-                  
-                  <div className="text-sm text-gray-500 mb-3 flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    Viewed {product.viewedAt}
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <Button className="flex-1" size="sm">
-                      View Product
-                    </Button>
-                    {!product.inCart && (
-                      <Button variant="outline" size="sm" className="px-3">
-                        <ShoppingCart className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
+                  return (
+                    <Link 
+                      key={product.id} 
+                      to={`/product/${product.id}`}
+                      className="flex items-center gap-4 p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <img 
+                        src={product.thumbnail} 
+                        alt={product.title}
+                        className="w-20 h-20 object-cover rounded"
+                      />
+                      <div className="flex-1">
+                        <h3 className="font-medium line-clamp-1">{product.title}</h3>
+                        <p className="text-lg font-bold text-primary">{formatPrice(product.price)}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Viewed {format(new Date(product.viewedAt), 'MMM d, yyyy h:mm a')}
+                        </p>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        {inCart && (
+                          <Badge variant="default">In Cart</Badge>
+                        )}
+                        {inWishlist && (
+                          <Badge variant="secondary">Wishlist</Badge>
+                        )}
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Search History */}
-        <div>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">Search History</h2>
-            <Button variant="outline" size="sm">
-              Clear Searches
-            </Button>
-          </div>
-          
-          <Card>
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                {searchHistory.map((search, index) => (
-                  <div key={index} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                        <Clock className="h-4 w-4 text-gray-500" />
-                      </div>
-                      <span className="font-medium">{search.query}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm text-gray-500">{search.date}</span>
-                      <Button variant="outline" size="sm">
-                        Search Again
-                      </Button>
-                    </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Search History</CardTitle>
+            <CardDescription>Your recent searches</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {searchHistory.map((search, index) => (
+                <div key={index} className="flex items-center justify-between py-3 border-b last:border-b-0">
+                  <div className="flex items-center gap-3">
+                    <Search className="h-4 w-4 text-muted-foreground" />
+                    <span className="font-medium">{search.query}</span>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-muted-foreground">{search.date}</span>
+                    <Button variant="outline" size="sm">
+                      Search Again
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Privacy Note */}
         <Card className="bg-blue-50">

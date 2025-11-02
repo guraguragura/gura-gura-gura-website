@@ -1,90 +1,38 @@
 
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useCurrency } from "@/hooks/useCurrency";
-import { Badge } from "@/components/ui/badge";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AddToCartButton from "@/components/product/AddToCartButton";
 import { useWishlist } from "@/contexts/WishlistContext";
-
-const recentProducts = [
-  {
-    id: 1,
-    name: "Smart Home Assistant",
-    price: 99.99,
-    oldPrice: 129.99,
-    image: "https://images.unsplash.com/photo-1558089687-f282ffcbc0d3",
-    badge: "Recently Viewed",
-    category: "Electronics"
-  },
-  {
-    id: 2,
-    name: "Ultra HD 4K Monitor",
-    price: 349.99,
-    oldPrice: 429.99,
-    image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf",
-    badge: "Popular",
-    category: "Computers"
-  },
-  {
-    id: 3,
-    name: "Wireless Gaming Mouse",
-    price: 59.99,
-    oldPrice: 79.99,
-    image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7",
-    badge: "Top Rated",
-    category: "Gaming"
-  },
-  {
-    id: 4,
-    name: "Mechanical Keyboard",
-    price: 129.99,
-    oldPrice: 159.99,
-    image: "https://images.unsplash.com/photo-1558050032-160f36233451",
-    badge: "Hot Item",
-    category: "Accessories"
-  },
-  {
-    id: 5,
-    name: "Portable SSD Drive",
-    price: 89.99,
-    oldPrice: 119.99,
-    image: "https://images.unsplash.com/photo-1563826904577-6b72c5d75e53",
-    badge: "Last Viewed",
-    category: "Storage"
-  },
-  {
-    id: 6,
-    name: "Wireless Charger",
-    price: 29.99,
-    oldPrice: 39.99,
-    image: "https://images.unsplash.com/photo-1603539444875-76e7684265f3",
-    badge: "Just Viewed",
-    category: "Mobile"
-  }
-];
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 
 const RecentlyViewed = () => {
-  const { formatPrice, isLoading } = useCurrency();
+  const { formatPrice, isLoading: currencyLoading } = useCurrency();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { recentlyViewed } = useRecentlyViewed();
+
+  // Only show first 6 items
+  const displayProducts = recentlyViewed.slice(0, 6);
+
+  // Don't render section if no recently viewed items
+  if (displayProducts.length === 0) {
+    return null;
+  }
   
-  const handleWishlistToggle = (product: any, e: React.MouseEvent) => {
+  const handleWishlistToggle = (product: typeof displayProducts[0], e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    const productId = `recent-${product.id}`;
-    
-    if (isInWishlist(productId)) {
-      removeFromWishlist(productId);
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
     } else {
       addToWishlist({
-        id: productId,
-        title: product.name,
+        id: product.id,
+        title: product.title,
         price: product.price,
-        discount_price: product.oldPrice > product.price ? product.price : undefined,
-        thumbnail: product.image,
+        thumbnail: product.thumbnail,
         category: product.category
       });
     }
@@ -131,56 +79,56 @@ const RecentlyViewed = () => {
         </div>
         
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {recentProducts.map((product) => (
-            <div key={product.id} className="flex flex-col h-full border rounded-lg overflow-hidden">
+          {displayProducts.map((product) => (
+            <Link 
+              key={product.id} 
+              to={`/product/${product.id}`}
+              className="flex flex-col h-full border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+            >
               <div className="relative">
                 <img 
-                  src={product.image} 
-                  alt={product.name}
+                  src={product.thumbnail} 
+                  alt={product.title}
                   className="w-full aspect-square object-cover" 
                 />
-                {product.badge && (
-                  <div className="absolute top-2 left-2 rounded-md px-2 py-1 text-xs font-medium text-white bg-blue-500">
-                    {product.badge}
-                  </div>
-                )}
+                <div className="absolute top-2 left-2 rounded-md px-2 py-1 text-xs font-medium text-white bg-blue-500">
+                  Recently Viewed
+                </div>
                 <button 
                   onClick={(e) => handleWishlistToggle(product, e)}
                   className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm hover:bg-gray-100"
                 >
-                  <Heart className={`h-4 w-4 ${isInWishlist(`recent-${product.id}`) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
+                  <Heart className={`h-4 w-4 ${isInWishlist(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
                 </button>
               </div>
               
               <div className="flex flex-col flex-1 p-3">
-                <div className="text-xs text-gray-500 mb-1">{product.category}</div>
-                <h3 className="font-medium text-sm mb-2 line-clamp-2 min-h-[2.5rem]">{product.name}</h3>
+                {product.category && (
+                  <div className="text-xs text-gray-500 mb-1">{product.category}</div>
+                )}
+                <h3 className="font-medium text-sm mb-2 line-clamp-2 min-h-[2.5rem]">{product.title}</h3>
                 
                 <div className="flex items-center gap-2 mb-4">
-                  {isLoading ? (
+                  {currencyLoading ? (
                     <div className="animate-pulse h-5 bg-gray-200 rounded w-16"></div>
                   ) : (
-                    <>
-                      <span className="font-bold">{formatPrice(product.price)}</span>
-                      <span className="text-gray-500 text-sm line-through">{formatPrice(product.oldPrice)}</span>
-                    </>
+                    <span className="font-bold">{formatPrice(product.price)}</span>
                   )}
                 </div>
                 
                 <div className="mt-auto">
                   <AddToCartButton 
                     product={{
-                      id: product.id.toString(),
-                      title: product.name,
+                      id: product.id,
+                      title: product.title,
                       price: product.price,
-                      discount_price: product.oldPrice > product.price ? product.price : undefined,
-                      thumbnail: product.image
+                      thumbnail: product.thumbnail
                     }}
                     className="w-full flex items-center justify-center gap-2"
                   />
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
