@@ -5,7 +5,6 @@ import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
 import PopularCategories from "@/components/home/PopularCategories";
 import TopSellingProducts from "@/components/home/TopSellingProducts";
-import PromotionalBanners from "@/components/home/PromotionalBanners";
 import RecentlyViewed from "@/components/home/RecentlyViewed";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
 import FeaturedProductsWithPromo from "@/components/home/FeaturedProductsWithPromo";
@@ -73,7 +72,6 @@ const Index = () => {
           <Hero />
           <PopularCategories dbCategories={categories} isLoading={isLoading} />
           <TopSellingProducts />
-          <PromotionalBanners />
           <FeaturedProducts />
           <FeaturedProductsWithPromo />
           <TrendingPurchasesWithPromo />
