@@ -5093,6 +5093,48 @@ export type Database = {
           },
         ]
       }
+      promotional_articles: {
+        Row: {
+          background_color: string | null
+          created_at: string | null
+          display_order: number | null
+          id: string
+          image_url: string
+          is_active: boolean | null
+          link_url: string
+          published_at: string | null
+          subtitle: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          background_color?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          image_url: string
+          is_active?: boolean | null
+          link_url: string
+          published_at?: string | null
+          subtitle: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          background_color?: string | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          is_active?: boolean | null
+          link_url?: string
+          published_at?: string | null
+          subtitle?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       provider_identity: {
         Row: {
           auth_identity_id: string

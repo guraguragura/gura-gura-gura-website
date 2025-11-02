@@ -1,6 +1,8 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
+import { useLatestArticles } from "@/hooks/usePromotionalArticles";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface PromotionalCardProps {
   image: string;
@@ -30,42 +32,41 @@ const PromotionalCard = ({ image, title, subtitle, backgroundColor, link }: Prom
 };
 
 const PromotionalBannerCards = () => {
-  const promotionalCards = [
-    {
-      image: "/lovable-uploads/9f9f6f6c-f423-47c6-8964-326b064c2fd8.png",
-      title: "The newest",
-      subtitle: "gadgets at your finger tips",
-      backgroundColor: "bg-orange-400",
-      link: "/shop"
-    },
-    {
-      image: "https://images.unsplash.com/photo-1517466787929-bc90951d0974",
-      title: "Gear up and dominate:",
-      subtitle: "sports gear for every victory",
-      backgroundColor: "bg-green-700",
-      link: "/shop"
-    },
-    {
-      image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb",
-      title: "Deal of the week :",
-      subtitle: "Get 15% off on amazing headsets!",
-      backgroundColor: "bg-yellow-400",
-      link: "/shop"
-    }
-  ];
+  const { data: articles, isLoading } = useLatestArticles(3);
+
+  if (isLoading) {
+    return (
+      <section className="py-12 bg-white">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex flex-col">
+                <Skeleton className="h-64 rounded-lg mb-3" />
+                <Skeleton className="h-6 w-3/4" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!articles || articles.length === 0) {
+    return null;
+  }
 
   return (
     <section className="py-12 bg-white">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {promotionalCards.map((card, index) => (
+          {articles.map((article) => (
             <PromotionalCard
-              key={index}
-              image={card.image}
-              title={card.title}
-              subtitle={card.subtitle}
-              backgroundColor={card.backgroundColor}
-              link={card.link}
+              key={article.id}
+              image={article.image_url}
+              title={article.title}
+              subtitle={article.subtitle}
+              backgroundColor={article.background_color}
+              link={article.link_url}
             />
           ))}
         </div>
