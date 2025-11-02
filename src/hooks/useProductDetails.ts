@@ -150,15 +150,22 @@ export function useProductDetails(productId: string | undefined) {
       setError(null);
       
       try {
+        console.log('Fetching product with ID:', productId);
         const { data, error: queryError } = await supabase
           .from('product')
           .select('*, product_category_product(product_category_id, product_category:product_category(name, handle))')
           .eq('id', productId)
-          .single();
+          .maybeSingle();
+
+        console.log('Product query result:', { data, error: queryError });
 
         if (queryError) {
           console.error("Error fetching product:", queryError);
           setError("Failed to load product");
+          setProduct(null);
+        } else if (!data) {
+          console.error("No product found with ID:", productId);
+          setError("Product not found");
           setProduct(null);
         } else if (data) {
           // First, ensure metadata is an object
