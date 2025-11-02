@@ -1,43 +1,25 @@
-
 import React, { useState } from 'react';
-import { Star, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Star, ThumbsUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { useProductReviews, ProductReview } from '@/hooks/useProductReviews';
+import { useAuth } from '@/contexts/AuthContext';
+import ReviewForm from './ReviewForm';
+import { useNavigate } from 'react-router-dom';
 
 interface ProductReviewsProps {
   productId: string;
-  averageRating: number;
-  totalReviews: number;
+  productTitle: string;
 }
 
-interface Review {
-  id: string;
-  author: string;
-  date: string;
-  rating: number;
-  title: string;
-  content: string;
-  isVerified: boolean;
-  helpfulCount: number;
-  helpfulPercentage: number;
-}
-
-const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, averageRating, totalReviews }) => {
+const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, productTitle }) => {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
-  
-  // Mock review data
-  const mockReviews: Review[] = Array(6).fill(null).map((_, idx) => ({
-    id: `review-${idx}`,
-    author: `Customer ${idx + 1}`,
-    date: new Date(Date.now() - (idx * 86400000)).toLocaleDateString(),
-    rating: Math.max(3, Math.floor(Math.random() * 6)),
-    title: ["Great product!", "Highly recommend", "Good value", "Excellent quality", "Works well", "Worth the money"][idx % 6],
-    content: "This product exceeded my expectations. The build quality is excellent and it works exactly as described. I would definitely recommend this to anyone looking for a reliable product in this category.",
-    isVerified: idx % 3 === 0,
-    helpfulCount: Math.floor(Math.random() * 50),
-    helpfulPercentage: Math.floor(Math.random() * 40) + 60
-  }));
+  const [reviewFormOpen, setReviewFormOpen] = useState(false);
+  const { reviews, summary, loading, error, submitReview } = useProductReviews(productId);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const filterReviews = (reviews: Review[]): Review[] => {
+  const filterReviews = (reviews: ProductReview[]): ProductReview[] => {
     if (!activeFilter) return reviews;
     
     switch (activeFilter) {
@@ -52,20 +34,30 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, averageRatin
       case "1star":
         return reviews.filter(review => review.rating === 1);
       case "verified":
-        return reviews.filter(review => review.isVerified);
+        return reviews.filter(review => review.verified_purchase);
       default:
         return reviews;
     }
   };
 
-  const filteredReviews = filterReviews(mockReviews);
+  const filteredReviews = filterReviews(reviews);
+
+  const handleWriteReview = () => {
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+    setReviewFormOpen(true);
+  };
 
   // Calculate rating distribution
-  const ratingDistribution = [5, 4, 3, 2, 1].map(rating => {
-    const count = mockReviews.filter(review => review.rating === rating).length;
-    const percentage = totalReviews > 0 ? (count / mockReviews.length) * 100 : 0;
-    return { rating, count, percentage };
-  });
+  const ratingDistribution = [5, 4, 3, 2, 1].map(rating => ({
+    rating,
+    count: summary.ratingDistribution[rating] || 0,
+    percentage: summary.totalReviews > 0 
+      ? ((summary.ratingDistribution[rating] || 0) / summary.totalReviews) * 100 
+      : 0
+  }));
 
   const renderStars = (rating: number) => {
     return (
@@ -81,136 +73,141 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, averageRatin
     );
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <div className="text-muted-foreground">Loading reviews...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
-      {/* Reviews Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="flex flex-col items-center justify-center">
-          <div className="text-5xl font-bold mb-2">{averageRating.toFixed(1)}</div>
-          <div className="flex mb-2">
-            {renderStars(Math.round(averageRating))}
-          </div>
-          <div className="text-sm text-gray-500">{totalReviews} reviews</div>
-        </div>
-
-        <div className="space-y-2">
-          {ratingDistribution.map(({ rating, count, percentage }) => (
-            <div key={rating} className="flex items-center">
-              <div className="flex items-center w-24">
-                {renderStars(rating)}
+      {/* Reviews Overview */}
+      <div className="bg-gray-50 rounded-lg p-6">
+        <div className="grid md:grid-cols-3 gap-8">
+          {/* Left: Rating Summary */}
+          <div className="md:col-span-1">
+            <div className="text-center mb-6">
+              <div className="text-5xl font-bold mb-2">{summary.averageRating.toFixed(1)}</div>
+              <div className="flex justify-center mb-2">
+                {renderStars(Math.round(summary.averageRating))}
               </div>
-              <div className="flex-1 h-2 mx-4 bg-gray-200 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-yellow-400 rounded-full" 
-                  style={{ width: `${percentage}%` }}
-                />
-              </div>
-              <div className="w-12 text-xs text-gray-500 text-right">
-                {count}
-              </div>
+              <div className="text-sm text-gray-600">{summary.totalReviews} reviews</div>
             </div>
-          ))}
-        </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <Button className="w-full mb-3">Write a Review</Button>
-          <p className="text-center text-sm text-gray-500">
-            Share your thoughts with other customers
-          </p>
-        </div>
-      </div>
-
-      {/* Review Filters */}
-      <div className="flex flex-wrap gap-2">
-        <Button 
-          variant={activeFilter === null ? "default" : "outline"} 
-          size="sm"
-          onClick={() => setActiveFilter(null)}
-        >
-          All Reviews
-        </Button>
-        {[5, 4, 3, 2, 1].map(rating => (
-          <Button 
-            key={rating}
-            variant={activeFilter === `${rating}star` ? "default" : "outline"} 
-            size="sm"
-            onClick={() => setActiveFilter(activeFilter === `${rating}star` ? null : `${rating}star`)}
-          >
-            {rating} Star
-          </Button>
-        ))}
-        <Button 
-          variant={activeFilter === "verified" ? "default" : "outline"} 
-          size="sm"
-          onClick={() => setActiveFilter(activeFilter === "verified" ? null : "verified")}
-        >
-          Verified Purchases
-        </Button>
-      </div>
-
-      {/* Reviews List */}
-      <div className="space-y-6">
-        {filteredReviews.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-500">No reviews match your selected filter.</p>
-          </div>
-        ) : (
-          filteredReviews.map(review => (
-            <div key={review.id} className="border-b pb-6">
-              <div className="flex justify-between mb-2">
-                <div className="font-semibold">{review.author}</div>
-                <div className="text-sm text-gray-500">{review.date}</div>
-              </div>
-              <div className="flex items-center mb-2">
-                {renderStars(review.rating)}
-                {review.isVerified && (
-                  <span className="ml-3 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded">
-                    Verified Purchase
-                  </span>
-                )}
-              </div>
-              <h4 className="font-medium mb-2">{review.title}</h4>
-              <p className="text-gray-600 mb-4">{review.content}</p>
-              <div className="flex items-center text-sm text-gray-500">
-                <span className="mr-4">{review.helpfulPercentage}% of people found this helpful</span>
-                <div className="flex items-center space-x-4">
-                  <button className="flex items-center hover:text-blue-500">
-                    <ThumbsUp size={14} className="mr-1" />
-                    Helpful ({review.helpfulCount})
-                  </button>
-                  <button className="flex items-center hover:text-blue-500">
-                    <ThumbsDown size={14} className="mr-1" />
-                    Not helpful
-                  </button>
-                  <button className="hover:text-blue-500">Report</button>
+            {/* Rating Distribution */}
+            <div className="space-y-2">
+              {ratingDistribution.map(({ rating, count, percentage }) => (
+                <div key={rating} className="flex items-center gap-2">
+                  <span className="text-sm w-12">{rating} star</span>
+                  <Progress value={percentage} className="flex-1 h-2" />
+                  <span className="text-sm w-12 text-right">{Math.round(percentage)}%</span>
                 </div>
-              </div>
+              ))}
             </div>
-          ))
-        )}
+
+            <Button className="w-full mt-6" onClick={handleWriteReview}>
+              Write a Review
+            </Button>
+          </div>
+
+          {/* Right: Review Filters */}
+          <div className="md:col-span-2">
+            <h3 className="font-semibold mb-4">Filter Reviews</h3>
+            <div className="flex flex-wrap gap-2">
+              <Button 
+                variant={activeFilter === null ? "default" : "outline"} 
+                size="sm"
+                onClick={() => setActiveFilter(null)}
+              >
+                All Reviews ({reviews.length})
+              </Button>
+              {[5, 4, 3, 2, 1].map(rating => {
+                const count = summary.ratingDistribution[rating] || 0;
+                return (
+                  <Button 
+                    key={rating}
+                    variant={activeFilter === `${rating}star` ? "default" : "outline"} 
+                    size="sm"
+                    onClick={() => setActiveFilter(activeFilter === `${rating}star` ? null : `${rating}star`)}
+                  >
+                    {rating} Star ({count})
+                  </Button>
+                );
+              })}
+              <Button 
+                variant={activeFilter === "verified" ? "default" : "outline"} 
+                size="sm"
+                onClick={() => setActiveFilter(activeFilter === "verified" ? null : "verified")}
+              >
+                Verified Purchases
+              </Button>
+            </div>
+
+            {/* Reviews List */}
+            <div className="space-y-6 mt-6">
+              {filteredReviews.length === 0 ? (
+                <div className="text-center py-12 bg-white rounded-lg">
+                  <p className="text-gray-600 mb-4">
+                    {reviews.length === 0 
+                      ? "No reviews yet. Be the first to review this product!" 
+                      : "No reviews match the selected filter."}
+                  </p>
+                  {reviews.length === 0 && (
+                    <Button onClick={handleWriteReview}>
+                      Write the First Review
+                    </Button>
+                  )}
+                </div>
+              ) : (
+                filteredReviews.map((review) => (
+                  <div key={review.id} className="border-b pb-6 last:border-b-0">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <div className="font-semibold">{review.user_name}</div>
+                        <div className="text-sm text-gray-500">
+                          {new Date(review.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {renderStars(review.rating)}
+                        {review.verified_purchase && (
+                          <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                            Verified Purchase
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <h4 className="font-semibold mb-2">{review.title}</h4>
+                    <p className="text-gray-700 mb-3">{review.comment}</p>
+                    
+                    <div className="flex items-center gap-4 text-sm">
+                      <button className="flex items-center gap-1 text-gray-600 hover:text-blue-600">
+                        <ThumbsUp className="w-4 h-4" />
+                        Helpful ({review.helpful_count})
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Pagination */}
-      {filteredReviews.length > 0 && (
-        <div className="flex justify-center mt-8">
-          <Button variant="outline" size="sm" className="mx-1">
-            Previous
-          </Button>
-          <Button variant="default" size="sm" className="mx-1">
-            1
-          </Button>
-          <Button variant="outline" size="sm" className="mx-1">
-            2
-          </Button>
-          <Button variant="outline" size="sm" className="mx-1">
-            3
-          </Button>
-          <span className="mx-1 flex items-center">...</span>
-          <Button variant="outline" size="sm" className="mx-1">
-            Next
-          </Button>
-        </div>
-      )}
+      {/* Review Form Dialog */}
+      <ReviewForm
+        open={reviewFormOpen}
+        onOpenChange={setReviewFormOpen}
+        onSubmit={submitReview}
+        productTitle={productTitle}
+      />
     </div>
   );
 };

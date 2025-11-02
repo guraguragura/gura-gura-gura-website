@@ -103,8 +103,7 @@ const ProductTabs: React.FC<ProductTabsProps> = ({ product }) => {
           <CardContent className="p-0">
             <ProductReviews 
               productId={product.id} 
-              averageRating={product.rating} 
-              totalReviews={product.reviews_count} 
+              productTitle={product.title}
             />
           </CardContent>
         </Card>
