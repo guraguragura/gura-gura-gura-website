@@ -23,12 +23,7 @@ interface CategoriesMenuProps {
 
 const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuProps) => {
   const handleCategorySelect = (value: string) => {
-    // Navigate to the selected category
-    if (value === "view-all") {
-      window.location.href = "/collections";
-    } else {
-      window.location.href = `/categories/${value}`;
-    }
+    window.location.href = `/categories/${value}`;
   };
 
   return (
@@ -50,9 +45,6 @@ const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuP
                   {category.name}
                 </SelectItem>
               ))}
-              <SelectItem value="view-all" className="text-brand-teal font-medium">
-                View Collections →
-              </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
