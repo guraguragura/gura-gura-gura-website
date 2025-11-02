@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import {
@@ -17,6 +17,12 @@ interface CategoriesMenuProps {
 }
 
 const CategoriesMenu = ({ categoriesWithChildren, staticCategories }: CategoriesMenuProps) => {
+  const [hoveredCategoryId, setHoveredCategoryId] = useState<string | null>(null);
+  
+  const hoveredCategory = categoriesWithChildren.find(
+    ({ category }) => category.id === hoveredCategoryId
+  );
+
   return (
     <div className="hidden md:flex items-center justify-start pl-0 space-x-6 py-2 overflow-x-auto">
       {/* Categories Dropdown Menu */}
@@ -30,33 +36,52 @@ const CategoriesMenu = ({ categoriesWithChildren, staticCategories }: Categories
             <ChevronRight className="h-4 w-4 ml-1 rotate-90" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-[400px] md:w-[500px] lg:w-[600px] p-4 bg-background border shadow-md z-50">
-          <div className="grid grid-cols-2 gap-3">
-            {categoriesWithChildren.map(({ category, subcategories }) => (
-              <div key={category.id} className="space-y-2">
+        <DropdownMenuContent className="w-[700px] p-0 bg-background border shadow-md z-50">
+          <div className="flex min-h-[400px]">
+            {/* Left Column - Parent Categories */}
+            <div className="w-64 border-r border-border">
+              {categoriesWithChildren.map(({ category }) => (
                 <Link
+                  key={category.id}
                   to={`/categories/${category.handle}`}
-                  className="block text-sm font-medium hover:text-brand-teal transition-colors"
+                  onMouseEnter={() => setHoveredCategoryId(category.id)}
+                  className="block px-4 py-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
                 >
                   {category.name}
                 </Link>
-                {subcategories.length > 0 && (
-                  <ul className="space-y-1">
-                    {subcategories.map((sub) => (
-                      <li key={sub.id}>
+              ))}
+            </div>
+
+            {/* Right Column - Subcategories */}
+            <div className="flex-1 p-6">
+              {hoveredCategory ? (
+                <div>
+                  <h3 className="text-sm font-semibold mb-4 text-foreground">
+                    {hoveredCategory.category.name}
+                  </h3>
+                  {hoveredCategory.subcategories.length > 0 ? (
+                    <div className="grid grid-cols-2 gap-3">
+                      {hoveredCategory.subcategories.map((sub) => (
                         <Link
+                          key={sub.id}
                           to={`/categories/${sub.handle}`}
-                          className="flex items-center text-xs text-muted-foreground hover:text-foreground transition-colors"
+                          className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
                         >
-                          <ChevronRight className="h-3 w-3 mr-1" />
+                          <ChevronRight className="h-4 w-4 mr-2 flex-shrink-0" />
                           {sub.name}
                         </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">No subcategories available</p>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
+                  Hover over a category to see subcategories
+                </div>
+              )}
+            </div>
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
