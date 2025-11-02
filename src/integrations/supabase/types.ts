@@ -6397,6 +6397,7 @@ export type Database = {
           execution: Json | null
           id: string
           retention_time: number | null
+          run_id: string | null
           state: string
           transaction_id: string
           updated_at: string
@@ -6409,6 +6410,7 @@ export type Database = {
           execution?: Json | null
           id: string
           retention_time?: number | null
+          run_id?: string | null
           state: string
           transaction_id: string
           updated_at?: string
@@ -6421,6 +6423,7 @@ export type Database = {
           execution?: Json | null
           id?: string
           retention_time?: number | null
+          run_id?: string | null
           state?: string
           transaction_id?: string
           updated_at?: string
