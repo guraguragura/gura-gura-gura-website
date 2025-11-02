@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const TrendingProductsGrid = () => {
   const { products, isLoading, error } = useProducts({ 
     limit: 4,
-    tag: 'Trending'
+    tag: 'Best Seller'
   });
 
   if (isLoading) {

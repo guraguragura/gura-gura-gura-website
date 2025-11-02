@@ -12,28 +12,32 @@ const giftsCategories = [
     name: "For Her",
     description: "Perfect gifts for all the special women in your life",
     image: "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd",
-    handle: "gifts-for-her"
+    handle: "for-her",
+    type: "tag" as const
   },
   {
     id: 2,
     name: "For Him",
     description: "Unique presents sure to impress the men in your life",
     image: "https://images.unsplash.com/photo-1490367532201-b9bc1dc483f6",
-    handle: "gifts-for-him"
+    handle: "for-him",
+    type: "tag" as const
   },
   {
     id: 3,
     name: "For Kids",
     description: "Fun and educational gifts children will love",
     image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c",
-    handle: "gifts-for-kids"
+    handle: "for-kids",
+    type: "tag" as const
   },
   {
     id: 4,
     name: "For Home",
     description: "Beautiful pieces to enhance any living space",
     image: "https://images.unsplash.com/photo-1513161455079-7dc1de15ef3e",
-    handle: "gifts-for-home"
+    handle: "home-art",
+    type: "category" as const
   }
 ];
 
@@ -68,7 +72,7 @@ const GiftsForEveryone = () => {
                     asChild 
                     className="w-fit bg-white/20 border-white/40 text-white hover:bg-white/30 backdrop-blur-sm"
                   >
-                    <Link to={`/categories/${category.handle}`}>
+                    <Link to={category.type === 'tag' ? `/tags/${category.handle}` : `/categories/${category.handle}`}>
                       Shop Now
                     </Link>
                   </Button>

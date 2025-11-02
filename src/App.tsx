@@ -41,6 +41,7 @@ const GiftsPage = React.lazy(() => import('./pages/GiftsPage'));
 const HistoryPage = React.lazy(() => import('./pages/HistoryPage'));
 const TrackOrderPage = React.lazy(() => import('./pages/TrackOrderPage'));
 const ProductSearchPage = React.lazy(() => import('./pages/ProductSearchPage'));
+const TagPage = React.lazy(() => import('./pages/TagPage'));
 function App() {
   // Track performance metrics
   usePerformanceTracking();
@@ -59,6 +60,9 @@ function App() {
             <Route path="/categories/:categoryName" element={<CategoryPage />} />
             {/* Keep backward compatibility for old category route */}
             <Route path="/category/:categoryName" element={<CategoryPage />} />
+            
+            {/* Tag-based product pages */}
+            <Route path="/tags/:tagName" element={<TagPage />} />
             
             <Route path="/product/:productId" element={<ProductPage />} />
             <Route path="/cart" element={<CartPage />} />
