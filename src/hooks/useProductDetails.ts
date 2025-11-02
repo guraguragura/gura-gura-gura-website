@@ -193,8 +193,8 @@ export function useProductDetails(productKey: string | undefined) {
           const price = safeExtract(rawMetadata, 'price', 'number', 19.99);
           const discountPrice = safeExtract(rawMetadata, 'discount_price', 'number', undefined);
           const images = safeExtractArray(rawMetadata, 'images', [productData.thumbnail || "/placeholder.svg"]);
-          const rating = safeExtract(rawMetadata, 'rating', 'number', 4.5);
-          const reviewsCount = safeExtract(rawMetadata, 'reviews_count', 'number', 124);
+          const rating = safeExtract(rawMetadata, 'rating', 'number', 0);
+          const reviewsCount = safeExtract(rawMetadata, 'reviews_count', 'number', 0);
           const inStock = safeExtractBoolean(rawMetadata, 'in_stock', true);
           const sku = safeExtract(rawMetadata, 'sku', 'string', '');
           const isSale = safeExtractBoolean(rawMetadata, 'is_sale', false);
