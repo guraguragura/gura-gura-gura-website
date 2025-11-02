@@ -67,22 +67,8 @@ export const useSubcategories = (handle?: string) => {
     }
   }, [handle]);
 
-  // Fallback to mock data if no subcategories are found
-  const mockCategories = [
-    { name: "Mobile & Accessories", handle: "mobile-accessories" },
-    { name: "Laptop", handle: "laptop" },
-    { name: "Electronics", handle: "electronics" },
-    { name: "Smart Watch", handle: "smart-watch" },
-    { name: "Storage", handle: "storage" },
-    { name: "Portable Devices", handle: "portable-devices" },
-    { name: "Action Camera", handle: "action-camera" },
-    { name: "Smart Gadget", handle: "smart-gadget" },
-    { name: "Monitor", handle: "monitor" },
-    { name: "Smart TV", handle: "smart-tv" },
-    { name: "Camera", handle: "camera" },
-  ];
-
-  const displayCategories = categories.length > 0 ? categories : mockCategories;
+  // Only show real database subcategories
+  const displayCategories = categories;
 
   return { displayCategories, loading };
 };
