@@ -161,21 +161,8 @@ const useCategoryData = (handle?: string) => {
 
   const totalPages = Math.ceil(totalProducts / productsPerPage);
 
-  const mockProducts: Product[] = loading ? [] : products.length > 0 ? products : Array(8).fill(null).map((_, index) => ({
-    id: `mock-${index}`,
-    title: "Taylor Farms Broccoli Florets Vegetables",
-    description: "High-quality product with great features",
-    price: 28.99,
-    thumbnail: "/placeholder.svg",
-    rating: 4.8,
-    reviews_count: 17000,
-    discount_price: 14.99,
-    is_sale: index % 3 === 0,
-    is_new: index % 5 === 0
-  }));
-
   return {
-    products: mockProducts,
+    products,
     loading,
     categoryName,
     sortBy,
