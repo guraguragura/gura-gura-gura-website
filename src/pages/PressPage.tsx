@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Download, FileText, Globe, Mail } from 'lucide-react';
-import { useAllArticles } from '@/hooks/usePromotionalArticles';
+import { useAllArticles, useLatestArticles } from '@/hooks/usePromotionalArticles';
 import { format } from 'date-fns';
 import {
   Pagination,
@@ -20,27 +20,7 @@ const PressPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 12;
   const { data, isLoading, error } = useAllArticles(currentPage, articlesPerPage);
-
-  const mediaFeatures = [
-    {
-      publication: "Rwanda Business Journal",
-      date: "April 2023",
-      title: "How Gura is Revolutionizing E-commerce in Rwanda",
-      link: "#"
-    },
-    {
-      publication: "Tech Africa",
-      date: "January 2023",
-      title: "Gura Named Among Top 10 African Startups to Watch",
-      link: "#"
-    },
-    {
-      publication: "Kigali Today",
-      date: "November 2022",
-      title: "Local Tech Company Gura Creating Jobs for Youth",
-      link: "#"
-    }
-  ];
+  const { data: latestArticles, isLoading: isLoadingLatest } = useLatestArticles(3);
 
   return (
     <PageLayout>
@@ -148,17 +128,41 @@ const PressPage = () => {
             <Globe className="mr-2 h-6 w-6 text-blue-500" />
             Media Coverage
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {mediaFeatures.map((feature, index) => (
-              <Card key={index} className="h-full">
-                <CardContent className="p-6 flex flex-col h-full">
-                  <div className="text-sm text-gray-500 mb-1">{feature.publication} | {feature.date}</div>
-                  <h3 className="text-lg font-bold mb-4 flex-grow">{feature.title}</h3>
-                  <a href={feature.link} className="text-blue-600 hover:underline font-medium">Read article</a>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {isLoadingLatest ? (
+            <div className="grid md:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <Card key={i} className="h-full">
+                  <CardContent className="p-6">
+                    <Skeleton className="h-4 w-32 mb-2" />
+                    <Skeleton className="h-6 w-full mb-4" />
+                    <Skeleton className="h-4 w-24" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : latestArticles && latestArticles.length > 0 ? (
+            <div className="grid md:grid-cols-3 gap-6">
+              {latestArticles.map((article) => (
+                <Card key={article.id} className="h-full">
+                  <CardContent className="p-6 flex flex-col h-full">
+                    <div className="text-sm text-muted-foreground mb-1">
+                      {format(new Date(article.published_at), 'MMMM yyyy')}
+                    </div>
+                    <h3 className="text-lg font-bold mb-4 flex-grow">{article.title}</h3>
+                    <a href={article.link_url} className="text-primary hover:underline font-medium">
+                      Read article
+                    </a>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 bg-muted/50 rounded-lg">
+              <Globe className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-lg font-medium mb-2">No media coverage yet</p>
+              <p className="text-muted-foreground">Check back soon for our latest media features.</p>
+            </div>
+          )}
         </section>
 
         {/* Press Contact Section */}
