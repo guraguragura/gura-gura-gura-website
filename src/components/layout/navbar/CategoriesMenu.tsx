@@ -74,7 +74,6 @@ const CategoriesMenu = ({ categoriesWithChildren, staticCategories }: Categories
                               className="w-6 h-6 object-cover rounded flex-shrink-0"
                             />
                           )}
-                          <ChevronRight className="h-4 w-4 flex-shrink-0" />
                           {sub.name}
                         </Link>
                       ))}
