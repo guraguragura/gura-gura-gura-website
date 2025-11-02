@@ -1,54 +1,67 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-interface Category {
-  id: string;
-  name: string;
-  handle: string;
-}
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import { CategoryWithChildren } from "./useCategoriesData";
 
 interface CategoriesMenuProps {
-  displayCategories: Category[];
+  categoriesWithChildren: CategoryWithChildren[];
   staticCategories: string[];
 }
 
-const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuProps) => {
-  const handleCategorySelect = (value: string) => {
-    window.location.href = `/categories/${value}`;
-  };
-
+const CategoriesMenu = ({ categoriesWithChildren, staticCategories }: CategoriesMenuProps) => {
   return (
     <div className="hidden md:flex items-center justify-start pl-0 space-x-6 py-2 overflow-x-auto">
-      {/* Categories dropdown using Select */}
-      <div className="relative z-40">
-        <Select onValueChange={handleCategorySelect}>
-          <SelectTrigger className="w-[130px] bg-white text-sm hover:text-brand-teal border-none shadow-none focus:ring-0 px-2 py-2">
-            <span className="mr-0 pr-0">Categories</span>
-          </SelectTrigger>
-          <SelectContent className="bg-white z-50">
-            <SelectGroup>
-              {displayCategories.map((category) => (
-                <SelectItem 
-                  key={category.id} 
-                  value={category.handle}
-                  className="cursor-pointer"
-                >
-                  {category.name}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
+      {/* Categories Navigation Menu */}
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger className="bg-transparent text-sm hover:text-brand-teal h-auto py-2 px-2">
+              Categories
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                {categoriesWithChildren.map(({ category, subcategories }) => (
+                  <li key={category.id}>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        to={`/categories/${category.handle}`}
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                      >
+                        <div className="text-sm font-medium leading-none">{category.name}</div>
+                        {subcategories.length > 0 && (
+                          <ul className="mt-2 space-y-1">
+                            {subcategories.map((sub) => (
+                              <li key={sub.id}>
+                                <Link
+                                  to={`/categories/${sub.handle}`}
+                                  className="flex items-center text-xs text-muted-foreground hover:text-foreground transition-colors"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <ChevronRight className="h-3 w-3 mr-1" />
+                                  {sub.name}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </Link>
+                    </NavigationMenuLink>
+                  </li>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
 
       {/* Static menu items */}
       {staticCategories.map((category) => (

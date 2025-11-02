@@ -21,7 +21,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 const staticCategories = ["10K Shop", "Electronics", "Appliances", "Deals"];
 
 const Navbar = () => {
-  const { displayCategories } = useCategoriesData();
+  const { categoriesWithChildren } = useCategoriesData();
   const isMobile = useIsMobile();
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
@@ -29,7 +29,7 @@ const Navbar = () => {
     return (
       <header className="sticky top-0 z-50 bg-white shadow-sm border-b">
         <MobileHeader 
-          displayCategories={displayCategories} 
+          categoriesWithChildren={categoriesWithChildren} 
           staticCategories={staticCategories} 
           showSearch={showMobileSearch}
           setShowSearch={setShowMobileSearch}
@@ -52,7 +52,7 @@ const Navbar = () => {
         <div className="relative">
           <div className="flex items-center justify-between">
             <CategoriesMenu 
-              displayCategories={displayCategories} 
+              categoriesWithChildren={categoriesWithChildren} 
               staticCategories={staticCategories} 
             />
             
@@ -119,7 +119,7 @@ const Navbar = () => {
           </div>
           
           <MobileMenu 
-            displayCategories={displayCategories} 
+            categoriesWithChildren={categoriesWithChildren} 
             staticCategories={staticCategories} 
           />
         </div>

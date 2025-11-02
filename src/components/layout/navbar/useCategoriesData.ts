@@ -2,36 +2,55 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-interface Category {
+export interface Category {
   id: string;
   name: string;
   handle: string;
+  parent_category_id?: string | null;
+}
+
+export interface CategoryWithChildren {
+  category: Category;
+  subcategories: Category[];
 }
 
 export const useCategoriesData = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [parentCategories, setParentCategories] = useState<Category[]>([]);
+  const [categoriesWithChildren, setCategoriesWithChildren] = useState<CategoryWithChildren[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCategories = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
+        // Fetch all active categories
+        const { data: allCategories, error } = await supabase
           .from('product_category')
-          .select('id, name, handle')
+          .select('id, name, handle, parent_category_id')
           .eq('is_active', true)
           .order('rank', { ascending: true });
         
         if (error) {
           console.error("Error fetching categories:", error);
-          setCategories([]);
-        } else {
+          setParentCategories([]);
+          setCategoriesWithChildren([]);
+        } else if (allCategories) {
+          // Filter parent categories (no parent_category_id)
+          const parents = allCategories.filter(cat => !cat.parent_category_id);
+          setParentCategories(parents);
           
-          setCategories(data || []);
+          // Build hierarchy: group subcategories under parents
+          const hierarchy: CategoryWithChildren[] = parents.map(parent => ({
+            category: parent,
+            subcategories: allCategories.filter(cat => cat.parent_category_id === parent.id)
+          }));
+          
+          setCategoriesWithChildren(hierarchy);
         }
       } catch (error) {
         console.error("Failed to fetch categories:", error);
-        setCategories([]);
+        setParentCategories([]);
+        setCategoriesWithChildren([]);
       } finally {
         setLoading(false);
       }
@@ -39,11 +58,10 @@ export const useCategoriesData = () => {
 
     fetchCategories();
   }, []);
-
-  const displayCategories = categories;
   
   return {
     loading,
-    displayCategories
+    parentCategories,
+    categoriesWithChildren
   };
 };
