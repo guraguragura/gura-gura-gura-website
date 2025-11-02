@@ -133,16 +133,16 @@ function safeExtractObject<T>(
   return value as T;
 }
 
-export function useProductDetails(productId: string | undefined) {
+export function useProductDetails(productKey: string | undefined) {
   const [product, setProduct] = useState<ProductDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
-      if (!productId) {
+      if (!productKey) {
         setLoading(false);
-        setError("Product ID is required");
+        setError("Product identifier is required");
         return;
       }
 
@@ -150,33 +150,46 @@ export function useProductDetails(productId: string | undefined) {
       setError(null);
       
       try {
-        console.log('Fetching product with ID:', productId);
+        // Try fetching by ID first
         const { data, error: queryError } = await supabase
           .from('product')
           .select('*, product_category_product(product_category_id, product_category:product_category(name, handle))')
-          .eq('id', productId)
+          .eq('id', productKey)
           .maybeSingle();
 
-        console.log('Product query result:', { data, error: queryError });
+        let productData = data;
+        let fetchError = queryError;
 
-        if (queryError) {
-          console.error("Error fetching product:", queryError);
+        // If no product found by ID and no error, try by handle
+        if (!data && !queryError) {
+          const { data: byHandle, error: handleError } = await supabase
+            .from('product')
+            .select('*, product_category_product(product_category_id, product_category:product_category(name, handle))')
+            .eq('handle', productKey)
+            .maybeSingle();
+          
+          productData = byHandle;
+          fetchError = handleError;
+        }
+
+        if (fetchError) {
+          console.error("Error fetching product:", fetchError);
           setError("Failed to load product");
           setProduct(null);
-        } else if (!data) {
-          console.error("No product found with ID:", productId);
+        } else if (!productData) {
+          console.error("No product found with key:", productKey);
           setError("Product not found");
           setProduct(null);
-        } else if (data) {
+        } else if (productData) {
           // First, ensure metadata is an object
-          const rawMetadata = (typeof data.metadata === 'object' && data.metadata !== null) 
-            ? data.metadata as Record<string, unknown>
+          const rawMetadata = (typeof productData.metadata === 'object' && productData.metadata !== null) 
+            ? productData.metadata as Record<string, unknown>
             : {};
           
           // Extract values safely with type checking
           const price = safeExtract(rawMetadata, 'price', 'number', 19.99);
           const discountPrice = safeExtract(rawMetadata, 'discount_price', 'number', undefined);
-          const images = safeExtractArray(rawMetadata, 'images', [data.thumbnail || "/placeholder.svg"]);
+          const images = safeExtractArray(rawMetadata, 'images', [productData.thumbnail || "/placeholder.svg"]);
           const rating = safeExtract(rawMetadata, 'rating', 'number', 4.5);
           const reviewsCount = safeExtract(rawMetadata, 'reviews_count', 'number', 124);
           const inStock = safeExtractBoolean(rawMetadata, 'in_stock', true);
@@ -205,13 +218,13 @@ export function useProductDetails(productId: string | undefined) {
           
           // Build product with directly assigned properties
           const formattedProduct: ProductDetails = {
-            id: data.id,
-            title: data.title,
-            description: data.description || "",
-            subtitle: data.subtitle || "",
+            id: productData.id,
+            title: productData.title,
+            description: productData.description || "",
+            subtitle: productData.subtitle || "",
             price,
             discount_price: discountPrice,
-            thumbnail: data.thumbnail || "/placeholder.svg",
+            thumbnail: productData.thumbnail || "/placeholder.svg",
             images,
             rating,
             reviews_count: reviewsCount,
@@ -237,7 +250,7 @@ export function useProductDetails(productId: string | undefined) {
     };
 
     fetchProduct();
-  }, [productId]);
+  }, [productKey]);
 
   return { product, loading, error };
 }

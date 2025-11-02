@@ -13,8 +13,15 @@ import { useProductDetails } from "@/hooks/useProductDetails";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 
 const ProductPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const { product, loading, error } = useProductDetails(id);
+  const { productId, id, handle } = useParams<{ 
+    productId?: string; 
+    id?: string; 
+    handle?: string; 
+  }>();
+  
+  // Use whichever parameter is available
+  const productKey = productId || id || handle;
+  const { product, loading, error } = useProductDetails(productKey);
   const { addToRecentlyViewed } = useRecentlyViewed();
 
   // Track product view when product loads
