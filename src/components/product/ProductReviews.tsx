@@ -112,53 +112,14 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, productTitle
             </Button>
           </div>
 
-          {/* Right: Review Filters */}
+          {/* Reviews List */}
           <div className="md:col-span-2">
-            <h3 className="font-semibold mb-4">Filter Reviews</h3>
-            <div className="flex flex-wrap gap-2">
-              <Button 
-                variant={activeFilter === null ? "default" : "outline"} 
-                size="sm"
-                onClick={() => setActiveFilter(null)}
-              >
-                All Reviews ({reviews.length})
-              </Button>
-              {[5, 4, 3, 2, 1].map(rating => {
-                const count = summary.ratingDistribution[rating] || 0;
-                return (
-                  <Button 
-                    key={rating}
-                    variant={activeFilter === `${rating}star` ? "default" : "outline"} 
-                    size="sm"
-                    onClick={() => setActiveFilter(activeFilter === `${rating}star` ? null : `${rating}star`)}
-                  >
-                    {rating} Star ({count})
-                  </Button>
-                );
-              })}
-              <Button 
-                variant={activeFilter === "verified" ? "default" : "outline"} 
-                size="sm"
-                onClick={() => setActiveFilter(activeFilter === "verified" ? null : "verified")}
-              >
-                Verified Purchases
-              </Button>
-            </div>
-
-            {/* Reviews List */}
-            <div className="space-y-6 mt-6">
+            <div className="space-y-6">
               {filteredReviews.length === 0 ? (
                 <div className="text-center py-12 bg-white rounded-lg">
-                  <p className="text-gray-600 mb-4">
-                    {reviews.length === 0 
-                      ? "No reviews yet. Be the first to review this product!" 
-                      : "No reviews match the selected filter."}
+                  <p className="text-gray-600">
+                    No reviews yet. Be the first to review this product!
                   </p>
-                  {reviews.length === 0 && (
-                    <Button onClick={handleWriteReview}>
-                      Write the First Review
-                    </Button>
-                  )}
                 </div>
               ) : (
                 filteredReviews.map((review) => (
