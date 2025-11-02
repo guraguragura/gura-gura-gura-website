@@ -1,5 +1,5 @@
-
 import React from "react";
+import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Heart } from "lucide-react";
 import { useCurrency } from "@/hooks/useCurrency";
@@ -25,7 +25,9 @@ const TrendingProductCard: React.FC<TrendingProductProps> = ({ product }) => {
   const productId = product.id.toString();
   const inWishlist = isInWishlist(productId);
   
-  const toggleWishlist = () => {
+  const toggleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (inWishlist) {
       removeFromWishlist(productId);
     } else {
@@ -41,7 +43,8 @@ const TrendingProductCard: React.FC<TrendingProductProps> = ({ product }) => {
   };
 
   return (
-    <Card key={product.id} className="border rounded-lg overflow-hidden flex flex-col h-52">
+    <Link to={`/product/${product.id}`} className="block">
+      <Card key={product.id} className="border rounded-lg overflow-hidden flex flex-col h-52">
       <div className="relative h-28">
         <img 
           src={product.image} 
@@ -94,6 +97,7 @@ const TrendingProductCard: React.FC<TrendingProductProps> = ({ product }) => {
         />
       </div>
     </Card>
+    </Link>
   );
 };
 

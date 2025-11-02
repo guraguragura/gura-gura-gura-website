@@ -1,5 +1,5 @@
-
 import React from "react";
+import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Heart } from "lucide-react";
 import { useCurrency } from "@/hooks/useCurrency";
@@ -28,7 +28,9 @@ const FeaturedProductCard = ({ product }: FeaturedProductCardProps) => {
   const productId = product.id.toString();
   const inWishlist = isInWishlist(productId);
   
-  const toggleWishlist = () => {
+  const toggleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (inWishlist) {
       removeFromWishlist(productId);
     } else {
@@ -44,7 +46,8 @@ const FeaturedProductCard = ({ product }: FeaturedProductCardProps) => {
   };
 
   return (
-    <Card className="border rounded-lg overflow-hidden flex flex-col h-52">
+    <Link to={`/product/${product.id}`} className="block">
+      <Card className="border rounded-lg overflow-hidden flex flex-col h-52">
       <div className="relative h-28">
         <img 
           src={product.image} 
@@ -95,6 +98,7 @@ const FeaturedProductCard = ({ product }: FeaturedProductCardProps) => {
         />
       </div>
     </Card>
+    </Link>
   );
 };
 

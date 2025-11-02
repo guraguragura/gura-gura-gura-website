@@ -99,8 +99,9 @@ const FeaturedProducts = () => {
             </div>
           ) : products.length > 0 ? (
             products.map((product) => (
-              <div key={product.id} className="border rounded-lg overflow-hidden">
-                <div className="relative">
+              <Link to={`/product/${product.id}`} key={product.id} className="block">
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="relative">
                   <img 
                     src={product.thumbnail || "/placeholder.svg"} 
                     alt={product.title}
@@ -157,6 +158,7 @@ const FeaturedProducts = () => {
                   />
                 </div>
               </div>
+              </Link>
             ))
           ) : (
             <div className="col-span-full flex items-center justify-center text-gray-500 py-12">
