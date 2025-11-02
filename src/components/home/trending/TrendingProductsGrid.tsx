@@ -7,9 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const TrendingProductsGrid = () => {
   const { products, isLoading, error } = useProducts({ 
     limit: 4,
-    // You can customize this query based on what makes a product "trending"
-    // For example, you could create a field in your database to mark trending products
-    onSale: true // For now, let's show products on sale as trending
+    tag: 'Trending'
   });
 
   if (isLoading) {

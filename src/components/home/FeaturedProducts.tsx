@@ -14,7 +14,7 @@ const FeaturedProducts = () => {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const { products, isLoading: productsLoading, error } = useProducts({ 
     limit: 6,
-    featured: true // Get featured products
+    tag: 'New Arrival'
   });
   
   const isLoading = currencyLoading || productsLoading;

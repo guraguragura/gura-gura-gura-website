@@ -11,7 +11,7 @@ const TopSellingProducts = () => {
   const { formatPrice, isLoading: currencyLoading } = useCurrency();
   const { products, isLoading: productsLoading } = useProducts({ 
     limit: 4,
-    onSale: true // Get products on sale
+    tag: 'Trending'
   });
   
   const isLoading = currencyLoading || productsLoading;
@@ -22,7 +22,7 @@ const TopSellingProducts = () => {
     <section className="py-12 bg-white">
       <div className="container mx-auto px-4">
         <NavigationControls 
-          title="Top Selling"
+          title="Trending"
           subtitle="Products"
           linkUrl="/shop"
           linkText="View All Products"

@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const FeaturedProductsGrid = () => {
   const { products, isLoading, error } = useProducts({ 
     limit: 4,
-    featured: true
+    tag: 'Featured'
   });
 
   

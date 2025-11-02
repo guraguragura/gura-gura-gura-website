@@ -27,6 +27,7 @@ interface ProductOptions {
   featured?: boolean;
   onSale?: boolean;
   new?: boolean;
+  tag?: string;
 }
 
 // Utility functions for safely extracting values
@@ -93,6 +94,10 @@ export function useProducts(options: ProductOptions = {}) {
         
         if (options.new) {
           query = query.eq('metadata->>is_new', 'true');
+        }
+        
+        if (options.tag) {
+          query = query.filter('product_tags.product_tag.value', 'eq', options.tag);
         }
         
         if (options.limit) {
@@ -171,7 +176,7 @@ export function useProducts(options: ProductOptions = {}) {
     };
 
     fetchProducts();
-  }, [options.category, options.limit, options.featured, options.onSale, options.new]);
+  }, [options.category, options.limit, options.featured, options.onSale, options.new, options.tag]);
 
   return { products, isLoading, error };
 }
