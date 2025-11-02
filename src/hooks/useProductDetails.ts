@@ -37,6 +37,8 @@ export interface ProductDetails {
   is_new?: boolean;
   variants?: any[];
   metadata: ProductMetadata;
+  categoryName?: string;
+  categoryHandle?: string;
 }
 
 /**
@@ -200,6 +202,21 @@ export function useProductDetails(productKey: string | undefined) {
           const features = safeExtractArray(rawMetadata, 'features', []);
           const variants = safeExtractArray(rawMetadata, 'variants', []);
           
+          // Extract category information (use first category if multiple exist)
+          let categoryName: string | undefined;
+          let categoryHandle: string | undefined;
+          
+          if (Array.isArray(productData.product_category_product) && productData.product_category_product.length > 0) {
+            const firstCategory = productData.product_category_product[0];
+            if (firstCategory && typeof firstCategory === 'object' && 'product_category' in firstCategory) {
+              const category = firstCategory.product_category as { name?: string; handle?: string } | null;
+              if (category) {
+                categoryName = category.name;
+                categoryHandle = category.handle;
+              }
+            }
+          }
+          
           // Create a safe ProductMetadata object
           const productMetadata: ProductMetadata = {
             price,
@@ -235,7 +252,9 @@ export function useProductDetails(productKey: string | undefined) {
             is_sale: isSale,
             is_new: isNew,
             variants,
-            metadata: productMetadata
+            metadata: productMetadata,
+            categoryName,
+            categoryHandle
           };
           
           setProduct(formattedProduct);

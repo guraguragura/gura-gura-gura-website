@@ -108,7 +108,11 @@ const ProductPage = () => {
       <Navbar />
       <div className="container mx-auto py-6 px-4">
         {/* Breadcrumb */}
-        <ProductBreadcrumb title={displayProduct.title} />
+        <ProductBreadcrumb 
+          title={displayProduct.title} 
+          categoryName={displayProduct.categoryName}
+          categoryHandle={displayProduct.categoryHandle}
+        />
 
         {/* Product Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
