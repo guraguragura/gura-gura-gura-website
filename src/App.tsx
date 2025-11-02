@@ -41,17 +41,12 @@ const GiftsPage = React.lazy(() => import('./pages/GiftsPage'));
 const HistoryPage = React.lazy(() => import('./pages/HistoryPage'));
 const TrackOrderPage = React.lazy(() => import('./pages/TrackOrderPage'));
 const ProductSearchPage = React.lazy(() => import('./pages/ProductSearchPage'));
-
 function App() {
   // Track performance metrics
   usePerformanceTracking();
-
-  return (
-    <ErrorBoundary>
+  return <ErrorBoundary>
       <div className="min-h-screen bg-background">
-        <p style={{ textAlign: "center", color: "gray", fontSize: "14px", paddingTop: "10px" }}>
-         🚀 Staging deployment test — updated by Victor ({new Date().toLocaleDateString()})
-        </p>
+        
         
         <Suspense fallback={<PageLoader message="Loading page..." />}>
           <Routes>
@@ -105,8 +100,6 @@ function App() {
         </Suspense>
         <Toaster />
       </div>
-    </ErrorBoundary>
-  );
+    </ErrorBoundary>;
 }
-
 export default App;
