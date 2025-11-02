@@ -15,7 +15,7 @@ module.exports = defineConfig({
     }
   },
   admin: {
-    disable: false,
+    disable: false, // set to true temporarily if you need to isolate server startup
     backendUrl: process.env.MEDUSA_BACKEND_URL || "http://localhost:9000",
   },
   modules: [
