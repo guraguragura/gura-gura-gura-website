@@ -1,33 +1,25 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, FileText, Globe, Mail, Camera, Users } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Download, FileText, Globe, Mail } from 'lucide-react';
+import { useAllArticles } from '@/hooks/usePromotionalArticles';
+import { format } from 'date-fns';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 
 const PressPage = () => {
-  const pressReleases = [
-    {
-      date: "May 15, 2023",
-      title: "Gura Expands Operations to Eastern Province",
-      excerpt: "Following strong growth in Kigali and other major cities, Gura's e-commerce services are now available across Rwanda's Eastern Province."
-    },
-    {
-      date: "March 2, 2023",
-      title: "Gura Secures $5M in Series A Funding",
-      excerpt: "The investment will accelerate growth and development of the platform's technology infrastructure."
-    },
-    {
-      date: "December 10, 2022",
-      title: "Gura Launches Express Delivery in Kigali",
-      excerpt: "New 2-hour delivery service now available for select products within Kigali city limits."
-    },
-    {
-      date: "October 5, 2022",
-      title: "Gura Partners with Major Telecom for Mobile Payments",
-      excerpt: "Strategic partnership enhances mobile payment options for customers across Rwanda."
-    }
-  ];
+  const [currentPage, setCurrentPage] = useState(1);
+  const articlesPerPage = 12;
+  const { data, isLoading, error } = useAllArticles(currentPage, articlesPerPage);
 
   const mediaFeatures = [
     {
@@ -67,21 +59,87 @@ const PressPage = () => {
             <FileText className="mr-2 h-6 w-6 text-blue-500" />
             Press Releases
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {pressReleases.map((release, index) => (
-              <Card key={index} className="h-full">
-                <CardContent className="p-6 flex flex-col h-full">
-                  <div className="text-sm text-gray-500 mb-1">{release.date}</div>
-                  <h3 className="text-xl font-bold mb-2">{release.title}</h3>
-                  <p className="text-gray-700 mb-4 flex-grow">{release.excerpt}</p>
-                  <a href="#" className="text-blue-600 hover:underline font-medium">Read full press release</a>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <div className="mt-6 text-center">
-            <Button variant="outline" className="mt-4">View All Press Releases</Button>
-          </div>
+          
+          {isLoading ? (
+            <div className="grid md:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <Card key={i} className="h-full">
+                  <CardContent className="p-6">
+                    <Skeleton className="h-4 w-24 mb-2" />
+                    <Skeleton className="h-6 w-full mb-2" />
+                    <Skeleton className="h-4 w-full mb-1" />
+                    <Skeleton className="h-4 w-3/4 mb-4" />
+                    <Skeleton className="h-4 w-32" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : error ? (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground">Failed to load press releases. Please try again later.</p>
+            </div>
+          ) : data?.articles && data.articles.length > 0 ? (
+            <>
+              <div className="grid md:grid-cols-3 gap-6">
+                {data.articles.map((article) => (
+                  <Card key={article.id} className="h-full">
+                    <CardContent className="p-6 flex flex-col h-full">
+                      <div className="text-sm text-muted-foreground mb-1">
+                        {format(new Date(article.published_at), 'MMMM d, yyyy')}
+                      </div>
+                      <h3 className="text-xl font-bold mb-2">{article.title}</h3>
+                      <p className="text-muted-foreground mb-4 flex-grow">{article.subtitle}</p>
+                      <a 
+                        href={article.link_url} 
+                        className="text-primary hover:underline font-medium"
+                      >
+                        Read full press release
+                      </a>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              
+              {/* Pagination */}
+              {data.total > articlesPerPage && (
+                <div className="mt-8 flex justify-center">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                          className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                        />
+                      </PaginationItem>
+                      {Array.from({ length: Math.ceil(data.total / articlesPerPage) }, (_, i) => i + 1).map((page) => (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            onClick={() => setCurrentPage(page)}
+                            isActive={currentPage === page}
+                            className="cursor-pointer"
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      <PaginationItem>
+                        <PaginationNext 
+                          onClick={() => setCurrentPage(p => Math.min(Math.ceil(data.total / articlesPerPage), p + 1))}
+                          className={currentPage === Math.ceil(data.total / articlesPerPage) ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="text-center py-12 bg-muted/50 rounded-lg">
+              <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-lg font-medium mb-2">No press releases yet</p>
+              <p className="text-muted-foreground">Check back soon for our latest news and updates.</p>
+            </div>
+          )}
         </section>
 
         {/* Media Coverage */}
