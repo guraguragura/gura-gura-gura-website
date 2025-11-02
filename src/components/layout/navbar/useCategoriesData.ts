@@ -40,16 +40,7 @@ export const useCategoriesData = () => {
     fetchCategories();
   }, []);
 
-  // Fallback categories in case the data fetch fails
-  const fallbackCategories = [
-    { id: "pcat_01", name: "Women's Collection", handle: "women" },
-    { id: "pcat_02", name: "Men's Collection", handle: "men" },
-    { id: "pcat_03", name: "Home & Art", handle: "home-art" },
-    { id: "pcat_04", name: "Kids", handle: "kids" },
-    { id: "pcat_05", name: "Beauty", handle: "beauty" },
-  ];
-
-  const displayCategories = categories.length > 0 ? categories : fallbackCategories;
+  const displayCategories = categories;
   
   return {
     loading,
