@@ -27,13 +27,13 @@ const CategoryImageForm: React.FC<CategoryImageFormProps> = ({ category }) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      toast.error('Error', { description: 'Please select an image file' });
+    // Client-side validation
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error('Error', { description: `Only image files allowed: ${allowedTypes.join(', ')}` });
       return;
     }
 
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast.error('Error', { description: 'Image size should be less than 5MB' });
       return;
@@ -41,26 +41,24 @@ const CategoryImageForm: React.FC<CategoryImageFormProps> = ({ category }) => {
 
     setUploading(true);
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `category-${category.handle}-${Date.now()}.${fileExt}`;
-      const filePath = `categories/${fileName}`;
+      // Prepare form data
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('categoryId', category.id);
+      formData.append('categoryHandle', category.handle);
 
-      const { data, error } = await supabase.storage
-        .from('article-images')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
+      // Call Edge Function
+      const { data, error } = await supabase.functions.invoke('category-image-upload', {
+        body: formData
+      });
 
       if (error) throw error;
+      if (!data.success) throw new Error(data.error || 'Upload failed');
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('article-images')
-        .getPublicUrl(filePath);
-
-      setImageUrl(publicUrl);
-      setPreviewUrl(publicUrl);
-      toast.success('Success', { description: 'Image uploaded successfully' });
+      setImageUrl(data.imageUrl);
+      setPreviewUrl(data.imageUrl);
+      toast.success('Success', { description: 'Image uploaded and category updated successfully!' });
+      setTimeout(() => window.location.reload(), 1000);
     } catch (error: any) {
       console.error('Error uploading image:', error);
       toast.error('Error', { description: 'Failed to upload image: ' + error.message });
@@ -69,37 +67,6 @@ const CategoryImageForm: React.FC<CategoryImageFormProps> = ({ category }) => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!imageUrl) {
-      toast.error('Error', { description: 'Please upload an image' });
-      return;
-    }
-
-    try {
-      const updatedMetadata = {
-        ...(category.metadata || {}),
-        image: imageUrl
-      };
-
-      const { error } = await supabase
-        .from('product_category')
-        .update({ 
-          metadata: updatedMetadata,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', category.id);
-
-      if (error) throw error;
-
-      toast.success('Success', { description: 'Category image updated successfully!' });
-      setTimeout(() => window.location.reload(), 1000);
-    } catch (error: any) {
-      console.error('Error updating category:', error);
-      toast.error('Error', { description: 'Failed to update category: ' + error.message });
-    }
-  };
 
   const handleRemoveImage = async () => {
     if (!confirm('Are you sure you want to remove this image?')) return;
@@ -129,7 +96,7 @@ const CategoryImageForm: React.FC<CategoryImageFormProps> = ({ category }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="space-y-4">
       <div>
         <Label htmlFor="category-image">Upload Image</Label>
         <Input
@@ -164,14 +131,7 @@ const CategoryImageForm: React.FC<CategoryImageFormProps> = ({ category }) => {
           </Button>
         </div>
       )}
-
-      <Button
-        type="submit"
-        disabled={uploading || !imageUrl}
-      >
-        Save Category Image
-      </Button>
-    </form>
+    </div>
   );
 };
 
