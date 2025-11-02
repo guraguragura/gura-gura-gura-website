@@ -7,6 +7,7 @@ const corsHeaders = {
 };
 
 const MEDUSA_BACKEND_URL = Deno.env.get('MEDUSA_BACKEND_URL') || 'http://localhost:9000';
+const MEDUSA_PUBLISHABLE_KEY = Deno.env.get('MEDUSA_PUBLISHABLE_KEY');
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -52,6 +53,7 @@ serve(async (req) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'x-publishable-api-key': MEDUSA_PUBLISHABLE_KEY || '',
       },
     });
 
