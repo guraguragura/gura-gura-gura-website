@@ -18,10 +18,9 @@ interface Category {
 
 interface CategoriesMenuProps {
   displayCategories: Category[];
-  staticCategories: string[];
 }
 
-const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuProps) => {
+const CategoriesMenu = ({ displayCategories }: CategoriesMenuProps) => {
   const handleCategorySelect = (value: string) => {
     window.location.href = `/categories/${value}`;
   };
@@ -49,17 +48,6 @@ const CategoriesMenu = ({ displayCategories, staticCategories }: CategoriesMenuP
           </SelectContent>
         </Select>
       </div>
-
-      {/* Static menu items */}
-      {staticCategories.map((category) => (
-        <Link 
-          key={category} 
-          to={`/categories/${category.toLowerCase().replace(/\s+/g, '-')}`}
-          className="text-sm whitespace-nowrap hover:text-brand-teal px-1"
-        >
-          {category}
-        </Link>
-      ))}
     </div>
   );
 };

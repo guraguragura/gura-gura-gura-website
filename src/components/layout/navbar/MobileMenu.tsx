@@ -19,10 +19,9 @@ interface Category {
 
 interface MobileMenuProps {
   displayCategories: Category[];
-  staticCategories: string[];
 }
 
-const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) => {
+const MobileMenu = ({ displayCategories }: MobileMenuProps) => {
   return (
     <div className="md:hidden py-2">
       <DropdownMenu>
@@ -47,16 +46,6 @@ const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) =>
                 className="w-full"
               >
                 {category.name}
-              </Link>
-            </DropdownMenuItem>
-          ))}
-          {staticCategories.map((category) => (
-            <DropdownMenuItem key={category} asChild>
-              <Link 
-                to={`/categories/${category.toLowerCase().replace(/\s+/g, '-')}`}
-                className="w-full"
-              >
-                {category}
               </Link>
             </DropdownMenuItem>
           ))}
