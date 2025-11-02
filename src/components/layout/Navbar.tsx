@@ -51,9 +51,10 @@ const Navbar = () => {
         {/* Bottom navbar with categories */}
         <div className="relative">
           <div className="flex items-center justify-between">
-          <CategoriesMenu 
-            displayCategories={displayCategories}
-          />
+            <CategoriesMenu 
+              displayCategories={displayCategories} 
+              staticCategories={staticCategories} 
+            />
             
             <NavigationMenu className="hidden md:flex">
               <NavigationMenuList>
@@ -117,9 +118,10 @@ const Navbar = () => {
             </NavigationMenu>
           </div>
           
-        <MobileMenu 
-          displayCategories={displayCategories}
-        />
+          <MobileMenu 
+            displayCategories={displayCategories} 
+            staticCategories={staticCategories} 
+          />
         </div>
       </div>
     </header>
