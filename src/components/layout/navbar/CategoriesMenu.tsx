@@ -3,13 +3,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import { CategoryWithChildren } from "./useCategoriesData";
 
 interface CategoriesMenuProps {
@@ -20,48 +19,47 @@ interface CategoriesMenuProps {
 const CategoriesMenu = ({ categoriesWithChildren, staticCategories }: CategoriesMenuProps) => {
   return (
     <div className="hidden md:flex items-center justify-start pl-0 space-x-6 py-2 overflow-x-auto">
-      {/* Categories Navigation Menu */}
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger className="bg-transparent text-sm hover:text-brand-teal h-auto py-2 px-2">
-              Categories
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                {categoriesWithChildren.map(({ category, subcategories }) => (
-                  <li key={category.id}>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        to={`/categories/${category.handle}`}
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                      >
-                        <div className="text-sm font-medium leading-none">{category.name}</div>
-                        {subcategories.length > 0 && (
-                          <ul className="mt-2 space-y-1">
-                            {subcategories.map((sub) => (
-                              <li key={sub.id}>
-                                <Link
-                                  to={`/categories/${sub.handle}`}
-                                  className="flex items-center text-xs text-muted-foreground hover:text-foreground transition-colors"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <ChevronRight className="h-3 w-3 mr-1" />
-                                  {sub.name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </Link>
-                    </NavigationMenuLink>
-                  </li>
-                ))}
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+      {/* Categories Dropdown Menu */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button 
+            variant="ghost" 
+            className="text-sm hover:text-brand-teal h-auto py-2 px-2"
+          >
+            Categories
+            <ChevronRight className="h-4 w-4 ml-1 rotate-90" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-[400px] md:w-[500px] lg:w-[600px] p-4 bg-background border shadow-md z-50">
+          <div className="grid grid-cols-2 gap-3">
+            {categoriesWithChildren.map(({ category, subcategories }) => (
+              <div key={category.id} className="space-y-2">
+                <Link
+                  to={`/categories/${category.handle}`}
+                  className="block text-sm font-medium hover:text-brand-teal transition-colors"
+                >
+                  {category.name}
+                </Link>
+                {subcategories.length > 0 && (
+                  <ul className="space-y-1">
+                    {subcategories.map((sub) => (
+                      <li key={sub.id}>
+                        <Link
+                          to={`/categories/${sub.handle}`}
+                          className="flex items-center text-xs text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          <ChevronRight className="h-3 w-3 mr-1" />
+                          {sub.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       {/* Static menu items */}
       {staticCategories.map((category) => (
