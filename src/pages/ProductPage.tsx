@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -39,54 +39,6 @@ const ProductPage = () => {
     // Implement wishlist functionality here
   };
 
-  // Fallback to mock data if there's an error or no product found
-  const mockProduct = {
-    id: "1",
-    title: "Apple iPhone 14 Pro Max - 256GB - Deep Purple",
-    description: "The iPhone 14 Pro Max features a stunning 6.7-inch Super Retina XDR display with ProMotion technology, an advanced camera system for incredible photos and videos, and the A16 Bionic chip, the fastest chip ever in a smartphone. Plus, it has all-day battery life and industry-leading durability features.",
-    subtitle: "Latest flagship phone with advanced camera system",
-    price: 1299,
-    discount_price: 1199,
-    thumbnail: "/placeholder.svg",
-    images: Array(5).fill("/placeholder.svg"),
-    rating: 4.8,
-    reviews_count: 356,
-    in_stock: true,
-    sku: "APIP14PM-256-DP",
-    specifications: {
-      "Display": "6.7-inch Super Retina XDR display with ProMotion",
-      "Processor": "A16 Bionic chip",
-      "Storage": "256GB",
-      "Camera": "48MP main, 12MP ultra wide, 12MP telephoto",
-      "Front Camera": "12MP TrueDepth camera",
-      "Battery": "Up to 29 hours video playback",
-      "OS": "iOS 16",
-      "Connectivity": "5G capable, Wi-Fi 6, Bluetooth 5.3",
-      "Dimensions": "160.7 x 77.6 x 7.85 mm",
-      "Weight": "240 grams"
-    },
-    features: [
-      "A16 Bionic chip",
-      "6.7-inch Super Retina XDR display with ProMotion",
-      "Pro camera system with 48MP main",
-      "Emergency SOS via satellite",
-      "Crash Detection",
-      "All-day battery life",
-      "Face ID",
-      "Ceramic Shield",
-      "Water resistant to 6 meters for 30 minutes"
-    ],
-    is_sale: true,
-    is_new: true,
-    variants: [
-      { color: "Deep Purple", price: 1299, thumbnail: "/placeholder.svg" },
-      { color: "Gold", price: 1299, thumbnail: "/placeholder.svg" },
-      { color: "Silver", price: 1299, thumbnail: "/placeholder.svg" },
-      { color: "Space Black", price: 1299, thumbnail: "/placeholder.svg" }
-    ],
-    metadata: {}
-  };
-
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen bg-gray-50">
@@ -120,8 +72,28 @@ const ProductPage = () => {
     );
   }
 
-  // Use product data or fallback to mock data if there's an error
-  const displayProduct = product || mockProduct;
+  if (error || !product) {
+    return (
+      <div className="flex flex-col min-h-screen bg-gray-50">
+        <TopInfoBar />
+        <Navbar />
+        <div className="container mx-auto py-8 px-4">
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold mb-4">Product Not Found</h2>
+            <p className="text-gray-600 mb-6">
+              The product you're looking for doesn't exist or has been removed.
+            </p>
+            <Link to="/shop" className="text-primary hover:underline">
+              ← Back to Shop
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  const displayProduct = product;
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">

@@ -97,7 +97,8 @@ export function useProducts(options: ProductOptions = {}) {
         }
         
         if (options.tag) {
-          query = query.filter('product_tags.product_tag.value', 'eq', options.tag);
+          // Note: We'll filter by tag AFTER fetching to avoid LEFT JOIN filter issues
+          query = query.not('product_tags', 'is', null);
         }
         
         if (options.limit) {
@@ -105,13 +106,25 @@ export function useProducts(options: ProductOptions = {}) {
         }
         
         // Execute the query
-        const { data, error: queryError } = await query;
+        let { data, error: queryError } = await query;
         
         if (queryError) {
           console.error("Error fetching products:", queryError);
           setError("Failed to load products");
           setProducts([]);
         } else if (data) {
+          // Client-side tag filtering if tag option is provided
+          if (options.tag && data) {
+            data = data.filter(product => {
+              // Check if product has the requested tag
+              if (!product.product_tags || product.product_tags.length === 0) {
+                return false;
+              }
+              return product.product_tags.some((pt: any) => 
+                pt.product_tag?.value === options.tag
+              );
+            });
+          }
           
           
           // Transform data to match our Product interface without circular references
