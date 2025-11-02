@@ -28,7 +28,7 @@ const ProductTabs: React.FC<ProductTabsProps> = ({ product }) => {
           Specifications
         </TabsTrigger>
         <TabsTrigger value="reviews" className="data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:shadow-none rounded-none">
-          Reviews ({product.reviews_count})
+          Reviews
         </TabsTrigger>
       </TabsList>
       

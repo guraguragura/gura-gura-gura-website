@@ -39,6 +39,7 @@ export interface ProductDetails {
   metadata: ProductMetadata;
   categoryName?: string;
   categoryHandle?: string;
+  category_id?: string;
 }
 
 /**
@@ -205,6 +206,7 @@ export function useProductDetails(productKey: string | undefined) {
           // Extract category information (use first category if multiple exist)
           let categoryName: string | undefined;
           let categoryHandle: string | undefined;
+          let categoryId: string | undefined;
           
           if (Array.isArray(productData.product_category_product) && productData.product_category_product.length > 0) {
             const firstCategory = productData.product_category_product[0];
@@ -214,6 +216,10 @@ export function useProductDetails(productKey: string | undefined) {
                 categoryName = category.name;
                 categoryHandle = category.handle;
               }
+            }
+            // Extract category_id
+            if (firstCategory && typeof firstCategory === 'object' && 'product_category_id' in firstCategory) {
+              categoryId = firstCategory.product_category_id as string;
             }
           }
           
@@ -254,7 +260,8 @@ export function useProductDetails(productKey: string | undefined) {
             variants,
             metadata: productMetadata,
             categoryName,
-            categoryHandle
+            categoryHandle,
+            category_id: categoryId
           };
           
           setProduct(formattedProduct);
