@@ -65,9 +65,16 @@ const CategoriesMenu = ({ categoriesWithChildren, staticCategories }: Categories
                         <Link
                           key={sub.id}
                           to={`/categories/${sub.handle}`}
-                          className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
+                          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-1"
                         >
-                          <ChevronRight className="h-4 w-4 mr-2 flex-shrink-0" />
+                          {sub.metadata?.image && (
+                            <img 
+                              src={sub.metadata.image} 
+                              alt={sub.name}
+                              className="w-6 h-6 object-cover rounded flex-shrink-0"
+                            />
+                          )}
+                          <ChevronRight className="h-4 w-4 flex-shrink-0" />
                           {sub.name}
                         </Link>
                       ))}

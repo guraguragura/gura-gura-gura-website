@@ -7,6 +7,7 @@ export interface Category {
   name: string;
   handle: string;
   parent_category_id?: string | null;
+  metadata?: any;
 }
 
 export interface CategoryWithChildren {
@@ -26,7 +27,7 @@ export const useCategoriesData = () => {
         // Fetch all active categories
         const { data: allCategories, error } = await supabase
           .from('product_category')
-          .select('id, name, handle, parent_category_id')
+          .select('id, name, handle, parent_category_id, metadata')
           .eq('is_active', true)
           .order('rank', { ascending: true });
         
