@@ -22,6 +22,7 @@ interface ProductProps {
     discount_price?: number;
     is_sale?: boolean;
     is_new?: boolean;
+    tags?: string[];
   };
   viewMode: "grid" | "list";
   formatPrice: (price: number) => string;
@@ -68,6 +69,16 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
             
             <p className="text-gray-600 text-sm mb-3 line-clamp-2">{description}</p>
             
+            {product.tags && product.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1 mb-2">
+                {product.tags.map((tag, index) => (
+                  <Badge key={index} variant="secondary" className="text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
+            
             <ProductRating rating={rating} reviews_count={reviews_count} />
             <ProductInventory soldItems={soldItems} totalInventory={totalInventory} />
           </div>
@@ -107,6 +118,16 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
             {title}
           </h3>
         </Link>
+        
+        {product.tags && product.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-2">
+            {product.tags.slice(0, 3).map((tag, index) => (
+              <Badge key={index} variant="secondary" className="text-xs">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
         
         <div className="rating-container">
           <ProductRating rating={rating} reviews_count={reviews_count} />

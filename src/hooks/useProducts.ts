@@ -16,6 +16,7 @@ export interface Product {
   is_sale: boolean;
   is_new: boolean;
   is_featured: boolean;
+  tags?: string[];
   // Store original metadata for reference if needed
   raw_metadata?: Record<string, any>;
 }
@@ -71,8 +72,8 @@ export function useProducts(options: ProductOptions = {}) {
         // Build the query step by step to maintain type safety
         let query = supabase
           .from('product')
-          .select('*, product_category_product(product_category_id, product_category:product_category(name, handle))')
-          .is('deleted_at', null) // Changed from .eq('deleted_at', null) to .is('deleted_at', null)
+          .select('*, product_category_product(product_category_id, product_category:product_category(name, handle)), product_tags(product_tag(id, value))')
+          .is('deleted_at', null)
           .order('created_at', { ascending: false });
         
         
@@ -129,6 +130,12 @@ export function useProducts(options: ProductOptions = {}) {
             const isNew = extractBoolean(rawMetadata, 'is_new', false);
             const isFeatured = extractBoolean(rawMetadata, 'is_featured', false);
             
+            // Extract tags from the joined data
+            const tags = Array.isArray(item.product_tags) 
+              ? item.product_tags
+                  .map((pt: any) => pt?.product_tag?.value)
+                  .filter((tag: string | undefined): tag is string => typeof tag === 'string')
+              : [];
             
             // Build a completely flat product object
             const product: Product = {
@@ -144,6 +151,7 @@ export function useProducts(options: ProductOptions = {}) {
               is_sale: isSale,
               is_new: isNew,
               is_featured: isFeatured,
+              tags: tags.length > 0 ? tags : undefined,
               // Optionally keep the original metadata for reference
               raw_metadata: rawMetadata
             };

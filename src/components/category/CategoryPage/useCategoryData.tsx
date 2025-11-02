@@ -14,6 +14,7 @@ interface Product {
   discount_price?: number;
   is_sale?: boolean;
   is_new?: boolean;
+  tags?: string[];
 }
 
 // Constants
@@ -97,7 +98,7 @@ const useCategoryData = (handle?: string) => {
             
             let query = supabase
               .from('product')
-              .select('id, title, description, thumbnail, metadata')
+              .select('id, title, description, thumbnail, metadata, product_tags(product_tag(id, value))')
               .in('id', productIds)
               .range((currentPage - 1) * productsPerPage, currentPage * productsPerPage - 1);
               
@@ -126,6 +127,13 @@ const useCategoryData = (handle?: string) => {
               const formattedProducts = productsData.map(product => {
                 const metadataObj = product.metadata as Record<string, any> || {};
                 
+                // Extract tags from the joined data
+                const tags = Array.isArray((product as any).product_tags) 
+                  ? (product as any).product_tags
+                      .map((pt: any) => pt?.product_tag?.value)
+                      .filter((tag: string | undefined): tag is string => typeof tag === 'string')
+                  : [];
+                
                 return {
                   id: product.id,
                   title: product.title,
@@ -137,6 +145,7 @@ const useCategoryData = (handle?: string) => {
                   reviews_count: metadataObj.reviews_count || 0,
                   is_sale: metadataObj.is_sale || false,
                   is_new: metadataObj.is_new || false,
+                  tags: tags.length > 0 ? tags : undefined,
                 };
               });
               

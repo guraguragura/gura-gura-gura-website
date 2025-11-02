@@ -13,6 +13,7 @@ export interface Product {
   category?: string;
   handle?: string;
   images?: string[];
+  tags?: string[];
 }
 
 export interface Category {
