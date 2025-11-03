@@ -71,7 +71,7 @@ export const useProductRecommendations = (productId?: string, userId?: string) =
             thumbnail: product.thumbnail || '',
             price: Number(metadata.price) || 0,
             discount_price: metadata.discount_price ? Number(metadata.discount_price) : undefined,
-            rating: Number(metadata.rating) || 0,
+            rating: Number(metadata.rating) || 4.5,
             reviews_count: Number(metadata.reviews_count) || 0,
             is_sale: Boolean(metadata.is_sale),
             is_new: Boolean(metadata.is_new),

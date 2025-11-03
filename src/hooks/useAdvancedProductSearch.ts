@@ -127,7 +127,7 @@ export const useAdvancedProductSearch = (filters: AdvancedProductFilters = {}) =
             discount_price: metadata.discount_price ? Number(metadata.discount_price) : undefined,
             thumbnail: product.thumbnail || '',
             images: metadata.images || [product.thumbnail].filter(Boolean),
-            rating: Number(metadata.rating) || 0,
+            rating: Number(metadata.rating) || 4.5,
             reviews_count: Number(metadata.reviews_count) || 0,
             handle: product.handle,
             brand: metadata.brand || '',

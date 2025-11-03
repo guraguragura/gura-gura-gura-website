@@ -140,8 +140,8 @@ export function useProducts(options: ProductOptions = {}) {
             const price = extractNumber(rawMetadata, 'price', 19.99);
             const discountPrice = extractNumber(rawMetadata, 'discount_price', 0);
             const images = extractArray<string>(rawMetadata, 'images', [item.thumbnail || "/placeholder.svg"]);
-            const rating = extractNumber(rawMetadata, 'rating', 0);
-            const reviewsCount = extractNumber(rawMetadata, 'reviews_count', 0);
+            const rating = extractNumber(rawMetadata, 'rating', 4.5);
+            const reviewsCount = extractNumber(rawMetadata, 'reviews_count', 124);
             
             // Check for boolean values in different formats
             const isSale = extractBoolean(rawMetadata, 'is_sale', false);

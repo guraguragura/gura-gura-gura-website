@@ -45,8 +45,8 @@ export const Wishlist = () => {
                 description: item.category || "No description available",
                 price: item.price,
                 thumbnail: item.thumbnail,
-                rating: 0,
-                reviews_count: 0,
+                rating: 4.5, // Default rating for wishlist items
+                reviews_count: 0, // Default reviews count
                 discount_price: item.discount_price,
                 is_sale: !!item.discount_price,
                 is_new: false

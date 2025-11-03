@@ -91,7 +91,7 @@ export function useTagData(tagName: string): TagDataReturn {
               thumbnail: item.thumbnail || '/placeholder.svg',
               price: typeof rawMetadata['price'] === 'number' ? rawMetadata['price'] : 19.99,
               discount_price: typeof rawMetadata['discount_price'] === 'number' ? rawMetadata['discount_price'] : undefined,
-              rating: typeof rawMetadata['rating'] === 'number' ? rawMetadata['rating'] : 0,
+              rating: typeof rawMetadata['rating'] === 'number' ? rawMetadata['rating'] : 4.5,
               reviews_count: typeof rawMetadata['reviews_count'] === 'number' ? rawMetadata['reviews_count'] : 0,
               is_sale: rawMetadata['is_sale'] === true || rawMetadata['is_sale'] === 'true',
               is_new: rawMetadata['is_new'] === true || rawMetadata['is_new'] === 'true',

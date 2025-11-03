@@ -55,7 +55,7 @@ const TopSellingProducts = () => {
                     oldPrice: product.discount_price ? product.price : product.price * 1.2,
                     image: product.thumbnail || "/placeholder.svg",
                     badge: product.is_new ? 'New' : product.is_sale ? 'Sale' : null,
-                    rating: product.rating || 0,
+                    rating: product.rating || 4.5,
                     reviewsCount: product.reviews_count || 0
                   }}
                   formatPrice={formatPrice}
