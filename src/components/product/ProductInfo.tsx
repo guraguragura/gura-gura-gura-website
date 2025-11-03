@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Heart, Minus, Plus, ShoppingCart, Star } from "lucide-react";
+import { Heart, Minus, Plus, ShoppingCart, Star, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCurrency } from "@/hooks/useCurrency";
@@ -24,6 +24,7 @@ interface ProductInfoProps {
     is_new?: boolean;
     variants?: any[];
     thumbnail: string;
+    delivery_time?: string;
   };
   onAddToCart: (quantity: number) => void;
   onAddToWishlist: () => void;
@@ -119,6 +120,12 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         ) : (
           <p className="text-red-600 mt-1 text-sm">Out of Stock</p>
         )}
+        
+        {/* Delivery Time */}
+        <div className="flex items-center mt-2 text-sm text-gray-600">
+          <Clock size={16} className="mr-1" />
+          <span>Delivery: {product.delivery_time || 'Same-day'}</span>
+        </div>
       </div>
       
       {/* Product Tags */}

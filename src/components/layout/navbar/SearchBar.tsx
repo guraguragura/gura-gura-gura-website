@@ -63,7 +63,7 @@ const SearchBar = () => {
   };
 
   const handleProductSelect = (product: ProductSuggestion) => {
-    navigate(`/product/${product.handle}`);
+    navigate(`/product/${product.id}`);
     setQuery("");
     setIsOpen(false);
   };

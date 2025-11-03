@@ -17,13 +17,14 @@ import BrandFilter from "./filters/BrandFilter";
 import { colorsData, brandsData, ratingsData } from "./filters/data/filterData";
 
 const CategoryFilter = () => {
-  const { handle } = useParams<{ handle: string }>();
+  const { handle, categoryName } = useParams<{ handle?: string; categoryName?: string }>();
+  const currentHandle = handle || categoryName;
   const [priceRange, setPriceRange] = useState([0, 100]);
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [colorFilter, setColorFilter] = useState<string | null>(null);
   const [brandFilter, setBrandFilter] = useState<string | null>(null);
   
-  const { displayCategories, loading } = useSubcategories(handle);
+  const { displayCategories, loading } = useSubcategories(currentHandle || undefined);
 
   return (
     <div className="space-y-6">

@@ -16,6 +16,7 @@ interface ProductMetadata {
   is_sale?: boolean;
   is_new?: boolean;
   variants?: any[];
+  delivery_time?: string;
 }
 
 export interface ProductDetails {
@@ -36,7 +37,11 @@ export interface ProductDetails {
   is_sale?: boolean;
   is_new?: boolean;
   variants?: any[];
+  delivery_time?: string;
   metadata: ProductMetadata;
+  categoryName?: string;
+  categoryHandle?: string;
+  category_id?: string;
 }
 
 /**
@@ -133,16 +138,16 @@ function safeExtractObject<T>(
   return value as T;
 }
 
-export function useProductDetails(productId: string | undefined) {
+export function useProductDetails(productKey: string | undefined) {
   const [product, setProduct] = useState<ProductDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
-      if (!productId) {
+      if (!productKey) {
         setLoading(false);
-        setError("Product ID is required");
+        setError("Product identifier is required");
         return;
       }
 
@@ -150,28 +155,48 @@ export function useProductDetails(productId: string | undefined) {
       setError(null);
       
       try {
+        // Try fetching by ID first
         const { data, error: queryError } = await supabase
           .from('product')
           .select('*, product_category_product(product_category_id, product_category:product_category(name, handle))')
-          .eq('id', productId)
-          .single();
+          .eq('id', productKey)
+          .maybeSingle();
 
-        if (queryError) {
-          console.error("Error fetching product:", queryError);
+        let productData = data;
+        let fetchError = queryError;
+
+        // If no product found by ID and no error, try by handle
+        if (!data && !queryError) {
+          const { data: byHandle, error: handleError } = await supabase
+            .from('product')
+            .select('*, product_category_product(product_category_id, product_category:product_category(name, handle))')
+            .eq('handle', productKey)
+            .maybeSingle();
+          
+          productData = byHandle;
+          fetchError = handleError;
+        }
+
+        if (fetchError) {
+          console.error("Error fetching product:", fetchError);
           setError("Failed to load product");
           setProduct(null);
-        } else if (data) {
+        } else if (!productData) {
+          console.error("No product found with key:", productKey);
+          setError("Product not found");
+          setProduct(null);
+        } else if (productData) {
           // First, ensure metadata is an object
-          const rawMetadata = (typeof data.metadata === 'object' && data.metadata !== null) 
-            ? data.metadata as Record<string, unknown>
+          const rawMetadata = (typeof productData.metadata === 'object' && productData.metadata !== null) 
+            ? productData.metadata as Record<string, unknown>
             : {};
           
           // Extract values safely with type checking
           const price = safeExtract(rawMetadata, 'price', 'number', 19.99);
           const discountPrice = safeExtract(rawMetadata, 'discount_price', 'number', undefined);
-          const images = safeExtractArray(rawMetadata, 'images', [data.thumbnail || "/placeholder.svg"]);
-          const rating = safeExtract(rawMetadata, 'rating', 'number', 4.5);
-          const reviewsCount = safeExtract(rawMetadata, 'reviews_count', 'number', 124);
+          const images = safeExtractArray(rawMetadata, 'images', [productData.thumbnail || "/placeholder.svg"]);
+          const rating = safeExtract(rawMetadata, 'rating', 'number', 0);
+          const reviewsCount = safeExtract(rawMetadata, 'reviews_count', 'number', 0);
           const inStock = safeExtractBoolean(rawMetadata, 'in_stock', true);
           const sku = safeExtract(rawMetadata, 'sku', 'string', '');
           const isSale = safeExtractBoolean(rawMetadata, 'is_sale', false);
@@ -179,6 +204,27 @@ export function useProductDetails(productId: string | undefined) {
           const specifications = safeExtractObject(rawMetadata, 'specifications', {});
           const features = safeExtractArray(rawMetadata, 'features', []);
           const variants = safeExtractArray(rawMetadata, 'variants', []);
+          const deliveryTime = safeExtract(rawMetadata, 'delivery_time', 'string', 'Same-day');
+          
+          // Extract category information (use first category if multiple exist)
+          let categoryName: string | undefined;
+          let categoryHandle: string | undefined;
+          let categoryId: string | undefined;
+          
+          if (Array.isArray(productData.product_category_product) && productData.product_category_product.length > 0) {
+            const firstCategory = productData.product_category_product[0];
+            if (firstCategory && typeof firstCategory === 'object' && 'product_category' in firstCategory) {
+              const category = firstCategory.product_category as { name?: string; handle?: string } | null;
+              if (category) {
+                categoryName = category.name;
+                categoryHandle = category.handle;
+              }
+            }
+            // Extract category_id
+            if (firstCategory && typeof firstCategory === 'object' && 'product_category_id' in firstCategory) {
+              categoryId = firstCategory.product_category_id as string;
+            }
+          }
           
           // Create a safe ProductMetadata object
           const productMetadata: ProductMetadata = {
@@ -193,18 +239,19 @@ export function useProductDetails(productId: string | undefined) {
             features,
             is_sale: isSale,
             is_new: isNew,
-            variants
+            variants,
+            delivery_time: deliveryTime
           };
           
           // Build product with directly assigned properties
           const formattedProduct: ProductDetails = {
-            id: data.id,
-            title: data.title,
-            description: data.description || "",
-            subtitle: data.subtitle || "",
+            id: productData.id,
+            title: productData.title,
+            description: productData.description || "",
+            subtitle: productData.subtitle || "",
             price,
             discount_price: discountPrice,
-            thumbnail: data.thumbnail || "/placeholder.svg",
+            thumbnail: productData.thumbnail || "/placeholder.svg",
             images,
             rating,
             reviews_count: reviewsCount,
@@ -215,7 +262,11 @@ export function useProductDetails(productId: string | undefined) {
             is_sale: isSale,
             is_new: isNew,
             variants,
-            metadata: productMetadata
+            delivery_time: deliveryTime,
+            metadata: productMetadata,
+            categoryName,
+            categoryHandle,
+            category_id: categoryId
           };
           
           setProduct(formattedProduct);
@@ -230,7 +281,7 @@ export function useProductDetails(productId: string | undefined) {
     };
 
     fetchProduct();
-  }, [productId]);
+  }, [productKey]);
 
   return { product, loading, error };
 }

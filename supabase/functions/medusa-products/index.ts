@@ -7,6 +7,7 @@ const corsHeaders = {
 };
 
 const MEDUSA_BACKEND_URL = Deno.env.get('MEDUSA_BACKEND_URL') || 'http://localhost:9000';
+const MEDUSA_PUBLISHABLE_KEY = Deno.env.get('MEDUSA_PUBLISHABLE_KEY');
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -45,19 +46,33 @@ serve(async (req) => {
       medusaParams.append('offset', params.get('offset')!);
     }
 
-    console.log(`Fetching products from Medusa: ${MEDUSA_BACKEND_URL}/store/products?${medusaParams.toString()}`);
+    console.log(`Backend URL: ${MEDUSA_BACKEND_URL}`);
+    console.log(`Publishable Key: ${MEDUSA_PUBLISHABLE_KEY ? 'Set' : 'Missing'}`);
+    console.log(`Fetching products from: ${MEDUSA_BACKEND_URL}/store/products?${medusaParams.toString()}`);
 
     // Fetch products from Medusa Store API
     const response = await fetch(`${MEDUSA_BACKEND_URL}/store/products?${medusaParams.toString()}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'x-publishable-api-key': MEDUSA_PUBLISHABLE_KEY || '',
       },
     });
 
+    console.log(`Response status: ${response.status}`);
+    console.log(`Response content-type: ${response.headers.get('content-type')}`);
+
     if (!response.ok) {
-      console.error('Medusa API error:', response.status, response.statusText);
-      throw new Error(`Medusa API error: ${response.status}`);
+      const errorText = await response.text();
+      console.error('Medusa API error:', response.status, errorText);
+      throw new Error(`Medusa API error ${response.status}: ${errorText.substring(0, 200)}`);
+    }
+
+    // Check if response is HTML (login page redirect)
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('text/html')) {
+      console.error('Received HTML response instead of JSON - possible authentication issue or wrong URL');
+      throw new Error('Medusa backend returned HTML instead of JSON. Check your MEDUSA_BACKEND_URL and ensure it does not include /app/login');
     }
 
     const data = await response.json();
