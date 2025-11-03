@@ -7,10 +7,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 interface CategoryItemProps {
   name: string;
   handle: string;
+  count: number;
   image?: string;
-  metadata?: {
-    image?: string;
-  };
 }
 
 interface CategoryListProps {
@@ -43,7 +41,7 @@ const CategoryList = ({ categories, loading }: CategoryListProps) => {
         <li key={category.name} className={`flex items-center mb-2 sm:mb-3 hover:bg-gray-50 rounded p-1 ${isMobile ? 'text-xs' : ''}`}>
           <div className={`${isMobile ? 'h-6 w-6' : 'h-7 sm:h-8 w-7 sm:w-8'} rounded-full overflow-hidden mr-2 sm:mr-3 bg-gray-100`}>
             <img 
-              src={category.metadata?.image || category.image || getCategoryStyle(category.handle).image} 
+              src={getCategoryStyle(category.handle).image} 
               alt={category.name}
               className="w-full h-full object-cover"
               onError={(e) => {
@@ -52,12 +50,15 @@ const CategoryList = ({ categories, loading }: CategoryListProps) => {
               }}
             />
           </div>
-          <Link 
-            to={`/categories/${category.handle}`}
-            className="hover:text-blue-500 cursor-pointer text-xs sm:text-sm flex-grow"
-          >
-            {category.name}
-          </Link>
+          <div className="flex justify-between items-center flex-grow">
+            <Link 
+              to={`/categories/${category.handle}`}
+              className="hover:text-blue-500 cursor-pointer text-xs sm:text-sm truncate max-w-[70%]"
+            >
+              {category.name}
+            </Link>
+            <span className="text-gray-500 text-xs">({category.count})</span>
+          </div>
         </li>
       ))}
     </>

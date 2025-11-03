@@ -10,23 +10,16 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { CategoryWithChildren } from "./useCategoriesData";
 
 interface MobileHeaderProps {
-  categoriesWithChildren: CategoryWithChildren[];
+  displayCategories: { id: string; name: string; handle: string }[];
   staticCategories: string[];
   showSearch: boolean;
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const MobileHeader = ({ 
-  categoriesWithChildren, 
+  displayCategories, 
   staticCategories,
   showSearch,
   setShowSearch
@@ -46,60 +39,29 @@ const MobileHeader = ({
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="overflow-y-auto">
+            <SheetContent side="left">
               <div className="mt-4 flex flex-col gap-4">
                 <h3 className="text-lg font-bold">Categories</h3>
-                <Accordion type="single" collapsible className="w-full">
-                  {categoriesWithChildren.map(({ category, subcategories }) => (
-                    subcategories.length > 0 ? (
-                      <AccordionItem key={category.id} value={category.id}>
-                        <AccordionTrigger className="text-sm py-2">
-                          <Link 
-                            to={`/categories/${category.handle}`}
-                            className="flex-1 text-left hover:text-brand-teal"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            {category.name}
-                          </Link>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          <ul className="space-y-2 pl-4">
-                            {subcategories.map((sub) => (
-                              <li key={sub.id}>
-                                <Link
-                                  to={`/categories/${sub.handle}`}
-                                  className="text-sm text-muted-foreground hover:text-foreground transition-colors block py-1"
-                                >
-                                  {sub.name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </AccordionContent>
-                      </AccordionItem>
-                    ) : (
-                      <div key={category.id} className="border-b">
-                        <Link
-                          to={`/categories/${category.handle}`}
-                          className="block py-2 text-sm hover:text-brand-teal"
-                        >
-                          {category.name}
-                        </Link>
-                      </div>
-                    )
+                <div className="space-y-3">
+                  {displayCategories.map((category) => (
+                    <Link 
+                      key={category.id}
+                      to={`/categories/${category.handle}`}
+                      className="block py-2 hover:text-brand-teal"
+                    >
+                      {category.name}
+                    </Link>
                   ))}
-                  
                   {staticCategories.map((category) => (
-                    <div key={category} className="border-b">
-                      <Link
-                        to={`/categories/${category.toLowerCase().replace(/\s+/g, '-')}`}
-                        className="block py-2 text-sm hover:text-brand-teal"
-                      >
-                        {category}
-                      </Link>
-                    </div>
+                    <Link 
+                      key={category}
+                      to={`/categories/${category.toLowerCase().replace(/\s+/g, '-')}`}
+                      className="block py-2 hover:text-brand-teal"
+                    >
+                      {category}
+                    </Link>
                   ))}
-                </Accordion>
+                </div>
                 
                 <div className="border-t pt-4 mt-2">
                   <Link to="/business" className="block py-2 hover:text-brand-teal">
@@ -149,7 +111,7 @@ const MobileHeader = ({
               >
                 All Categories
               </Link>
-              {categoriesWithChildren.slice(0, 5).map(({ category }) => (
+              {displayCategories.slice(0, 5).map((category) => (
                 <Link 
                   key={category.id}
                   to={`/categories/${category.handle}`}

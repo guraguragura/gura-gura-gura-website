@@ -5,7 +5,7 @@ loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
 module.exports = defineConfig({
   projectConfig: {
-    databaseUrl: process.env.DATABASE_URL,
+    databaseUrl: process.env.DATABASE_URL || "postgresql://postgres.wxniywyujrxlwraocszi:password@aws-0-us-east-1.pooler.supabase.com:6543/postgres",
     http: {
       storeCors: process.env.STORE_CORS || "http://localhost:5173,https://your-domain.com",
       adminCors: process.env.ADMIN_CORS || "http://localhost:9000,http://localhost:7001,http://localhost:5173",
@@ -15,7 +15,7 @@ module.exports = defineConfig({
     }
   },
   admin: {
-    disable: false, // set to true temporarily if you need to isolate server startup
+    disable: false,
     backendUrl: process.env.MEDUSA_BACKEND_URL || "http://localhost:9000",
   },
   modules: [

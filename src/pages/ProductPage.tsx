@@ -5,7 +5,6 @@ import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import RelatedProducts from "@/components/product/RelatedProducts";
-import RecommendedProducts from "@/components/product/RecommendedProducts";
 import ProductBreadcrumb from "@/components/product/ProductBreadcrumb";
 import ProductImageGallery from "@/components/product/ProductImageGallery";
 import ProductInfo from "@/components/product/ProductInfo";
@@ -14,15 +13,8 @@ import { useProductDetails } from "@/hooks/useProductDetails";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 
 const ProductPage = () => {
-  const { productId, id, handle } = useParams<{ 
-    productId?: string; 
-    id?: string; 
-    handle?: string; 
-  }>();
-  
-  // Use whichever parameter is available
-  const productKey = productId || id || handle;
-  const { product, loading, error } = useProductDetails(productKey);
+  const { id } = useParams<{ id: string }>();
+  const { product, loading, error } = useProductDetails(id);
   const { addToRecentlyViewed } = useRecentlyViewed();
 
   // Track product view when product loads
@@ -109,11 +101,7 @@ const ProductPage = () => {
       <Navbar />
       <div className="container mx-auto py-6 px-4">
         {/* Breadcrumb */}
-        <ProductBreadcrumb 
-          title={displayProduct.title} 
-          categoryName={displayProduct.categoryName}
-          categoryHandle={displayProduct.categoryHandle}
-        />
+        <ProductBreadcrumb title={displayProduct.title} />
 
         {/* Product Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
@@ -133,16 +121,6 @@ const ProductPage = () => {
 
         {/* Product Tabs */}
         <ProductTabs product={displayProduct} />
-
-        {/* Recommended Products from Same Category */}
-        {displayProduct.category_id && (
-          <div className="max-w-[1200px] mx-auto">
-            <RecommendedProducts 
-              categoryId={displayProduct.category_id} 
-              currentProductId={displayProduct.id}
-            />
-          </div>
-        )}
 
         {/* Related Products - Now with improved responsive layout */}
         <div className="max-w-[1200px] mx-auto">

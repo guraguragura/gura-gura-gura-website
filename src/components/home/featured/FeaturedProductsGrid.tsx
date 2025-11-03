@@ -49,7 +49,7 @@ const FeaturedProductsGrid = () => {
               product.is_new ? 'new' : null,
               product.is_sale ? 'sale' : null
             ].filter(Boolean) as string[],
-            rating: product.rating || 0,
+            rating: product.rating || 4.5,
             category: product.raw_metadata?.product_type || "Product",
             badge: product.is_sale ? 'Sale' : product.is_new ? 'New' : null
           }}
