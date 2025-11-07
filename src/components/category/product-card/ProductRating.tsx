@@ -9,16 +9,9 @@ interface ProductRatingProps {
 }
 
 const ProductRating: React.FC<ProductRatingProps> = ({ rating, reviews_count }) => {
-  // Show "No reviews yet" when there are no reviews
+  // Don't show anything when there are no reviews
   if (reviews_count === 0 || rating === 0) {
-    return (
-      <div className="flex items-center gap-2 mb-2">
-        <Badge variant="secondary" className="text-xs font-normal">
-          No reviews yet
-        </Badge>
-        <span className="text-xs text-muted-foreground">Be the first to review!</span>
-      </div>
-    );
+    return null;
   }
 
   return (

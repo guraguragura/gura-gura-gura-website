@@ -31,9 +31,6 @@ interface ProductProps {
 const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice }) => {
   const { id, title, price, thumbnail, rating, reviews_count, discount_price, is_sale, description } = product;
   
-  const totalInventory = 35;
-  const soldItems = 18;
-  
   const discountPercentage = discount_price && price 
     ? Math.round(((price - discount_price) / price) * 100) 
     : 0;
@@ -80,7 +77,6 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
             )}
             
             <ProductRating rating={rating} reviews_count={reviews_count} />
-            <ProductInventory soldItems={soldItems} totalInventory={totalInventory} />
           </div>
           
           <div className="p-4 flex flex-col justify-between md:w-48 flex-shrink-0 border-t md:border-t-0 md:border-l">
@@ -133,7 +129,6 @@ const ProductCard: React.FC<ProductProps> = ({ product, viewMode, formatPrice })
           <ProductRating rating={rating} reviews_count={reviews_count} />
         </div>
         
-        <ProductInventory soldItems={soldItems} totalInventory={totalInventory} />
         <ProductPrice price={price} discount_price={discount_price} formatPrice={formatPrice} />
       </CardContent>
       
