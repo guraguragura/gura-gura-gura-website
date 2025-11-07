@@ -52,7 +52,6 @@ const Navbar = () => {
         <div className="relative">
           <div className="flex items-center justify-between">
             <CategoriesMenu 
-              displayCategories={displayCategories} 
               staticCategories={staticCategories} 
             />
             
