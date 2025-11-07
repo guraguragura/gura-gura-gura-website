@@ -122,6 +122,83 @@ export const useProductReviews = (productId: string) => {
 
     fetchReviews();
   }, [productId]);
+  
+  // Refetch function to manually refresh reviews
+  const refetch = () => {
+    const fetchReviews = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const { data: reviewsData, error: reviewsError } = await supabase
+          .from('product_reviews')
+          .select(`
+            *,
+            profiles:user_id (
+              display_name,
+              avatar_url
+            )
+          `)
+          .eq('product_id', productId)
+          .order('created_at', { ascending: false });
+
+        if (reviewsError) {
+          console.error('Reviews fetch error:', reviewsError);
+          setReviews([]);
+          setSummary({
+            averageRating: 0,
+            totalReviews: 0,
+            ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+          });
+          return;
+        }
+
+        const transformedReviews: ProductReview[] = (reviewsData || []).map(review => ({
+          id: review.id,
+          product_id: review.product_id,
+          user_id: review.user_id,
+          rating: review.rating,
+          title: review.title,
+          comment: review.comment,
+          verified_purchase: review.verified_purchase,
+          helpful_count: review.helpful_count,
+          created_at: review.created_at,
+          user_name: (review as any).profiles?.display_name || 'Anonymous',
+          user_avatar: (review as any).profiles?.avatar_url
+        }));
+
+        setReviews(transformedReviews);
+
+        const totalReviews = transformedReviews.length;
+        const averageRating = totalReviews > 0 
+          ? transformedReviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews 
+          : 0;
+
+        const distribution: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        transformedReviews.forEach(review => {
+          distribution[review.rating] = (distribution[review.rating] || 0) + 1;
+        });
+
+        setSummary({
+          averageRating: Number(averageRating.toFixed(1)),
+          totalReviews,
+          ratingDistribution: distribution
+        });
+      } catch (err) {
+        console.error("Error fetching reviews:", err);
+        setError(err instanceof Error ? err : new Error("Failed to fetch reviews"));
+        setReviews([]);
+        setSummary({
+          averageRating: 0,
+          totalReviews: 0,
+          ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchReviews();
+  };
 
   const submitReview = async (reviewData: {
     rating: number;
@@ -154,5 +231,5 @@ export const useProductReviews = (productId: string) => {
     }
   };
 
-  return { reviews, summary, loading, error, submitReview };
+  return { reviews, summary, loading, error, submitReview, refetch };
 };

@@ -1,7 +1,9 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Star, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useProductReviews } from '@/hooks/useProductReviews';
+import ReviewSubmissionForm from './ReviewSubmissionForm';
 
 interface ProductReviewsProps {
   productId: string;
@@ -9,35 +11,12 @@ interface ProductReviewsProps {
   totalReviews: number;
 }
 
-interface Review {
-  id: string;
-  author: string;
-  date: string;
-  rating: number;
-  title: string;
-  content: string;
-  isVerified: boolean;
-  helpfulCount: number;
-  helpfulPercentage: number;
-}
-
 const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, averageRating, totalReviews }) => {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
-  
-  // Mock review data
-  const mockReviews: Review[] = Array(6).fill(null).map((_, idx) => ({
-    id: `review-${idx}`,
-    author: `Customer ${idx + 1}`,
-    date: new Date(Date.now() - (idx * 86400000)).toLocaleDateString(),
-    rating: Math.max(3, Math.floor(Math.random() * 6)),
-    title: ["Great product!", "Highly recommend", "Good value", "Excellent quality", "Works well", "Worth the money"][idx % 6],
-    content: "This product exceeded my expectations. The build quality is excellent and it works exactly as described. I would definitely recommend this to anyone looking for a reliable product in this category.",
-    isVerified: idx % 3 === 0,
-    helpfulCount: Math.floor(Math.random() * 50),
-    helpfulPercentage: Math.floor(Math.random() * 40) + 60
-  }));
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const { reviews, summary, loading, error, refetch } = useProductReviews(productId);
 
-  const filterReviews = (reviews: Review[]): Review[] => {
+  const filterReviews = () => {
     if (!activeFilter) return reviews;
     
     switch (activeFilter) {
@@ -52,18 +31,19 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, averageRatin
       case "1star":
         return reviews.filter(review => review.rating === 1);
       case "verified":
-        return reviews.filter(review => review.isVerified);
+        return reviews.filter(review => review.verified_purchase);
       default:
         return reviews;
     }
   };
 
-  const filteredReviews = filterReviews(mockReviews);
+  const filteredReviews = filterReviews();
 
-  // Calculate rating distribution
+
+  // Calculate rating distribution from real data
   const ratingDistribution = [5, 4, 3, 2, 1].map(rating => {
-    const count = mockReviews.filter(review => review.rating === rating).length;
-    const percentage = totalReviews > 0 ? (count / mockReviews.length) * 100 : 0;
+    const count = summary.ratingDistribution[rating] || 0;
+    const percentage = summary.totalReviews > 0 ? (count / summary.totalReviews) * 100 : 0;
     return { rating, count, percentage };
   });
 
@@ -81,16 +61,29 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, averageRatin
     );
   };
 
+
   return (
     <div className="space-y-8">
+      {/* Review Submission Form */}
+      {showReviewForm && (
+        <ReviewSubmissionForm
+          productId={productId}
+          onSuccess={() => {
+            setShowReviewForm(false);
+            refetch();
+          }}
+          onCancel={() => setShowReviewForm(false)}
+        />
+      )}
+
       {/* Reviews Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="flex flex-col items-center justify-center">
-          <div className="text-5xl font-bold mb-2">{averageRating.toFixed(1)}</div>
+          <div className="text-5xl font-bold mb-2">{summary.averageRating.toFixed(1)}</div>
           <div className="flex mb-2">
-            {renderStars(Math.round(averageRating))}
+            {renderStars(Math.round(summary.averageRating))}
           </div>
-          <div className="text-sm text-gray-500">{totalReviews} reviews</div>
+          <div className="text-sm text-gray-500">{summary.totalReviews} reviews</div>
         </div>
 
         <div className="space-y-2">
@@ -113,7 +106,12 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, averageRatin
         </div>
 
         <div className="flex flex-col items-center justify-center">
-          <Button className="w-full mb-3">Write a Review</Button>
+          <Button 
+            className="w-full mb-3"
+            onClick={() => setShowReviewForm(!showReviewForm)}
+          >
+            {showReviewForm ? 'Hide Form' : 'Write a Review'}
+          </Button>
           <p className="text-center text-sm text-gray-500">
             Share your thoughts with other customers
           </p>
@@ -150,33 +148,40 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, averageRatin
 
       {/* Reviews List */}
       <div className="space-y-6">
-        {filteredReviews.length === 0 ? (
+        {loading ? (
           <div className="text-center py-8">
-            <p className="text-gray-500">No reviews match your selected filter.</p>
+            <p className="text-gray-500">Loading reviews...</p>
+          </div>
+        ) : filteredReviews.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-500">
+              {activeFilter ? 'No reviews match your selected filter.' : 'No reviews yet. Be the first to review!'}
+            </p>
           </div>
         ) : (
           filteredReviews.map(review => (
             <div key={review.id} className="border-b pb-6">
               <div className="flex justify-between mb-2">
-                <div className="font-semibold">{review.author}</div>
-                <div className="text-sm text-gray-500">{review.date}</div>
+                <div className="font-semibold">{review.user_name || 'Anonymous'}</div>
+                <div className="text-sm text-gray-500">
+                  {new Date(review.created_at).toLocaleDateString()}
+                </div>
               </div>
               <div className="flex items-center mb-2">
                 {renderStars(review.rating)}
-                {review.isVerified && (
+                {review.verified_purchase && (
                   <span className="ml-3 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded">
                     Verified Purchase
                   </span>
                 )}
               </div>
               <h4 className="font-medium mb-2">{review.title}</h4>
-              <p className="text-gray-600 mb-4">{review.content}</p>
+              <p className="text-gray-600 mb-4">{review.comment}</p>
               <div className="flex items-center text-sm text-gray-500">
-                <span className="mr-4">{review.helpfulPercentage}% of people found this helpful</span>
                 <div className="flex items-center space-x-4">
                   <button className="flex items-center hover:text-blue-500">
                     <ThumbsUp size={14} className="mr-1" />
-                    Helpful ({review.helpfulCount})
+                    Helpful ({review.helpful_count})
                   </button>
                   <button className="flex items-center hover:text-blue-500">
                     <ThumbsDown size={14} className="mr-1" />
