@@ -16,33 +16,42 @@ export const useSubcategories = (handle?: string) => {
     const fetchSubcategories = async () => {
       setLoading(true);
       try {
+        console.log('[useSubcategories] Fetching for handle:', handle);
+        
         // First get the current category ID
         const { data: currentCategory, error: categoryError } = await supabase
           .from('product_category')
-          .select('id, name')
+          .select('id, name, handle, mpath')
           .eq('handle', handle)
           .single();
 
         if (categoryError) {
-          console.error("Error fetching current category:", categoryError);
+          console.error("[useSubcategories] Error fetching current category:", categoryError);
           setLoading(false);
           return;
         }
 
+        console.log('[useSubcategories] Current category:', currentCategory);
+
         if (currentCategory) {
           // Fetch subcategories using the mpath pattern matching
+          const mpathPattern = `${currentCategory.id}.%`;
+          console.log('[useSubcategories] Searching for subcategories with mpath pattern:', mpathPattern);
+          
           const { data: subcategories, error: subcategoriesError } = await supabase
             .from('product_category')
-            .select('id, name, handle')
-            .like('mpath', `${currentCategory.id}.%`)
+            .select('id, name, handle, mpath')
+            .like('mpath', mpathPattern)
             .eq('is_active', true)
             .order('rank', { ascending: true });
 
           if (subcategoriesError) {
-            console.error("Error fetching subcategories:", subcategoriesError);
+            console.error("[useSubcategories] Error fetching subcategories:", subcategoriesError);
             setLoading(false);
             return;
           }
+
+          console.log('[useSubcategories] Found subcategories:', subcategories);
 
           // For each subcategory, get the count of products
           const subcategoriesWithCount = await Promise.all(
@@ -54,22 +63,26 @@ export const useSubcategories = (handle?: string) => {
                 .eq('product_category_id', subcat.id);
 
               if (productLinksError) {
-                console.error(`Error fetching products for subcategory ${subcat.name}:`, productLinksError);
-                return { ...subcat, count: 0 };
+                console.error(`[useSubcategories] Error fetching products for subcategory ${subcat.name}:`, productLinksError);
+                return { name: subcat.name, handle: subcat.handle, count: 0 };
               }
+
+              const count = productLinks?.length || 0;
+              console.log(`[useSubcategories] Subcategory "${subcat.name}" has ${count} products`);
 
               return {
                 name: subcat.name,
                 handle: subcat.handle,
-                count: productLinks?.length || 0
+                count
               };
             })
           );
 
+          console.log('[useSubcategories] Final subcategories with counts:', subcategoriesWithCount);
           setCategories(subcategoriesWithCount);
         }
       } catch (error) {
-        console.error("Failed to fetch subcategories:", error);
+        console.error("[useSubcategories] Failed to fetch subcategories:", error);
       } finally {
         setLoading(false);
       }
@@ -77,25 +90,11 @@ export const useSubcategories = (handle?: string) => {
 
     if (handle) {
       fetchSubcategories();
+    } else {
+      setCategories([]);
+      setLoading(false);
     }
   }, [handle]);
 
-  // Fallback to mock data if no subcategories are found
-  const mockCategories = [
-    { name: "Mobile & Accessories", handle: "mobile-accessories", count: 32 },
-    { name: "Laptop", handle: "laptop", count: 24 },
-    { name: "Electronics", handle: "electronics", count: 52 },
-    { name: "Smart Watch", handle: "smart-watch", count: 32 },
-    { name: "Storage", handle: "storage", count: 25 },
-    { name: "Portable Devices", handle: "portable-devices", count: 35 },
-    { name: "Action Camera", handle: "action-camera", count: 25 },
-    { name: "Smart Gadget", handle: "smart-gadget", count: 32 },
-    { name: "Monitor", handle: "monitor", count: 32 },
-    { name: "Smart TV", handle: "smart-tv", count: 12 },
-    { name: "Camera", handle: "camera", count: 12 },
-  ];
-
-  const displayCategories = categories.length > 0 ? categories : mockCategories;
-
-  return { displayCategories, loading };
+  return { displayCategories: categories, loading };
 };
