@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { normalizeImageUrl } from '@/lib/utils';
 
 export interface MedusaProduct {
   id: string;
@@ -69,7 +70,13 @@ export function useMedusaProducts(options: ProductOptions = {}) {
           setError(data.error);
           setProducts([]);
         } else {
-          setProducts(data.products || []);
+          // Normalize all image URLs in the products
+          const normalizedProducts = (data.products || []).map((product: MedusaProduct) => ({
+            ...product,
+            thumbnail: normalizeImageUrl(product.thumbnail),
+            images: product.images.map(img => normalizeImageUrl(img))
+          }));
+          setProducts(normalizedProducts);
           
         }
         

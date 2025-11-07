@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { normalizeImageUrl } from '@/lib/utils';
 
 // Define a flat structure with no circular references
 export interface Product {
@@ -164,7 +165,8 @@ export function useProducts(options: ProductOptions = {}) {
             // Extract all values we need
             const price = extractNumber(rawMetadata, 'price', 19.99);
             const discountPrice = extractNumber(rawMetadata, 'discount_price', 0);
-            const images = extractArray<string>(rawMetadata, 'images', [item.thumbnail || "/placeholder.svg"]);
+            const rawImages = extractArray<string>(rawMetadata, 'images', [item.thumbnail || "/placeholder.svg"]);
+            const images = rawImages.map(img => normalizeImageUrl(img));
             
             // Check for boolean values in different formats
             const isSale = extractBoolean(rawMetadata, 'is_sale', false);
@@ -185,7 +187,7 @@ export function useProducts(options: ProductOptions = {}) {
               description: item.description || "",
               price: price,
               discount_price: discountPrice || undefined,
-              thumbnail: item.thumbnail || "/placeholder.svg",
+              thumbnail: normalizeImageUrl(item.thumbnail),
               images: images,
               rating: productRating?.avg || 0,
               reviews_count: productRating?.count || 0,
