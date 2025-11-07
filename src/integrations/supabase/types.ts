@@ -6339,6 +6339,7 @@ export type Database = {
           id: string
           last_name: string | null
           metadata: Json | null
+          password_hash: string | null
           updated_at: string
         }
         Insert: {
@@ -6350,6 +6351,7 @@ export type Database = {
           id: string
           last_name?: string | null
           metadata?: Json | null
+          password_hash?: string | null
           updated_at?: string
         }
         Update: {
@@ -6361,6 +6363,7 @@ export type Database = {
           id?: string
           last_name?: string | null
           metadata?: Json | null
+          password_hash?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -6397,6 +6400,7 @@ export type Database = {
           execution: Json | null
           id: string
           retention_time: number | null
+          run_id: string | null
           state: string
           transaction_id: string
           updated_at: string
@@ -6409,6 +6413,7 @@ export type Database = {
           execution?: Json | null
           id: string
           retention_time?: number | null
+          run_id?: string | null
           state: string
           transaction_id: string
           updated_at?: string
@@ -6421,6 +6426,7 @@ export type Database = {
           execution?: Json | null
           id?: string
           retention_time?: number | null
+          run_id?: string | null
           state?: string
           transaction_id?: string
           updated_at?: string
