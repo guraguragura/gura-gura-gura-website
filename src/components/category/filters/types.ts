@@ -24,3 +24,18 @@ export interface RatingOption {
   value: number;
   count: number;
 }
+
+export interface OptionValue {
+  value: string;
+  count: number;
+}
+
+export interface ProductFilters {
+  size?: string | null;
+  color?: string | null;
+  brand?: string | null;
+  material?: string | null;
+  type?: string | null;
+  priceRange?: [number, number];
+  rating?: number | null;
+}

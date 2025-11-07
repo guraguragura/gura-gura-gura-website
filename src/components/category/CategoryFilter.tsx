@@ -6,16 +6,14 @@ import { Accordion } from "@/components/ui/accordion";
 // Import custom hooks
 import { useSubcategories } from "./filters/hooks/useSubcategories";
 import { useCategoryRatings } from "./filters/hooks/useCategoryRatings";
+import { useProductOptions } from "./filters/hooks/useProductOptions";
+import { useProductMetadata } from "./filters/hooks/useProductMetadata";
 
 // Import sub-components
 import CategoryList from "./filters/CategoryList";
 import PriceFilter from "./filters/PriceFilter";
 import RatingFilter from "./filters/RatingFilter";
-import ColorFilter from "./filters/ColorFilter";
-import BrandFilter from "./filters/BrandFilter";
-
-// Import filter data
-import { colorsData, brandsData } from "./filters/data/filterData";
+import GenericOptionFilter from "./filters/GenericOptionFilter";
 
 const CategoryFilter = () => {
   // Use destructuring to get all potential parameter names
@@ -30,11 +28,16 @@ const CategoryFilter = () => {
   
   const [priceRange, setPriceRange] = useState([0, 100]);
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
-  const [colorFilter, setColorFilter] = useState<string | null>(null);
-  const [brandFilter, setBrandFilter] = useState<string | null>(null);
+  const [filters, setFilters] = useState<Record<string, string | null>>({});
   
   const { displayCategories, loading } = useSubcategories(categoryHandle);
   const { ratings: dynamicRatings } = useCategoryRatings(categoryHandle);
+  const { options: productOptions } = useProductOptions(categoryHandle);
+  const { metadata: productMetadata } = useProductMetadata(categoryHandle);
+
+  const handleFilterChange = (key: string, value: string | null) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  };
 
   return (
     <div className="space-y-6">
@@ -50,8 +53,58 @@ const CategoryFilter = () => {
       <Accordion type="single" collapsible defaultValue="price">
         <PriceFilter priceRange={priceRange} setPriceRange={setPriceRange} />
         <RatingFilter ratings={dynamicRatings} ratingFilter={ratingFilter} setRatingFilter={setRatingFilter} />
-        <ColorFilter colors={colorsData} colorFilter={colorFilter} setColorFilter={setColorFilter} />
-        <BrandFilter brands={brandsData} brandFilter={brandFilter} setBrandFilter={setBrandFilter} />
+        
+        {/* Dynamic Product Options */}
+        {productOptions.Size && (
+          <GenericOptionFilter
+            title="Filter by Size"
+            filterKey="size"
+            options={productOptions.Size}
+            selectedValue={filters.size || null}
+            onChange={(value) => handleFilterChange('size', value)}
+          />
+        )}
+        
+        {productOptions.Color && (
+          <GenericOptionFilter
+            title="Filter by Color"
+            filterKey="color"
+            options={productOptions.Color}
+            selectedValue={filters.color || null}
+            onChange={(value) => handleFilterChange('color', value)}
+          />
+        )}
+        
+        {/* Dynamic Product Metadata */}
+        {productMetadata.brand && (
+          <GenericOptionFilter
+            title="Filter by Brand"
+            filterKey="brand"
+            options={productMetadata.brand}
+            selectedValue={filters.brand || null}
+            onChange={(value) => handleFilterChange('brand', value)}
+          />
+        )}
+        
+        {productMetadata.material && (
+          <GenericOptionFilter
+            title="Filter by Material"
+            filterKey="material"
+            options={productMetadata.material}
+            selectedValue={filters.material || null}
+            onChange={(value) => handleFilterChange('material', value)}
+          />
+        )}
+        
+        {productMetadata.type && (
+          <GenericOptionFilter
+            title="Filter by Type"
+            filterKey="type"
+            options={productMetadata.type}
+            selectedValue={filters.type || null}
+            onChange={(value) => handleFilterChange('type', value)}
+          />
+        )}
       </Accordion>
     </div>
   );
