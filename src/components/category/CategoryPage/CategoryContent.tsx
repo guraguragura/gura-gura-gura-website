@@ -10,6 +10,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import type { ProductFilters } from "@/components/category/filters/types";
 
 interface Product {
   id: string;
@@ -39,6 +40,7 @@ interface CategoryContentProps {
   totalPages: number;
   productsPerPage: number;
   sortOptions: { label: string; value: string }[];
+  onFiltersChange?: (filters: ProductFilters) => void;
 }
 
 const CategoryContent: React.FC<CategoryContentProps> = ({
@@ -55,7 +57,8 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
   totalProducts,
   totalPages,
   productsPerPage,
-  sortOptions
+  sortOptions,
+  onFiltersChange
 }) => {
   const isMobile = useIsMobile();
 
@@ -79,7 +82,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
             <SheetContent side="left" className="w-[85%] sm:w-[350px] overflow-y-auto">
               <div className="py-4">
                 <CategoryHeader name={categoryName} />
-                <CategoryFilter />
+                <CategoryFilter onFiltersChange={onFiltersChange} />
               </div>
             </SheetContent>
           </Sheet>
@@ -88,7 +91,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
         {/* Desktop sidebar filter */}
         <div className="hidden md:block">
           <CategoryHeader name={categoryName} />
-          <CategoryFilter />
+          <CategoryFilter onFiltersChange={onFiltersChange} />
         </div>
 
         <div className="md:col-span-3">

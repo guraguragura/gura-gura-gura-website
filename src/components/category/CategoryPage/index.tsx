@@ -1,21 +1,21 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useCurrency } from "@/hooks/useCurrency";
 import PageLayout from "@/components/layout/PageLayout";
 import CategoryContent from "./CategoryContent";
 import useCategoryData from "./useCategoryData";
+import type { ProductFilters } from "@/components/category/filters/types";
 
 const CategoryPage = () => {
-  // Use destructuring to get both potential parameter names
   const { handle, id, categoryName } = useParams<{ 
     handle?: string; 
     id?: string; 
     categoryName?: string; 
   }>();
   
-  // Use whichever parameter is available (handle from /categories/:handle, id from /category/:id, or categoryName from either)
   const categoryHandle = handle || id || categoryName;
+  const [filters, setFilters] = useState<ProductFilters>({});
   
   const { formatPrice } = useCurrency();
   const { 
@@ -32,7 +32,7 @@ const CategoryPage = () => {
     totalPages,
     productsPerPage,
     sortOptions
-  } = useCategoryData(categoryHandle);
+  } = useCategoryData(categoryHandle, filters);
 
   const displayedProducts = loading ? [] : products;
 
@@ -53,6 +53,7 @@ const CategoryPage = () => {
         totalPages={totalPages}
         productsPerPage={productsPerPage}
         sortOptions={sortOptions}
+        onFiltersChange={setFilters}
       />
     </PageLayout>
   );

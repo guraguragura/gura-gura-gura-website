@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import type { ProductFilters } from "@/components/category/filters/types";
 
 // Types
 interface Product {
@@ -26,7 +27,7 @@ const sortOptions = [
   { label: "Newest", value: "newest" },
 ];
 
-const useCategoryData = (handle?: string) => {
+const useCategoryData = (handle?: string, filters?: ProductFilters) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [categoryName, setCategoryName] = useState("");
@@ -96,10 +97,95 @@ const useCategoryData = (handle?: string) => {
               setTotalProducts(count || 0);
             }
             
+            // Apply filters before fetching
+            let filteredProductIds = productIds;
+            
+            // Filter by product options (Size, Color)
+            if (filters && Object.keys(filters).length > 0) {
+              const optionFilters = Object.entries(filters).filter(([key]) => 
+                ['Size', 'Color'].includes(key)
+              );
+              
+              if (optionFilters.length > 0) {
+                const { data: variantData } = await supabase
+                  .from('product_variant')
+                  .select(`
+                    product_id,
+                    product_variant_option!inner(
+                      option_value:product_option_value!inner(
+                        value,
+                        option:product_option!inner(title)
+                      )
+                    )
+                  `)
+                  .in('product_id', productIds);
+                
+                if (variantData) {
+                  const matchingProducts = new Set<string>();
+                  
+                  variantData.forEach((variant: any) => {
+                    const variantOptions = variant.product_variant_option || [];
+                    const matches = optionFilters.every(([filterKey, filterValue]) => {
+                      return variantOptions.some((vo: any) => 
+                        vo.option_value?.option?.title === filterKey &&
+                        vo.option_value?.value === filterValue
+                      );
+                    });
+                    
+                    if (matches) {
+                      matchingProducts.add(variant.product_id);
+                    }
+                  });
+                  
+                  filteredProductIds = Array.from(matchingProducts);
+                }
+              }
+            }
+            
+            // Apply metadata filters (Brand, Material, Type)
+            if (filters && Object.keys(filters).length > 0) {
+              const metadataFilters = Object.entries(filters).filter(([key]) => 
+                !['Size', 'Color'].includes(key)
+              );
+              
+              if (metadataFilters.length > 0 && filteredProductIds.length > 0) {
+                const { data: productsWithMetadata } = await supabase
+                  .from('product')
+                  .select('id, metadata')
+                  .in('id', filteredProductIds);
+                
+                if (productsWithMetadata) {
+                  filteredProductIds = productsWithMetadata
+                    .filter(product => {
+                      const metadata = (product.metadata as Record<string, any>) || {};
+                      return metadataFilters.every(([key, value]) => 
+                        metadata[key.toLowerCase()] === value
+                      );
+                    })
+                    .map(p => p.id);
+                }
+              }
+            }
+            
+            if (filteredProductIds.length === 0) {
+              setProducts([]);
+              setTotalProducts(0);
+              setLoading(false);
+              return;
+            }
+            
+            // Update total count with filtered products
+            const { count: filteredCount } = await supabase
+              .from('product')
+              .select('id', { count: 'exact' })
+              .in('id', filteredProductIds);
+            
+            setTotalProducts(filteredCount || 0);
+            
             let query = supabase
               .from('product')
               .select('id, title, description, thumbnail, metadata, product_tags(product_tag(id, value))')
-              .in('id', productIds)
+              .in('id', filteredProductIds)
               .range((currentPage - 1) * productsPerPage, currentPage * productsPerPage - 1);
               
             switch (sortBy) {
@@ -197,7 +283,7 @@ const useCategoryData = (handle?: string) => {
       fetchCategory();
       fetchProducts();
     }
-  }, [handle, currentPage, sortBy]);
+  }, [handle, currentPage, sortBy, filters]);
 
   const totalPages = Math.ceil(totalProducts / productsPerPage);
 

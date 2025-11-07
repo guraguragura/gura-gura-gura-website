@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Accordion } from "@/components/ui/accordion";
+import type { ProductFilters } from "./filters/types";
 
 // Import custom hooks
 import { useSubcategories } from "./filters/hooks/useSubcategories";
@@ -15,7 +16,11 @@ import PriceFilter from "./filters/PriceFilter";
 import RatingFilter from "./filters/RatingFilter";
 import GenericOptionFilter from "./filters/GenericOptionFilter";
 
-const CategoryFilter = () => {
+interface CategoryFilterProps {
+  onFiltersChange?: (filters: ProductFilters) => void;
+}
+
+const CategoryFilter: React.FC<CategoryFilterProps> = ({ onFiltersChange }) => {
   // Use destructuring to get all potential parameter names
   const { handle, id, categoryName } = useParams<{ 
     handle?: string; 
@@ -36,7 +41,9 @@ const CategoryFilter = () => {
   const { metadata: productMetadata } = useProductMetadata(categoryHandle);
 
   const handleFilterChange = (key: string, value: string | null) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    const newFilters = { ...filters, [key]: value };
+    setFilters(newFilters);
+    onFiltersChange?.(newFilters);
   };
 
   return (
@@ -58,20 +65,20 @@ const CategoryFilter = () => {
         {productOptions.Size && (
           <GenericOptionFilter
             title="Filter by Size"
-            filterKey="size"
+            filterKey="Size"
             options={productOptions.Size}
-            selectedValue={filters.size || null}
-            onChange={(value) => handleFilterChange('size', value)}
+            selectedValue={filters.Size || null}
+            onChange={(value) => handleFilterChange('Size', value)}
           />
         )}
         
         {productOptions.Color && (
           <GenericOptionFilter
             title="Filter by Color"
-            filterKey="color"
+            filterKey="Color"
             options={productOptions.Color}
-            selectedValue={filters.color || null}
-            onChange={(value) => handleFilterChange('color', value)}
+            selectedValue={filters.Color || null}
+            onChange={(value) => handleFilterChange('Color', value)}
           />
         )}
         
