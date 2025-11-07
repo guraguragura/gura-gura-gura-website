@@ -110,7 +110,7 @@ const useCategoryData = (handle?: string) => {
                 query = query.order('metadata->price', { ascending: false });
                 break;
               case "rating":
-                query = query.order('metadata->rating', { ascending: false });
+                // We'll sort in memory after fetching reviews
                 break;
               case "newest":
                 query = query.order('created_at', { ascending: false });
@@ -124,8 +124,34 @@ const useCategoryData = (handle?: string) => {
             if (productsError) {
               console.error("Error fetching products:", productsError);
             } else if (productsData) {
+              // Fetch reviews for all products
+              const { data: reviewsData } = await supabase
+                .from('product_reviews')
+                .select('product_id, rating')
+                .in('product_id', productsData.map(p => p.id));
+
+              // Calculate ratings per product
+              const ratingsMap = new Map<string, { avg: number; count: number }>();
+              
+              if (reviewsData && reviewsData.length > 0) {
+                const productRatings: Record<string, number[]> = {};
+                
+                reviewsData.forEach(review => {
+                  if (!productRatings[review.product_id]) {
+                    productRatings[review.product_id] = [];
+                  }
+                  productRatings[review.product_id].push(review.rating);
+                });
+                
+                Object.entries(productRatings).forEach(([productId, ratings]) => {
+                  const avg = ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
+                  ratingsMap.set(productId, { avg, count: ratings.length });
+                });
+              }
+              
               const formattedProducts = productsData.map(product => {
                 const metadataObj = product.metadata as Record<string, any> || {};
+                const productRating = ratingsMap.get(product.id);
                 
                 // Extract tags from the joined data
                 const tags = Array.isArray((product as any).product_tags) 
@@ -141,13 +167,18 @@ const useCategoryData = (handle?: string) => {
                   thumbnail: product.thumbnail || "/placeholder.svg",
                   price: metadataObj.price || 0,
                   discount_price: metadataObj.discount_price,
-                  rating: metadataObj.rating || 0,
-                  reviews_count: metadataObj.reviews_count || 0,
+                  rating: productRating?.avg || 0,
+                  reviews_count: productRating?.count || 0,
                   is_sale: metadataObj.is_sale || false,
                   is_new: metadataObj.is_new || false,
                   tags: tags.length > 0 ? tags : undefined,
                 };
               });
+              
+              // Sort by rating if needed
+              if (sortBy === "rating") {
+                formattedProducts.sort((a, b) => b.rating - a.rating);
+              }
               
               setProducts(formattedProducts);
             }
