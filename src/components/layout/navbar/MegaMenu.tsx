@@ -12,13 +12,22 @@ import { Skeleton } from "@/components/ui/skeleton";
 const MegaMenu = () => {
   const { parentCategories, subcategoriesByParent, loading } = useCategoryMegaMenu();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (open && parentCategories.length > 0) {
+      // Auto-select first category when menu opens
+      setActiveCategory(parentCategories[0].id);
+    }
+  };
 
   if (loading) {
     return <Skeleton className="w-[130px] h-9" />;
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={handleOpenChange}>
       <DropdownMenuTrigger className="flex items-center gap-1 px-2 py-2 text-sm hover:text-primary focus:outline-none">
         Categories
         <ChevronDown className="h-4 w-4" />
