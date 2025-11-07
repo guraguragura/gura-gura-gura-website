@@ -62,17 +62,45 @@ export const useProductRecommendations = (productId?: string, userId?: string) =
         
         if (!allProducts) return;
         
+        // Fetch reviews for all products
+        const productIds = allProducts.map(p => p.id);
+        const { data: reviewsData } = await supabase
+          .from('product_reviews')
+          .select('product_id, rating')
+          .in('product_id', productIds);
+
+        // Calculate ratings per product
+        const ratingsMap = new Map<string, { avg: number; count: number }>();
+        
+        if (reviewsData && reviewsData.length > 0) {
+          const productRatings: Record<string, number[]> = {};
+          
+          reviewsData.forEach(review => {
+            if (!productRatings[review.product_id]) {
+              productRatings[review.product_id] = [];
+            }
+            productRatings[review.product_id].push(review.rating);
+          });
+          
+          Object.entries(productRatings).forEach(([productId, ratings]) => {
+            const avg = ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
+            ratingsMap.set(productId, { avg, count: ratings.length });
+          });
+        }
+        
         // Transform and filter products
         const transformedProducts = allProducts.map(product => {
           const metadata = (product.metadata as any) || {};
+          const productRating = ratingsMap.get(product.id);
+          
           return {
             id: product.id,
             title: product.title,
             thumbnail: product.thumbnail || '',
             price: Number(metadata.price) || 0,
             discount_price: metadata.discount_price ? Number(metadata.discount_price) : undefined,
-            rating: Number(metadata.rating) || 4.5,
-            reviews_count: Number(metadata.reviews_count) || 0,
+            rating: productRating?.avg || 0,
+            reviews_count: productRating?.count || 0,
             is_sale: Boolean(metadata.is_sale),
             is_new: Boolean(metadata.is_new),
             handle: product.handle,
@@ -98,8 +126,10 @@ export const useProductRecommendations = (productId?: string, userId?: string) =
             score += priceScore;
           }
           
-          // Rating bonus
-          score += product.rating * 3;
+          // Rating bonus (only if product has reviews)
+          if (product.rating > 0) {
+            score += product.rating * 3;
+          }
           
           return {
             ...product,

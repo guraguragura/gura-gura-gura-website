@@ -126,6 +126,31 @@ export function useProducts(options: ProductOptions = {}) {
             });
           }
           
+          // Fetch reviews for all products
+          const productIds = data.map(p => p.id);
+          const { data: reviewsData } = await supabase
+            .from('product_reviews')
+            .select('product_id, rating')
+            .in('product_id', productIds);
+
+          // Calculate ratings per product
+          const ratingsMap = new Map<string, { avg: number; count: number }>();
+          
+          if (reviewsData && reviewsData.length > 0) {
+            const productRatings: Record<string, number[]> = {};
+            
+            reviewsData.forEach(review => {
+              if (!productRatings[review.product_id]) {
+                productRatings[review.product_id] = [];
+              }
+              productRatings[review.product_id].push(review.rating);
+            });
+            
+            Object.entries(productRatings).forEach(([productId, ratings]) => {
+              const avg = ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
+              ratingsMap.set(productId, { avg, count: ratings.length });
+            });
+          }
           
           // Transform data to match our Product interface without circular references
           const formattedProducts = data.map(item => {
@@ -134,14 +159,12 @@ export function useProducts(options: ProductOptions = {}) {
               ? item.metadata 
               : {};
             
-            
+            const productRating = ratingsMap.get(item.id);
             
             // Extract all values we need
             const price = extractNumber(rawMetadata, 'price', 19.99);
             const discountPrice = extractNumber(rawMetadata, 'discount_price', 0);
             const images = extractArray<string>(rawMetadata, 'images', [item.thumbnail || "/placeholder.svg"]);
-            const rating = extractNumber(rawMetadata, 'rating', 4.5);
-            const reviewsCount = extractNumber(rawMetadata, 'reviews_count', 124);
             
             // Check for boolean values in different formats
             const isSale = extractBoolean(rawMetadata, 'is_sale', false);
@@ -155,7 +178,7 @@ export function useProducts(options: ProductOptions = {}) {
                   .filter((tag: string | undefined): tag is string => typeof tag === 'string')
               : [];
             
-            // Build a completely flat product object
+            // Build a completely flat product object with real ratings
             const product: Product = {
               id: item.id,
               title: item.title,
@@ -164,8 +187,8 @@ export function useProducts(options: ProductOptions = {}) {
               discount_price: discountPrice || undefined,
               thumbnail: item.thumbnail || "/placeholder.svg",
               images: images,
-              rating: rating,
-              reviews_count: reviewsCount,
+              rating: productRating?.avg || 0,
+              reviews_count: productRating?.count || 0,
               is_sale: isSale,
               is_new: isNew,
               is_featured: isFeatured,

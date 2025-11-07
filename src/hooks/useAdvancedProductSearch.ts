@@ -116,9 +116,37 @@ export const useAdvancedProductSearch = (filters: AdvancedProductFilters = {}) =
           throw new Error(error.message);
         }
         
+        // Fetch reviews for all products
+        const productIds = (data || []).map(p => p.id);
+        const { data: reviewsData } = await supabase
+          .from('product_reviews')
+          .select('product_id, rating')
+          .in('product_id', productIds);
+
+        // Calculate ratings per product
+        const ratingsMap = new Map<string, { avg: number; count: number }>();
+        
+        if (reviewsData && reviewsData.length > 0) {
+          const productRatings: Record<string, number[]> = {};
+          
+          reviewsData.forEach(review => {
+            if (!productRatings[review.product_id]) {
+              productRatings[review.product_id] = [];
+            }
+            productRatings[review.product_id].push(review.rating);
+          });
+          
+          Object.entries(productRatings).forEach(([productId, ratings]) => {
+            const avg = ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
+            ratingsMap.set(productId, { avg, count: ratings.length });
+          });
+        }
+        
         // Transform data to extract metadata fields
         const transformedProducts = (data || []).map(product => {
           const metadata = (product.metadata as any) || {};
+          const productRating = ratingsMap.get(product.id);
+          
           return {
             id: product.id,
             title: product.title,
@@ -127,8 +155,8 @@ export const useAdvancedProductSearch = (filters: AdvancedProductFilters = {}) =
             discount_price: metadata.discount_price ? Number(metadata.discount_price) : undefined,
             thumbnail: product.thumbnail || '',
             images: metadata.images || [product.thumbnail].filter(Boolean),
-            rating: Number(metadata.rating) || 4.5,
-            reviews_count: Number(metadata.reviews_count) || 0,
+            rating: productRating?.avg || 0,
+            reviews_count: productRating?.count || 0,
             handle: product.handle,
             brand: metadata.brand || '',
             color: metadata.color || '',

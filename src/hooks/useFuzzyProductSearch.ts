@@ -67,11 +67,39 @@ export const useFuzzyProductSearch = (query: string) => {
           didYouMeanSuggestions = generateTypoSuggestions(query);
         }
 
+        // Fetch reviews for all products
+        const productIds = results.map(p => p.id);
+        const { data: reviewsData } = await supabase
+          .from('product_reviews')
+          .select('product_id, rating')
+          .in('product_id', productIds);
+
+        // Calculate ratings per product
+        const ratingsMap = new Map<string, { avg: number; count: number }>();
+        
+        if (reviewsData && reviewsData.length > 0) {
+          const productRatings: Record<string, number[]> = {};
+          
+          reviewsData.forEach(review => {
+            if (!productRatings[review.product_id]) {
+              productRatings[review.product_id] = [];
+            }
+            productRatings[review.product_id].push(review.rating);
+          });
+          
+          Object.entries(productRatings).forEach(([productId, ratings]) => {
+            const avg = ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
+            ratingsMap.set(productId, { avg, count: ratings.length });
+          });
+        }
+
         // Transform and flatten the data
         const transformedProducts = results.map(product => {
           const metadata = (typeof product.metadata === 'object' && product.metadata !== null) 
             ? product.metadata as Record<string, any> 
             : {};
+          const productRating = ratingsMap.get(product.id);
+          
           return {
             id: product.id,
             title: product.title,
@@ -79,7 +107,7 @@ export const useFuzzyProductSearch = (query: string) => {
             handle: product.handle,
             price: parseFloat(String(metadata.price || '0')),
             description: String(metadata.description || ''),
-            rating: parseFloat(String(metadata.rating || '0')),
+            rating: productRating?.avg || 0,
             category: String(metadata.category || '')
           };
         });

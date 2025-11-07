@@ -81,6 +81,32 @@ export function useGiftsData(): GiftsDataReturn {
             return hasGiftTag || isHomeArt;
           });
 
+          // Fetch reviews for filtered products
+          const productIds = filteredProducts.map(p => p.id);
+          const { data: reviewsData } = await supabase
+            .from('product_reviews')
+            .select('product_id, rating')
+            .in('product_id', productIds);
+
+          // Calculate ratings per product
+          const ratingsMap = new Map<string, { avg: number; count: number }>();
+          
+          if (reviewsData && reviewsData.length > 0) {
+            const productRatings: Record<string, number[]> = {};
+            
+            reviewsData.forEach(review => {
+              if (!productRatings[review.product_id]) {
+                productRatings[review.product_id] = [];
+              }
+              productRatings[review.product_id].push(review.rating);
+            });
+            
+            Object.entries(productRatings).forEach(([productId, ratings]) => {
+              const avg = ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
+              ratingsMap.set(productId, { avg, count: ratings.length });
+            });
+          }
+
           // Transform to GiftProduct format
           const formattedProducts = filteredProducts.map(item => {
             const rawMetadata = typeof item.metadata === 'object' && item.metadata !== null && !Array.isArray(item.metadata)
@@ -99,6 +125,8 @@ export function useGiftsData(): GiftsDataReturn {
                   .filter((name: string | undefined): name is string => typeof name === 'string')
               : [];
 
+            const productRating = ratingsMap.get(item.id);
+
             return {
               id: item.id,
               title: item.title,
@@ -106,8 +134,8 @@ export function useGiftsData(): GiftsDataReturn {
               thumbnail: item.thumbnail || '/placeholder.svg',
               price: typeof rawMetadata['price'] === 'number' ? rawMetadata['price'] : 19.99,
               discount_price: typeof rawMetadata['discount_price'] === 'number' ? rawMetadata['discount_price'] : undefined,
-              rating: typeof rawMetadata['rating'] === 'number' ? rawMetadata['rating'] : 4.5,
-              reviews_count: typeof rawMetadata['reviews_count'] === 'number' ? rawMetadata['reviews_count'] : 0,
+              rating: productRating?.avg || 0,
+              reviews_count: productRating?.count || 0,
               is_sale: rawMetadata['is_sale'] === true || rawMetadata['is_sale'] === 'true',
               is_new: rawMetadata['is_new'] === true || rawMetadata['is_new'] === 'true',
               tags,
