@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { ProductFilters } from "@/components/category/filters/types";
+import { normalizeImageUrl } from "@/lib/utils";
 
 // Types
 interface Product {
@@ -251,7 +252,7 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
                   id: product.id,
                   title: product.title,
                   description: product.description || "",
-                  thumbnail: product.thumbnail || "/placeholder.svg",
+                  thumbnail: normalizeImageUrl(product.thumbnail),
                   price: metadataObj.price || 0,
                   discount_price: metadataObj.discount_price,
                   rating: productRating?.avg || 0,

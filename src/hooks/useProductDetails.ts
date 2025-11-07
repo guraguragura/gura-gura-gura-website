@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { normalizeImageUrl } from '@/lib/utils';
 
 // Define interfaces for product details
 interface ProductMetadata {
@@ -189,7 +190,8 @@ export function useProductDetails(productKey: string | undefined) {
           // Extract values safely with type checking
           const price = safeExtract(rawMetadata, 'price', 'number', 19.99);
           const discountPrice = safeExtract(rawMetadata, 'discount_price', 'number', undefined);
-          const images = safeExtractArray(rawMetadata, 'images', [productData.thumbnail || "/placeholder.svg"]);
+          const rawImages = safeExtractArray(rawMetadata, 'images', [productData.thumbnail || "/placeholder.svg"]);
+          const images = rawImages.map(img => normalizeImageUrl(img));
           const rating = safeExtract(rawMetadata, 'rating', 'number', 4.5);
           const reviewsCount = safeExtract(rawMetadata, 'reviews_count', 'number', 124);
           const inStock = safeExtractBoolean(rawMetadata, 'in_stock', true);
@@ -224,7 +226,7 @@ export function useProductDetails(productKey: string | undefined) {
             subtitle: productData.subtitle || "",
             price,
             discount_price: discountPrice,
-            thumbnail: productData.thumbnail || "/placeholder.svg",
+            thumbnail: normalizeImageUrl(productData.thumbnail),
             images,
             rating,
             reviews_count: reviewsCount,
