@@ -187,7 +187,8 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
               .select('id, title, description, thumbnail, metadata, product_tags(product_tag(id, value))')
               .in('id', filteredProductIds)
               .range((currentPage - 1) * productsPerPage, currentPage * productsPerPage - 1);
-              
+            
+            // Apply sort to the query
             switch (sortBy) {
               case "price_asc":
                 query = query.order('metadata->price', { ascending: true });
@@ -235,7 +236,7 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
                 });
               }
               
-              const formattedProducts = productsData.map(product => {
+              let formattedProducts = productsData.map(product => {
                 const metadataObj = product.metadata as Record<string, any> || {};
                 const productRating = ratingsMap.get(product.id);
                 
@@ -260,6 +261,21 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
                   tags: tags.length > 0 ? tags : undefined,
                 };
               });
+              
+              // Apply price filter
+              if (filters?.minPrice || filters?.maxPrice) {
+                const minPrice = filters.minPrice ? parseFloat(filters.minPrice) : 0;
+                const maxPrice = filters.maxPrice ? parseFloat(filters.maxPrice) : Infinity;
+                formattedProducts = formattedProducts.filter(p => 
+                  p.price >= minPrice && p.price <= maxPrice
+                );
+              }
+              
+              // Apply rating filter
+              if (filters?.minRating) {
+                const minRating = parseFloat(filters.minRating);
+                formattedProducts = formattedProducts.filter(p => p.rating >= minRating);
+              }
               
               // Sort by rating if needed
               if (sortBy === "rating") {

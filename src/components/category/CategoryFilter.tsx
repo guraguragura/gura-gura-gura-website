@@ -46,6 +46,25 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ onFiltersChange }) => {
     onFiltersChange?.(newFilters);
   };
 
+  const handlePriceChange = (range: number[]) => {
+    setPriceRange(range);
+    const newFilters = { ...filters, minPrice: range[0].toString(), maxPrice: range[1].toString() };
+    setFilters(newFilters);
+    onFiltersChange?.(newFilters);
+  };
+
+  const handleRatingChange = (rating: number | null) => {
+    setRatingFilter(rating);
+    const newFilters = { ...filters };
+    if (rating !== null) {
+      newFilters.minRating = rating.toString();
+    } else {
+      delete newFilters.minRating;
+    }
+    setFilters(newFilters);
+    onFiltersChange?.(newFilters);
+  };
+
   return (
     <div className="space-y-6">
       {/* Product categories */}
@@ -58,8 +77,8 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ onFiltersChange }) => {
 
       {/* Filters */}
       <Accordion type="single" collapsible defaultValue="price">
-        <PriceFilter priceRange={priceRange} setPriceRange={setPriceRange} />
-        <RatingFilter ratings={dynamicRatings} ratingFilter={ratingFilter} setRatingFilter={setRatingFilter} />
+        <PriceFilter priceRange={priceRange} setPriceRange={handlePriceChange} />
+        <RatingFilter ratings={dynamicRatings} ratingFilter={ratingFilter} setRatingFilter={handleRatingChange} />
         
         {/* Dynamic Product Options */}
         {productOptions.Size && (

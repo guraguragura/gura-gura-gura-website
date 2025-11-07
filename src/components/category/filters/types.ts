@@ -31,11 +31,13 @@ export interface OptionValue {
 }
 
 export interface ProductFilters {
-  size?: string | null;
-  color?: string | null;
+  Size?: string | null;
+  Color?: string | null;
   brand?: string | null;
   material?: string | null;
   type?: string | null;
-  priceRange?: [number, number];
-  rating?: number | null;
+  minPrice?: string;
+  maxPrice?: string;
+  minRating?: string;
+  [key: string]: string | null | undefined;
 }
