@@ -50,15 +50,12 @@ const CategoryList = ({ categories, loading }: CategoryListProps) => {
               }}
             />
           </div>
-          <div className="flex justify-between items-center flex-grow">
-            <Link 
-              to={`/categories/${category.handle}`}
-              className="hover:text-blue-500 cursor-pointer text-xs sm:text-sm truncate max-w-[70%]"
-            >
-              {category.name}
-            </Link>
-            <span className="text-gray-500 text-xs">({category.count})</span>
-          </div>
+          <Link 
+            to={`/categories/${category.handle}`}
+            className="hover:text-blue-500 cursor-pointer text-xs sm:text-sm flex-grow"
+          >
+            {category.name}
+          </Link>
         </li>
       ))}
     </>
