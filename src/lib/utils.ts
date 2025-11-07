@@ -17,8 +17,10 @@ export function normalizeImageUrl(url: string | undefined): string {
     normalizedUrl = normalizedUrl.replace('http://localhost:9000', publicBase);
   }
   
-  // Upgrade http to https for security (even after localhost replacement)
-  if (normalizedUrl.startsWith('http://') && !normalizedUrl.includes('localhost')) {
+  // Only upgrade to HTTPS if publicBase itself uses HTTPS
+  // This prevents forcing HTTPS on development/HTTP-only servers
+  const shouldUpgradeToHttps = publicBase.startsWith('https://');
+  if (shouldUpgradeToHttps && normalizedUrl.startsWith('http://') && !normalizedUrl.includes('localhost')) {
     normalizedUrl = normalizedUrl.replace('http://', 'https://');
   }
   
