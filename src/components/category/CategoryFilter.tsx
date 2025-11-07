@@ -17,13 +17,22 @@ import BrandFilter from "./filters/BrandFilter";
 import { colorsData, brandsData, ratingsData } from "./filters/data/filterData";
 
 const CategoryFilter = () => {
-  const { handle } = useParams<{ handle: string }>();
+  // Use destructuring to get all potential parameter names
+  const { handle, id, categoryName } = useParams<{ 
+    handle?: string; 
+    id?: string; 
+    categoryName?: string; 
+  }>();
+  
+  // Use whichever parameter is available
+  const categoryHandle = handle || id || categoryName;
+  
   const [priceRange, setPriceRange] = useState([0, 100]);
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [colorFilter, setColorFilter] = useState<string | null>(null);
   const [brandFilter, setBrandFilter] = useState<string | null>(null);
   
-  const { displayCategories, loading } = useSubcategories(handle);
+  const { displayCategories, loading } = useSubcategories(categoryHandle);
 
   return (
     <div className="space-y-6">
