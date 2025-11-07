@@ -5,6 +5,7 @@ import { Accordion } from "@/components/ui/accordion";
 
 // Import custom hooks
 import { useSubcategories } from "./filters/hooks/useSubcategories";
+import { useCategoryRatings } from "./filters/hooks/useCategoryRatings";
 
 // Import sub-components
 import CategoryList from "./filters/CategoryList";
@@ -14,7 +15,7 @@ import ColorFilter from "./filters/ColorFilter";
 import BrandFilter from "./filters/BrandFilter";
 
 // Import filter data
-import { colorsData, brandsData, ratingsData } from "./filters/data/filterData";
+import { colorsData, brandsData } from "./filters/data/filterData";
 
 const CategoryFilter = () => {
   // Use destructuring to get all potential parameter names
@@ -33,6 +34,7 @@ const CategoryFilter = () => {
   const [brandFilter, setBrandFilter] = useState<string | null>(null);
   
   const { displayCategories, loading } = useSubcategories(categoryHandle);
+  const { ratings: dynamicRatings } = useCategoryRatings(categoryHandle);
 
   return (
     <div className="space-y-6">
@@ -47,7 +49,7 @@ const CategoryFilter = () => {
       {/* Filters */}
       <Accordion type="single" collapsible defaultValue="price">
         <PriceFilter priceRange={priceRange} setPriceRange={setPriceRange} />
-        <RatingFilter ratings={ratingsData} ratingFilter={ratingFilter} setRatingFilter={setRatingFilter} />
+        <RatingFilter ratings={dynamicRatings} ratingFilter={ratingFilter} setRatingFilter={setRatingFilter} />
         <ColorFilter colors={colorsData} colorFilter={colorFilter} setColorFilter={setColorFilter} />
         <BrandFilter brands={brandsData} brandFilter={brandFilter} setBrandFilter={setBrandFilter} />
       </Accordion>
