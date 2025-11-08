@@ -60,9 +60,6 @@ const MegaMenu = () => {
           <div className="overflow-y-auto p-4 bg-background">
             {activeCategory && subcategoriesByParent[activeCategory] ? (
               <div>
-                <h3 className="text-sm font-semibold mb-3 text-foreground">
-                  Subcategories
-                </h3>
                 <div className="grid grid-cols-2 gap-2">
                   {subcategoriesByParent[activeCategory].map((subcategory) => (
                     <Link
