@@ -238,10 +238,10 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
             // Apply sort to the query
             switch (sortBy) {
               case "price_asc":
-                query = query.order('metadata->price', { ascending: true });
+                query = query.order('(metadata->price)::numeric', { ascending: true });
                 break;
               case "price_desc":
-                query = query.order('metadata->price', { ascending: false });
+                query = query.order('(metadata->price)::numeric', { ascending: false });
                 break;
               case "rating":
                 // We'll sort in memory after fetching reviews
