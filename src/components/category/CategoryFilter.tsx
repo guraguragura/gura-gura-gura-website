@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Accordion } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 import type { ProductFilters } from "./filters/types";
 
 // Import custom hooks
@@ -65,8 +67,34 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ onFiltersChange }) => {
     onFiltersChange?.(newFilters);
   };
 
+  const handleClearAllFilters = () => {
+    setPriceRange([0, 100]);
+    setRatingFilter(null);
+    setFilters({});
+    onFiltersChange?.({});
+  };
+
+  // Check if any filters are active
+  const hasActiveFilters = 
+    priceRange[0] !== 0 || 
+    priceRange[1] !== 100 || 
+    ratingFilter !== null || 
+    Object.values(filters).some(value => value !== null && value !== undefined);
+
   return (
     <div className="space-y-6">
+      {/* Clear All Filters Button */}
+      {hasActiveFilters && (
+        <Button 
+          variant="outline" 
+          onClick={handleClearAllFilters}
+          className="w-full flex items-center justify-center gap-2"
+        >
+          <X className="h-4 w-4" />
+          Clear All Filters
+        </Button>
+      )}
+
       {/* Product categories */}
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-3">Product Categories</h3>
