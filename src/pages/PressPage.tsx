@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -69,12 +70,12 @@ const PressPage = () => {
                       </div>
                       <h3 className="text-xl font-bold mb-2">{article.title}</h3>
                       <p className="text-muted-foreground mb-4 flex-grow">{article.subtitle}</p>
-                      <a 
-                        href={article.link_url} 
+                      <Link 
+                        to={`/article/${article.slug}`}
                         className="text-primary hover:underline font-medium"
                       >
                         Read full press release
-                      </a>
+                      </Link>
                     </CardContent>
                   </Card>
                 ))}
@@ -149,9 +150,9 @@ const PressPage = () => {
                       {format(new Date(article.published_at), 'MMMM yyyy')}
                     </div>
                     <h3 className="text-lg font-bold mb-4 flex-grow">{article.title}</h3>
-                    <a href={article.link_url} className="text-primary hover:underline font-medium">
+                    <Link to={`/article/${article.slug}`} className="text-primary hover:underline font-medium">
                       Read article
-                    </a>
+                    </Link>
                   </CardContent>
                 </Card>
               ))}
