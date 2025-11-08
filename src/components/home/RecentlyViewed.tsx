@@ -124,7 +124,6 @@ const RecentlyViewed = () => {
                       price: product.price,
                       thumbnail: product.thumbnail
                     }}
-                    className="h-8 w-8"
                   />
                 </div>
               </div>

@@ -155,7 +155,6 @@ const FeaturedProducts = () => {
                         discount_price: product.discount_price,
                         thumbnail: product.thumbnail
                       }}
-                      className="h-8 w-8"
                     />
                   </div>
                 </div>

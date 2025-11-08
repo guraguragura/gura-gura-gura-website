@@ -94,7 +94,6 @@ const TrendingProductCard: React.FC<TrendingProductProps> = ({ product }) => {
               discount_price: product.oldPrice > product.price ? product.price : undefined,
               thumbnail: product.image
             }}
-            className="h-6 w-6"
           />
         </div>
       </div>

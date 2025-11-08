@@ -147,7 +147,6 @@ const DailyDeals = () => {
                           discount_price: product.discount_price,
                           thumbnail: product.thumbnail
                         }}
-                        className="h-9 w-9"
                       />
                     </CardContent>
                   </Card>
