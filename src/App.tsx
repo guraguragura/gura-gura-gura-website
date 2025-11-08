@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import PageLoader from '@/components/common/PageLoader';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
+import { AdminRoute } from '@/components/common/AdminRoute';
 import { usePerformanceTracking } from '@/hooks/usePerformanceTracking';
 
 // Lazy load pages for better performance
@@ -101,7 +102,11 @@ function App() {
             <Route path="/track" element={<TrackOrderPage />} />
             <Route path="/articles" element={<ArticlesPage />} />
             <Route path="/article/:slug" element={<ArticleDetailPage />} />
-            <Route path="/admin/category-images" element={<AdminCategoryImages />} />
+            <Route path="/admin/category-images" element={
+              <AdminRoute>
+                <AdminCategoryImages />
+              </AdminRoute>
+            } />
             
             {/* Keep existing routes */}
             <Route path="/about" element={<AboutUsPage />} />

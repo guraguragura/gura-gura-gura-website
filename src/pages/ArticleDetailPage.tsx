@@ -1,5 +1,6 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import DOMPurify from 'dompurify';
 import { useArticleBySlug } from "@/hooks/usePromotionalArticles";
 import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
@@ -119,7 +120,12 @@ const ArticleDetailPage = () => {
           <div className="prose prose-lg dark:prose-invert max-w-none">
             {article.content ? (
               <div 
-                dangerouslySetInnerHTML={{ __html: article.content }}
+                dangerouslySetInnerHTML={{ 
+                  __html: DOMPurify.sanitize(article.content, {
+                    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'a', 'img', 'blockquote', 'code', 'pre', 'div', 'span'],
+                    ALLOWED_ATTR: ['href', 'target', 'rel', 'src', 'alt', 'class', 'id']
+                  })
+                }}
                 className="article-content"
               />
             ) : (
