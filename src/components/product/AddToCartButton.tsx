@@ -48,15 +48,9 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
       disabled={isAdding}
     >
       {isAdding ? (
-        <>
-          <Check className="mr-2 h-4 w-4 flex-shrink-0" />
-          <span className="truncate">Added to Cart</span>
-        </>
+        <Check className="h-4 w-4 flex-shrink-0" />
       ) : (
-        <>
-          <ShoppingCart className="mr-2 h-4 w-4 flex-shrink-0" />
-          <span className="truncate">Add to Cart</span>
-        </>
+        <ShoppingCart className="h-4 w-4 flex-shrink-0" />
       )}
     </Button>
   );
