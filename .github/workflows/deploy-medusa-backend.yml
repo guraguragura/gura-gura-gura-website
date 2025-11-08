@@ -1,0 +1,206 @@
+name: Deploy Medusa Backend
+
+on:
+  push:
+    branches:
+      - staging
+      - production
+    paths:
+      - 'medusa-backend/**'
+      - '.github/workflows/deploy-medusa-backend.yml'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name == 'production' && 'production' || 'staging' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set environment variables
+        run: |
+          if [ "${{ github.ref_name }}" == "production" ]; then
+            echo "DEPLOY_PATH=/var/www/medusa-production" >> $GITHUB_ENV
+            echo "PM2_APP_NAME=medusa-production" >> $GITHUB_ENV
+            echo "MEDUSA_PORT=9002" >> $GITHUB_ENV
+            echo "ENV_NAME=production" >> $GITHUB_ENV
+          else
+            echo "DEPLOY_PATH=/var/www/medusa-staging" >> $GITHUB_ENV
+            echo "PM2_APP_NAME=medusa-staging" >> $GITHUB_ENV
+            echo "MEDUSA_PORT=9001" >> $GITHUB_ENV
+            echo "ENV_NAME=staging" >> $GITHUB_ENV
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies and build
+        working-directory: ./medusa-backend
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+
+      - name: Create deployment package
+        run: |
+          cd medusa-backend
+          tar -czf ../medusa-backend.tar.gz \
+            --exclude='node_modules' \
+            --exclude='.git' \
+            --exclude='*.log' \
+            .
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+
+      - name: Add VPS to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          DATABASE_URL: ${{ secrets[format('MEDUSA_DATABASE_URL_{0}', env.ENV_NAME)] }}
+          JWT_SECRET: ${{ secrets[format('MEDUSA_JWT_SECRET_{0}', env.ENV_NAME)] }}
+          COOKIE_SECRET: ${{ secrets[format('MEDUSA_COOKIE_SECRET_{0}', env.ENV_NAME)] }}
+          REDIS_URL: ${{ secrets.MEDUSA_REDIS_URL }}
+          STORE_CORS: ${{ secrets[format('MEDUSA_STORE_CORS_{0}', env.ENV_NAME)] }}
+          ADMIN_CORS: ${{ secrets[format('MEDUSA_ADMIN_CORS_{0}', env.ENV_NAME)] }}
+        run: |
+          # Upload deployment package
+          scp medusa-backend.tar.gz $VPS_USER@$VPS_HOST:/tmp/
+
+          # Execute deployment script on VPS
+          ssh $VPS_USER@$VPS_HOST << 'ENDSSH'
+            set -e
+            
+            # Create deployment directory if it doesn't exist
+            mkdir -p ${{ env.DEPLOY_PATH }}
+            
+            # Backup current deployment
+            if [ -d "${{ env.DEPLOY_PATH }}/current" ]; then
+              echo "Creating backup..."
+              cp -r ${{ env.DEPLOY_PATH }}/current ${{ env.DEPLOY_PATH }}/backup-$(date +%Y%m%d-%H%M%S)
+              
+              # Keep only last 5 backups
+              cd ${{ env.DEPLOY_PATH }}
+              ls -dt backup-* | tail -n +6 | xargs -r rm -rf
+            fi
+            
+            # Extract new deployment
+            echo "Extracting new deployment..."
+            mkdir -p ${{ env.DEPLOY_PATH }}/release-$(date +%Y%m%d-%H%M%S)
+            cd ${{ env.DEPLOY_PATH }}/release-$(date +%Y%m%d-%H%M%S)
+            tar -xzf /tmp/medusa-backend.tar.gz
+            rm /tmp/medusa-backend.tar.gz
+            
+            # Install production dependencies
+            echo "Installing dependencies..."
+            yarn install --production --frozen-lockfile
+            
+            # Create .env file
+            echo "Creating environment configuration..."
+            cat > .env << 'EOF'
+          DATABASE_URL=${{ env.DATABASE_URL }}
+          JWT_SECRET=${{ env.JWT_SECRET }}
+          COOKIE_SECRET=${{ env.COOKIE_SECRET }}
+          REDIS_URL=${{ env.REDIS_URL }}
+          STORE_CORS=${{ env.STORE_CORS }}
+          ADMIN_CORS=${{ env.ADMIN_CORS }}
+          AUTH_CORS=${{ env.STORE_CORS }}
+          PORT=${{ env.MEDUSA_PORT }}
+          NODE_ENV=production
+          EOF
+            
+            # Run database migrations
+            echo "Running database migrations..."
+            npx medusa migrations run
+            
+            # Update symlink to new release
+            echo "Updating current symlink..."
+            ln -sfn ${{ env.DEPLOY_PATH }}/release-$(date +%Y%m%d-%H%M%S) ${{ env.DEPLOY_PATH }}/current
+            
+            # Restart PM2 process
+            echo "Restarting Medusa service..."
+            cd ${{ env.DEPLOY_PATH }}/current
+            
+            # Check if PM2 process exists
+            if pm2 describe ${{ env.PM2_APP_NAME }} > /dev/null 2>&1; then
+              pm2 restart ${{ env.PM2_APP_NAME }}
+            else
+              # Start new PM2 process
+              pm2 start yarn --name ${{ env.PM2_APP_NAME }} -- start
+              pm2 save
+            fi
+            
+            # Health check
+            echo "Performing health check..."
+            sleep 5
+            curl -f http://localhost:${{ env.MEDUSA_PORT }}/health || exit 1
+            
+            echo "Deployment completed successfully!"
+          ENDSSH
+
+      - name: Verify deployment
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: |
+          ssh $VPS_USER@$VPS_HOST << 'ENDSSH'
+            echo "=== PM2 Status ==="
+            pm2 status ${{ env.PM2_APP_NAME }}
+            
+            echo "=== Application Logs (last 20 lines) ==="
+            pm2 logs ${{ env.PM2_APP_NAME }} --lines 20 --nostream
+          ENDSSH
+
+      - name: Rollback on failure
+        if: failure()
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: |
+          ssh $VPS_USER@$VPS_HOST << 'ENDSSH'
+            echo "Deployment failed, rolling back..."
+            
+            # Find most recent backup
+            LATEST_BACKUP=$(ls -dt ${{ env.DEPLOY_PATH }}/backup-* | head -n 1)
+            
+            if [ -n "$LATEST_BACKUP" ]; then
+              ln -sfn $LATEST_BACKUP ${{ env.DEPLOY_PATH }}/current
+              pm2 restart ${{ env.PM2_APP_NAME }}
+              echo "Rolled back to: $LATEST_BACKUP"
+            else
+              echo "No backup found, cannot rollback"
+              exit 1
+            fi
+          ENDSSH
+
+      - name: Cleanup
+        if: always()
+        run: rm -f medusa-backend.tar.gz
+
+      - name: Notify deployment status
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ Medusa backend deployed successfully to ${{ env.ENV_NAME }}"
+          else
+            echo "❌ Medusa backend deployment failed for ${{ env.ENV_NAME }}"
+          fi
