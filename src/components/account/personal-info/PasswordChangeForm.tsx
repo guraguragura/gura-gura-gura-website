@@ -45,6 +45,24 @@ const PasswordChangeForm = () => {
     setIsSubmitting(true);
     
     try {
+      // Get current user email
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user?.email) {
+        throw new Error('User email not found');
+      }
+
+      // Verify current password by attempting to sign in
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: values.current_password,
+      });
+
+      if (signInError) {
+        toast.error('Current password is incorrect');
+        return;
+      }
+
       // Update password using Supabase Auth API
       const { error } = await supabase.auth.updateUser({ 
         password: values.new_password 
