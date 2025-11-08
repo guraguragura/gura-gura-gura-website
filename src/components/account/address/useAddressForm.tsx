@@ -78,6 +78,26 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
           }
 
           if (data) {
+            // Link customer to authenticated user if user_id is NULL
+            if (!data.user_id) {
+              const { error: updateError } = await supabase
+                .from('customer')
+                .update({ 
+                  user_id: authData.user.id,
+                  has_account: true 
+                })
+                .eq('id', data.id);
+              
+              if (updateError) {
+                console.error('Error linking customer to user:', updateError);
+                toast.error('Error linking customer profile');
+              } else {
+                // Update local data with new user_id
+                data.user_id = authData.user.id;
+                data.has_account = true;
+              }
+            }
+            
             setCustomerData(data);
             
             // Pre-fill the phone number field from the customer data if available
@@ -96,7 +116,8 @@ export const useAddressForm = (isOpen: boolean, onClose: () => void, onAddressAd
               const { data: newCustomer, error: createError } = await supabase
                 .from('customer')
                 .insert({
-                  id: newCustomerId, 
+                  id: newCustomerId,
+                  user_id: authData.user.id,
                   first_name: '',
                   last_name: '',
                   // Store authenticated email to satisfy RLS policies
