@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { useAuth } from '@/contexts/AuthContext';
 import LoginForm from '@/components/auth/LoginForm';
 import SignupForm from '@/components/auth/SignupForm';
@@ -31,7 +32,12 @@ const AuthPage = () => {
   }, [searchParams]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <>
+      <Helmet>
+        <title>{mode === 'signup' ? 'Sign Up' : 'Sign In'} | Gura</title>
+        <meta name="description" content={mode === 'signup' ? 'Create your Gura account to start shopping' : 'Sign in to your Gura account'} />
+      </Helmet>
+      <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Mobile Header - Only visible on mobile */}
       {isMobile && (
         <div className="bg-[#84D1D3] p-4 flex flex-col items-center">
@@ -101,6 +107,7 @@ const AuthPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

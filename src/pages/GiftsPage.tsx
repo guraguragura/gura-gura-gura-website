@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import TopInfoBar from '@/components/layout/TopInfoBar';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -24,8 +25,13 @@ const GiftsPage = () => {
   const totalPages = Math.ceil(giftsData.totalProducts / productsPerPage);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <TopInfoBar />
+    <>
+      <Helmet>
+        <title>Gifts for Everyone | Gura</title>
+        <meta name="description" content="Find the perfect gift for everyone on Gura" />
+      </Helmet>
+      <div className="min-h-screen flex flex-col">
+        <TopInfoBar />
       <Navbar />
       
       <main className="flex-1 bg-background">
@@ -47,8 +53,9 @@ const GiftsPage = () => {
         />
       </main>
       
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   );
 };
 

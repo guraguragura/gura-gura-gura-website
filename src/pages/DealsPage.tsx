@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 import PageLayout from "@/components/layout/PageLayout";
 import CategoryBreadcrumb from "@/components/category/CategoryBreadcrumb";
 import CategoryContent from "@/components/category/CategoryPage/CategoryContent";
@@ -32,7 +33,12 @@ const DealsPage = () => {
   };
 
   return (
-    <PageLayout fullWidth={false}>
+    <>
+      <Helmet>
+        <title>Deals & Offers | Gura</title>
+        <meta name="description" content="Discover amazing deals and special offers on Gura" />
+      </Helmet>
+      <PageLayout fullWidth={false}>
       <CategoryContent
         categoryName={categoryName}
         categoryHandle="deals"
@@ -52,6 +58,7 @@ const DealsPage = () => {
         onFiltersChange={handleFiltersChange}
       />
     </PageLayout>
+    </>
   );
 };
 

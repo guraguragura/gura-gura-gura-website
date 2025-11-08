@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { AccountLayout } from '@/components/account/AccountLayout';
 import { PersonalInfo } from '@/components/account/PersonalInfo';
 import { Addresses } from '@/components/account/Addresses';
@@ -31,7 +32,12 @@ const AccountPage = () => {
   }
   
   return (
-    <AccountLayout>
+    <>
+      <Helmet>
+        <title>My Account | Gura</title>
+        <meta name="description" content="Manage your Gura account, orders, and preferences" />
+      </Helmet>
+      <AccountLayout>
       <Routes>
         <Route path="/" element={<Navigate to="/account/personal-info" replace />} />
         <Route path="/personal-info" element={<PersonalInfo />} />
@@ -45,6 +51,7 @@ const AccountPage = () => {
         <Route path="*" element={<Navigate to="/account/personal-info" replace />} />
       </Routes>
     </AccountLayout>
+    </>
   );
 };
 

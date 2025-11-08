@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { useCurrency } from "@/hooks/useCurrency";
 import PageLayout from "@/components/layout/PageLayout";
 import CategoryContent from "@/components/category/CategoryPage/CategoryContent";
@@ -30,7 +31,12 @@ const CollectionDetailPage = () => {
   const displayedProducts = loading ? [] : products;
 
   return (
-    <PageLayout fullWidth={false}>
+    <>
+      <Helmet>
+        <title>{collectionName || 'Collection'} | Gura</title>
+        <meta name="description" content={`Shop ${collectionName || 'products'} on Gura`} />
+      </Helmet>
+      <PageLayout fullWidth={false}>
       <CategoryContent
         categoryName={collectionName}
         categoryHandle={handle}
@@ -52,6 +58,7 @@ const CollectionDetailPage = () => {
         isCollection={true}
       />
     </PageLayout>
+    </>
   );
 };
 

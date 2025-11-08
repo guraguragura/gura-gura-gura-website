@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PageLayout from '@/components/layout/PageLayout';
 
 import MissionSection from '@/components/about/MissionSection';
@@ -12,7 +13,12 @@ import CallToActionSection from '@/components/about/CallToActionSection';
 
 const AboutUsPage = () => {
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>About Us | Gura</title>
+        <meta name="description" content="Learn about Gura, Rwanda's leading e-commerce platform dedicated to providing superior online shopping experience and innovative solutions." />
+      </Helmet>
+      <PageLayout>
       <div className="space-y-16 py-6">
         {/* Hero Section */}
         <div className="text-center space-y-6">
@@ -41,6 +47,7 @@ const AboutUsPage = () => {
         <CallToActionSection />
       </div>
     </PageLayout>
+    </>
   );
 };
 

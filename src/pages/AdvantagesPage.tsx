@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PageLayout from '@/components/layout/PageLayout';
 import HeroSection from '@/components/advantages/HeroSection';
 import ServicesOverview from '@/components/advantages/ServicesOverview';
@@ -10,7 +11,12 @@ import CallToAction from '@/components/advantages/CallToAction';
 
 const AdvantagesPage = () => {
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>Why Shop With Gura | Gura</title>
+        <meta name="description" content="Discover the advantages of shopping with Gura - fast delivery, quality products, and exceptional customer service." />
+      </Helmet>
+      <PageLayout>
       <div className="space-y-16">
         {/* Hero Section */}
         <HeroSection />
@@ -31,6 +37,7 @@ const AdvantagesPage = () => {
         <CallToAction />
       </div>
     </PageLayout>
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import NewsletterForm from "@/components/coming-soon/NewsletterForm";
 import ProductCarousel from "@/components/coming-soon/ProductCarousel";
 import MobileBackgroundCarousel from "@/components/coming-soon/MobileBackgroundCarousel";
@@ -102,7 +103,12 @@ const ComingSoonPage = () => {
   const autoplayPlugin = createAutoplayPlugin();
 
   return (
-    <div className="h-screen w-full bg-white text-black font-sans md:overflow-hidden">
+    <>
+      <Helmet>
+        <title>Coming Soon | Gura</title>
+        <meta name="description" content="Get ready to click, shop, and enjoy! Sign up for exclusive offers and deals." />
+      </Helmet>
+      <div className="h-screen w-full bg-white text-black font-sans md:overflow-hidden">
       {/* Mobile Layout - Allow scrolling */}
       <div className="flex md:hidden flex-col min-h-screen relative">
         {/* Logo at the top */}
@@ -180,6 +186,7 @@ const ComingSoonPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

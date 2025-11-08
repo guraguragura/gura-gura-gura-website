@@ -1,6 +1,7 @@
 
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
@@ -16,6 +17,10 @@ const NotFound = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Page Not Found | Gura</title>
+        <meta name="description" content="The page you're looking for doesn't exist" />
+      </Helmet>
       <Navbar />
       <div className="min-h-screen flex items-center justify-center bg-gray-100 py-16">
         <div className="text-center max-w-md mx-auto px-4">
