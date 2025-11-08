@@ -12,6 +12,10 @@ const CategoriesMenu = ({ staticCategories }: CategoriesMenuProps) => {
   const location = useLocation();
   
   const isActive = (handle: string) => {
+    // Special case for deals
+    if (handle === "deals") {
+      return location.pathname === "/deals";
+    }
     return location.pathname === `/categories/${handle}`;
   };
   
@@ -26,7 +30,7 @@ const CategoriesMenu = ({ staticCategories }: CategoriesMenuProps) => {
       {staticCategories.map((category) => (
         <Link 
           key={category.handle} 
-          to={`/categories/${category.handle}`}
+          to={category.handle === "deals" ? "/deals" : `/categories/${category.handle}`}
           className={cn(
             "text-sm whitespace-nowrap px-1 transition-all duration-200 relative",
             "hover:text-brand-teal hover:scale-105",

@@ -27,6 +27,10 @@ const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) =>
   const location = useLocation();
   
   const isActive = (handle: string) => {
+    // Special case for deals
+    if (handle === "deals") {
+      return location.pathname === "/deals";
+    }
     return location.pathname === `/categories/${handle}`;
   };
   
@@ -63,7 +67,7 @@ const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) =>
           {staticCategories.map((category) => (
             <DropdownMenuItem key={category.handle} asChild>
               <Link 
-                to={`/categories/${category.handle}`}
+                to={category.handle === "deals" ? "/deals" : `/categories/${category.handle}`}
                 className={cn(
                   "w-full",
                   isActive(category.handle) && "text-brand-teal font-semibold bg-accent"

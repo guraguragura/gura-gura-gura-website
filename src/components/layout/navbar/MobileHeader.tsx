@@ -32,6 +32,10 @@ const MobileHeader = ({
   };
   
   const isActive = (handle: string) => {
+    // Special case for deals
+    if (handle === "deals") {
+      return location.pathname === "/deals";
+    }
     return location.pathname === `/categories/${handle}`;
   };
   
@@ -65,7 +69,7 @@ const MobileHeader = ({
                   {staticCategories.map((category) => (
                     <Link 
                       key={category.handle}
-                      to={`/categories/${category.handle}`}
+                      to={category.handle === "deals" ? "/deals" : `/categories/${category.handle}`}
                       className={cn(
                         "block py-2 transition-colors duration-200",
                         "hover:text-brand-teal hover:pl-2",
@@ -137,7 +141,7 @@ const MobileHeader = ({
               {staticCategories.map((category) => (
                 <Link
                   key={category.handle}
-                  to={`/categories/${category.handle}`}
+                  to={category.handle === "deals" ? "/deals" : `/categories/${category.handle}`}
                   className={cn(
                     "text-xs whitespace-nowrap px-2 transition-all duration-200",
                     "hover:text-brand-teal hover:scale-105",
