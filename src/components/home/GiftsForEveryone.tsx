@@ -49,7 +49,7 @@ const GiftsForEveryone = () => {
           <h2 className="text-2xl">
             <span className="font-bold">Gifts for</span> <span className="font-light">Everyone</span>
           </h2>
-          <Link to="/gifts" className="flex items-center text-blue-600 hover:underline">
+          <Link to="/gifts" className="flex items-center text-gray-600 hover:text-gray-900 text-sm">
             View All Gifts <ChevronRight className="w-4 h-4 ml-1" />
           </Link>
         </div>

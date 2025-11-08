@@ -47,7 +47,7 @@ const FeaturedProducts = () => {
             <span className="font-bold">New</span> <span className="font-light">Arrivals</span>
           </h2>
           <div className="flex items-center gap-4">
-            <Link to="/tags/new-arrival" className="text-gray-600 hover:text-gray-900">
+            <Link to="/tags/new-arrival" className="text-gray-600 hover:text-gray-900 text-sm">
               View All Products
             </Link>
             <div className="flex gap-2">
