@@ -86,7 +86,7 @@ serve(async (req) => {
       body: JSON.stringify({
         email,
         attributes,
-        listIds: [2], // Default "Gura Deal Subscribers" list - update with your actual list ID
+        listIds: [8], // Gura Deal Subscribers list
         updateEnabled: true,
       })
     });
@@ -113,7 +113,7 @@ serve(async (req) => {
         },
         body: JSON.stringify({
           attributes,
-          listIds: [2], // Ensure they're in the master list
+          listIds: [8], // Ensure they're in the master list
         })
       });
 
