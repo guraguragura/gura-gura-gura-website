@@ -6563,6 +6563,7 @@ export type Database = {
         Returns: Json
       }
       get_customer_id_for_user: { Args: never; Returns: string }
+      get_deal_notification_cron_status: { Args: never; Returns: Json }
       get_products_by_category: {
         Args: { cid: string }
         Returns: {
@@ -6617,6 +6618,7 @@ export type Database = {
         Args: { p_driver_id: string; p_order_id: string; p_reason?: string }
         Returns: Json
       }
+      trigger_deal_notification_check: { Args: never; Returns: Json }
       update_driver_rating: {
         Args: { p_driver_id: string }
         Returns: undefined
