@@ -4338,6 +4338,51 @@ export type Database = {
         }
         Relationships: []
       }
+      product_deal_subscriptions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          notified: boolean
+          product_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          notified?: boolean
+          product_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          notified?: boolean
+          product_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_deal_subscriptions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "product"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_deal_subscriptions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "product_with_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_option: {
         Row: {
           created_at: string
