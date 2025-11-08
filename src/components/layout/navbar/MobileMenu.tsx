@@ -1,7 +1,8 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { MenuIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,6 +24,12 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) => {
+  const location = useLocation();
+  
+  const isActive = (handle: string) => {
+    return location.pathname === `/categories/${handle}`;
+  };
+  
   return (
     <div className="md:hidden py-2">
       <DropdownMenu>
@@ -44,7 +51,10 @@ const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) =>
             <DropdownMenuItem key={category.id} asChild>
               <Link 
                 to={`/categories/${category.handle}`}
-                className="w-full"
+                className={cn(
+                  "w-full",
+                  isActive(category.handle) && "text-brand-teal font-semibold bg-accent"
+                )}
               >
                 {category.name}
               </Link>
@@ -54,7 +64,10 @@ const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) =>
             <DropdownMenuItem key={category.handle} asChild>
               <Link 
                 to={`/categories/${category.handle}`}
-                className="w-full"
+                className={cn(
+                  "w-full",
+                  isActive(category.handle) && "text-brand-teal font-semibold bg-accent"
+                )}
               >
                 {category.name}
               </Link>

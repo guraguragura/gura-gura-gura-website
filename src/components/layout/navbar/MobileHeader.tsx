@@ -1,10 +1,11 @@
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, Search, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Logo from "./Logo";
 import NavIcons from "./NavIcons";
 import SearchBar from "./SearchBar";
-import { Link } from "react-router-dom";
 import {
   Sheet,
   SheetContent,
@@ -24,9 +25,14 @@ const MobileHeader = ({
   showSearch,
   setShowSearch
 }: MobileHeaderProps) => {
+  const location = useLocation();
   
   const toggleSearch = () => {
     setShowSearch(!showSearch);
+  };
+  
+  const isActive = (handle: string) => {
+    return location.pathname === `/categories/${handle}`;
   };
   
   return (
@@ -47,7 +53,11 @@ const MobileHeader = ({
                     <Link 
                       key={category.id}
                       to={`/categories/${category.handle}`}
-                      className="block py-2 hover:text-brand-teal"
+                      className={cn(
+                        "block py-2 transition-colors duration-200",
+                        "hover:text-brand-teal hover:pl-2",
+                        isActive(category.handle) && "text-brand-teal font-semibold pl-2"
+                      )}
                     >
                       {category.name}
                     </Link>
@@ -56,7 +66,11 @@ const MobileHeader = ({
                     <Link 
                       key={category.handle}
                       to={`/categories/${category.handle}`}
-                      className="block py-2 hover:text-brand-teal"
+                      className={cn(
+                        "block py-2 transition-colors duration-200",
+                        "hover:text-brand-teal hover:pl-2",
+                        isActive(category.handle) && "text-brand-teal font-semibold pl-2"
+                      )}
                     >
                       {category.name}
                     </Link>
@@ -116,6 +130,19 @@ const MobileHeader = ({
                   key={category.id}
                   to={`/categories/${category.handle}`}
                   className="whitespace-nowrap rounded-full border border-gray-300 px-3 py-1 text-xs"
+                >
+                  {category.name}
+                </Link>
+              ))}
+              {staticCategories.map((category) => (
+                <Link
+                  key={category.handle}
+                  to={`/categories/${category.handle}`}
+                  className={cn(
+                    "text-xs whitespace-nowrap px-2 transition-all duration-200",
+                    "hover:text-brand-teal hover:scale-105",
+                    isActive(category.handle) && "text-brand-teal font-semibold border-b-2 border-brand-teal"
+                  )}
                 >
                   {category.name}
                 </Link>
