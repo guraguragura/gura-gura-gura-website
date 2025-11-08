@@ -42,7 +42,6 @@ const LoginForm = ({ error, setError }: LoginFormProps) => {
       if (result.error) {
         setError(result.error.message || 'Failed to sign in. Please check your credentials.');
       } else {
-        toast.success("Successfully signed in");
         navigate('/account/personal-info');
       }
     } catch (err: any) {
