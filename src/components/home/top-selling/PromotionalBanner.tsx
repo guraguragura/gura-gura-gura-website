@@ -1,26 +1,40 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useBanners, getBannerLink } from "@/hooks/useBanners";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const PromotionalBanner = () => {
+  const { data: banners, isLoading } = useBanners('top-selling-promo');
+
+  if (isLoading) {
+    return <Skeleton className="lg:col-span-1 h-[400px] rounded-lg" />;
+  }
+
+  if (!banners || banners.length === 0) return null;
+
+  const banner = banners[0];
+  const href = getBannerLink(banner);
+  const isClickable = banner.link_type !== 'none' && href !== '#';
+
   return (
-    <div className="lg:col-span-1 bg-blue-100 rounded-lg overflow-hidden">
-      <div className="h-full flex flex-col justify-between p-6 relative">
-        <div className="text-center lg:text-left">
-          <div className="text-lg font-medium mb-1">Polaroid Now+ Gen 2 - White</div>
-          <h3 className="text-2xl font-bold mb-6">Fresh Vegetables</h3>
-          <Button className="rounded-full flex items-center gap-2 bg-white text-black hover:bg-gray-100">
-            Shop Now
-          </Button>
-        </div>
-        <div className="mt-4 flex justify-center">
+    <div className="lg:col-span-1 rounded-lg overflow-hidden">
+      {isClickable ? (
+        <Link to={href} className="block h-full">
           <img 
-            src="/lovable-uploads/8b872c64-6416-41e9-bcd6-fa615c17062e.png" 
-            alt="Polaroid Camera" 
-            className="max-h-48 object-contain"
+            src={banner.image_url} 
+            alt={banner.title} 
+            className="w-full h-full object-cover hover:opacity-95 transition-opacity"
           />
-        </div>
-      </div>
+        </Link>
+      ) : (
+        <img 
+          src={banner.image_url} 
+          alt={banner.title} 
+          className="w-full h-full object-cover"
+        />
+      )}
     </div>
   );
 };

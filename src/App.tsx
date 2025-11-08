@@ -35,6 +35,7 @@ const ForgotPasswordPage = React.lazy(() => import('./pages/ForgotPasswordPage')
 
 // Import new page components to be created
 const CollectionsPage = React.lazy(() => import('./pages/CollectionsPage'));
+const CollectionDetailPage = React.lazy(() => import('./pages/CollectionDetailPage'));
 const ShopPage = React.lazy(() => import('./pages/ShopPage'));
 const DealsPage = React.lazy(() => import('./pages/DealsPage'));
 const GiftsPage = React.lazy(() => import('./pages/GiftsPage'));
@@ -91,6 +92,7 @@ function App() {
             
             {/* Add routes for new page components */}
             <Route path="/collections" element={<CollectionsPage />} />
+            <Route path="/collections/:handle" element={<CollectionDetailPage />} />
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/deals" element={<DealsPage />} />
             <Route path="/gifts" element={<GiftsPage />} />

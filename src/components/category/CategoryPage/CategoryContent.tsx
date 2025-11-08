@@ -12,19 +12,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ProductFilters } from "@/components/category/filters/types";
-
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  thumbnail: string;
-  rating: number;
-  reviews_count: number;
-  discount_price?: number;
-  is_sale?: boolean;
-  is_new?: boolean;
-}
+import type { Product } from "@/types/common";
 
 interface CategoryContentProps {
   categoryName: string;
@@ -44,6 +32,7 @@ interface CategoryContentProps {
   productsPerPage: number;
   sortOptions: { label: string; value: string }[];
   onFiltersChange?: (filters: ProductFilters) => void;
+  isCollection?: boolean;
 }
 
 const CategoryContent: React.FC<CategoryContentProps> = ({
@@ -63,14 +52,18 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
   totalPages,
   productsPerPage,
   sortOptions,
-  onFiltersChange
+  onFiltersChange,
+  isCollection = false
 }) => {
   const isMobile = useIsMobile();
 
   return (
     <div className="p-2 sm:p-6">
-      <CategoryBreadcrumb categoryName={categoryName} parentCategory={parentCategory} />
-      <CategoryBanner categoryHandle={categoryHandle || ""} categoryName={categoryName} />
+      <CategoryBreadcrumb 
+        categoryName={categoryName} 
+        parentCategory={isCollection ? { name: "Collections", handle: "/collections" } : parentCategory} 
+      />
+      {!isCollection && <CategoryBanner categoryHandle={categoryHandle || ""} categoryName={categoryName} />}
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8">
         {/* Mobile filter drawer */}

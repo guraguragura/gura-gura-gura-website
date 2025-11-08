@@ -1,11 +1,13 @@
-
 import React from "react";
+import { Link } from "react-router-dom";
 import { 
   Carousel, 
   CarouselContent, 
   CarouselItem 
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
+import { useBanners, getBannerLink } from "@/hooks/useBanners";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const heroSlides = [
   {
@@ -33,6 +35,7 @@ const heroSlides = [
 
 const Hero = () => {
   const [api, setApi] = React.useState<any>(null);
+  const { data: banners, isLoading } = useBanners('hero');
 
   // Auto-scroll hero carousel
   React.useEffect(() => {
@@ -40,10 +43,27 @@ const Hero = () => {
     
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 5000); // Longer interval for hero carousel
+    }, 5000);
     
     return () => clearInterval(interval);
   }, [api]);
+
+  if (isLoading) {
+    return <Skeleton className="w-full h-[450px]" />;
+  }
+
+  const displayBanners = banners && banners.length > 0 ? banners : heroSlides.map((slide, idx) => ({
+    id: `fallback-${idx}`,
+    title: slide.title,
+    image_url: slide.image,
+    placement: 'hero' as const,
+    link_type: 'none' as const,
+    link_value: null,
+    display_order: idx,
+    is_active: true,
+    start_date: null,
+    end_date: null
+  }));
 
   return (
     <section className="py-1 md:py-4">
@@ -57,31 +77,32 @@ const Hero = () => {
           }}
         >
           <CarouselContent>
-            {heroSlides.map((slide) => (
-              <CarouselItem key={slide.id}>
-                <div className="relative h-[250px] sm:h-[300px] md:h-[400px] lg:h-[450px] w-full rounded-lg overflow-hidden">
-                  <img 
-                    src={slide.image} 
-                    alt={slide.title} 
-                    className="w-full h-full object-cover"
-                  />
-                  
-                  {/* Overlay with gradient for better text visibility */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
-                  
-                  {/* Content positioned over the banner */}
-                  <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-16">
-                    <div className="max-w-md">
-                      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white mb-2">
-                        {slide.title}
-                      </h1>
-                      <p className="text-lg md:text-xl text-white/90 mb-4 md:mb-6">{slide.subtitle}</p>
-                      <Button size="lg">{slide.buttonText}</Button>
-                    </div>
+            {displayBanners.map((banner) => {
+              const href = getBannerLink(banner);
+              const isClickable = banner.link_type !== 'none' && href !== '#';
+
+              return (
+                <CarouselItem key={banner.id}>
+                  <div className="relative h-[250px] sm:h-[300px] md:h-[400px] lg:h-[450px] w-full rounded-lg overflow-hidden">
+                    {isClickable ? (
+                      <Link to={href} className="block w-full h-full">
+                        <img
+                          src={banner.image_url}
+                          alt={banner.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </Link>
+                    ) : (
+                      <img
+                        src={banner.image_url}
+                        alt={banner.title}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                   </div>
-                </div>
-              </CarouselItem>
-            ))}
+                </CarouselItem>
+              );
+            })}
           </CarouselContent>
         </Carousel>
       </div>
