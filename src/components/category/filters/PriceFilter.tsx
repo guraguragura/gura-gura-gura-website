@@ -28,14 +28,11 @@ const PriceFilter = ({ priceRange, setPriceRange }: PriceFilterProps) => {
             <div className="bg-gray-100 rounded-md px-3 py-1 text-sm">
               {formatPrice(priceRange[0])}
             </div>
-            <div className="bg-gray-100 rounded-md px-3 py-1 text-sm">
-              {formatPrice(priceRange[1])}
-            </div>
+          <div className="bg-gray-100 rounded-md px-3 py-1 text-sm">
+            {formatPrice(priceRange[1])}
           </div>
-          <button className="mt-4 bg-blue-500 text-white w-full rounded-md py-2 text-sm">
-            Filter
-          </button>
         </div>
+      </div>
       </AccordionContent>
     </AccordionItem>
   );
