@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { useSubcategories } from "./filters/hooks/useSubcategories";
 import { useCategoryRatings } from "./filters/hooks/useCategoryRatings";
 import { useProductOptions } from "./filters/hooks/useProductOptions";
 import { useProductMetadata } from "./filters/hooks/useProductMetadata";
+import { useCategoryPriceRange } from "@/hooks/useCategoryPriceRange";
 
 // Import sub-components
 import CategoryList from "./filters/CategoryList";
@@ -33,7 +34,8 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ onFiltersChange }) => {
   // Use whichever parameter is available
   const categoryHandle = handle || id || categoryName;
   
-  const [priceRange, setPriceRange] = useState([0, 100]);
+  const { min: minPrice, max: maxPrice, loading: priceLoading } = useCategoryPriceRange(categoryHandle);
+  const [priceRange, setPriceRange] = useState([minPrice, maxPrice]);
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [filters, setFilters] = useState<Record<string, string | null>>({});
   
@@ -41,6 +43,13 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ onFiltersChange }) => {
   const { ratings: dynamicRatings } = useCategoryRatings(categoryHandle);
   const { options: productOptions } = useProductOptions(categoryHandle);
   const { metadata: productMetadata } = useProductMetadata(categoryHandle);
+
+  // Update price range when min/max prices are loaded
+  useEffect(() => {
+    if (!priceLoading) {
+      setPriceRange([minPrice, maxPrice]);
+    }
+  }, [minPrice, maxPrice, priceLoading]);
 
   const handleFilterChange = (key: string, value: string | null) => {
     const newFilters = { ...filters, [key]: value };
@@ -68,7 +77,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ onFiltersChange }) => {
   };
 
   const handleClearAllFilters = () => {
-    setPriceRange([0, 100]);
+    setPriceRange([minPrice, maxPrice]);
     setRatingFilter(null);
     setFilters({});
     onFiltersChange?.({});
@@ -76,8 +85,8 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ onFiltersChange }) => {
 
   // Check if any filters are active
   const hasActiveFilters = 
-    priceRange[0] !== 0 || 
-    priceRange[1] !== 100 || 
+    priceRange[0] !== minPrice || 
+    priceRange[1] !== maxPrice || 
     ratingFilter !== null || 
     Object.values(filters).some(value => value !== null && value !== undefined);
 
@@ -105,7 +114,12 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ onFiltersChange }) => {
 
       {/* Filters */}
       <Accordion type="single" collapsible defaultValue="price">
-        <PriceFilter priceRange={priceRange} setPriceRange={handlePriceChange} />
+        <PriceFilter 
+          priceRange={priceRange} 
+          setPriceRange={handlePriceChange}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+        />
         <RatingFilter ratings={dynamicRatings} ratingFilter={ratingFilter} setRatingFilter={handleRatingChange} />
         
         {/* Dynamic Product Options */}

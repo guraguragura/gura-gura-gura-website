@@ -7,9 +7,11 @@ import { useCurrency } from "@/hooks/useCurrency";
 interface PriceFilterProps {
   priceRange: number[];
   setPriceRange: (value: number[]) => void;
+  minPrice: number;
+  maxPrice: number;
 }
 
-const PriceFilter = ({ priceRange, setPriceRange }: PriceFilterProps) => {
+const PriceFilter = ({ priceRange, setPriceRange, minPrice, maxPrice }: PriceFilterProps) => {
   const { formatPrice } = useCurrency();
   return (
     <AccordionItem value="price" className="border-0">
@@ -17,22 +19,22 @@ const PriceFilter = ({ priceRange, setPriceRange }: PriceFilterProps) => {
       <AccordionContent>
         <div className="mt-4 px-2">
           <Slider
-            defaultValue={[0, 100]}
-            max={100}
+            min={minPrice}
+            max={maxPrice}
             step={1}
             value={priceRange}
             onValueChange={setPriceRange}
             className="my-6"
           />
           <div className="flex justify-between mt-2">
-            <div className="bg-gray-100 rounded-md px-3 py-1 text-sm">
+            <div className="bg-muted rounded-md px-3 py-1 text-sm">
               {formatPrice(priceRange[0])}
             </div>
-          <div className="bg-gray-100 rounded-md px-3 py-1 text-sm">
-            {formatPrice(priceRange[1])}
+            <div className="bg-muted rounded-md px-3 py-1 text-sm">
+              {formatPrice(priceRange[1])}
+            </div>
           </div>
         </div>
-      </div>
       </AccordionContent>
     </AccordionItem>
   );
