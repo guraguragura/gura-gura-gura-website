@@ -21,7 +21,8 @@ const CategoryPage = () => {
   const { 
     products, 
     loading, 
-    categoryName: resolvedCategoryName, 
+    categoryName: resolvedCategoryName,
+    parentCategory,
     sortBy, 
     setSortBy, 
     viewMode,
@@ -41,6 +42,7 @@ const CategoryPage = () => {
       <CategoryContent
         categoryName={resolvedCategoryName}
         categoryHandle={categoryHandle}
+        parentCategory={parentCategory}
         products={displayedProducts}
         loading={loading}
         formatPrice={formatPrice}

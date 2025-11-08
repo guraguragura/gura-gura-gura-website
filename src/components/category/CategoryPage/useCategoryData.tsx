@@ -32,6 +32,7 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [categoryName, setCategoryName] = useState("");
+  const [parentCategory, setParentCategory] = useState<{ name: string; handle: string } | null>(null);
   const [sortBy, setSortBy] = useState("popularity");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,7 +44,7 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
       try {
         const { data: categoryData, error: categoryError } = await supabase
           .from('product_category')
-          .select('name')
+          .select('name, parent_category_id')
           .eq('handle', handle)
           .single();
 
@@ -51,6 +52,24 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
           console.error("Error fetching category:", categoryError);
         } else if (categoryData) {
           setCategoryName(categoryData.name);
+          
+          // Fetch parent category if exists
+          if (categoryData.parent_category_id) {
+            const { data: parentData, error: parentError } = await supabase
+              .from('product_category')
+              .select('name, handle')
+              .eq('id', categoryData.parent_category_id)
+              .single();
+            
+            if (parentError) {
+              console.error("Error fetching parent category:", parentError);
+              setParentCategory(null);
+            } else if (parentData) {
+              setParentCategory({ name: parentData.name, handle: parentData.handle });
+            }
+          } else {
+            setParentCategory(null);
+          }
         }
       } catch (error) {
         console.error("Failed to fetch category:", error);
@@ -339,6 +358,7 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
     products,
     loading,
     categoryName,
+    parentCategory,
     sortBy,
     setSortBy,
     viewMode,

@@ -29,6 +29,7 @@ interface Product {
 interface CategoryContentProps {
   categoryName: string;
   categoryHandle?: string;
+  parentCategory?: { name: string; handle: string } | null;
   products: Product[];
   loading: boolean;
   formatPrice: (price: number) => string;
@@ -48,6 +49,7 @@ interface CategoryContentProps {
 const CategoryContent: React.FC<CategoryContentProps> = ({
   categoryName,
   categoryHandle,
+  parentCategory,
   products,
   loading,
   formatPrice,
@@ -67,7 +69,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
 
   return (
     <div className="p-2 sm:p-6">
-      <CategoryBreadcrumb categoryName={categoryName} />
+      <CategoryBreadcrumb categoryName={categoryName} parentCategory={parentCategory} />
       <CategoryBanner categoryHandle={categoryHandle || ""} categoryName={categoryName} />
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8">
