@@ -45,6 +45,7 @@ const ProductSearchPage = React.lazy(() => import('./pages/ProductSearchPage'));
 const TagPage = React.lazy(() => import('./pages/TagPage'));
 const ArticlesPage = React.lazy(() => import('./pages/ArticlesPage'));
 const ArticleDetailPage = React.lazy(() => import('./pages/ArticleDetailPage'));
+const AdminCategoryImages = React.lazy(() => import('./pages/AdminCategoryImages'));
 function App() {
   // Track performance metrics
   usePerformanceTracking();
@@ -100,6 +101,7 @@ function App() {
             <Route path="/track" element={<TrackOrderPage />} />
             <Route path="/articles" element={<ArticlesPage />} />
             <Route path="/article/:slug" element={<ArticleDetailPage />} />
+            <Route path="/admin/category-images" element={<AdminCategoryImages />} />
             
             {/* Keep existing routes */}
             <Route path="/about" element={<AboutUsPage />} />

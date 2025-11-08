@@ -137,15 +137,22 @@ export const staticCategories = [
   }
 ];
 
-// Get category image and color
-export const getCategoryStyle = (handle: string) => {
-  // First try direct match
+// Get category image and color - prioritizes metadata from database
+export const getCategoryStyle = (handle: string, metadata?: any) => {
+  // First priority: metadata from database
+  if (metadata?.image_url && metadata?.background_color) {
+    return {
+      image: metadata.image_url,
+      color: metadata.background_color
+    };
+  }
+  
+  // Second priority: direct match in categoryImageMap
   if (categoryImageMap[handle]) {
     return categoryImageMap[handle];
   }
   
-  // Try to match with hyphenated variations
-  // This helps with handles like "car-accessories" matching "car_accessories" etc.
+  // Third priority: match with hyphenated variations
   const normalizedHandle = handle.replace(/[-_]/g, '').toLowerCase();
   for (const [key, value] of Object.entries(categoryImageMap)) {
     const normalizedKey = key.replace(/[-_]/g, '').toLowerCase();
@@ -154,7 +161,7 @@ export const getCategoryStyle = (handle: string) => {
     }
   }
   
-  // Return default if no match
+  // Final fallback: default
   return categoryImageMap.default;
 };
 

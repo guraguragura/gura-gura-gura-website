@@ -6,6 +6,7 @@ interface Category {
   name: string;
   handle: string;
   rank: number;
+  metadata?: any;
 }
 
 interface Subcategory {
@@ -13,6 +14,7 @@ interface Subcategory {
   name: string;
   handle: string;
   rank: number;
+  metadata?: any;
 }
 
 export const useCategoryMegaMenu = () => {
@@ -27,7 +29,7 @@ export const useCategoryMegaMenu = () => {
         // Fetch parent categories
         const { data: parents, error: parentsError } = await supabase
           .from('product_category')
-          .select('id, name, handle, rank')
+          .select('id, name, handle, rank, metadata')
           .is('parent_category_id', null)
           .eq('is_active', true)
           .order('rank', { ascending: true });
@@ -46,7 +48,7 @@ export const useCategoryMegaMenu = () => {
         for (const parent of parents || []) {
           const { data: children, error: childrenError } = await supabase
             .from('product_category')
-            .select('id, name, handle, rank')
+            .select('id, name, handle, rank, metadata')
             .eq('parent_category_id', parent.id)
             .eq('is_active', true)
             .order('rank', { ascending: true });

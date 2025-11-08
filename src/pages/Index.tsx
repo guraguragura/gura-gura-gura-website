@@ -23,6 +23,7 @@ interface Category {
   name: string;
   handle: string;
   is_active: boolean;
+  metadata?: any;
 }
 
 const Index = () => {
@@ -37,7 +38,7 @@ const Index = () => {
         setIsLoading(true);
         const { data, error } = await supabase
           .from('product_category')
-          .select('id, name, handle, is_active')
+          .select('id, name, handle, is_active, metadata')
           .eq('is_active', true);
         
         if (error) {
@@ -48,7 +49,8 @@ const Index = () => {
             id: item.id || '',
             name: item.name || '',
             handle: item.handle || '',
-            is_active: !!item.is_active
+            is_active: !!item.is_active,
+            metadata: item.metadata
           }));
           
           setCategories(fetchedCategories);

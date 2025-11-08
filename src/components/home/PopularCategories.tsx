@@ -16,6 +16,7 @@ interface Category {
   name: string;
   handle: string;
   is_active?: boolean;
+  metadata?: any;
 }
 
 interface PopularCategoriesProps {
@@ -43,7 +44,7 @@ const PopularCategories: React.FC<PopularCategoriesProps> = ({
   // Process categories and ensure they have the correct images
   const displayCategories = dbCategories.length > 0 
     ? dbCategories.map(cat => {
-        const style = getCategoryStyle(cat.handle);
+        const style = getCategoryStyle(cat.handle, cat.metadata);
         return {
           id: cat.id,
           name: cat.name,

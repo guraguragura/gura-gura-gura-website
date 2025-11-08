@@ -6,6 +6,7 @@ interface Category {
   id: string;
   name: string;
   handle: string;
+  metadata?: any;
 }
 
 export const useCategoriesData = () => {
@@ -18,7 +19,7 @@ export const useCategoriesData = () => {
       try {
         const { data, error } = await supabase
           .from('product_category')
-          .select('id, name, handle')
+          .select('id, name, handle, metadata')
           .eq('is_active', true)
           .order('rank', { ascending: true });
         
