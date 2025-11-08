@@ -5176,40 +5176,55 @@ export type Database = {
       }
       promotional_articles: {
         Row: {
+          author: string | null
           background_color: string | null
+          content: string | null
           created_at: string | null
           display_order: number | null
+          excerpt: string | null
+          featured_image_alt: string | null
           id: string
           image_url: string
           is_active: boolean | null
           link_url: string
           published_at: string | null
+          slug: string | null
           subtitle: string
           title: string
           updated_at: string | null
         }
         Insert: {
+          author?: string | null
           background_color?: string | null
+          content?: string | null
           created_at?: string | null
           display_order?: number | null
+          excerpt?: string | null
+          featured_image_alt?: string | null
           id?: string
           image_url: string
           is_active?: boolean | null
           link_url: string
           published_at?: string | null
+          slug?: string | null
           subtitle: string
           title: string
           updated_at?: string | null
         }
         Update: {
+          author?: string | null
           background_color?: string | null
+          content?: string | null
           created_at?: string | null
           display_order?: number | null
+          excerpt?: string | null
+          featured_image_alt?: string | null
           id?: string
           image_url?: string
           is_active?: boolean | null
           link_url?: string
           published_at?: string | null
+          slug?: string | null
           subtitle?: string
           title?: string
           updated_at?: string | null
