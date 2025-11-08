@@ -11,6 +11,7 @@ import ProductCard from "@/components/category/ProductCard";
 import { useAdvancedProductSearch } from "@/hooks/useAdvancedProductSearch";
 import { useFuzzyProductSearch } from "@/hooks/useFuzzyProductSearch";
 import { useProducts } from "@/hooks/useProducts";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface SearchFilters {
   query: string;
@@ -35,13 +36,58 @@ const ProductSearchPage = () => {
 
   const [searchInput, setSearchInput] = useState(initialQuery);
   const [showFilters, setShowFilters] = useState(false);
+  const [productsWithReviews, setProductsWithReviews] = useState<any[]>([]);
 
   // Use fuzzy search for better typo tolerance
   const { products, loading, error, suggestions: didYouMeanSuggestions } = useFuzzyProductSearch(filters.query);
+
+  // Fetch actual review data for search results
+  useEffect(() => {
+    const fetchReviewData = async () => {
+      if (products.length === 0) {
+        setProductsWithReviews([]);
+        return;
+      }
+
+      const productIds = products.map(p => p.id);
+      
+      const { data: reviewData } = await supabase
+        .from('product_reviews')
+        .select('product_id, rating')
+        .in('product_id', productIds);
+
+      const reviewsByProduct = (reviewData || []).reduce((acc, review) => {
+        if (!acc[review.product_id]) {
+          acc[review.product_id] = { ratings: [], count: 0 };
+        }
+        acc[review.product_id].ratings.push(review.rating);
+        acc[review.product_id].count++;
+        return acc;
+      }, {} as Record<string, { ratings: number[], count: number }>);
+
+      const enrichedProducts = products.map(product => {
+        const reviewInfo = reviewsByProduct[product.id];
+        const rating = reviewInfo 
+          ? reviewInfo.ratings.reduce((sum, r) => sum + r, 0) / reviewInfo.ratings.length 
+          : 0;
+        const reviews_count = reviewInfo ? reviewInfo.count : 0;
+
+        return {
+          ...product,
+          rating,
+          reviews_count
+        };
+      });
+
+      setProductsWithReviews(enrichedProducts);
+    };
+
+    fetchReviewData();
+  }, [products]);
   
   // Simple filtering and sorting for now
   const filteredAndSortedProducts = React.useMemo(() => {
-    let filtered = [...products];
+    let filtered = [...productsWithReviews];
     
     // Apply category filter
     if (filters.category) {
@@ -73,7 +119,7 @@ const ProductSearchPage = () => {
     }
     
     return filtered;
-  }, [products, filters]);
+  }, [productsWithReviews, filters]);
   
   // Get popular products for no-results fallback
   const { products: popularProducts, isLoading: popularLoading } = useProducts({ 
@@ -256,8 +302,6 @@ const ProductSearchPage = () => {
                 key={product.id} 
                 product={{
                   ...product,
-                  rating: product.rating || 0,
-                  reviews_count: 0,
                   description: product.description || ''
                 }}
                 viewMode="grid"
