@@ -143,13 +143,16 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
               }
             }
             
-            // Apply metadata filters (Brand, Material, Type)
+            // Apply metadata filters (Brand, Material, Type) and Price filter
             if (filters && Object.keys(filters).length > 0) {
               const metadataFilters = Object.entries(filters).filter(([key]) => 
-                !['Size', 'Color'].includes(key)
+                !['Size', 'Color', 'minPrice', 'maxPrice', 'minRating'].includes(key)
               );
               
-              if (metadataFilters.length > 0 && filteredProductIds.length > 0) {
+              // Need to fetch metadata for price filter or metadata filters
+              const needsMetadata = metadataFilters.length > 0 || filters.minPrice || filters.maxPrice;
+              
+              if (needsMetadata && filteredProductIds.length > 0) {
                 const { data: productsWithMetadata } = await supabase
                   .from('product')
                   .select('id, metadata')
@@ -159,12 +162,55 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
                   filteredProductIds = productsWithMetadata
                     .filter(product => {
                       const metadata = (product.metadata as Record<string, any>) || {};
-                      return metadataFilters.every(([key, value]) => 
+                      
+                      // Apply metadata filters
+                      const metadataMatch = metadataFilters.every(([key, value]) => 
                         metadata[key.toLowerCase()] === value
                       );
+                      
+                      // Apply price filter
+                      let priceMatch = true;
+                      if (filters.minPrice || filters.maxPrice) {
+                        const price = metadata.price || 0;
+                        const minPrice = filters.minPrice ? parseFloat(filters.minPrice) : 0;
+                        const maxPrice = filters.maxPrice ? parseFloat(filters.maxPrice) : Infinity;
+                        priceMatch = price >= minPrice && price <= maxPrice;
+                      }
+                      
+                      return metadataMatch && priceMatch;
                     })
                     .map(p => p.id);
                 }
+              }
+            }
+            
+            // Apply rating filter before pagination
+            if (filters?.minRating && filteredProductIds.length > 0) {
+              const { data: reviewsData } = await supabase
+                .from('product_reviews')
+                .select('product_id, rating')
+                .in('product_id', filteredProductIds);
+              
+              if (reviewsData && reviewsData.length > 0) {
+                const productRatings: Record<string, number[]> = {};
+                
+                reviewsData.forEach(review => {
+                  if (!productRatings[review.product_id]) {
+                    productRatings[review.product_id] = [];
+                  }
+                  productRatings[review.product_id].push(review.rating);
+                });
+                
+                const minRating = parseFloat(filters.minRating);
+                filteredProductIds = filteredProductIds.filter(productId => {
+                  const ratings = productRatings[productId];
+                  if (!ratings || ratings.length === 0) return false;
+                  const avgRating = ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
+                  return avgRating >= minRating;
+                });
+              } else {
+                // No reviews means rating is 0, so filter out all products if minRating is set
+                filteredProductIds = [];
               }
             }
             
@@ -263,22 +309,7 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
                 };
               });
               
-              // Apply price filter
-              if (filters?.minPrice || filters?.maxPrice) {
-                const minPrice = filters.minPrice ? parseFloat(filters.minPrice) : 0;
-                const maxPrice = filters.maxPrice ? parseFloat(filters.maxPrice) : Infinity;
-                formattedProducts = formattedProducts.filter(p => 
-                  p.price >= minPrice && p.price <= maxPrice
-                );
-              }
-              
-              // Apply rating filter
-              if (filters?.minRating) {
-                const minRating = parseFloat(filters.minRating);
-                formattedProducts = formattedProducts.filter(p => p.rating >= minRating);
-              }
-              
-              // Sort by rating if needed
+              // Sort by rating if needed (already filtered before pagination)
               if (sortBy === "rating") {
                 formattedProducts.sort((a, b) => b.rating - a.rating);
               }
