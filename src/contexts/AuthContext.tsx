@@ -38,8 +38,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         if (event === 'SIGNED_IN') {
           toast.success('Successfully signed in');
-        } else if (event === 'SIGNED_OUT') {
-          toast.info('Signed out');
         }
       }
     );
