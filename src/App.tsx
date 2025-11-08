@@ -43,6 +43,7 @@ const TrackOrderPage = React.lazy(() => import('./pages/TrackOrderPage'));
 const ProductSearchPage = React.lazy(() => import('./pages/ProductSearchPage'));
 const TagPage = React.lazy(() => import('./pages/TagPage'));
 const ArticlesPage = React.lazy(() => import('./pages/ArticlesPage'));
+const ArticleDetailPage = React.lazy(() => import('./pages/ArticleDetailPage'));
 function App() {
   // Track performance metrics
   usePerformanceTracking();
@@ -96,6 +97,7 @@ function App() {
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/track" element={<TrackOrderPage />} />
             <Route path="/articles" element={<ArticlesPage />} />
+            <Route path="/article/:slug" element={<ArticleDetailPage />} />
             
             {/* Keep existing routes */}
             <Route path="/about" element={<AboutUsPage />} />

@@ -16,6 +16,11 @@ export const ArticleForm = ({ article, onClose, onSuccess }: ArticleFormProps) =
     background_color: article?.background_color || "bg-gray-100",
     is_active: article?.is_active ?? true,
     published_at: article?.published_at || new Date().toISOString(),
+    slug: article?.slug || "",
+    content: article?.content || "",
+    author: article?.author || "",
+    excerpt: article?.excerpt || "",
+    featured_image_alt: article?.featured_image_alt || "",
   });
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState(article?.image_url || "");
@@ -160,13 +165,68 @@ export const ArticleForm = ({ article, onClose, onSuccess }: ArticleFormProps) =
         </div>
 
         <div>
-          <Label htmlFor="link_url">Link URL *</Label>
+          <Label htmlFor="slug">Slug (leave empty for auto-generation)</Label>
+          <Input
+            id="slug"
+            value={formData.slug}
+            onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+            placeholder="auto-generated-from-title"
+          />
+          <p className="text-xs text-gray-500 mt-1">URL-friendly identifier. Leave blank to auto-generate from title.</p>
+        </div>
+
+        <div>
+          <Label htmlFor="content">Article Content</Label>
+          <Textarea
+            id="content"
+            value={formData.content}
+            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+            rows={10}
+            placeholder="Full article content (supports HTML)"
+          />
+          <p className="text-xs text-gray-500 mt-1">Use HTML tags for formatting. Leave empty to use link_url.</p>
+        </div>
+
+        <div>
+          <Label htmlFor="excerpt">Excerpt (optional)</Label>
+          <Textarea
+            id="excerpt"
+            value={formData.excerpt}
+            onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+            rows={3}
+            placeholder="Brief summary for previews. Defaults to subtitle if empty."
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="author">Author (optional)</Label>
+          <Input
+            id="author"
+            value={formData.author}
+            onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+            placeholder="e.g., Gura Editorial Team"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="featured_image_alt">Image Alt Text (recommended for accessibility)</Label>
+          <Input
+            id="featured_image_alt"
+            value={formData.featured_image_alt}
+            onChange={(e) => setFormData({ ...formData, featured_image_alt: e.target.value })}
+            placeholder="Descriptive text for the featured image"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="link_url">External Link URL (optional)</Label>
           <Input
             id="link_url"
             value={formData.link_url}
             onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
-            required
+            placeholder="/shop or https://example.com"
           />
+          <p className="text-xs text-gray-500 mt-1">Only used if content is empty. Readers will see internal content first.</p>
         </div>
 
         <div>

@@ -51,20 +51,20 @@ const ArticlesPage = () => {
                 {data.articles.map((article) => (
                   <Link
                     key={article.id}
-                    to={article.link_url}
+                    to={`/article/${article.slug}`}
                     className="group flex flex-col overflow-hidden rounded-lg border bg-card hover:shadow-lg transition-shadow"
                   >
                     <div className={`${article.background_color} h-64 relative overflow-hidden`}>
                       <img
                         src={article.image_url}
-                        alt={article.title}
+                        alt={article.featured_image_alt || article.title}
                         className="object-cover h-full w-full group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                     <div className="p-4 flex-grow">
                       <h3 className="text-lg font-bold mb-2">{article.title}</h3>
                       <p className="text-sm text-muted-foreground line-clamp-2">
-                        {article.subtitle}
+                        {article.excerpt || article.subtitle}
                       </p>
                       <p className="text-xs text-muted-foreground mt-2">
                         {new Date(article.published_at).toLocaleDateString("en-US", {

@@ -11,6 +11,11 @@ interface PromotionalArticle {
   is_active: boolean;
   published_at: string;
   created_at: string;
+  slug: string;
+  content: string | null;
+  author: string | null;
+  excerpt: string | null;
+  featured_image_alt: string | null;
 }
 
 export const useLatestArticles = (limit: number = 3) => {
@@ -47,5 +52,23 @@ export const useAllArticles = (page: number = 1, perPage: number = 12) => {
       if (error) throw error;
       return { articles: data as PromotionalArticle[], total: count || 0 };
     },
+  });
+};
+
+export const useArticleBySlug = (slug: string) => {
+  return useQuery({
+    queryKey: ["promotional-articles", "slug", slug],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("promotional_articles")
+        .select("*")
+        .eq("slug", slug)
+        .eq("is_active", true)
+        .single();
+
+      if (error) throw error;
+      return data as PromotionalArticle;
+    },
+    enabled: !!slug,
   });
 };

@@ -66,7 +66,7 @@ const PromotionalBannerCards = () => {
               title={article.title}
               subtitle={article.subtitle}
               backgroundColor={article.background_color}
-              link={article.link_url}
+              link={`/article/${article.slug}`}
             />
           ))}
         </div>
