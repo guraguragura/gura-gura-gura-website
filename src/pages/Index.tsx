@@ -12,6 +12,7 @@ import TrendingPurchasesWithPromo from "@/components/home/TrendingPurchasesWithP
 import CyberMondayBanner from "@/components/home/CyberMondayBanner";
 import GiftsForEveryone from "@/components/home/GiftsForEveryone";
 import PromotionalBannerCards from "@/components/home/PromotionalBannerCards";
+import PersonalizedRecommendations from "@/components/product/PersonalizedRecommendations";
 import Newsletter from "@/components/home/Newsletter";
 import Footer from "@/components/layout/Footer";
 import { supabase } from "@/integrations/supabase/client";
@@ -78,6 +79,11 @@ const Index = () => {
           <CyberMondayBanner />
           <GiftsForEveryone />
           <PromotionalBannerCards />
+          <PersonalizedRecommendations 
+            title="You May Also Like" 
+            limit={8}
+            className="px-4"
+          />
           <RecentlyViewed />
         </div>
         <Newsletter />
