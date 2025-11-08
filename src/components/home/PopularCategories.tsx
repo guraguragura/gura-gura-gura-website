@@ -87,8 +87,6 @@ const PopularCategories: React.FC<PopularCategoriesProps> = ({
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="left-2 bg-white/80 hover:bg-white" />
-            <CarouselNext className="right-2 bg-white/80 hover:bg-white" />
           </Carousel>
         )}
       </div>
