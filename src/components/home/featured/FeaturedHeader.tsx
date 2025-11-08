@@ -10,7 +10,7 @@ const FeaturedHeader = () => {
         <span className="font-bold">Featured</span> <span className="font-light">Products</span>
       </h2>
       <div className="flex items-center gap-2">
-        <Link to="/shop" className="text-gray-600 hover:text-gray-900 text-sm">
+        <Link to="/tags/featured" className="text-gray-600 hover:text-gray-900 text-sm">
           View All Products
         </Link>
         <div className="flex gap-1">

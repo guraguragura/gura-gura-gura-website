@@ -10,7 +10,7 @@ const TrendingHeader = () => {
         <span className="font-bold">Trending</span> <span className="font-light">Purchases</span>
       </h2>
       <div className="flex items-center gap-2">
-        <Link to="/shop" className="text-gray-600 hover:text-gray-900 text-sm">
+        <Link to="/tags/best-seller" className="text-gray-600 hover:text-gray-900 text-sm">
           View All Products
         </Link>
         <div className="flex gap-1">

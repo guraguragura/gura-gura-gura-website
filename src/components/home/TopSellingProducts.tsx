@@ -24,7 +24,7 @@ const TopSellingProducts = () => {
         <NavigationControls 
           title="Trending"
           subtitle="Products"
-          linkUrl="/shop"
+          linkUrl="/tags/trending"
           linkText="View All Products"
         />
         
