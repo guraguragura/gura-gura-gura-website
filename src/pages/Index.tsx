@@ -39,7 +39,9 @@ const Index = () => {
         const { data, error } = await supabase
           .from('product_category')
           .select('id, name, handle, is_active, metadata')
-          .eq('is_active', true);
+          .eq('is_active', true)
+          .is('parent_category_id', null)
+          .order('rank', { ascending: true });
         
         if (error) {
           console.error("Error fetching categories:", error);
