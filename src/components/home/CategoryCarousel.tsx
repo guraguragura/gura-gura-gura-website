@@ -32,6 +32,7 @@ const CategoryCarousel = () => {
           .from('product_category')
           .select('id, name, handle')
           .eq('is_active', true)
+          .is('parent_category_id', null)
           .order('rank', { ascending: true });
         
         if (error) {
