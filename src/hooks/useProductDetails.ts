@@ -173,6 +173,22 @@ export function useProductDetails(productKey: string | undefined) {
           fetchError = handleError;
         }
 
+        // Fetch actual review data from product_reviews table
+        let actualRating = 0;
+        let actualReviewsCount = 0;
+        
+        if (productData) {
+          const { data: reviewData } = await supabase
+            .from('product_reviews')
+            .select('rating')
+            .eq('product_id', productData.id);
+          
+          if (reviewData && reviewData.length > 0) {
+            actualReviewsCount = reviewData.length;
+            actualRating = reviewData.reduce((sum, review) => sum + review.rating, 0) / reviewData.length;
+          }
+        }
+
         if (fetchError) {
           console.error("Error fetching product:", fetchError);
           setError("Failed to load product");
@@ -192,8 +208,9 @@ export function useProductDetails(productKey: string | undefined) {
           const discountPrice = safeExtract(rawMetadata, 'discount_price', 'number', undefined);
           const rawImages = safeExtractArray(rawMetadata, 'images', [productData.thumbnail || "/placeholder.svg"]);
           const images = rawImages.map(img => normalizeImageUrl(img));
-          const rating = safeExtract(rawMetadata, 'rating', 'number', 4.5);
-          const reviewsCount = safeExtract(rawMetadata, 'reviews_count', 'number', 124);
+          // Use actual review data from database instead of metadata
+          const rating = actualRating;
+          const reviewsCount = actualReviewsCount;
           const inStock = safeExtractBoolean(rawMetadata, 'in_stock', true);
           const sku = safeExtract(rawMetadata, 'sku', 'string', '');
           const isSale = safeExtractBoolean(rawMetadata, 'is_sale', false);
