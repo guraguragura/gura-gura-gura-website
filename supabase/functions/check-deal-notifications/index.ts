@@ -53,9 +53,23 @@ serve(async (req) => {
         continue;
       }
 
-      // If there are unnotified subscribers, trigger notification
+      // If there are unnotified subscribers, sync to Brevo
       if (subscribers && subscribers.length > 0) {
         console.log(`Found unnotified subscribers for product: ${product.title}`);
+
+        // Get all subscriber emails
+        const { data: allSubscribers, error: emailsError } = await supabase
+          .from('product_deal_subscriptions')
+          .select('email')
+          .eq('product_id', product.id)
+          .eq('notified', false);
+
+        if (emailsError || !allSubscribers) {
+          console.error(`Error fetching subscriber emails for ${product.title}:`, emailsError);
+          continue;
+        }
+
+        const subscriberEmails = allSubscribers.map(s => s.email);
 
         // Extract pricing information
         const metadata = product.metadata || {};
@@ -64,8 +78,9 @@ serve(async (req) => {
           ? parseFloat(metadata.discount_price) * 100 
           : price * 0.8; // Default 20% discount if not specified
 
-        // Call notify-deal-subscribers function
-        const notificationPromise = supabase.functions.invoke('notify-deal-subscribers', {
+        // Call sync-deal-triggers-to-brevo to update Brevo contact attributes
+        // This will trigger Brevo's automation workflows
+        const notificationPromise = supabase.functions.invoke('sync-deal-triggers-to-brevo', {
           body: {
             product_id: product.id,
             product_title: product.title,
@@ -73,13 +88,27 @@ serve(async (req) => {
             product_handle: product.handle,
             old_price: price,
             new_price: discountPrice,
+            subscriber_emails: subscriberEmails,
           }
         }).then(({ data, error }) => {
           if (error) {
-            console.error(`Failed to notify subscribers for ${product.title}:`, error);
+            console.error(`Failed to sync deal triggers for ${product.title}:`, error);
             return { product: product.title, success: false, error };
           }
-          console.log(`Successfully triggered notifications for ${product.title}`);
+          
+          // Mark subscribers as notified in Supabase
+          supabase
+            .from('product_deal_subscriptions')
+            .update({ notified: true })
+            .eq('product_id', product.id)
+            .eq('notified', false)
+            .then(({ error: updateError }) => {
+              if (updateError) {
+                console.error(`Error marking subscribers as notified:`, updateError);
+              }
+            });
+
+          console.log(`Successfully synced deal triggers to Brevo for ${product.title}`);
           return { product: product.title, success: true, data };
         });
 

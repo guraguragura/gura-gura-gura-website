@@ -49,6 +49,21 @@ export const useDealNotifications = () => {
         throw error;
       }
 
+      // Sync contact to Brevo
+      try {
+        await supabase.functions.invoke('sync-contact-to-brevo', {
+          body: {
+            email: userEmail,
+            action: 'subscribe',
+            product_id: productId,
+            user_id: user?.id,
+          }
+        });
+      } catch (syncError) {
+        console.error('Error syncing to Brevo:', syncError);
+        // Don't fail the whole operation if Brevo sync fails
+      }
+
       toast({
         title: "Subscribed!",
         description: "You'll be notified when this product goes on sale",
@@ -87,6 +102,20 @@ export const useDealNotifications = () => {
         .eq('product_id', productId);
 
       if (error) throw error;
+
+      // Sync unsubscribe to Brevo
+      try {
+        await supabase.functions.invoke('sync-contact-to-brevo', {
+          body: {
+            email: user.email,
+            action: 'unsubscribe',
+            product_id: productId,
+            user_id: user.id,
+          }
+        });
+      } catch (syncError) {
+        console.error('Error syncing unsubscribe to Brevo:', syncError);
+      }
 
       toast({
         title: "Unsubscribed",

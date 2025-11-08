@@ -218,6 +218,42 @@ export type Database = {
         }
         Relationships: []
       }
+      brevo_sync_log: {
+        Row: {
+          brevo_response: Json | null
+          contact_attributes: Json | null
+          contact_email: string
+          created_at: string | null
+          error_message: string | null
+          id: string
+          sync_status: string
+          sync_type: string
+          synced_at: string | null
+        }
+        Insert: {
+          brevo_response?: Json | null
+          contact_attributes?: Json | null
+          contact_email: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          sync_status: string
+          sync_type: string
+          synced_at?: string | null
+        }
+        Update: {
+          brevo_response?: Json | null
+          contact_attributes?: Json | null
+          contact_email?: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          sync_status?: string
+          sync_type?: string
+          synced_at?: string | null
+        }
+        Relationships: []
+      }
       capture: {
         Row: {
           amount: number
