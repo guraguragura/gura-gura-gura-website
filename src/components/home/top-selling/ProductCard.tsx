@@ -77,7 +77,7 @@ const ProductCard = ({ product, formatPrice, isLoading }: ProductCardProps) => {
                   discount_price: product.oldPrice > product.price ? product.price : undefined,
                   thumbnail: product.image
                 }}
-                className="flex items-center gap-1 px-3 h-9 w-full"
+                className="h-9 w-9 rounded-full flex-shrink-0"
               />
               <Button 
                 variant="outline" 

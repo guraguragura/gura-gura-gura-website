@@ -116,7 +116,7 @@ const RecentlyViewed = () => {
                   )}
                 </div>
                 
-                <div className="mt-auto">
+                <div className="mt-auto flex justify-center">
                   <AddToCartButton 
                     product={{
                       id: product.id,
@@ -124,7 +124,7 @@ const RecentlyViewed = () => {
                       price: product.price,
                       thumbnail: product.thumbnail
                     }}
-                    className="w-full flex items-center justify-center gap-2"
+                    className="h-8 w-8 rounded-full"
                   />
                 </div>
               </div>

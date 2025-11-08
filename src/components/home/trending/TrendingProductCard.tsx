@@ -85,16 +85,18 @@ const TrendingProductCard: React.FC<TrendingProductProps> = ({ product }) => {
           )}
         </div>
         
-        <AddToCartButton 
-          product={{
-            id: product.id.toString(),
-            title: product.name,
-            price: product.price,
-            discount_price: product.oldPrice > product.price ? product.price : undefined,
-            thumbnail: product.image
-          }}
-          className="w-full text-[10px] py-0.5 h-6"
-        />
+        <div className="flex items-center justify-between gap-1">
+          <AddToCartButton 
+            product={{
+              id: product.id.toString(),
+              title: product.name,
+              price: product.price,
+              discount_price: product.oldPrice > product.price ? product.price : undefined,
+              thumbnail: product.image
+            }}
+            className="h-6 w-6 rounded-full"
+          />
+        </div>
       </div>
     </Card>
     </Link>

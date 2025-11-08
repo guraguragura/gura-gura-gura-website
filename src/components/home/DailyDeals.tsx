@@ -147,7 +147,7 @@ const DailyDeals = () => {
                           discount_price: product.discount_price,
                           thumbnail: product.thumbnail
                         }}
-                        className="w-full mt-2"
+                        className="h-9 w-9 rounded-full"
                       />
                     </CardContent>
                   </Card>
