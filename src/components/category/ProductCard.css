@@ -30,7 +30,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #3B93E5;
+  background-color: hsl(0, 84%, 60%);
   color: white;
   padding: 4px 8px;
   border-radius: 16px 0 0 0;
