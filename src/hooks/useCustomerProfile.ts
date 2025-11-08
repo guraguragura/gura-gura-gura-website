@@ -34,12 +34,9 @@ export function useCustomerProfile() {
           customerError = emailError;
         }
 
-        // Handle actual errors (not "not found")
         if (customerError && customerError.code !== 'PGRST116') {
-          console.error('Error fetching customer data:', customerError);
-          toast.error("Failed to load customer data");
-          setIsLoading(false);
-          return;
+          console.error('Error fetching customer data (non-fatal):', customerError);
+          // Proceed to create or update a record instead of interrupting UX
         }
 
         // If customer record exists, use it
@@ -84,7 +81,6 @@ export function useCustomerProfile() {
         }
       } catch (error) {
         console.error('Error in fetchCustomer:', error);
-        toast.error("Failed to load customer profile");
       } finally {
         setIsLoading(false);
       }
