@@ -40,6 +40,7 @@ const CategoryPage = () => {
     <PageLayout fullWidth={false}>
       <CategoryContent
         categoryName={resolvedCategoryName}
+        categoryHandle={categoryHandle}
         products={displayedProducts}
         loading={loading}
         formatPrice={formatPrice}

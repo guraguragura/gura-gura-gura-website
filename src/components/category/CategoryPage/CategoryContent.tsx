@@ -2,6 +2,7 @@
 import React from "react";
 import CategoryBreadcrumb from "@/components/category/CategoryBreadcrumb";
 import CategoryHeader from "@/components/category/CategoryHeader";
+import CategoryBanner from "@/components/category/CategoryBanner";
 import CategoryFilter from "@/components/category/CategoryFilter";
 import ProductListHeader from "@/components/category/ProductListHeader";
 import ProductGrid from "@/components/category/ProductGrid";
@@ -27,6 +28,7 @@ interface Product {
 
 interface CategoryContentProps {
   categoryName: string;
+  categoryHandle?: string;
   products: Product[];
   loading: boolean;
   formatPrice: (price: number) => string;
@@ -45,6 +47,7 @@ interface CategoryContentProps {
 
 const CategoryContent: React.FC<CategoryContentProps> = ({
   categoryName,
+  categoryHandle,
   products,
   loading,
   formatPrice,
@@ -65,6 +68,7 @@ const CategoryContent: React.FC<CategoryContentProps> = ({
   return (
     <div className="p-2 sm:p-6">
       <CategoryBreadcrumb categoryName={categoryName} />
+      <CategoryBanner categoryHandle={categoryHandle || ""} categoryName={categoryName} />
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8">
         {/* Mobile filter drawer */}
