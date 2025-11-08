@@ -8,7 +8,7 @@ export interface WishlistItem {
   title: string;
   price: number;
   discount_price?: number;
-  thumbnail: string;
+  thumbnail?: string;
   category?: string;
 }
 

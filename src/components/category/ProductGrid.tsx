@@ -2,19 +2,7 @@
 import React from "react";
 import ProductCard from "./ProductCard";
 import { useIsMobile } from "@/hooks/use-mobile";
-
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  thumbnail: string;
-  rating: number;
-  reviews_count: number;
-  discount_price?: number;
-  is_sale?: boolean;
-  is_new?: boolean;
-}
+import type { Product } from "@/types/common";
 
 interface ProductGridProps {
   products: Product[];

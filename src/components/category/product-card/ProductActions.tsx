@@ -9,7 +9,7 @@ interface ProductActionsProps {
     id: string;
     title: string;
     price: number;
-    thumbnail: string;
+    thumbnail?: string;
     discount_price?: number;
   };
 }

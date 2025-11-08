@@ -12,7 +12,7 @@ interface WishlistItemWithReviews {
   title: string;
   category?: string;
   price: number;
-  thumbnail: string;
+  thumbnail?: string;
   discount_price?: number;
   rating: number;
   reviews_count: number;

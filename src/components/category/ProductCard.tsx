@@ -8,22 +8,11 @@ import ProductRating from "./product-card/ProductRating";
 import ProductInventory from "./product-card/ProductInventory";
 import ProductPrice from "./product-card/ProductPrice";
 import ProductActions from "./product-card/ProductActions";
+import type { Product } from "@/types/common";
 import "./ProductCard.css";
 
 interface ProductProps {
-  product: {
-    id: string;
-    title: string;
-    description: string;
-    price: number;
-    thumbnail: string;
-    rating: number;
-    reviews_count: number;
-    discount_price?: number;
-    is_sale?: boolean;
-    is_new?: boolean;
-    tags?: string[];
-  };
+  product: Product;
   viewMode: "grid" | "list";
   formatPrice: (price: number) => string;
 }

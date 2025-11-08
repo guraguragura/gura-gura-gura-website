@@ -1,30 +1,16 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-
-export interface GiftProduct {
-  id: string;
-  title: string;
-  description: string;
-  thumbnail: string;
-  price: number;
-  discount_price?: number;
-  rating: number;
-  reviews_count: number;
-  is_sale?: boolean;
-  is_new?: boolean;
-  tags?: string[];
-  category?: string;
-}
+import type { Product } from '@/types/common';
 
 export interface GiftsDataReturn {
-  products: GiftProduct[];
+  products: Product[];
   isLoading: boolean;
   error: string | null;
   totalProducts: number;
 }
 
 export function useGiftsData(): GiftsDataReturn {
-  const [products, setProducts] = useState<GiftProduct[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalProducts, setTotalProducts] = useState(0);
@@ -130,7 +116,7 @@ export function useGiftsData(): GiftsDataReturn {
             return {
               id: item.id,
               title: item.title,
-              description: item.description || '',
+              description: item.description || undefined,
               thumbnail: item.thumbnail || '/placeholder.svg',
               price: typeof rawMetadata['price'] === 'number' ? rawMetadata['price'] : 19.99,
               discount_price: typeof rawMetadata['discount_price'] === 'number' ? rawMetadata['discount_price'] : undefined,
@@ -138,6 +124,7 @@ export function useGiftsData(): GiftsDataReturn {
               reviews_count: productRating?.count || 0,
               is_sale: rawMetadata['is_sale'] === true || rawMetadata['is_sale'] === 'true',
               is_new: rawMetadata['is_new'] === true || rawMetadata['is_new'] === 'true',
+              is_featured: rawMetadata['is_featured'] === true || rawMetadata['is_featured'] === 'true',
               tags,
               category: categories[0]
             };

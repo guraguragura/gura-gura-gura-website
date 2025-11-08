@@ -7,9 +7,9 @@ export interface Product {
   discount_price?: number;
   rating: number;
   reviews_count: number;
-  is_sale: boolean;
-  is_new: boolean;
-  is_featured: boolean;
+  is_sale?: boolean;
+  is_new?: boolean;
+  is_featured?: boolean;
   category?: string;
   handle?: string;
   images?: string[];

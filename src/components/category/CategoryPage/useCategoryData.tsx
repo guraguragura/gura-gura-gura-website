@@ -1,23 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { ProductFilters } from "@/components/category/filters/types";
+import type { Product } from "@/types/common";
 import { normalizeImageUrl } from "@/lib/utils";
-
-// Types
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  thumbnail: string;
-  rating: number;
-  reviews_count: number;
-  discount_price?: number;
-  is_sale?: boolean;
-  is_new?: boolean;
-  tags?: string[];
-}
 
 // Constants
 const sortOptions = [
@@ -316,7 +301,7 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
                 return {
                   id: product.id,
                   title: product.title,
-                  description: product.description || "",
+                  description: product.description || undefined,
                   thumbnail: normalizeImageUrl(product.thumbnail),
                   price: metadataObj.price || 0,
                   discount_price: metadataObj.discount_price,
@@ -324,6 +309,7 @@ const useCategoryData = (handle?: string, filters?: ProductFilters) => {
                   reviews_count: productRating?.count || 0,
                   is_sale: metadataObj.is_sale || false,
                   is_new: metadataObj.is_new || false,
+                  is_featured: metadataObj.is_featured || false,
                   tags: tags.length > 0 ? tags : undefined,
                 };
               });
