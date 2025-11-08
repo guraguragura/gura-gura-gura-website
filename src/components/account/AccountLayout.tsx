@@ -8,7 +8,8 @@ import {
   RefreshCw, 
   LogOut, 
   HelpCircle,
-  Menu
+  Menu,
+  Bell
 } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -54,6 +55,7 @@ export const AccountLayout = ({ children }: AccountLayoutProps) => {
     { path: '/account/wishlist', label: 'Wishlists', icon: <Heart className="h-5 w-5" /> },
     { path: '/account/orders', label: 'Orders', icon: <ShoppingBag className="h-5 w-5" /> },
     { path: '/account/returns', label: 'Returns', icon: <RefreshCw className="h-5 w-5" /> },
+    { path: '/account/deal-notifications', label: 'Deal Notifications', icon: <Bell className="h-5 w-5" /> },
   ];
 
   const secondaryNavItems: NavItem[] = [

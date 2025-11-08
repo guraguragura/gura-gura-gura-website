@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { useCurrency } from "@/hooks/useCurrency";
 import AddToCartButton from "./AddToCartButton";
 import { useWishlist } from "@/contexts/WishlistContext";
+import { DealNotificationButton } from "./DealNotificationButton";
 
 interface ProductInfoProps {
   product: {
@@ -209,6 +210,14 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
             className={inWishlist ? "fill-red-500 text-red-500" : ""} 
           />
         </Button>
+      </div>
+
+      {/* Deal Notification Button */}
+      <div className="mb-6">
+        <DealNotificationButton 
+          productId={product.id} 
+          isOnSale={product.is_sale || false} 
+        />
       </div>
       
     </div>
