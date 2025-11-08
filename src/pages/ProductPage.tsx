@@ -9,6 +9,7 @@ import ProductBreadcrumb from "@/components/product/ProductBreadcrumb";
 import ProductImageGallery from "@/components/product/ProductImageGallery";
 import ProductInfo from "@/components/product/ProductInfo";
 import ProductTabs from "@/components/product/ProductTabs";
+import ProductSchema from "@/components/product/ProductSchema";
 import { useProductDetails } from "@/hooks/useProductDetails";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 
@@ -104,6 +105,7 @@ const ProductPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
+      <ProductSchema product={displayProduct} />
       <TopInfoBar />
       <Navbar />
       <div className="container mx-auto py-6 px-4">
