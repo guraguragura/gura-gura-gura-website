@@ -89,7 +89,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
 
       {signupMethod === 'phone' && (
         <div className="space-y-1 md:space-y-2">
-          <label htmlFor="phone" className="block text-xs md:text-sm font-medium text-gray-700">
+          <label htmlFor="phone-primary" className="block text-xs md:text-sm font-medium text-gray-700">
             Phone Number*
           </label>
           <div className="relative">
@@ -97,7 +97,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
               <Phone className="h-3.5 w-3.5 md:h-4 md:w-4" />
             </span>
             <Input
-              id="phone"
+              id="phone-primary"
               type="tel"
               placeholder="+1234567890"
               value={phone}
@@ -108,6 +108,26 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
           </div>
         </div>
       )}
+
+      <div className="space-y-1 md:space-y-2">
+        <label htmlFor="phone-contact" className="block text-xs md:text-sm font-medium text-gray-700">
+          Phone Number*
+        </label>
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <Phone className="h-3.5 w-3.5 md:h-4 md:w-4" />
+          </span>
+          <Input
+            id="phone-contact"
+            type="tel"
+            placeholder="+1234567890"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="pl-8 md:pl-10 text-xs md:text-sm h-9 md:h-10"
+            required
+          />
+        </div>
+      </div>
     </>
   );
 };

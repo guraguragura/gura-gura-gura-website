@@ -14,8 +14,8 @@ type AuthContextType = {
     email: string, 
     password: string, 
     firstName: string, 
-    lastName: string, 
-    addressData?: Record<string, string>
+    lastName: string,
+    phone: string
   ) => Promise<{error: Error | null}>;
   signInWithGoogle: () => Promise<void>;
   signInWithFacebook: () => Promise<void>;
@@ -75,19 +75,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     password: string, 
     firstName: string, 
     lastName: string,
-    addressData?: Record<string, string>
+    phone: string
   ) => {
-    // Combine basic user data with address data if provided
     const userData = {
       first_name: firstName,
       last_name: lastName,
-      ...(addressData || {})
+      phone_number: phone
     };
 
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
+        emailRedirectTo: `${window.location.origin}/`,
         data: userData,
       },
     });

@@ -43,7 +43,8 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
         formState.signupMethod === 'email' ? formState.email : formState.phone,
         formState.password,
         formState.firstName,
-        formState.lastName
+        formState.lastName,
+        formState.phone
       );
 
       if (result.error) {

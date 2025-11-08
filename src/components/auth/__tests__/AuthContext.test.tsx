@@ -65,7 +65,7 @@ const TestComponent = () => {
       <button onClick={() => signInWithEmail('test@example.com', 'password')}>
         Sign In
       </button>
-      <button onClick={() => signUpWithEmail('test@example.com', 'password', 'John', 'Doe')}>
+      <button onClick={() => signUpWithEmail('test@example.com', 'password', 'John', 'Doe', '+1234567890')}>
         Sign Up
       </button>
       <button onClick={signOut}>Sign Out</button>
@@ -142,9 +142,11 @@ describe('AuthContext', () => {
         email: 'test@example.com',
         password: 'password',
         options: {
+          emailRedirectTo: `${window.location.origin}/`,
           data: {
             first_name: 'John',
-            last_name: 'Doe'
+            last_name: 'Doe',
+            phone_number: '+1234567890'
           }
         }
       })

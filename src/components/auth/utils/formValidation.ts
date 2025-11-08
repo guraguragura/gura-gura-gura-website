@@ -1,22 +1,53 @@
 
 import { SignupFormState } from "../hooks/useSignupForm";
+import { z } from 'zod';
+
+const phoneSchema = z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format');
+const emailSchema = z.string().email('Invalid email address');
+const nameSchema = z.string().trim().min(1, 'Required').max(100, 'Must be less than 100 characters');
+const passwordSchema = z.string().min(8, 'Password must be at least 8 characters');
 
 export const validateSignupForm = (formState: SignupFormState): string | null => {
   const { firstName, lastName, email, phone, password, confirmPassword, agreeToTerms, signupMethod } = formState;
 
-  if (!firstName || !lastName) {
-    return 'Please enter your first and last name';
+  try {
+    nameSchema.parse(firstName);
+  } catch (e) {
+    return 'Please enter your first name';
   }
 
-  if (signupMethod === 'email' && (!email || !/\S+@\S+\.\S+/.test(email))) {
-    return 'Please enter a valid email address';
+  try {
+    nameSchema.parse(lastName);
+  } catch (e) {
+    return 'Please enter your last name';
   }
 
-  if (signupMethod === 'phone' && (!phone || !/^\+?[1-9]\d{1,14}$/.test(phone))) {
+  if (signupMethod === 'email') {
+    try {
+      emailSchema.parse(email);
+    } catch (e) {
+      return 'Please enter a valid email address';
+    }
+  }
+
+  if (signupMethod === 'phone') {
+    try {
+      phoneSchema.parse(phone);
+    } catch (e) {
+      return 'Please enter a valid phone number (e.g., +1234567890)';
+    }
+  }
+
+  // Always validate phone number field
+  try {
+    phoneSchema.parse(phone);
+  } catch (e) {
     return 'Please enter a valid phone number (e.g., +1234567890)';
   }
 
-  if (!password || password.length < 8) {
+  try {
+    passwordSchema.parse(password);
+  } catch (e) {
     return 'Password must be at least 8 characters';
   }
 
