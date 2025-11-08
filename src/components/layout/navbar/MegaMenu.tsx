@@ -44,6 +44,7 @@ const MegaMenu = () => {
                 key={category.id}
                 to={`/categories/${category.handle}`}
                 onMouseEnter={() => setActiveCategory(category.id)}
+                onClick={() => setIsOpen(false)}
                 className={`block px-4 py-3 text-sm transition-colors ${
                   activeCategory === category.id
                     ? 'bg-primary/10 text-primary border-l-2 border-primary'
@@ -67,6 +68,7 @@ const MegaMenu = () => {
                     <Link
                       key={subcategory.id}
                       to={`/categories/${subcategory.handle}`}
+                      onClick={() => setIsOpen(false)}
                       className="px-3 py-2 text-sm rounded-md hover:bg-muted transition-colors text-foreground"
                     >
                       {subcategory.name}
