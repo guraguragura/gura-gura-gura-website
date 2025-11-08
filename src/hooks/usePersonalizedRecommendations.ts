@@ -8,15 +8,14 @@ interface Product {
   title: string;
   handle: string;
   thumbnail: string;
-  variants: Array<{
-    id: string;
-    calculated_price?: {
-      calculated_amount: number;
-      currency_code: string;
-    };
-  }>;
-  tags?: Array<{ value: string }>;
-  categories?: Array<{ id: string; name: string }>;
+  metadata?: {
+    price?: number;
+    discount_price?: number;
+    category?: string;
+    tags?: string[];
+    brand?: string;
+  };
+  collection_id?: string;
 }
 
 interface RecommendationOptions {
@@ -65,40 +64,45 @@ export const usePersonalizedRecommendations = (options: RecommendationOptions = 
         const allCategories = [...viewedCategories, ...wishlistCategories];
 
         // Fetch recommendations based on categories
-        let recommendedProducts: any[] = [];
+        let recommendedProducts: Product[] = [];
 
         if (allExcluded.length === 0 || allCategories.length > 0) {
           const { data: products } = await supabase
             .from('product')
-            .select(`
-              id,
-              title,
-              handle,
-              thumbnail,
-              collection_id,
-              variants:product_variant!inner(
-                id,
-                prices:price(
-                  amount,
-                  currency_code
-                )
-              )
-            `)
+            .select('id, title, handle, thumbnail, metadata, collection_id')
             .not('id', 'in', `(${allExcluded.length > 0 ? allExcluded.join(',') : 'none'})`)
             .eq('status', 'published')
             .limit(limit * 2);
 
           if (products && products.length > 0) {
-            recommendedProducts = products.map(p => ({
-              ...p,
-              variants: p.variants.map((v: any) => ({
-                id: v.id,
-                calculated_price: v.prices?.[0] ? {
-                  calculated_amount: v.prices[0].amount,
-                  currency_code: v.prices[0].currency_code
-                } : undefined
-              }))
-            }));
+            // Filter products with valid metadata and price
+            recommendedProducts = products.filter(p => 
+              p.metadata && 
+              typeof p.metadata === 'object' && 
+              'price' in p.metadata
+            ) as Product[];
+
+            // Score and sort by relevance if we have category context
+            if (allCategories.length > 0) {
+              recommendedProducts = recommendedProducts.map(p => {
+                let score = 0;
+                const productCategory = p.metadata?.category;
+                
+                // Match categories
+                if (productCategory && allCategories.includes(productCategory)) {
+                  score += 3;
+                }
+                
+                // Match tags
+                const productTags = p.metadata?.tags || [];
+                const allContextTags = Array.from(new Set([...Array.from(viewedTags), ...Array.from(wishlistTags)]));
+                if (productTags.some(tag => allContextTags.includes(tag))) {
+                  score += 2;
+                }
+                
+                return { ...p, score };
+              }).sort((a: any, b: any) => b.score - a.score);
+            }
           }
         }
 
@@ -106,36 +110,19 @@ export const usePersonalizedRecommendations = (options: RecommendationOptions = 
         if (recommendedProducts.length < limit) {
           const { data: trendingProducts } = await supabase
             .from('product')
-            .select(`
-              id,
-              title,
-              handle,
-              thumbnail,
-              collection_id,
-              variants:product_variant!inner(
-                id,
-                prices:price(
-                  amount,
-                  currency_code
-                )
-              )
-            `)
+            .select('id, title, handle, thumbnail, metadata, collection_id')
             .eq('status', 'published')
             .order('created_at', { ascending: false })
             .limit(limit);
 
           if (trendingProducts) {
-            const formattedTrending = trendingProducts.map(p => ({
-              ...p,
-              variants: p.variants.map((v: any) => ({
-                id: v.id,
-                calculated_price: v.prices?.[0] ? {
-                  calculated_amount: v.prices[0].amount,
-                  currency_code: v.prices[0].currency_code
-                } : undefined
-              }))
-            }));
-            recommendedProducts = [...recommendedProducts, ...formattedTrending];
+            const validTrending = trendingProducts.filter(p => 
+              p.metadata && 
+              typeof p.metadata === 'object' && 
+              'price' in p.metadata
+            ) as Product[];
+            
+            recommendedProducts = [...recommendedProducts, ...validTrending];
           }
         }
 

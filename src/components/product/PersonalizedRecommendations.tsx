@@ -49,17 +49,17 @@ const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsProps> = 
     e.preventDefault();
     e.stopPropagation();
     
-    if (product.variants && product.variants.length > 0) {
-      const variant = product.variants[0];
-      addItem({
-        id: product.id,
-        title: product.title,
-        price: variant.calculated_price?.calculated_amount || 0,
-        quantity: 1,
-        thumbnail: product.thumbnail || '',
-      });
-      toast.success('Added to cart');
-    }
+    const price = product.metadata?.discount_price || product.metadata?.price || 0;
+    
+    addItem({
+      id: product.id,
+      title: product.title,
+      price: price,
+      discount_price: product.metadata?.discount_price,
+      quantity: 1,
+      thumbnail: product.thumbnail || '',
+    });
+    toast.success('Added to cart');
   };
 
   const formatPrice = (amount: number, currency: string = 'RWF') => {
@@ -67,7 +67,7 @@ const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsProps> = 
       style: 'currency',
       currency: currency,
       minimumFractionDigits: 0,
-    }).format(amount / 100);
+    }).format(amount);
   };
 
   if (loading) {
@@ -104,9 +104,9 @@ const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsProps> = 
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {recommendations.map((product) => {
-          const variant = product.variants?.[0];
-          const price = variant?.calculated_price?.calculated_amount || 0;
-          const currency = variant?.calculated_price?.currency_code || 'RWF';
+          const price = product.metadata?.price || 0;
+          const discountPrice = product.metadata?.discount_price;
+          const displayPrice = discountPrice || price;
           const inWishlist = isInWishlist(product.id);
 
           return (
@@ -142,9 +142,16 @@ const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsProps> = 
                   </h3>
 
                   <div className="flex items-center justify-between">
-                    <p className="text-lg font-bold text-primary">
-                      {formatPrice(price, currency)}
-                    </p>
+                    <div className="flex flex-col">
+                      <p className="text-lg font-bold text-primary">
+                        {formatPrice(displayPrice)}
+                      </p>
+                      {discountPrice && (
+                        <p className="text-xs text-muted-foreground line-through">
+                          {formatPrice(price)}
+                        </p>
+                      )}
+                    </div>
                     <Button
                       size="sm"
                       variant="ghost"
