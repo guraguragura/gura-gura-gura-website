@@ -1,12 +1,18 @@
 
 import React from "react";
+import { Helmet } from "react-helmet";
 import PageLayout from "@/components/layout/PageLayout";
 import { Separator } from "@/components/ui/separator";
 import { Truck, Clock, MapPin, AlertTriangle } from "lucide-react";
 
 const ShippingPage = () => {
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>Shipping & Delivery | Gura</title>
+        <meta name="description" content="Learn about Gura's shipping options, delivery times, and costs across Rwanda" />
+      </Helmet>
+      <PageLayout>
       <div className="max-w-4xl mx-auto py-8">
         <h1 className="text-3xl font-bold mb-6">Shipping and Delivery</h1>
         <Separator className="mb-8" />
@@ -113,6 +119,7 @@ const ShippingPage = () => {
         </div>
       </div>
     </PageLayout>
+    </>
   );
 };
 

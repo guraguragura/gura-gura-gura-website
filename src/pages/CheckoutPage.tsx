@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import TopInfoBar from '@/components/layout/TopInfoBar';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -93,7 +94,12 @@ const CheckoutPage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <>
+      <Helmet>
+        <title>Checkout | Gura</title>
+        <meta name="description" content="Complete your purchase securely" />
+      </Helmet>
+      <div className="flex flex-col min-h-screen bg-gray-50">
       <TopInfoBar />
       <Navbar />
       <div className="container mx-auto py-12 px-4 flex-grow">
@@ -424,6 +430,7 @@ const CheckoutPage = () => {
         onLocationConfirmed={handleLocationConfirmed}
       />
     </div>
+    </>
   );
 };
 

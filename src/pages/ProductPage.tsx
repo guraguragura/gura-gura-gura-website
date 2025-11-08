@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -105,8 +106,13 @@ const ProductPage = () => {
   const displayProduct = product;
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      <ProductSchema product={displayProduct} />
+    <>
+      <Helmet>
+        <title>{displayProduct.title} | Gura</title>
+        <meta name="description" content={displayProduct.description?.substring(0, 160) || `Buy ${displayProduct.title} on Gura`} />
+      </Helmet>
+      <div className="flex flex-col min-h-screen bg-gray-50">
+        <ProductSchema product={displayProduct} />
       <TopInfoBar />
       <Navbar />
       <div className="container mx-auto py-6 px-4">
@@ -147,6 +153,7 @@ const ProductPage = () => {
       </div>
       <Footer />
     </div>
+    </>
   );
 };
 

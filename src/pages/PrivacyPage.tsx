@@ -1,11 +1,17 @@
 
 import React from "react";
+import { Helmet } from "react-helmet";
 import PageLayout from "@/components/layout/PageLayout";
 import { Separator } from "@/components/ui/separator";
 
 const PrivacyPage = () => {
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>Privacy Policy | Gura</title>
+        <meta name="description" content="Learn how Gura collects, uses, and protects your personal information" />
+      </Helmet>
+      <PageLayout>
       <div className="max-w-4xl mx-auto py-8">
         <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
         <Separator className="mb-8" />
@@ -114,6 +120,7 @@ const PrivacyPage = () => {
         </div>
       </div>
     </PageLayout>
+    </>
   );
 };
 

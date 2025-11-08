@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { ArrowUp } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -52,8 +53,13 @@ const FaqPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      <Navbar />
+    <>
+      <Helmet>
+        <title>FAQ - Frequently Asked Questions | Gura</title>
+        <meta name="description" content="Find answers to common questions about shopping, orders, shipping, and more on Gura" />
+      </Helmet>
+      <div className="flex flex-col min-h-screen bg-gray-50">
+        <Navbar />
       <main className="flex-grow pt-8 pb-16">
         <div className="mx-auto w-[80%] max-w-4xl px-4">
           <div className="text-center mb-10">
@@ -110,6 +116,7 @@ const FaqPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

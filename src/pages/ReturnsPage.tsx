@@ -1,12 +1,18 @@
 
 import React from "react";
+import { Helmet } from "react-helmet";
 import PageLayout from "@/components/layout/PageLayout";
 import { Separator } from "@/components/ui/separator";
 import { RefreshCcw, Shield, Clock, AlertCircle } from "lucide-react";
 
 const ReturnsPage = () => {
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>Returns & Refunds | Gura</title>
+        <meta name="description" content="Learn about Gura's hassle-free return and refund policy" />
+      </Helmet>
+      <PageLayout>
       <div className="max-w-4xl mx-auto py-8">
         <h1 className="text-3xl font-bold mb-6">Returns and Refunds</h1>
         <Separator className="mb-8" />
@@ -118,6 +124,7 @@ const ReturnsPage = () => {
         </div>
       </div>
     </PageLayout>
+    </>
   );
 };
 

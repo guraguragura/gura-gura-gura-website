@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import TopInfoBar from '@/components/layout/TopInfoBar';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -20,7 +21,12 @@ const CartPage = () => {
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col min-h-screen bg-gray-50">
+      <>
+        <Helmet>
+          <title>Shopping Cart | Gura</title>
+          <meta name="description" content="View and manage items in your shopping cart" />
+        </Helmet>
+        <div className="flex flex-col min-h-screen bg-gray-50">
         <TopInfoBar />
         <Navbar />
         <div className="container mx-auto py-8 px-4 flex-grow">
@@ -28,11 +34,17 @@ const CartPage = () => {
         </div>
         <Footer />
       </div>
+      </>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <>
+      <Helmet>
+        <title>Shopping Cart ({itemCount}) | Gura</title>
+        <meta name="description" content="Review your cart and proceed to checkout" />
+      </Helmet>
+      <div className="flex flex-col min-h-screen bg-gray-50">
       <TopInfoBar />
       <Navbar />
       <div className="container mx-auto py-6 sm:py-12 px-4 flex-grow">
@@ -152,6 +164,7 @@ const CartPage = () => {
       </div>
       <Footer />
     </div>
+    </>
   );
 };
 

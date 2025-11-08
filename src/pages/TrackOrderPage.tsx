@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 import PageLayout from "@/components/layout/PageLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -83,7 +84,12 @@ const TrackOrderPage = () => {
   }, [trackingResult?.rawStatus, orderNumber]);
 
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>Track Your Order | Gura</title>
+        <meta name="description" content="Track your Gura order in real-time and get delivery updates" />
+      </Helmet>
+      <PageLayout>
       <div className="space-y-8 max-w-4xl mx-auto">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-2">
@@ -284,6 +290,7 @@ const TrackOrderPage = () => {
         </Card>
       </div>
     </PageLayout>
+    </>
   );
 };
 

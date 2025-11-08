@@ -6,6 +6,7 @@
  */
 
 import React from "react";
+import { Helmet } from "react-helmet";
 import PageLayout from "@/components/layout/PageLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,12 @@ const ShopPage = () => {
   const isLoading = productsLoading || currencyLoading;
 
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>Shop All Products | Gura</title>
+        <meta name="description" content="Discover thousands of products at great prices on Gura" />
+      </Helmet>
+      <PageLayout>
       <div className="space-y-8">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Shop</h1>
@@ -154,6 +160,7 @@ const ShopPage = () => {
         </div>
       </div>
     </PageLayout>
+    </>
   );
 };
 

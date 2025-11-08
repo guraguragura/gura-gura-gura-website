@@ -1,12 +1,18 @@
 
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import PageLayout from '@/components/layout/PageLayout';
 import { Button } from '@/components/ui/button';
 
 
 const ContactPage = () => {
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>Contact Us | Gura</title>
+        <meta name="description" content="Get in touch with Gura customer support team. We're here to help!" />
+      </Helmet>
+      <PageLayout>
       <div className="max-w-4xl mx-auto py-12">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold tracking-tight">Contact Us</h1>
@@ -104,6 +110,7 @@ const ContactPage = () => {
         </div>
       </div>
     </PageLayout>
+    </>
   );
 };
 

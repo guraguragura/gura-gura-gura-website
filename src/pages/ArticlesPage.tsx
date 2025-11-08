@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { useAllArticles } from "@/hooks/usePromotionalArticles";
 import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
@@ -16,9 +17,14 @@ const ArticlesPage = () => {
   const totalPages = data ? Math.ceil(data.total / perPage) : 0;
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <TopInfoBar />
-      <Navbar />
+    <>
+      <Helmet>
+        <title>Promotional Articles | Gura</title>
+        <meta name="description" content="Explore our latest promotions and special offers on Gura" />
+      </Helmet>
+      <div className="min-h-screen flex flex-col">
+        <TopInfoBar />
+        <Navbar />
       
       <main className="flex-grow">
         <div className="container mx-auto px-4 py-8">
@@ -112,6 +118,7 @@ const ArticlesPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

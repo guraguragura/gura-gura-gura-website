@@ -1,11 +1,17 @@
 
 import React from "react";
+import { Helmet } from "react-helmet";
 import PageLayout from "@/components/layout/PageLayout";
 import { Separator } from "@/components/ui/separator";
 
 const TermsPage = () => {
   return (
-    <PageLayout>
+    <>
+      <Helmet>
+        <title>Terms and Conditions | Gura</title>
+        <meta name="description" content="Read Gura's terms and conditions for using our platform and services" />
+      </Helmet>
+      <PageLayout>
       <div className="max-w-4xl mx-auto py-8">
         <h1 className="text-3xl font-bold mb-6">Terms and Conditions</h1>
         <Separator className="mb-8" />
@@ -86,6 +92,7 @@ const TermsPage = () => {
         </div>
       </div>
     </PageLayout>
+    </>
   );
 };
 
