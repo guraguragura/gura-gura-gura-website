@@ -146,17 +146,16 @@ const FeaturedProducts = () => {
                     )}
                   </div>
                   
-                  <div className="flex justify-center">
-                    <AddToCartButton 
-                      product={{
-                        id: product.id.toString(),
-                        title: product.title,
-                        price: product.price,
-                        discount_price: product.discount_price,
-                        thumbnail: product.thumbnail
-                      }}
-                    />
-                  </div>
+                  <AddToCartButton 
+                    product={{
+                      id: product.id.toString(),
+                      title: product.title,
+                      price: product.price,
+                      discount_price: product.discount_price,
+                      thumbnail: product.thumbnail
+                    }}
+                    className="w-full flex items-center justify-center gap-2 size-sm"
+                  />
                 </div>
               </div>
               </Link>

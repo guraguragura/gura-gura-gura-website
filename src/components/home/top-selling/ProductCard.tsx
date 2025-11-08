@@ -77,12 +77,12 @@ const ProductCard = ({ product, formatPrice, isLoading }: ProductCardProps) => {
                   discount_price: product.oldPrice > product.price ? product.price : undefined,
                   thumbnail: product.image
                 }}
-                className="flex-shrink-0"
+                className="flex items-center gap-1 px-3 h-9 w-full"
               />
               <Button 
                 variant="outline" 
                 size="icon" 
-                className="flex-shrink-0"
+                className="rounded-full h-9 w-9 flex-shrink-0"
                 onClick={handleWishlistToggle}
               >
                 <Heart 

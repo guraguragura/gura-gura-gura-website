@@ -14,14 +14,12 @@ interface AddToCartButtonProps {
   };
   quantity?: number;
   className?: string;
-  showText?: boolean;
 }
 
 const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   product,
   quantity = 1,
   className,
-  showText = false,
 }) => {
   const { addItem } = useCartContext();
   const [isAdding, setIsAdding] = useState(false);
@@ -46,20 +44,19 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   return (
     <Button 
       onClick={handleAddToCart}
-      className={className}
+      className={`min-h-[36px] ${className}`}
       disabled={isAdding}
-      size={showText ? "default" : "icon"}
-      aria-label="Add to cart"
     >
       {isAdding ? (
-        <Check className={showText ? "mr-2 h-4 w-4 flex-shrink-0" : "h-4 w-4"} />
+        <>
+          <Check className="mr-2 h-4 w-4 flex-shrink-0" />
+          <span className="truncate">Added to Cart</span>
+        </>
       ) : (
-        <ShoppingCart className={showText ? "mr-2 h-4 w-4 flex-shrink-0" : "h-4 w-4"} />
-      )}
-      {showText && (
-        <span className="truncate">
-          {isAdding ? "Added to Cart" : "Add to Cart"}
-        </span>
+        <>
+          <ShoppingCart className="mr-2 h-4 w-4 flex-shrink-0" />
+          <span className="truncate">Add to Cart</span>
+        </>
       )}
     </Button>
   );
