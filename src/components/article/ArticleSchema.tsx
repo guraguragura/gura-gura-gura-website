@@ -28,10 +28,6 @@ const ArticleSchema: React.FC<ArticleSchemaProps> = ({ article }) => {
     "image": absoluteImage,
     "datePublished": article.published_at,
     "dateModified": article.published_at,
-    "author": {
-      "@type": "Person",
-      "name": article.author || "Gura Editorial Team"
-    },
     "publisher": {
       "@type": "Organization",
       "name": "Gura",

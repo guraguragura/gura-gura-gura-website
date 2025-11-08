@@ -7,7 +7,7 @@ import Footer from "@/components/layout/Footer";
 import ArticleSchema from "@/components/article/ArticleSchema";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { Calendar, User } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { format } from "date-fns";
 
 const ArticleDetailPage = () => {
@@ -92,20 +92,12 @@ const ArticleDetailPage = () => {
               </p>
             )}
 
-            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-              {article.author && (
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span>{article.author}</span>
-                </div>
-              )}
-              {publishedDate && (
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <time dateTime={article.published_at}>{publishedDate}</time>
-                </div>
-              )}
-            </div>
+            {publishedDate && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Calendar className="h-4 w-4" />
+                <time dateTime={article.published_at}>{publishedDate}</time>
+              </div>
+            )}
           </header>
 
           {/* Featured Image */}
