@@ -42,7 +42,8 @@ const PressPage = () => {
           {isLoading ? (
             <div className="grid md:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
-                <Card key={i} className="h-full">
+                <Card key={i} className="h-full overflow-hidden">
+                  <Skeleton className="h-48 w-full" />
                   <CardContent className="p-6">
                     <Skeleton className="h-4 w-24 mb-2" />
                     <Skeleton className="h-6 w-full mb-2" />
@@ -61,7 +62,16 @@ const PressPage = () => {
             <>
               <div className="grid md:grid-cols-3 gap-6">
                 {data.articles.map((article) => (
-                  <Card key={article.id} className="h-full">
+                  <Card key={article.id} className="h-full overflow-hidden group">
+                    <Link to={`/article/${article.slug}`}>
+                      <div className="aspect-video overflow-hidden">
+                        <img 
+                          src={article.image_url} 
+                          alt={article.featured_image_alt || article.title}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
+                    </Link>
                     <CardContent className="p-6 flex flex-col h-full">
                       <div className="text-sm text-muted-foreground mb-1">
                         {format(new Date(article.published_at), 'MMMM d, yyyy')}
