@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { useCurrency } from '@/hooks/useCurrency';
 import CartEmpty from '@/components/cart/CartEmpty';
 import CartSummary from '@/components/cart/CartSummary';
+import PersonalizedRecommendations from '@/components/product/PersonalizedRecommendations';
 
 const CartPage = () => {
   const { items, removeItem, updateItemQuantity, itemCount, subtotal, total } = useCartContext();
@@ -137,6 +138,15 @@ const CartPage = () => {
             <div className="lg:col-span-1 mt-4 lg:mt-0">
               <CartSummary />
             </div>
+          </div>
+
+          {/* Personalized Recommendations */}
+          <div className="mt-12">
+            <PersonalizedRecommendations 
+              title="You May Also Like"
+              limit={8}
+              excludeProductIds={items.map(item => item.id)}
+            />
           </div>
         </div>
       </div>

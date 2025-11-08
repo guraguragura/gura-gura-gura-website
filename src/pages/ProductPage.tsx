@@ -5,6 +5,7 @@ import TopInfoBar from "@/components/layout/TopInfoBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import RelatedProducts from "@/components/product/RelatedProducts";
+import PersonalizedRecommendations from "@/components/product/PersonalizedRecommendations";
 import ProductBreadcrumb from "@/components/product/ProductBreadcrumb";
 import ProductImageGallery from "@/components/product/ProductImageGallery";
 import ProductInfo from "@/components/product/ProductInfo";
@@ -131,7 +132,15 @@ const ProductPage = () => {
         {/* Product Tabs */}
         <ProductTabs product={displayProduct} />
 
-        {/* Related Products - Now with improved responsive layout */}
+        {/* Personalized Recommendations */}
+        <div className="max-w-[1200px] mx-auto">
+          <PersonalizedRecommendations 
+            currentProductId={displayProduct.id}
+            limit={8}
+          />
+        </div>
+
+        {/* Related Products */}
         <div className="max-w-[1200px] mx-auto">
           <RelatedProducts productId={displayProduct.id} />
         </div>
