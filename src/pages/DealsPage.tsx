@@ -32,26 +32,25 @@ const DealsPage = () => {
   };
 
   return (
-    <PageLayout>
-      <div className="container mx-auto px-4 py-6">
-        <CategoryContent
-          categoryName={categoryName}
-          products={products}
-          loading={loading}
-          formatPrice={formatPrice}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalProducts={totalProducts}
-          productsPerPage={productsPerPage}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          sortOptions={sortOptions}
-          viewMode={viewMode}
-          setViewMode={setViewMode}
-          setCurrentPage={setCurrentPage}
-          onFiltersChange={handleFiltersChange}
-        />
-      </div>
+    <PageLayout fullWidth={false}>
+      <CategoryContent
+        categoryName={categoryName}
+        categoryHandle="deals"
+        products={products}
+        loading={loading}
+        formatPrice={formatPrice}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalProducts={totalProducts}
+        productsPerPage={productsPerPage}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        sortOptions={sortOptions}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        setCurrentPage={setCurrentPage}
+        onFiltersChange={handleFiltersChange}
+      />
     </PageLayout>
   );
 };
