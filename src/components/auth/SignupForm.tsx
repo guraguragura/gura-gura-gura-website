@@ -6,11 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import BasicInfoFields from './BasicInfoFields';
 import TermsCheckbox from './TermsCheckbox';
-import AddressFields from './AddressFields';
+
 import SubmitButton from './SubmitButton';
 import PasswordFields from './PasswordFields';
 
-import { useSignupForm, AddressData } from './hooks/useSignupForm';
+import { useSignupForm } from './hooks/useSignupForm';
 import { validateSignupForm } from './utils/formValidation';
 
 type SignupFormProps = {
@@ -37,22 +37,13 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
     setIsLoading(true);
 
     try {
-      const addressData: AddressData = {
-        address: formState.address,
-        city: formState.city,
-        state: formState.state,
-        zipCode: formState.zipCode,
-        country: formState.country,
-      };
-
       // For now, we're using signUpWithEmail with both methods as Supabase doesn't
       // have a separate signUpWithPhone method - we'd need to customize this
       const result = await signUpWithEmail(
         formState.signupMethod === 'email' ? formState.email : formState.phone,
         formState.password,
         formState.firstName,
-        formState.lastName,
-        addressData
+        formState.lastName
       );
 
       if (result.error) {
@@ -112,18 +103,6 @@ const SignupForm = ({ error, setError }: SignupFormProps) => {
             setConfirmPassword={(value) => updateField('confirmPassword', value)}
           />
 
-          <AddressFields
-            address={formState.address}
-            city={formState.city}
-            state={formState.state}
-            zipCode={formState.zipCode}
-            country={formState.country}
-            setAddress={(value) => updateField('address', value)}
-            setCity={(value) => updateField('city', value)}
-            setState={(value) => updateField('state', value)}
-            setZipCode={(value) => updateField('zipCode', value)}
-            setCountry={(value) => updateField('country', value)}
-          />
 
           <TermsCheckbox
             checked={formState.agreeToTerms}
