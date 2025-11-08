@@ -17,8 +17,13 @@ import {
 } from "@/components/ui/navigation-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-// Static categories that don't need to be fetched
-const staticCategories = ["10K Shop", "Electronics", "Appliances", "Deals"];
+// Static categories with their correct handles
+const staticCategories = [
+  { name: "10K Shop", handle: "10k-shop" },
+  { name: "Electronics", handle: "electronics" },
+  { name: "Appliances", handle: "appliances-and-kitchen" },
+  { name: "Deals", handle: "deals" }
+];
 
 const Navbar = () => {
   const { displayCategories } = useCategoriesData();

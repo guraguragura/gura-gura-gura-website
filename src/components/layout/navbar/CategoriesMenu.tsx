@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import MegaMenu from "./MegaMenu";
 
 interface CategoriesMenuProps {
-  staticCategories: string[];
+  staticCategories: { name: string; handle: string }[];
 }
 
 const CategoriesMenu = ({ staticCategories }: CategoriesMenuProps) => {
@@ -18,11 +18,11 @@ const CategoriesMenu = ({ staticCategories }: CategoriesMenuProps) => {
       {/* Static menu items */}
       {staticCategories.map((category) => (
         <Link 
-          key={category} 
-          to={`/categories/${category.toLowerCase().replace(/\s+/g, '-')}`}
+          key={category.handle} 
+          to={`/categories/${category.handle}`}
           className="text-sm whitespace-nowrap hover:text-brand-teal px-1"
         >
-          {category}
+          {category.name}
         </Link>
       ))}
     </div>

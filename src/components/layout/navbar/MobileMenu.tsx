@@ -19,7 +19,7 @@ interface Category {
 
 interface MobileMenuProps {
   displayCategories: Category[];
-  staticCategories: string[];
+  staticCategories: { name: string; handle: string }[];
 }
 
 const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) => {
@@ -51,12 +51,12 @@ const MobileMenu = ({ displayCategories, staticCategories }: MobileMenuProps) =>
             </DropdownMenuItem>
           ))}
           {staticCategories.map((category) => (
-            <DropdownMenuItem key={category} asChild>
+            <DropdownMenuItem key={category.handle} asChild>
               <Link 
-                to={`/categories/${category.toLowerCase().replace(/\s+/g, '-')}`}
+                to={`/categories/${category.handle}`}
                 className="w-full"
               >
-                {category}
+                {category.name}
               </Link>
             </DropdownMenuItem>
           ))}

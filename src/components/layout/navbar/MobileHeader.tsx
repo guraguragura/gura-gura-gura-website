@@ -13,7 +13,7 @@ import {
 
 interface MobileHeaderProps {
   displayCategories: { id: string; name: string; handle: string }[];
-  staticCategories: string[];
+  staticCategories: { name: string; handle: string }[];
   showSearch: boolean;
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -54,11 +54,11 @@ const MobileHeader = ({
                   ))}
                   {staticCategories.map((category) => (
                     <Link 
-                      key={category}
-                      to={`/categories/${category.toLowerCase().replace(/\s+/g, '-')}`}
+                      key={category.handle}
+                      to={`/categories/${category.handle}`}
                       className="block py-2 hover:text-brand-teal"
                     >
-                      {category}
+                      {category.name}
                     </Link>
                   ))}
                 </div>
