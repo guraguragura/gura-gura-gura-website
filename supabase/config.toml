@@ -56,6 +56,9 @@ verify_jwt = false
 [functions.notify-deal-subscribers]
 verify_jwt = false
 
+[functions.check-deal-notifications]
+verify_jwt = false
+
 [functions.newsletter-subscription]
 verify_jwt = false
 
