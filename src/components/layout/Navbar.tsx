@@ -21,7 +21,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 const staticCategories = [
   { name: "10K Shop", handle: "10k-shop" },
   { name: "Electronics", handle: "electronics" },
-  { name: "Appliances", handle: "appliances-and-kitchen" },
+  { name: "Appliances", handle: "appliances-kitchen" },
   { name: "Deals", handle: "deals" }
 ];
 
