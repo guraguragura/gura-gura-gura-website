@@ -41,7 +41,7 @@ const CartPage = () => {
   return (
     <>
       <Helmet>
-        <title>Shopping Cart ({itemCount}) | Gura</title>
+        <title>{`Shopping Cart (${itemCount || 0}) | Gura`}</title>
         <meta name="description" content="Review your cart and proceed to checkout" />
       </Helmet>
       <div className="flex flex-col min-h-screen bg-gray-50">
