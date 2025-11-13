@@ -22,7 +22,7 @@ const AuthPage = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/account/personal-info');
+      navigate('/');
     }
   }, [user, navigate]);
 
