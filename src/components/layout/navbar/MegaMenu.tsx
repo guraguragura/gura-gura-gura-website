@@ -37,7 +37,7 @@ const MegaMenu = () => {
           <ChevronDown className="h-4 w-4" />
         </DropdownMenuTrigger>
         <DropdownMenuContent 
-          className="w-[600px] p-0 bg-background border border-border z-50"
+          className="w-[600px] p-0 bg-background border border-border z-50 animate-fade-in"
           align="start"
         >
         <div className="grid grid-cols-[240px_1fr] min-h-[400px] max-h-[500px]">
