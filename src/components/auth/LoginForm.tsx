@@ -42,7 +42,7 @@ const LoginForm = ({ error, setError }: LoginFormProps) => {
       if (result.error) {
         setError(result.error.message || 'Failed to sign in. Please check your credentials.');
       } else {
-        navigate('/account/personal-info');
+        navigate('/');
       }
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred');
