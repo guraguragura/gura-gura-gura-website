@@ -1,11 +1,92 @@
-
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import PageLayout from '@/components/layout/PageLayout';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { useToast } from '@/hooks/use-toast';
 
+const contactFormSchema = z.object({
+  firstName: z.string()
+    .trim()
+    .min(1, { message: "First name is required" })
+    .max(50, { message: "First name must be less than 50 characters" }),
+  lastName: z.string()
+    .trim()
+    .min(1, { message: "Last name is required" })
+    .max(50, { message: "Last name must be less than 50 characters" }),
+  email: z.string()
+    .trim()
+    .email({ message: "Invalid email address" })
+    .max(255, { message: "Email must be less than 255 characters" }),
+  phone: z.string()
+    .trim()
+    .min(10, { message: "Phone number must be at least 10 digits" })
+    .max(20, { message: "Phone number must be less than 20 characters" })
+    .optional()
+    .or(z.literal('')),
+  topic: z.string()
+    .min(1, { message: "Please select a topic" }),
+  message: z.string()
+    .trim()
+    .min(10, { message: "Message must be at least 10 characters" })
+    .max(1000, { message: "Message must be less than 1000 characters" }),
+});
+
+type ContactFormData = z.infer<typeof contactFormSchema>;
 
 const ContactPage = () => {
+  const { toast } = useToast();
+  const form = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      topic: '',
+      message: '',
+    },
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      // Simulate form submission (replace with actual API call later)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast({
+        title: "Message sent successfully! 🎉",
+        description: "We've received your message and will get back to you within 24 hours.",
+      });
+      
+      form.reset();
+    } catch (error) {
+      toast({
+        title: "Failed to send message",
+        description: "Something went wrong. Please try again or contact us directly.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -16,7 +97,7 @@ const ContactPage = () => {
       <div className="max-w-4xl mx-auto py-12">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold tracking-tight">Contact Us</h1>
-          <p className="mt-4 text-lg text-gray-500">
+          <p className="mt-4 text-lg text-muted-foreground">
             We're here to help! Get in touch with our team.
           </p>
         </div>
@@ -24,50 +105,126 @@ const ContactPage = () => {
         <div className="grid md:grid-cols-2 gap-10">
           <div>
             <h2 className="text-2xl font-semibold mb-4">Get in Touch</h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6">
               Have a question, comment, or concern? Fill out the form below and we'll get back to you as soon as possible.
             </p>
 
-            <form className="space-y-5">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">First Name</label>
-                  <input type="text" className="w-full p-2 border rounded-md" />
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="firstName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>First Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="John" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="lastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Last Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Doe" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Last Name</label>
-                  <input type="text" className="w-full p-2 border rounded-md" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Email Address</label>
-                <input type="email" className="w-full p-2 border rounded-md" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Phone Number</label>
-                <input type="tel" className="w-full p-2 border rounded-md" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Topic</label>
-                <select className="w-full p-2 border rounded-md">
-                  <option>General Inquiry</option>
-                  <option>Customer Support</option>
-                  <option>Order Status</option>
-                  <option>Technical Support</option>
-                  <option>Feedback</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Message</label>
-                <textarea rows={4} className="w-full p-2 border rounded-md"></textarea>
-              </div>
-              <Button type="submit" className="w-full">Send Message</Button>
-            </form>
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email Address</FormLabel>
+                      <FormControl>
+                        <Input type="email" placeholder="john@example.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone Number (Optional)</FormLabel>
+                      <FormControl>
+                        <Input type="tel" placeholder="+250 788 123 456" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="topic"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Topic</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a topic" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="general">General Inquiry</SelectItem>
+                          <SelectItem value="support">Customer Support</SelectItem>
+                          <SelectItem value="order">Order Status</SelectItem>
+                          <SelectItem value="technical">Technical Support</SelectItem>
+                          <SelectItem value="feedback">Feedback</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Message</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          rows={4} 
+                          placeholder="Tell us how we can help you..."
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button 
+                  type="submit" 
+                  className="w-full"
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting ? "Sending..." : "Send Message"}
+                </Button>
+              </form>
+            </Form>
           </div>
 
           <div>
             <h2 className="text-2xl font-semibold mb-4">Contact Information</h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6">
               Prefer to reach out directly? Use the information below to contact our team.
             </p>
 
@@ -78,8 +235,8 @@ const ContactPage = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold">Phone</h3>
-                  <p className="text-gray-600">+250 788 123 456</p>
-                  <p className="text-sm text-gray-500">Monday to Friday, 8am to 6pm</p>
+                  <p className="text-muted-foreground">+250 788 123 456</p>
+                  <p className="text-sm text-muted-foreground">Monday to Friday, 8am to 6pm</p>
                 </div>
               </div>
               
@@ -89,8 +246,8 @@ const ContactPage = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold">Email</h3>
-                  <p className="text-gray-600">support@gura.rw</p>
-                  <p className="text-sm text-gray-500">We'll respond within 24 hours</p>
+                  <p className="text-muted-foreground">support@gura.rw</p>
+                  <p className="text-sm text-muted-foreground">We'll respond within 24 hours</p>
                 </div>
               </div>
               
@@ -100,8 +257,8 @@ const ContactPage = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold">Office</h3>
-                  <p className="text-gray-600">123 Business Avenue, Kigali</p>
-                  <p className="text-sm text-gray-500">Rwanda</p>
+                  <p className="text-muted-foreground">123 Business Avenue, Kigali</p>
+                  <p className="text-sm text-muted-foreground">Rwanda</p>
                 </div>
               </div>
             </div>
