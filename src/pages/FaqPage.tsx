@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { ArrowUp } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import FaqSearch from '@/components/faq/FaqSearch';
@@ -13,6 +14,7 @@ import ChatButton from '@/components/crisp/ChatButton';
 const FaqPage = () => {
   const [searchResults, setSearchResults] = useState(faqData);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const navigate = useNavigate();
 
   // Check if user has scrolled enough to show the scroll-to-top button
   useEffect(() => {
@@ -95,7 +97,10 @@ const FaqPage = () => {
               Can't find the answer you're looking for? Please reach out to our customer support team.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button 
+                className="bg-blue-600 hover:bg-blue-700"
+                onClick={() => navigate('/contact')}
+              >
                 Contact Support
               </Button>
               <ChatButton variant="outline" label="Live Chat" />
