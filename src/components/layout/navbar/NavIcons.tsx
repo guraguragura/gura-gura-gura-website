@@ -14,11 +14,19 @@ const NavIcons = () => {
   return (
     <div className="flex items-center space-x-1 sm:space-x-2">
       <CartButton />
-      <Button variant="ghost" size="icon" asChild>
-        <Link to={user ? "/account" : "/auth"}>
-          <User className="h-5 w-5" />
-        </Link>
-      </Button>
+      {user ? (
+        <Button variant="ghost" size="icon" asChild>
+          <Link to="/account">
+            <User className="h-5 w-5" />
+          </Link>
+        </Button>
+      ) : (
+        <Button variant="ghost" asChild>
+          <Link to="/auth">
+            Hi, sign in
+          </Link>
+        </Button>
+      )}
     </div>
   );
 };
