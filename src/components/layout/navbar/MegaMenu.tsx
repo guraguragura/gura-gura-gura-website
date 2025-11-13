@@ -27,15 +27,19 @@ const MegaMenu = () => {
   }
 
   return (
-    <DropdownMenu open={isOpen} onOpenChange={handleOpenChange}>
-      <DropdownMenuTrigger className="flex items-center gap-1 px-2 py-2 text-sm hover:text-primary focus:outline-none">
-        Categories
-        <ChevronDown className="h-4 w-4" />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent 
-        className="w-[600px] p-0 bg-background border border-border z-50"
-        align="start"
-      >
+    <div 
+      onMouseEnter={() => handleOpenChange(true)}
+      onMouseLeave={() => handleOpenChange(false)}
+    >
+      <DropdownMenu open={isOpen} onOpenChange={handleOpenChange}>
+        <DropdownMenuTrigger className="flex items-center gap-1 px-2 py-2 text-sm hover:text-primary focus:outline-none">
+          Categories
+          <ChevronDown className="h-4 w-4" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent 
+          className="w-[600px] p-0 bg-background border border-border z-50"
+          align="start"
+        >
         <div className="grid grid-cols-[240px_1fr] min-h-[400px] max-h-[500px]">
           {/* Left Column - Main Categories */}
           <div className="border-r border-border overflow-y-auto bg-muted/30">
@@ -85,6 +89,7 @@ const MegaMenu = () => {
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
+    </div>
   );
 };
 
