@@ -83,21 +83,23 @@ const Hero = () => {
 
               return (
                 <CarouselItem key={banner.id}>
-                  <div className="relative h-[250px] sm:h-[300px] md:h-[400px] lg:h-[450px] w-full rounded-lg overflow-hidden">
-                    {isClickable ? (
-                      <Link to={href} className="block w-full h-full">
-                        <img
-                          src={banner.image_url}
-                          alt={banner.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </Link>
-                    ) : (
-                      <img
-                        src={banner.image_url}
-                        alt={banner.title}
-                        className="w-full h-full object-cover"
-                      />
+                  <div className="relative h-[250px] sm:h-[300px] md:h-[400px] lg:h-[450px] w-full rounded-lg overflow-hidden group">
+                    <img
+                      src={banner.image_url}
+                      alt={banner.title}
+                      className="w-full h-full object-cover"
+                    />
+                    {isClickable && (
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-end justify-center pb-8 md:pb-12">
+                        <Link to={href}>
+                          <Button 
+                            size="lg" 
+                            className="bg-white text-primary hover:bg-gray-100 font-semibold px-8 py-6 text-base md:text-lg shadow-lg transform group-hover:scale-105 transition-transform"
+                          >
+                            Shop Now
+                          </Button>
+                        </Link>
+                      </div>
                     )}
                   </div>
                 </CarouselItem>

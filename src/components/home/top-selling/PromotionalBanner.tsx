@@ -19,21 +19,23 @@ const PromotionalBanner = () => {
   const isClickable = banner.link_type !== 'none' && href !== '#';
 
   return (
-    <div className="lg:col-span-1 rounded-lg overflow-hidden">
-      {isClickable ? (
-        <Link to={href} className="block h-full">
-          <img 
-            src={banner.image_url} 
-            alt={banner.title} 
-            className="w-full h-full object-cover hover:opacity-95 transition-opacity"
-          />
-        </Link>
-      ) : (
-        <img 
-          src={banner.image_url} 
-          alt={banner.title} 
-          className="w-full h-full object-cover"
-        />
+    <div className="lg:col-span-1 rounded-lg overflow-hidden relative group">
+      <img 
+        src={banner.image_url} 
+        alt={banner.title} 
+        className="w-full h-full object-cover"
+      />
+      {isClickable && (
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-end justify-center pb-6">
+          <Link to={href}>
+            <Button 
+              size="lg" 
+              className="bg-white text-primary hover:bg-gray-100 font-semibold px-6 py-3 shadow-lg transform group-hover:scale-105 transition-transform"
+            >
+              Shop Now
+            </Button>
+          </Link>
+        </div>
       )}
     </div>
   );
