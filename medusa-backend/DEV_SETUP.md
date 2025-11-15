@@ -35,9 +35,11 @@ cd medusa-backend-dev
 # Copy the development environment file
 cp .env.development .env
 
-# Install dependencies if needed
+# Install dependencies (including @supabase/supabase-js for admin widgets)
 npm install
 ```
+
+**Note**: The `@supabase/supabase-js` dependency is required for the Promotional Banners widget in the MedusaJS admin panel.
 
 ### 4. Run Database Migrations for Dev
 
@@ -47,6 +49,9 @@ npx medusa db:migrate
 
 # Seed with test data
 npx medusa seed
+
+# Build admin panel with custom widgets
+npm run build
 ```
 
 ### 5. Start Development Server
